@@ -53,15 +53,13 @@ fn hero() -> SiteView {
             element(
                 "h1",
                 &[],
-                vec![txt(
-                    "Low-cost radio networks that keep communities messaging when cell towers and internet go down.",
-                )],
+                vec![txt("Resilient communities, connected peer-to-peer.")],
             ),
             element(
                 "p",
                 &[("class", "hero-copy")],
                 vec![txt(
-                    "A project of Merely LLC in Ashland, Kentucky. Open standards, open source, community-owned.",
+                    "Low-cost, community-owned radio networks that keep people messaging when cell towers and internet go down.",
                 )],
             ),
         ],
