@@ -96,7 +96,7 @@ fn graph_sandbox() -> SiteView {
                         "p",
                         &[],
                         vec![txt(
-                            "Switch between the live merely-made graph and a heterogeneous specimen. Both consume Mere's arrangement and representation registries, then hand motion and collision to Seiche. This is a public Graphshell projection sandbox, not the whole browser shell.",
+                            "Switch between the live merely-made graph and a heterogeneous specimen. Both consume Mere's reading, arrangement, and representation registries, then hand motion and collision to Seiche. This is a public Graphshell projection sandbox, not the whole browser shell.",
                         )],
                     ),
                 ],
@@ -196,7 +196,7 @@ fn sandbox_contract() -> SiteView {
         "dl",
         &[("class", "graph-sandbox-contract")],
         vec![
-            sandbox_contract_item("Scene", "actors, representation, behavior"),
+            sandbox_contract_item("Reading", "actor scope, surface, emphasis"),
             sandbox_contract_item("Arrangement", "deterministic target slots"),
             sandbox_contract_item("Motion", "frozen, anchored, or free"),
             sandbox_contract_item("Backdrop", "paint, colliders, or a field"),
@@ -229,17 +229,7 @@ fn sandbox_toolbar() -> SiteView {
                 &[("live", "merely-made feed"), ("specimen", "Specimen")],
                 "live",
             ),
-            sandbox_select(
-                "Scene",
-                "scene",
-                &[
-                    ("graph", "Graph"),
-                    ("changes", "Changes"),
-                    ("activity", "Activity"),
-                    ("matrix", "Matrix"),
-                ],
-                "graph",
-            ),
+            sandbox_select("Reading", "scene", &[("graph", "Graph")], "graph"),
             sandbox_select("Arrangement", "arrangement", &[], ""),
             sandbox_select(
                 "Motion",
@@ -1480,12 +1470,14 @@ fn graph_sandbox_json() -> String {
             {"id":"old-mock-replaced-merecat","source":"old-mock","target":"merecat","kind":"replaced_by","provenance":"curated"}
         ],
         "sandbox": {
-            "schema": "mer3ly.graphshell-sandbox/v2",
+            "schema": "mer3ly.graphshell-sandbox/v3",
             "scene_state_schema": "mer3ly.graphshell-scene-state/v1",
+            "reading_registry_schema": "mere.graph-reading-registry/v1",
             "representation_registry_schema": "mere.graph-representation-registry/v1",
+            "reading_rule": "Mere selects actor scope, surface, emphasis, and an initial arrangement",
             "primitive_rule": "Mere's registry maps class to one body shared by paint and collision",
             "behavior_rule": "named host bindings remain distinct from endpoint domain actions",
-            "views": ["graph", "changes", "activity", "matrix"]
+            "views": ["graph", "changes", "activity", "neighbors", "matrix"]
         }
     }))
     .expect("graph sandbox data is serializable")

@@ -1027,6 +1027,8 @@ try {
     expectedRepositoryCount,
   );
   const sandboxArrangement = sandboxRoot.locator('[data-sandbox-control="arrangement"]');
+  const sandboxReading = sandboxRoot.locator('[data-sandbox-control="scene"]');
+  assert.equal(await sandboxReading.locator("option").count(), 5);
   assert.equal(await sandboxArrangement.locator("option").count(), 8);
   assert.equal(await sandboxArrangement.inputValue(), "graph_layout:stack");
 
@@ -1053,6 +1055,27 @@ try {
   assert.ok(
     (await sandboxRoot.locator(".graph-sandbox-matrix-cell.has-relation").count()) > 10,
   );
+  await sandboxReading.selectOption("neighbors");
+  assert.equal(await sandboxArrangement.inputValue(), "graph_layout:radial");
+  assert.equal(await sandboxArrangement.isEnabled(), true);
+  assert.equal(await sandboxRoot.locator("[data-sandbox-node]").count(), 4);
+  assert.equal(
+    await sandboxRoot.locator('[data-sandbox-node="merecat"]').getAttribute("class").then(
+      (value) => value.includes("is-reading-focus"),
+    ),
+    true,
+  );
+  await sandboxRoot.locator('[data-sandbox-node="mere"]').click();
+  assert.equal(await sandboxRoot.locator("[data-sandbox-node]").count(), 5);
+  assert.equal(
+    await sandboxRoot.locator('[data-sandbox-node="mere"]').getAttribute("class").then(
+      (value) => value.includes("is-reading-focus"),
+    ),
+    true,
+    "selecting a neighbor must recompose the actor set around the new focus",
+  );
+  await sandboxArrangement.selectOption("graph_layout:grid");
+  assert.equal(await sandboxRoot.locator("[data-sandbox-node]").count(), 5);
   await sandboxRoot.locator('[data-sandbox-control="scene"]').selectOption("graph");
   await sandboxArrangement.selectOption("graph_layout:radial");
   await sandboxRoot.locator('[data-sandbox-node="ashland"]').click();
@@ -1122,7 +1145,7 @@ try {
   receipt.graph_sandbox = {
     state: sandboxState,
     datasets: { live: expectedRepositoryCount, specimen: 12 },
-    scenes: ["graph", "changes", "activity", "matrix"],
+    scenes: ["graph", "changes", "activity", "neighbors", "matrix"],
     arrangement: "graph_layout:radial",
     motion: "free",
     backdrop: "props",
@@ -1131,6 +1154,7 @@ try {
     pin_survives_arrangement: true,
     portable_scene: "reopened-from-url",
     changes: "adjacent-public-checkpoint-diff",
+    reading_registry: "mere.graph-reading-registry/v1",
     representation_registry: "mere.graph-representation-registry/v1",
   };
 

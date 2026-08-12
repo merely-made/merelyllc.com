@@ -1533,6 +1533,11 @@ h1 {
     0 5px 15px rgba(48, 39, 28, 0.2);
 }
 
+[data-sandbox-scene="neighbors"] .graph-sandbox-node.is-reading-focus .graph-sandbox-node-mark {
+  outline: 1px dashed var(--lake-edge);
+  outline-offset: 9px;
+}
+
 .graph-sandbox-node.is-pinned::before {
   content: "pin";
   position: absolute;

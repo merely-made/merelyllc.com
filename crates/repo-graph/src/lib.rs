@@ -6,7 +6,10 @@ use arrangements::{
     AxisValue, Layout, LayoutExtras, LayoutRegistry, Radial, RadialAngularPolicy, RadialConfig,
     RadialUnreachablePolicy, StaticLayoutState, Timeline, TimelineConfig,
 };
-use cartography::{PrimitiveBody, default_graph_representation_registry};
+use cartography::{
+    ActorScope, PrimitiveBody, default_graph_reading_registry,
+    default_graph_representation_registry,
+};
 use euclid::default::Point2D;
 use sceno::{
     Arrangement as SceneArrangement, Footprint, Placement, Representation, RoutedRelation, Score,
@@ -60,6 +63,10 @@ struct GraphNodeInput {
     class: String,
     status: String,
     pushed_at: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    change: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    summary: Option<String>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -69,6 +76,18 @@ struct GraphEdge {
     target: String,
     kind: String,
     provenance: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    change: Option<String>,
+}
+
+#[derive(Clone, Debug, Deserialize)]
+struct ReadingRequest {
+    reading: String,
+    current: GraphInput,
+    #[serde(default)]
+    previous: Option<GraphInput>,
+    #[serde(default)]
+    focus: Option<String>,
 }
 
 #[derive(Clone, Debug, Serialize)]
@@ -309,6 +328,241 @@ pub fn representation_registry() -> Result<String, JsValue> {
             "could not encode representation registry: {error}"
         ))
     })
+}
+
+/// Mere's portable catalog of graph readings.
+#[wasm_bindgen]
+pub fn reading_registry() -> Result<String, JsValue> {
+    serde_json::to_string(&default_graph_reading_registry())
+        .map_err(|error| JsValue::from_str(&format!("could not encode reading registry: {error}")))
+}
+
+/// Project one graph revision through a reading selected from Mere's registry.
+#[wasm_bindgen]
+pub fn project_reading(input: &str) -> Result<String, JsValue> {
+    project_reading_json(input).map_err(|error| JsValue::from_str(&error))
+}
+
+fn project_reading_json(input: &str) -> Result<String, String> {
+    let request: ReadingRequest =
+        serde_json::from_str(input).map_err(|error| format!("invalid reading request: {error}"))?;
+    validate(&request.current)?;
+    if let Some(previous) = &request.previous {
+        validate(previous)?;
+    }
+    let registry = default_graph_reading_registry();
+    let profile = registry
+        .resolve(&request.reading)
+        .ok_or_else(|| format!("unknown graph reading {}", request.reading))?;
+    let authored_changes = request
+        .current
+        .nodes
+        .iter()
+        .any(|node| node.change.is_some());
+    let current = decorate_current(request.current, request.previous.as_ref());
+    let projection = match profile.actor_scope {
+        ActorScope::All => current,
+        ActorScope::AdjacentRevision if request.previous.is_none() && authored_changes => current,
+        ActorScope::AdjacentRevision => diff_graphs(request.previous.as_ref(), &current),
+        ActorScope::FocusAndNeighbors => {
+            let focus = request
+                .focus
+                .as_deref()
+                .filter(|id| current.nodes.iter().any(|node| node.id == *id))
+                .or(current.focus.as_deref())
+                .unwrap_or_else(|| focal_node(&current));
+            focus_and_neighbors(&current, focus)
+        }
+    };
+    serde_json::to_string(&projection)
+        .map_err(|error| format!("could not encode graph reading: {error}"))
+}
+
+fn decorate_current(mut current: GraphInput, previous: Option<&GraphInput>) -> GraphInput {
+    let changes = diff_graphs(previous, &current)
+        .nodes
+        .into_iter()
+        .map(|node| (node.id, node.change.unwrap_or_else(|| "stable".to_owned())))
+        .collect::<HashMap<_, _>>();
+    for node in &mut current.nodes {
+        node.change = Some(node.change.clone().unwrap_or_else(|| {
+            changes
+                .get(&node.id)
+                .cloned()
+                .unwrap_or_else(|| "stable".to_owned())
+        }));
+        if node.summary.is_none() {
+            node.summary = Some(format!(
+                "{} is a {} in the selected public checkpoint.",
+                node.name,
+                humanize_identifier(&node.class)
+            ));
+        }
+    }
+    current
+}
+
+fn diff_graphs(previous: Option<&GraphInput>, current: &GraphInput) -> GraphInput {
+    let before = previous
+        .map(|graph| {
+            graph
+                .nodes
+                .iter()
+                .map(|node| (node.id.as_str(), node))
+                .collect::<HashMap<_, _>>()
+        })
+        .unwrap_or_default();
+    let after_ids = current
+        .nodes
+        .iter()
+        .map(|node| node.id.as_str())
+        .collect::<HashSet<_>>();
+    let before_edges = incident_edge_signatures(previous.map_or(&[], |graph| &graph.edges));
+    let after_edges = incident_edge_signatures(&current.edges);
+    let mut nodes = current
+        .nodes
+        .iter()
+        .cloned()
+        .map(|mut node| {
+            let change = match before.get(node.id.as_str()) {
+                None => "added",
+                Some(prior)
+                    if node_signature(prior) != node_signature(&node)
+                        || before_edges.get(&node.id) != after_edges.get(&node.id) =>
+                {
+                    "updated"
+                }
+                Some(_) => "stable",
+            };
+            node.change = Some(change.to_owned());
+            if node.summary.is_none() {
+                node.summary = Some(format!(
+                    "{} is a {} in the selected public checkpoint.",
+                    node.name,
+                    humanize_identifier(&node.class)
+                ));
+            }
+            node
+        })
+        .collect::<Vec<_>>();
+    if let Some(previous) = previous {
+        nodes.extend(
+            previous
+                .nodes
+                .iter()
+                .filter(|node| !after_ids.contains(node.id.as_str()))
+                .cloned()
+                .map(|mut node| {
+                    node.change = Some("removed".to_owned());
+                    if node.summary.is_none() {
+                        node.summary = Some(format!(
+                            "{} is absent from the selected public checkpoint.",
+                            node.name
+                        ));
+                    }
+                    node
+                }),
+        );
+    }
+
+    let node_ids = nodes
+        .iter()
+        .map(|node| node.id.as_str())
+        .collect::<HashSet<_>>();
+    let mut edges = current.edges.clone();
+    if let Some(previous) = previous {
+        let current_edge_ids = current
+            .edges
+            .iter()
+            .map(|edge| edge.id.as_str())
+            .collect::<HashSet<_>>();
+        edges.extend(
+            previous
+                .edges
+                .iter()
+                .filter(|edge| {
+                    !current_edge_ids.contains(edge.id.as_str())
+                        && node_ids.contains(edge.source.as_str())
+                        && node_ids.contains(edge.target.as_str())
+                })
+                .cloned()
+                .map(|mut edge| {
+                    edge.change = Some("removed".to_owned());
+                    edge
+                }),
+        );
+    }
+    let focus = current
+        .focus
+        .as_deref()
+        .filter(|focus| node_ids.contains(*focus))
+        .map(str::to_owned)
+        .or_else(|| nodes.first().map(|node| node.id.clone()));
+    GraphInput {
+        schema: current.schema.clone(),
+        focus,
+        nodes,
+        edges,
+    }
+}
+
+fn focus_and_neighbors(current: &GraphInput, focus: &str) -> GraphInput {
+    let mut ids = HashSet::from([focus]);
+    for edge in &current.edges {
+        if edge.source == focus {
+            ids.insert(edge.target.as_str());
+        }
+        if edge.target == focus {
+            ids.insert(edge.source.as_str());
+        }
+    }
+    GraphInput {
+        schema: current.schema.clone(),
+        focus: Some(focus.to_owned()),
+        nodes: current
+            .nodes
+            .iter()
+            .filter(|node| ids.contains(node.id.as_str()))
+            .cloned()
+            .collect(),
+        edges: current
+            .edges
+            .iter()
+            .filter(|edge| ids.contains(edge.source.as_str()) && ids.contains(edge.target.as_str()))
+            .cloned()
+            .collect(),
+    }
+}
+
+fn node_signature(node: &GraphNodeInput) -> (&str, &str, &str, &str) {
+    (&node.name, &node.class, &node.status, &node.pushed_at)
+}
+
+fn incident_edge_signatures(edges: &[GraphEdge]) -> HashMap<String, String> {
+    let mut by_node = HashMap::<String, Vec<String>>::new();
+    for edge in edges {
+        let signature = format!(
+            "{}:{}:{}:{}:{}",
+            edge.id, edge.source, edge.target, edge.kind, edge.provenance
+        );
+        for id in [&edge.source, &edge.target] {
+            by_node
+                .entry(id.clone())
+                .or_default()
+                .push(signature.clone());
+        }
+    }
+    by_node
+        .into_iter()
+        .map(|(id, mut signatures)| {
+            signatures.sort();
+            (id, signatures.join("|"))
+        })
+        .collect()
+}
+
+fn humanize_identifier(value: &str) -> String {
+    value.replace(['_', '-'], " ")
 }
 
 impl GraphPhysics {
@@ -1582,5 +1836,76 @@ mod tests {
             registry["profiles"][0]["behaviors"][0]["behavior"],
             "inspect"
         );
+    }
+
+    #[test]
+    fn sandbox_exports_meres_reading_registry() {
+        let encoded = reading_registry().expect("reading registry");
+        let registry: serde_json::Value =
+            serde_json::from_str(&encoded).expect("reading registry JSON");
+        assert_eq!(registry["schema"], "mere.graph-reading-registry/v1");
+        assert_eq!(registry["profiles"].as_array().expect("profiles").len(), 5);
+        assert_eq!(registry["profiles"][3]["id"], "neighbors");
+        assert_eq!(
+            registry["profiles"][3]["actor_scope"],
+            "focus_and_neighbors"
+        );
+    }
+
+    #[test]
+    fn neighbors_is_a_real_actor_projection_independent_of_arrangement() {
+        let current: serde_json::Value = serde_json::from_str(SAMPLE).expect("sample graph");
+        let request = serde_json::json!({
+            "reading": "neighbors",
+            "current": current,
+            "focus": "genet"
+        });
+        let encoded = project_reading_json(&request.to_string()).expect("neighbors reading");
+        let reading: serde_json::Value = serde_json::from_str(&encoded).expect("neighbors graph");
+        let ids = reading["nodes"]
+            .as_array()
+            .expect("nodes")
+            .iter()
+            .map(|node| node["id"].as_str().expect("node id"))
+            .collect::<HashSet<_>>();
+        assert_eq!(ids, HashSet::from(["mere", "genet"]));
+        assert_eq!(reading["edges"].as_array().expect("edges").len(), 1);
+        assert_eq!(reading["focus"], "genet");
+    }
+
+    #[test]
+    fn changes_is_computed_by_the_native_reading_consumer() {
+        let current: serde_json::Value = serde_json::from_str(SAMPLE).expect("sample graph");
+        let mut previous = current.clone();
+        previous["nodes"]
+            .as_array_mut()
+            .expect("previous nodes")
+            .retain(|node| node["id"] != "turnstone");
+        previous["edges"]
+            .as_array_mut()
+            .expect("previous edges")
+            .retain(|edge| edge["source"] != "turnstone");
+        previous["nodes"][0]["pushed_at"] = serde_json::json!("2026-07-29T05:44:23Z");
+        let request = serde_json::json!({
+            "reading": "changes",
+            "current": current,
+            "previous": previous
+        });
+        let encoded = project_reading_json(&request.to_string()).expect("changes reading");
+        let reading: serde_json::Value = serde_json::from_str(&encoded).expect("changes graph");
+        let change_by_id = reading["nodes"]
+            .as_array()
+            .expect("nodes")
+            .iter()
+            .map(|node| {
+                (
+                    node["id"].as_str().expect("node id"),
+                    node["change"].as_str().expect("change"),
+                )
+            })
+            .collect::<HashMap<_, _>>();
+        assert_eq!(change_by_id["mere"], "updated");
+        assert_eq!(change_by_id["genet"], "stable");
+        assert_eq!(change_by_id["turnstone"], "added");
     }
 }

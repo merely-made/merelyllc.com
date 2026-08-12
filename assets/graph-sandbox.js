@@ -1,9 +1,12 @@
 const runtimeVersion = new URL(import.meta.url).search;
 const SCENE_STATE_SCHEMA = "mer3ly.graphshell-scene-state/v1";
 const REGISTRY_SCHEMA = "mere.graph-representation-registry/v1";
+const READING_REGISTRY_SCHEMA = "mere.graph-reading-registry/v1";
 const {
   default: initWasm,
   layout_graph: layoutGraph,
+  project_reading: projectReading,
+  reading_registry: readingRegistry,
   representation_registry: representationRegistry,
   GraphPhysics,
 } = await import(`./mer3ly_repo_graph.js${runtimeVersion}`);
@@ -41,12 +44,15 @@ async function startSandbox(sandboxRoot) {
   });
   const registry = JSON.parse(representationRegistry());
   validateRegistry(registry);
+  const readings = JSON.parse(readingRegistry());
+  validateReadingRegistry(readings);
   const datasets = buildDatasets(specimen, repositories);
   const sharedState = decodeSceneState(window.location.hash);
   const sandbox = new GraphSandbox(
     sandboxRoot,
     datasets,
     registry,
+    readings,
     sharedState,
   );
   sandbox.start();
@@ -151,11 +157,25 @@ function validateRegistry(registry) {
   }
 }
 
+function validateReadingRegistry(registry) {
+  if (
+    registry.schema !== READING_REGISTRY_SCHEMA ||
+    !Array.isArray(registry.profiles) ||
+    !registry.profiles.length
+  ) {
+    throw new Error("Mere reading registry schema mismatch");
+  }
+}
+
 class GraphSandbox {
-  constructor(sandboxRoot, datasets, registry, sharedState) {
+  constructor(sandboxRoot, datasets, registry, readingRegistry, sharedState) {
     this.root = sandboxRoot;
     this.datasets = datasets;
     this.registry = registry;
+    this.readingRegistry = readingRegistry;
+    this.readings = new Map(
+      readingRegistry.profiles.map((reading) => [reading.id, reading]),
+    );
     this.sharedState = sharedState;
     this.stage = sandboxRoot.querySelector("[data-sandbox-stage]");
     this.canvas = sandboxRoot.querySelector("[data-sandbox-canvas]");
@@ -178,8 +198,9 @@ class GraphSandbox {
     this.shareStatus = sandboxRoot.querySelector("[data-sandbox-share-status]");
     this.datasetId = "live";
     this.historyIndex = 0;
-    this.currentArrangement = "graph_layout:stack";
-    this.scene = "graph";
+    this.scene = readingRegistry.profiles[0].id;
+    this.currentArrangement =
+      readingRegistry.profiles[0].default_arrangement ?? "graph_layout:stack";
     this.mobility = "anchored";
     this.backdrop = "ambient";
     this.physicsMode = "live";
@@ -197,6 +218,7 @@ class GraphSandbox {
   }
 
   start() {
+    this.installReadingOptions();
     this.installControls();
     this.applySharedState(this.sharedState);
     this.setLatestHistoryUnlessShared();
@@ -218,6 +240,14 @@ class GraphSandbox {
     return this.dataset()?.label ?? this.datasetId;
   }
 
+  readingProfile() {
+    return this.readings.get(this.scene) ?? this.readingRegistry.profiles[0];
+  }
+
+  isMatrix() {
+    return this.readingProfile().surface === "relation_matrix";
+  }
+
   currentPins() {
     if (!this.pinsByDataset.has(this.datasetId)) {
       this.pinsByDataset.set(this.datasetId, new Map());
@@ -237,7 +267,7 @@ class GraphSandbox {
   applySharedState(state) {
     if (!state || state.schema !== SCENE_STATE_SCHEMA) return;
     if (this.datasets.has(state.dataset)) this.datasetId = state.dataset;
-    if (["graph", "changes", "activity", "matrix"].includes(state.reading)) {
+    if (this.readings.has(state.reading)) {
       this.scene = state.reading;
     }
     if (typeof state.arrangement === "string") {
@@ -281,17 +311,18 @@ class GraphSandbox {
   authorityForState() {
     const dataset = this.dataset();
     const snapshots = dataset.snapshots;
-    if (!snapshots.length) return decorateSpecimen(dataset.graph);
-
     const current = snapshots[this.historyIndex]?.graph ?? dataset.graph;
     const previous = this.historyIndex > 0 ? snapshots[this.historyIndex - 1].graph : null;
-    const diff = diffGraphs(previous, current);
-    if (this.scene === "changes") return diff;
-    const changes = new Map(diff.nodes.map((node) => [node.id, node.change]));
-    return {
-      ...graphOnly(current),
-      nodes: current.nodes.map((node) => enrichNode(node, changes.get(node.id) ?? "stable")),
-    };
+    return JSON.parse(
+      projectReading(
+        JSON.stringify({
+          reading: this.scene,
+          current,
+          previous,
+          focus: this.selectedId ?? current.focus ?? null,
+        }),
+      ),
+    );
   }
 
   loadAuthority() {
@@ -301,11 +332,18 @@ class GraphSandbox {
     this.arrangements = new Map(
       this.layout.arrangements.map((arrangement) => [arrangement.id, arrangement]),
     );
-    if (!this.arrangements.has(this.currentArrangement)) {
-      this.currentArrangement = this.layout.default_arrangement;
-    }
-    if (this.scene === "activity" && this.arrangements.has("graph_layout:timeline")) {
-      this.currentArrangement = "graph_layout:timeline";
+    const reading = this.readingProfile();
+    if (
+      reading.arrangement_locked &&
+      reading.default_arrangement &&
+      this.arrangements.has(reading.default_arrangement)
+    ) {
+      this.currentArrangement = reading.default_arrangement;
+    } else if (!this.arrangements.has(this.currentArrangement)) {
+      this.currentArrangement =
+        reading.default_arrangement && this.arrangements.has(reading.default_arrangement)
+          ? reading.default_arrangement
+          : this.layout.default_arrangement;
     }
 
     this.physics = new GraphPhysics(JSON.stringify(this.authority));
@@ -338,6 +376,19 @@ class GraphSandbox {
       picker.append(option);
     }
     picker.value = this.currentArrangement;
+  }
+
+  installReadingOptions() {
+    const picker = this.controls.get("scene");
+    picker.replaceChildren();
+    for (const reading of this.readingRegistry.profiles) {
+      const option = document.createElement("option");
+      option.value = reading.id;
+      option.textContent = reading.label;
+      option.title = reading.description;
+      picker.append(option);
+    }
+    picker.value = this.scene;
   }
 
   installControls() {
@@ -373,6 +424,10 @@ class GraphSandbox {
     }
     if (name === "scene") {
       this.scene = value;
+      const reading = this.readingProfile();
+      if (reading.default_arrangement) {
+        this.currentArrangement = reading.default_arrangement;
+      }
       this.loadAuthority();
       this.schedule();
       return;
@@ -433,11 +488,12 @@ class GraphSandbox {
   }
 
   applySceneVisibility() {
-    const matrix = this.scene === "matrix";
+    const reading = this.readingProfile();
+    const matrix = reading.surface === "relation_matrix";
     this.canvas.hidden = matrix;
     this.nodeLayer.hidden = matrix;
     this.matrix.hidden = !matrix;
-    this.controls.get("arrangement").disabled = matrix || this.scene === "activity";
+    this.controls.get("arrangement").disabled = matrix || reading.arrangement_locked;
     this.controls.get("mobility").disabled = matrix;
     this.controls.get("backdrop").disabled = matrix;
     this.controls.get("physics").disabled = matrix;
@@ -534,18 +590,30 @@ class GraphSandbox {
   }
 
   updateNodeScenes() {
+    const emphasis = this.readingProfile().emphasis;
     for (const node of this.authority.nodes) {
       const button = this.nodeButtons.get(node.id);
       button?.classList.toggle(
         "is-change-muted",
-        this.scene === "changes" && node.change === "stable",
+        emphasis === "change" && node.change === "stable",
       );
-      button?.classList.toggle("is-activity", this.scene === "activity");
+      button?.classList.toggle("is-activity", emphasis === "activity");
+      button?.classList.toggle(
+        "is-reading-focus",
+        emphasis === "focus_distance" && node.id === this.authority.focus,
+      );
     }
   }
 
   startDrag(event, id, button) {
-    if (event.button !== 0 || this.scene === "matrix") return;
+    if (event.button !== 0 || this.isMatrix()) return;
+    if (
+      this.readingProfile().actor_scope === "focus_and_neighbors" &&
+      this.authority.focus !== id
+    ) {
+      this.select(id);
+      return;
+    }
     this.select(id, false);
     button.setPointerCapture(event.pointerId);
     this.drag = {
@@ -607,6 +675,17 @@ class GraphSandbox {
 
   select(id, speak = true) {
     if (!this.nodeButtons.has(id)) return;
+    const node = this.node(id);
+    if (
+      this.readingProfile().actor_scope === "focus_and_neighbors" &&
+      this.authority.focus !== id
+    ) {
+      this.selectedId = id;
+      this.loadAuthority();
+      if (speak) announce(this.root, `${node.name} is now the neighborhood focus.`);
+      this.schedule();
+      return;
+    }
     this.selectedId = id;
     for (const [nodeId, button] of this.nodeButtons) {
       const selected = nodeId === id;
@@ -619,7 +698,6 @@ class GraphSandbox {
     this.updateInspector();
     this.updateMatrixSelection();
     if (speak) {
-      const node = this.node(id);
       announce(this.root, `${node.name} selected. ${node.summary}`);
     }
     this.schedule();
@@ -675,15 +753,11 @@ class GraphSandbox {
 
   updateCaption() {
     const arrangement = this.arrangements.get(this.currentArrangement);
-    const sceneText = {
-      graph: "Graph shows actors and typed relations",
-      changes:
-        this.datasetId === "live"
-          ? "Changes compares this public checkpoint with its predecessor"
-          : "Changes shows the specimen's authored transition states",
-      activity: "Activity binds the same actors to their source times",
-      matrix: "Matrix replaces position with an exact relation lookup",
-    }[this.scene];
+    const reading = this.readingProfile();
+    const sceneText =
+      this.scene === "changes" && this.datasetId === "specimen"
+        ? "Authored transition states in the specimen"
+        : reading.description;
     const arrangementName =
       this.currentArrangement === "graph_layout:radial"
         ? "Neighborhood"
@@ -825,7 +899,7 @@ class GraphSandbox {
     this.animationFrame = null;
     const dt = Math.min(Math.max((time - this.lastTime) / 1000, 1 / 120), 1 / 24);
     this.lastTime = time;
-    if (this.scene !== "matrix" && this.physicsMode !== "paused") {
+    if (!this.isMatrix() && this.physicsMode !== "paused") {
       const steps = this.physicsMode === "settle" ? 3 : 1;
       for (let step = 0; step < steps; step += 1) {
         this.frame = JSON.parse(this.physics.tick(dt / steps));
@@ -841,11 +915,11 @@ class GraphSandbox {
       }
     }
     this.render();
-    if (this.scene !== "matrix" && this.physicsMode !== "paused") this.schedule();
+    if (!this.isMatrix() && this.physicsMode !== "paused") this.schedule();
   }
 
   render() {
-    if (this.scene === "matrix") return;
+    if (this.isMatrix()) return;
     this.drawCanvas();
     for (const node of this.authority.nodes) {
       const position = this.frameById.get(node.id);
@@ -866,7 +940,7 @@ class GraphSandbox {
     const rect = this.stage.getBoundingClientRect();
     context.clearRect(0, 0, rect.width, rect.height);
     this.drawBackdrop(context, rect);
-    if (this.scene === "activity") this.drawActivityRail(context, rect);
+    if (this.readingProfile().emphasis === "activity") this.drawActivityRail(context, rect);
     this.drawEdges(context);
     this.drawProps(context);
   }
@@ -915,7 +989,7 @@ class GraphSandbox {
       context.lineWidth = selected ? 1.9 : 0.9;
       context.strokeStyle = selected
         ? "rgba(89, 60, 37, 0.9)"
-        : this.scene === "changes" && changed
+        : this.readingProfile().emphasis === "change" && changed
           ? "rgba(156, 76, 45, 0.5)"
           : "rgba(77, 67, 53, 0.22)";
       if (edge.provenance === "derived") context.setLineDash([4, 5]);
@@ -972,71 +1046,8 @@ class GraphSandbox {
   }
 }
 
-function decorateSpecimen(graph) {
-  return {
-    ...graphOnly(graph),
-    nodes: graph.nodes.map((node) => enrichNode(node, node.change ?? "stable")),
-  };
-}
-
-function diffGraphs(previous, current) {
-  const before = new Map((previous?.nodes ?? []).map((node) => [node.id, node]));
-  const after = new Map(current.nodes.map((node) => [node.id, node]));
-  const beforeEdges = edgeSignatures(previous?.edges ?? []);
-  const afterEdges = edgeSignatures(current.edges);
-  const nodes = [];
-  for (const node of current.nodes) {
-    let change = "stable";
-    const prior = before.get(node.id);
-    if (!prior) change = "added";
-    else if (nodeSignature(prior) !== nodeSignature(node)) change = "updated";
-    else if (beforeEdges.get(node.id) !== afterEdges.get(node.id)) change = "updated";
-    nodes.push(enrichNode(node, change));
-  }
-  for (const node of previous?.nodes ?? []) {
-    if (!after.has(node.id)) nodes.push(enrichNode(node, "removed"));
-  }
-  const ids = new Set(nodes.map((node) => node.id));
-  const edges = new Map(current.edges.map((edge) => [edge.id, { ...edge }]));
-  for (const edge of previous?.edges ?? []) {
-    if (!edges.has(edge.id) && ids.has(edge.source) && ids.has(edge.target)) {
-      edges.set(edge.id, { ...edge, change: "removed" });
-    }
-  }
-  return {
-    schema: current.schema,
-    focus: ids.has(current.focus) ? current.focus : nodes[0]?.id,
-    nodes,
-    edges: [...edges.values()],
-  };
-}
-
-function enrichNode(node, change) {
-  return {
-    ...node,
-    change,
-    summary:
-      node.summary ??
-      `${node.name} is a ${humanize(node.class)} in the selected public checkpoint.`,
-  };
-}
-
 function nodeSignature(node) {
   return [node.name, node.class, node.status, node.pushed_at].join("\u0000");
-}
-
-function edgeSignatures(edges) {
-  const byNode = new Map();
-  for (const edge of edges) {
-    const signature = [edge.id, edge.source, edge.target, edge.kind, edge.provenance].join(":");
-    for (const id of [edge.source, edge.target]) {
-      if (!byNode.has(id)) byNode.set(id, []);
-      byNode.get(id).push(signature);
-    }
-  }
-  return new Map(
-    [...byNode].map(([id, signatures]) => [id, signatures.sort().join("|")]),
-  );
 }
 
 function behaviorText(profile) {

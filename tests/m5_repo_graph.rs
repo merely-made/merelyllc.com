@@ -338,10 +338,14 @@ fn graphshell_sandbox_keeps_scene_arrangement_motion_and_backdrop_distinct() {
         classes.len() >= 8,
         "the specimen graph is meaningfully heterogeneous"
     );
-    assert_eq!(sandbox["sandbox"]["schema"], "mer3ly.graphshell-sandbox/v2");
+    assert_eq!(sandbox["sandbox"]["schema"], "mer3ly.graphshell-sandbox/v3");
     assert_eq!(
         sandbox["sandbox"]["scene_state_schema"],
         "mer3ly.graphshell-scene-state/v1"
+    );
+    assert_eq!(
+        sandbox["sandbox"]["reading_registry_schema"],
+        "mere.graph-reading-registry/v1"
     );
     assert_eq!(
         sandbox["sandbox"]["representation_registry_schema"],
@@ -362,8 +366,9 @@ fn graphshell_sandbox_keeps_scene_arrangement_motion_and_backdrop_distinct() {
         "recomputeNeighborhood",
         "buildMatrix",
         "dataset.sandboxScene",
+        "readingRegistry",
+        "projectReading",
         "representationRegistry",
-        "diffGraphs",
         "encodeSceneState",
         "pinsByDataset",
         "physics.tick",
@@ -381,6 +386,7 @@ fn graphshell_sandbox_keeps_scene_arrangement_motion_and_backdrop_distinct() {
         ".graph-sandbox-history",
         ".graph-sandbox-share",
         "[data-sandbox-scene=\"changes\"]",
+        "[data-sandbox-scene=\"neighbors\"]",
         ".graph-sandbox-matrix-cell.has-relation",
     ] {
         assert!(
