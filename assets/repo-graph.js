@@ -22,6 +22,17 @@ const SCENE_PROFILES = new Map([
     },
   ],
   [
+    "graph_layout:stack",
+    {
+      form: "tile",
+      scaffold: "index",
+      edgeOpacity: 0.42,
+      selectedEdgeOpacity: 0.9,
+      canvasNodes: false,
+      caption: "Directed layers · topology supplies slots while relationships stay explicit",
+    },
+  ],
+  [
     "graph_layout:grid",
     {
       form: "tile",

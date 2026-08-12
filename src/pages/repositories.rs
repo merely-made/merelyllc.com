@@ -2,6 +2,7 @@ use std::collections::BTreeMap;
 use std::path::Path;
 
 use serde::Serialize;
+use serde_json::json;
 use sha2::{Digest, Sha256};
 
 use crate::repositories::{
@@ -23,6 +24,7 @@ pub const METADATA: PageMetadata = PageMetadata {
 };
 
 const REPO_GRAPH_LOADER: &[u8] = include_bytes!("../../assets/repo-graph.js");
+const GRAPH_SANDBOX_LOADER: &[u8] = include_bytes!("../../assets/graph-sandbox.js");
 const REPO_GRAPH_WASM_GLUE: &[u8] = include_bytes!("../../assets/mer3ly_repo_graph.js");
 const REPO_GRAPH_WASM: &[u8] = include_bytes!("../../assets/mer3ly_repo_graph_bg.wasm");
 const HISTORY_POINT_LIMIT: usize = 24;
@@ -61,11 +63,318 @@ pub fn view(data: &PublicSiteData) -> SiteView {
             vec![
                 hero(data),
                 repository_graph(data),
+                graph_sandbox(),
                 organization_activity(data),
                 repository_index(data),
                 source_note(data),
             ],
         ),
+    )
+}
+
+fn graph_sandbox() -> SiteView {
+    element(
+        "section",
+        &[
+            ("class", "content-section graph-sandbox-section"),
+            ("aria-labelledby", "graph-sandbox-title"),
+            ("data-graph-sandbox", ""),
+            ("data-sandbox-state", "pending"),
+        ],
+        vec![
+            section_heading("02", "graphshell sandbox"),
+            element(
+                "div",
+                &[("class", "graph-sandbox-heading")],
+                vec![
+                    element(
+                        "h3",
+                        &[("id", "graph-sandbox-title")],
+                        vec![txt("One graph, several readings, real Mere physics.")],
+                    ),
+                    element(
+                        "p",
+                        &[],
+                        vec![txt(
+                            "A heterogeneous specimen graph rendered through the same arrangement crate as the repository map, then handed to Seiche for motion and collision. It is a public Graphshell projection sandbox, not the whole browser shell.",
+                        )],
+                    ),
+                ],
+            ),
+            sandbox_contract(),
+            element(
+                "p",
+                &[
+                    ("class", "graph-sandbox-fallback"),
+                    ("data-sandbox-fallback", ""),
+                ],
+                vec![txt(
+                    "The sandbox requires WebAssembly. Its model is: arrangements choose slots; motion decides how strongly nodes obey them; backdrops may be paint, props, or force fields.",
+                )],
+            ),
+            element(
+                "div",
+                &[
+                    ("class", "graph-sandbox-shell"),
+                    ("data-sandbox-interface", ""),
+                    ("hidden", "hidden"),
+                ],
+                vec![
+                    sandbox_toolbar(),
+                    element(
+                        "p",
+                        &[
+                            ("class", "graph-sandbox-caption"),
+                            ("data-sandbox-caption", ""),
+                        ],
+                        vec![txt("Loading the graph runtime…")],
+                    ),
+                    element(
+                        "div",
+                        &[("class", "graph-sandbox-workbench")],
+                        vec![
+                            element(
+                                "div",
+                                &[
+                                    ("class", "graph-sandbox-stage"),
+                                    ("data-sandbox-stage", ""),
+                                    ("data-sandbox-scene", "graph"),
+                                    ("data-sandbox-backdrop", "ambient"),
+                                ],
+                                vec![
+                                    element(
+                                        "canvas",
+                                        &[
+                                            ("class", "graph-sandbox-canvas"),
+                                            ("data-sandbox-canvas", ""),
+                                            ("aria-hidden", "true"),
+                                        ],
+                                        vec![],
+                                    ),
+                                    element(
+                                        "div",
+                                        &[
+                                            ("class", "graph-sandbox-nodes"),
+                                            ("data-sandbox-nodes", ""),
+                                            ("role", "group"),
+                                            ("aria-label", "Graph sandbox nodes"),
+                                        ],
+                                        vec![],
+                                    ),
+                                    element(
+                                        "div",
+                                        &[
+                                            ("class", "graph-sandbox-matrix"),
+                                            ("data-sandbox-matrix", ""),
+                                            ("hidden", "hidden"),
+                                        ],
+                                        vec![],
+                                    ),
+                                ],
+                            ),
+                            sandbox_inspector(),
+                        ],
+                    ),
+                ],
+            ),
+            element(
+                "p",
+                &[
+                    ("class", "sr-only"),
+                    ("data-sandbox-status", ""),
+                    ("aria-live", "polite"),
+                ],
+                vec![txt("Graphshell sandbox not initialized.")],
+            ),
+        ],
+    )
+}
+
+fn sandbox_contract() -> SiteView {
+    element(
+        "dl",
+        &[("class", "graph-sandbox-contract")],
+        vec![
+            sandbox_contract_item("Scene", "actors, representation, behavior"),
+            sandbox_contract_item("Arrangement", "deterministic target slots"),
+            sandbox_contract_item("Motion", "frozen, anchored, or free"),
+            sandbox_contract_item("Backdrop", "paint, colliders, or a field"),
+        ],
+    )
+}
+
+fn sandbox_contract_item(term: &str, definition: &str) -> SiteView {
+    element(
+        "div",
+        &[],
+        vec![
+            element("dt", &[], vec![txt(term)]),
+            element("dd", &[], vec![txt(definition)]),
+        ],
+    )
+}
+
+fn sandbox_toolbar() -> SiteView {
+    element(
+        "div",
+        &[
+            ("class", "graph-sandbox-toolbar"),
+            ("aria-label", "Sandbox controls"),
+        ],
+        vec![
+            sandbox_select(
+                "Scene",
+                "scene",
+                &[
+                    ("graph", "Graph"),
+                    ("changes", "Changes"),
+                    ("activity", "Activity"),
+                    ("matrix", "Matrix"),
+                ],
+                "graph",
+            ),
+            sandbox_select("Arrangement", "arrangement", &[], ""),
+            sandbox_select(
+                "Motion",
+                "mobility",
+                &[
+                    ("frozen", "Frozen"),
+                    ("anchored", "Anchored"),
+                    ("free", "Free"),
+                ],
+                "anchored",
+            ),
+            sandbox_select(
+                "Backdrop",
+                "backdrop",
+                &[
+                    ("clear", "Clear"),
+                    ("ambient", "Ambient"),
+                    ("props", "Props"),
+                    ("field", "Field"),
+                ],
+                "ambient",
+            ),
+            sandbox_select(
+                "Physics",
+                "physics",
+                &[("paused", "Paused"), ("settle", "Settle"), ("live", "Live")],
+                "live",
+            ),
+            element(
+                "label",
+                &[("class", "graph-sandbox-toggle")],
+                vec![
+                    element(
+                        "input",
+                        &[
+                            ("type", "checkbox"),
+                            ("data-sandbox-tangible", ""),
+                            ("disabled", "disabled"),
+                        ],
+                        vec![],
+                    ),
+                    element("span", &[], vec![txt("collidable")]),
+                ],
+            ),
+        ],
+    )
+}
+
+fn sandbox_select(label: &str, name: &str, options: &[(&str, &str)], selected: &str) -> SiteView {
+    element(
+        "label",
+        &[("class", "graph-sandbox-select")],
+        vec![
+            element("span", &[], vec![txt(label)]),
+            element(
+                "select",
+                &[("data-sandbox-control", name), ("aria-label", label)],
+                options
+                    .iter()
+                    .map(|(value, text)| {
+                        let attrs = if *value == selected {
+                            vec![("value", *value), ("selected", "selected")]
+                        } else {
+                            vec![("value", *value)]
+                        };
+                        element("option", &attrs, vec![txt(*text)])
+                    })
+                    .collect(),
+            ),
+        ],
+    )
+}
+
+fn sandbox_inspector() -> SiteView {
+    element(
+        "aside",
+        &[
+            ("class", "graph-sandbox-inspector"),
+            ("aria-live", "polite"),
+        ],
+        vec![
+            element("p", &[("class", "eyebrow")], vec![txt("selected actor")]),
+            element(
+                "h4",
+                &[("data-sandbox-inspector-title", "")],
+                vec![txt("Nothing selected")],
+            ),
+            element(
+                "p",
+                &[("data-sandbox-inspector-summary", "")],
+                vec![txt(
+                    "Select a node to inspect its primitive and behavior bindings.",
+                )],
+            ),
+            element(
+                "dl",
+                &[("class", "graph-sandbox-inspector-facts")],
+                vec![
+                    element(
+                        "div",
+                        &[],
+                        vec![
+                            element("dt", &[], vec![txt("Primitive")]),
+                            element("dd", &[("data-sandbox-primitive", "")], vec![txt("—")]),
+                        ],
+                    ),
+                    element(
+                        "div",
+                        &[],
+                        vec![
+                            element("dt", &[], vec![txt("Behavior")]),
+                            element("dd", &[("data-sandbox-script", "")], vec![txt("—")]),
+                        ],
+                    ),
+                    element(
+                        "div",
+                        &[],
+                        vec![
+                            element("dt", &[], vec![txt("Motion")]),
+                            element("dd", &[("data-sandbox-node-motion", "")], vec![txt("—")]),
+                        ],
+                    ),
+                ],
+            ),
+            element(
+                "button",
+                &[
+                    ("type", "button"),
+                    ("class", "graph-sandbox-pin"),
+                    ("data-sandbox-pin", ""),
+                    ("disabled", "disabled"),
+                ],
+                vec![txt("pin selected")],
+            ),
+            element(
+                "p",
+                &[("class", "graph-sandbox-inspector-note")],
+                vec![txt(
+                    "Drag ends in a pin. Double-click toggles it. Select in Neighborhood to recenter the rings.",
+                )],
+            ),
+        ],
     )
 }
 
@@ -242,7 +551,7 @@ fn organization_activity(data: &PublicSiteData) -> SiteView {
             ("aria-label", "Recent merely-made GitHub activity"),
         ],
         vec![
-            section_heading("02", "recent organization activity"),
+            section_heading("03", "recent organization activity"),
             element(
                 "p",
                 &[("class", "repository-activity-intro")],
@@ -589,7 +898,7 @@ fn repository_index(data: &PublicSiteData) -> SiteView {
             ("aria-label", "Repository index"),
         ],
         vec![
-            section_heading("03", "repository index"),
+            section_heading("04", "repository index"),
             element(
                 "p",
                 &[("class", "index-intro")],
@@ -1067,10 +1376,60 @@ fn graph_bootstrap(
         .replace('>', "\\u003e")
         .replace('&', "\\u0026");
     let graph_runtime_href = graph_runtime_href();
+    let sandbox_runtime_href = graph_sandbox_runtime_href();
+    let sandbox_json = graph_sandbox_json();
     format!(
         "<script id=\"repository-graph-data\" type=\"application/json\">{json}</script>\n\
-<script type=\"module\" src=\"{graph_runtime_href}\"></script>"
+<script type=\"module\" src=\"{graph_runtime_href}\"></script>\n\
+<script id=\"graph-sandbox-data\" type=\"application/json\">{sandbox_json}</script>\n\
+<script type=\"module\" src=\"{sandbox_runtime_href}\"></script>"
     )
+}
+
+fn graph_sandbox_json() -> String {
+    serde_json::to_string_pretty(&json!({
+        "schema": "mer3ly.repo-graph/v1",
+        "focus": "merecat",
+        "nodes": [
+            {"id":"merecat","name":"merecat","class":"product","status":"live","pushed_at":"2026-08-11T16:20:00Z","change":"updated","summary":"A graph browser hosted on the local device.","script":"select: inspect · drag: pin · follow: open neighborhood"},
+            {"id":"mere","name":"Mere","class":"platform","status":"live","pushed_at":"2026-08-10T09:12:00Z","change":"updated","summary":"The modular graph GUI and canvas library.","script":"select: inspect · double-click: toggle pin"},
+            {"id":"turnstone","name":"Turnstone","class":"device","status":"present","pushed_at":"2026-08-07T14:30:00Z","change":"stable","summary":"A physical host in the trusted device group.","script":"select: inspect · drag: move body"},
+            {"id":"ashland","name":"Ashland","class":"place","status":"present","pushed_at":"2026-07-29T12:00:00Z","change":"stable","summary":"A place node, drawn and collided as a circle.","script":"select: inspect · follow: reveal contained actors"},
+            {"id":"merely-made","name":"merely-made","class":"community","status":"live","pushed_at":"2026-08-11T15:42:00Z","change":"added","summary":"A public organization and software community.","script":"select: inspect · follow: show members"},
+            {"id":"mark","name":"Mark","class":"person","status":"present","pushed_at":"2026-08-11T15:00:00Z","change":"stable","summary":"A person actor, distinct from their devices and projects.","script":"select: inspect · follow: authored things"},
+            {"id":"field-notes","name":"Field notes","class":"document","status":"draft","pushed_at":"2026-08-09T18:05:00Z","change":"updated","summary":"A square document primitive carrying observations.","script":"select: inspect · open: read document"},
+            {"id":"radio-session","name":"Radio session","class":"event","status":"past","pushed_at":"2026-08-05T20:00:00Z","change":"stable","summary":"A time-bound event represented as a diamond.","script":"select: inspect · follow: participants and place"},
+            {"id":"relay","name":"Neighborhood relay","class":"device","status":"present","pushed_at":"2026-08-06T08:30:00Z","change":"added","summary":"A peer radio carrying local messages.","script":"select: inspect · drag: pin relay"},
+            {"id":"message","name":"Shared message","class":"note","status":"received","pushed_at":"2026-08-06T08:33:00Z","change":"added","summary":"A small piece of content moving between peers.","script":"select: inspect · follow: provenance"},
+            {"id":"strophe","name":"Strophe","class":"software","status":"research","pushed_at":"2026-08-08T11:14:00Z","change":"stable","summary":"A sibling software system sharing the same surface stack.","script":"select: inspect · follow: dependencies"},
+            {"id":"old-mock","name":"Old mock","class":"page","status":"retired","pushed_at":"2026-07-18T10:10:00Z","change":"removed","summary":"A removed representation retained in the changes scene.","script":"select: inspect · compare: replacement"}
+        ],
+        "edges": [
+            {"id":"merecat-uses-mere","source":"merecat","target":"mere","kind":"uses","provenance":"curated"},
+            {"id":"turnstone-hosts-merecat","source":"turnstone","target":"merecat","kind":"hosts","provenance":"curated"},
+            {"id":"mark-builds-mere","source":"mark","target":"mere","kind":"builds","provenance":"curated"},
+            {"id":"mark-member-merely","source":"mark","target":"merely-made","kind":"member_of","provenance":"curated"},
+            {"id":"merely-publishes-mere","source":"merely-made","target":"mere","kind":"publishes","provenance":"derived"},
+            {"id":"strophe-shares-mere","source":"strophe","target":"mere","kind":"shares_stack","provenance":"curated"},
+            {"id":"session-occurs-ashland","source":"radio-session","target":"ashland","kind":"occurs_in","provenance":"curated"},
+            {"id":"mark-attends-session","source":"mark","target":"radio-session","kind":"participates","provenance":"curated"},
+            {"id":"session-produces-notes","source":"radio-session","target":"field-notes","kind":"produces","provenance":"curated"},
+            {"id":"relay-carries-message","source":"relay","target":"message","kind":"carries","provenance":"derived"},
+            {"id":"message-recorded-notes","source":"message","target":"field-notes","kind":"recorded_in","provenance":"curated"},
+            {"id":"relay-near-ashland","source":"relay","target":"ashland","kind":"located_in","provenance":"curated"},
+            {"id":"old-mock-replaced-merecat","source":"old-mock","target":"merecat","kind":"replaced_by","provenance":"curated"}
+        ],
+        "sandbox": {
+            "schema": "mer3ly.graphshell-sandbox/v1",
+            "primitive_rule": "class chooses face and collider; data remains authoritative",
+            "behavior_rule": "named bindings invoke host actions; scripts do not own graph position",
+            "views": ["graph", "changes", "activity", "matrix"]
+        }
+    }))
+    .expect("graph sandbox data is serializable")
+    .replace('<', "\\u003c")
+    .replace('>', "\\u003e")
+    .replace('&', "\\u0026")
 }
 
 fn serialize_json_records<T: Serialize>(records: &[T]) -> String {
@@ -1091,6 +1450,15 @@ fn graph_runtime_href() -> String {
     digest.update(REPO_GRAPH_WASM);
     let digest = format!("{:x}", digest.finalize());
     format!("/repo-graph.js?v={}", &digest[..12])
+}
+
+fn graph_sandbox_runtime_href() -> String {
+    let mut digest = Sha256::new();
+    digest.update(GRAPH_SANDBOX_LOADER);
+    digest.update(REPO_GRAPH_WASM_GLUE);
+    digest.update(REPO_GRAPH_WASM);
+    let digest = format!("{:x}", digest.finalize());
+    format!("/graph-sandbox.js?v={}", &digest[..12])
 }
 
 fn format_timestamp(value: &str) -> String {

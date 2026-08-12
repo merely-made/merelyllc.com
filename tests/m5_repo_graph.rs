@@ -7,6 +7,7 @@ use mer3ly_site::site::SITE_CSS;
 use serde::Deserialize;
 
 const GRAPH_LOADER: &str = include_str!("../assets/repo-graph.js");
+const GRAPH_SANDBOX: &str = include_str!("../assets/graph-sandbox.js");
 const GRAPH_GLUE: &str = include_str!("../assets/mer3ly_repo_graph.js");
 const GRAPH_WASM: &[u8] = include_bytes!("../assets/mer3ly_repo_graph_bg.wasm");
 
@@ -75,6 +76,16 @@ fn graph_authority(document: &str) -> GraphAuthority {
         .map(|offset| start + offset)
         .expect("repository graph bootstrap end");
     serde_json::from_str(&document[start..end]).expect("valid graph authority JSON")
+}
+
+fn sandbox_authority(document: &str) -> serde_json::Value {
+    let marker = "<script id=\"graph-sandbox-data\" type=\"application/json\">";
+    let start = document.find(marker).expect("graph sandbox bootstrap") + marker.len();
+    let end = document[start..]
+        .find("</script>")
+        .map(|offset| start + offset)
+        .expect("graph sandbox bootstrap end");
+    serde_json::from_str(&document[start..end]).expect("valid sandbox authority JSON")
 }
 
 #[test]
@@ -312,16 +323,76 @@ fn graph_runtime_covers_interaction_and_failure_contracts() {
 }
 
 #[test]
+fn graphshell_sandbox_keeps_scene_arrangement_motion_and_backdrop_distinct() {
+    let root = workspace_root();
+    let document = repositories::document(&root).expect("render repository page");
+    let sandbox = sandbox_authority(&document);
+    let classes = sandbox["nodes"]
+        .as_array()
+        .expect("sandbox nodes")
+        .iter()
+        .filter_map(|node| node["class"].as_str())
+        .collect::<BTreeSet<_>>();
+
+    assert!(
+        classes.len() >= 8,
+        "the specimen graph is meaningfully heterogeneous"
+    );
+    assert_eq!(sandbox["sandbox"]["schema"], "mer3ly.graphshell-sandbox/v1");
+    assert!(document.contains("data-graph-sandbox"));
+    assert!(document.contains("One graph, several readings, real Mere physics."));
+    assert!(document.contains("Graphshell projection sandbox, not the whole browser shell"));
+
+    for contract in [
+        "new GraphPhysics",
+        "setArrangement",
+        "setBackdrop",
+        "pinNode",
+        "unpinNode",
+        "graph_layout:stack",
+        "graph_layout:radial",
+        "recomputeNeighborhood",
+        "buildMatrix",
+        "dataset.sandboxScene",
+        "physics.tick",
+        "ResizeObserver",
+    ] {
+        assert!(
+            GRAPH_SANDBOX.contains(contract),
+            "sandbox runtime is missing {contract}"
+        );
+    }
+    for contract in [
+        ".graph-sandbox-contract",
+        ".graph-sandbox-node.class-event",
+        ".graph-sandbox-node.class-document",
+        "[data-sandbox-scene=\"changes\"]",
+        ".graph-sandbox-matrix-cell.has-relation",
+    ] {
+        assert!(
+            SITE_CSS.contains(contract),
+            "sandbox CSS is missing {contract}"
+        );
+    }
+    assert!(
+        GRAPH_SANDBOX.len() < 32 * 1024,
+        "sandbox loader is too large"
+    );
+}
+
+#[test]
 fn graph_assets_and_responsive_styles_are_bounded() {
     assert_eq!(&GRAPH_WASM[..4], b"\0asm");
+    // The module now includes Seiche and Rapier rather than a positional-layout-only
+    // adapter. Keep a deliberate raw ceiling while accepting the real physics world.
     assert!(
-        GRAPH_WASM.len() < 256 * 1024,
-        "graph Wasm is {} bytes",
+        GRAPH_WASM.len() < 900 * 1024,
+        "graph + physics Wasm is {} bytes",
         GRAPH_WASM.len()
     );
     assert!(
-        GRAPH_LOADER.len() + GRAPH_GLUE.len() + GRAPH_WASM.len() < 320 * 1024,
-        "graph runtime is {} bytes",
+        GRAPH_LOADER.len() + GRAPH_GLUE.len() + GRAPH_WASM.len() < 1_000 * 1024,
+        "graph + physics runtime is {} bytes",
         GRAPH_LOADER.len() + GRAPH_GLUE.len() + GRAPH_WASM.len()
     );
 

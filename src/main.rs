@@ -8,6 +8,7 @@ use mer3ly_site::repositories::PublicSiteData;
 use mer3ly_site::site::{DEVICE_CSS, SITE_CSS};
 
 const FAVICON: &[u8] = include_bytes!("../assets/favicon.svg");
+const GRAPH_SANDBOX: &[u8] = include_bytes!("../assets/graph-sandbox.js");
 const MESSAGE_PATH_LAB: &[u8] = include_bytes!("../assets/message-path-lab.js");
 const OG_IMAGE: &[u8] = include_bytes!("../assets/og.jpg");
 const PROJECTION_PROOF: &[u8] = include_bytes!("../assets/projection-proof.js");
@@ -80,6 +81,7 @@ fn build_site(output: &Path) -> std::io::Result<()> {
         fs::copy(source, destination)?;
     }
     fs::write(output.join("site.css"), SITE_CSS)?;
+    fs::write(output.join("graph-sandbox.js"), GRAPH_SANDBOX)?;
     fs::write(output.join("devices.css"), DEVICE_CSS)?;
     fs::write(output.join("message-path-lab.js"), MESSAGE_PATH_LAB)?;
     fs::write(output.join("projection-proof.js"), PROJECTION_PROOF)?;

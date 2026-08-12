@@ -89,6 +89,7 @@ const receipt = {
   radio_bench: {},
   projects: {},
   discovery: {},
+  graph_sandbox: {},
 };
 
 try {
@@ -1008,6 +1009,63 @@ try {
     "graph did not settle into ready or fallback state",
   );
 
+  await desktop.waitForFunction(() =>
+    ["ready", "unavailable"].includes(
+      document.querySelector("[data-graph-sandbox]")?.dataset.sandboxState,
+    ),
+  );
+  const sandboxRoot = desktop.locator("[data-graph-sandbox]");
+  const sandboxState = await sandboxRoot.getAttribute("data-sandbox-state");
+  assert.equal(sandboxState, "ready", "the real Wasm physics sandbox must initialize");
+  assert.equal(await sandboxRoot.locator("[data-sandbox-node]").count(), 12);
+  const sandboxArrangement = sandboxRoot.locator('[data-sandbox-control="arrangement"]');
+  assert.equal(await sandboxArrangement.locator("option").count(), 8);
+  assert.equal(await sandboxArrangement.inputValue(), "graph_layout:stack");
+
+  await sandboxRoot.locator('[data-sandbox-control="scene"]').selectOption("changes");
+  assert.equal(
+    await sandboxRoot.locator('[data-sandbox-node][data-change="added"]').count(),
+    3,
+  );
+  await sandboxRoot.locator('[data-sandbox-control="scene"]').selectOption("activity");
+  assert.equal(await sandboxArrangement.inputValue(), "graph_layout:timeline");
+  await sandboxRoot.locator('[data-sandbox-control="scene"]').selectOption("matrix");
+  assert.equal(await sandboxRoot.locator(".graph-sandbox-matrix-cell").count(), 144);
+  assert.ok(
+    (await sandboxRoot.locator(".graph-sandbox-matrix-cell.has-relation").count()) > 10,
+  );
+  await sandboxRoot.locator('[data-sandbox-control="scene"]').selectOption("graph");
+  await sandboxArrangement.selectOption("graph_layout:radial");
+  await sandboxRoot.locator('[data-sandbox-node="ashland"]').click();
+  assert.equal(
+    await sandboxRoot.locator("[data-sandbox-inspector-title]").textContent(),
+    "Ashland",
+  );
+  await sandboxRoot.locator('[data-sandbox-control="mobility"]').selectOption("free");
+  await sandboxRoot.locator('[data-sandbox-control="backdrop"]').selectOption("props");
+  await sandboxRoot.locator("[data-sandbox-tangible]").check();
+  await sandboxRoot.locator("[data-sandbox-pin]").click();
+  await desktop.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-sandbox-node="ashland"]')
+        ?.classList.contains("is-pinned") === true,
+  );
+  await sandboxRoot.screenshot({
+    path: path.join(receiptRoot, "graphshell-sandbox-desktop.png"),
+  });
+  receipt.graph_sandbox = {
+    state: sandboxState,
+    actors: 12,
+    relations: 13,
+    scenes: ["graph", "changes", "activity", "matrix"],
+    arrangement: "graph_layout:radial",
+    motion: "free",
+    backdrop: "props",
+    collidable: true,
+    pin: "ashland",
+  };
+
   let selectedProfile = "fallback-not-applicable";
   let sharedSceneUrl = null;
   let sharedSceneExpectation = null;
@@ -1016,10 +1074,10 @@ try {
     assert.equal(await mere.getAttribute("aria-label"), "Mere, platform, active");
     try {
       const arrangementPicker = desktop.locator("select[data-graph-arrangement]");
-      assert.equal(await arrangementPicker.locator("option").count(), 8);
+      assert.equal(await arrangementPicker.locator("option").count(), 9);
       assert.equal(
         await arrangementPicker.locator("option:not(:disabled)").count(),
-        7,
+        8,
       );
       await desktop.waitForFunction(() =>
         [...document.querySelectorAll("[data-graph-node-id]")].every(
@@ -1132,6 +1190,7 @@ try {
         assert.equal(await mere.getAttribute("aria-pressed"), "true");
         const historicalArrangementIds = [
           "graph_layout:radial",
+          "graph_layout:stack",
           "graph_layout:grid",
           "graph_layout:phyllotaxis",
           "graph_layout:timeline",
@@ -1284,7 +1343,7 @@ try {
       } else {
         desktopState.source_time = "no-committed-checkpoints";
       }
-      desktopState.arrangements = 7;
+      desktopState.arrangements = 8;
       desktopState.morphed_to = "graph_layout:grid";
       await mere.click({ timeout: 2000 });
       await mere.press("ArrowRight", { timeout: 2000 });
@@ -1339,6 +1398,7 @@ try {
     const arrangementPicker = mobile.locator("select[data-graph-arrangement]");
     const arrangementScenes = [
       ["graph_layout:radial", "medallion", "orbits"],
+      ["graph_layout:stack", "tile", "index"],
       ["graph_layout:grid", "tile", "index"],
       ["graph_layout:phyllotaxis", "seed", "field"],
       ["graph_layout:timeline", "flag", "timeline"],

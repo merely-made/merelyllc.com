@@ -12,6 +12,10 @@ use sceno::{
     ScoreItem, SourceRef, Spiral, Vec2,
 };
 use scenotime::{RelationId, Revision, SceneDiff, SceneEpoch, SceneOp, SceneSnapshot};
+use seiche::{
+    AnchorSpring, Boundary, EdgeSpring, NodeCollider, NodeExclusion, NodeKey, SceneBodySpec,
+    SceneField, SceneSpec, Simulation,
+};
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use wasm_bindgen::prelude::*;
@@ -24,6 +28,7 @@ const TIMELINE_LANE_GAP: f32 = 110.0;
 const TIMELINE_MIN_X_GAP: f32 = 110.0;
 const ARRANGEMENT_ORDER: &[&str] = &[
     "graph_layout:radial",
+    "graph_layout:stack",
     "graph_layout:grid",
     "graph_layout:phyllotaxis",
     "graph_layout:timeline",
@@ -41,6 +46,8 @@ const PROJECTION_ADAPTER: &str = "mer3ly.repository-graph/v1";
 #[derive(Clone, Debug, Deserialize, Serialize)]
 struct GraphInput {
     schema: String,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    focus: Option<String>,
     nodes: Vec<GraphNodeInput>,
     edges: Vec<GraphEdge>,
 }
@@ -96,7 +103,7 @@ struct GraphArrangement {
     nodes: Vec<GraphNodePosition>,
 }
 
-#[derive(Clone, Debug, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 struct GraphNodePosition {
     id: String,
     x: f32,
@@ -108,6 +115,377 @@ struct UnavailableArrangement {
     id: String,
     name: String,
     reason: String,
+}
+
+#[derive(Clone, Debug, Serialize)]
+struct PhysicsFrame {
+    schema: &'static str,
+    nodes: Vec<PhysicsNode>,
+    props: Vec<PhysicsProp>,
+    at_rest: bool,
+}
+
+#[derive(Clone, Debug, Serialize)]
+struct PhysicsNode {
+    id: String,
+    x: f32,
+    y: f32,
+    pinned: bool,
+}
+
+#[derive(Clone, Debug, Serialize)]
+struct PhysicsProp {
+    x: f32,
+    y: f32,
+    rotation: f32,
+    shape: &'static str,
+    radius: Option<f32>,
+    half: Option<f32>,
+    points: Vec<(f32, f32)>,
+}
+
+/// Stateful browser adapter over Mere's real Seiche simulation.
+///
+/// Arrangements supply slots. This adapter decides whether those slots are
+/// frozen positions, anchor springs, or initial conditions for free physics.
+#[wasm_bindgen]
+pub struct GraphPhysics {
+    simulation: Simulation,
+    key_by_id: HashMap<String, NodeKey>,
+    id_by_key: HashMap<NodeKey, String>,
+    manually_pinned: HashSet<String>,
+    mobility: String,
+}
+
+#[wasm_bindgen]
+impl GraphPhysics {
+    #[wasm_bindgen(constructor)]
+    pub fn new(input: &str) -> Result<GraphPhysics, JsValue> {
+        graph_physics(input).map_err(|error| JsValue::from_str(&error))
+    }
+
+    #[wasm_bindgen(js_name = setArrangement)]
+    pub fn set_arrangement(&mut self, positions: &str, mobility: &str) -> Result<(), JsValue> {
+        self.apply_arrangement(positions, mobility)
+            .map_err(|error| JsValue::from_str(&error))
+    }
+
+    #[wasm_bindgen(js_name = setBackdrop)]
+    pub fn set_backdrop(&mut self, backdrop: &str, tangible: bool) -> Result<(), JsValue> {
+        self.apply_backdrop(backdrop, tangible)
+            .map_err(|error| JsValue::from_str(&error))
+    }
+
+    #[wasm_bindgen(js_name = pinNode)]
+    pub fn pin_node(&mut self, id: &str, x: f32, y: f32) -> Result<(), JsValue> {
+        let key = self
+            .key_by_id
+            .get(id)
+            .copied()
+            .ok_or_else(|| JsValue::from_str(&format!("unknown graph node {id}")))?;
+        self.manually_pinned.insert(id.to_owned());
+        self.simulation.pin(key, Point2D::new(x, y));
+        Ok(())
+    }
+
+    #[wasm_bindgen(js_name = unpinNode)]
+    pub fn unpin_node(&mut self, id: &str) -> Result<(), JsValue> {
+        let key = self
+            .key_by_id
+            .get(id)
+            .copied()
+            .ok_or_else(|| JsValue::from_str(&format!("unknown graph node {id}")))?;
+        self.manually_pinned.remove(id);
+        if self.mobility != "frozen" {
+            self.simulation.unpin(key);
+        }
+        Ok(())
+    }
+
+    #[wasm_bindgen(js_name = isPinned)]
+    pub fn is_pinned(&self, id: &str) -> bool {
+        self.manually_pinned.contains(id) || self.mobility == "frozen"
+    }
+
+    pub fn tick(&mut self, dt: f32) -> Result<String, JsValue> {
+        self.simulation.tick(dt.clamp(1.0 / 240.0, 1.0 / 20.0));
+        self.frame_json().map_err(|error| JsValue::from_str(&error))
+    }
+
+    pub fn frame(&self) -> Result<String, JsValue> {
+        self.frame_json().map_err(|error| JsValue::from_str(&error))
+    }
+}
+
+fn graph_physics(input: &str) -> Result<GraphPhysics, String> {
+    let input: GraphInput =
+        serde_json::from_str(input).map_err(|error| format!("invalid graph JSON: {error}"))?;
+    validate(&input)?;
+
+    let key_by_id = input
+        .nodes
+        .iter()
+        .enumerate()
+        .map(|(index, node)| (node.id.clone(), NodeKey::new(index)))
+        .collect::<HashMap<_, _>>();
+    let id_by_key = key_by_id
+        .iter()
+        .map(|(id, key)| (*key, id.clone()))
+        .collect::<HashMap<_, _>>();
+    let mut simulation = Simulation::new();
+    simulation.set_linear_damping(3.6);
+    simulation.add_force(NodeExclusion {
+        strength: 125_000.0,
+        cutoff: 480.0,
+        min_distance: 12.0,
+    });
+    simulation.add_force(EdgeSpring {
+        stiffness: 3.4,
+        rest_length: 125.0,
+    });
+    simulation.add_force(Boundary { strength: 0.045 });
+    simulation.sync_nodes(input.nodes.iter().enumerate().map(|(index, _)| {
+        let angle = index as f32 * 2.399_963_1;
+        let radius = 24.0 * (index as f32).sqrt();
+        (
+            NodeKey::new(index),
+            Point2D::new(radius * angle.cos(), radius * angle.sin()),
+        )
+    }));
+    simulation.sync_edges(
+        input.edges.iter().filter_map(|edge| {
+            Some((*key_by_id.get(&edge.source)?, *key_by_id.get(&edge.target)?))
+        }),
+    );
+    simulation.set_node_colliders(
+        input
+            .nodes
+            .iter()
+            .filter_map(|node| Some((*key_by_id.get(&node.id)?, collider_for_class(&node.class)))),
+    );
+
+    Ok(GraphPhysics {
+        simulation,
+        key_by_id,
+        id_by_key,
+        manually_pinned: HashSet::new(),
+        mobility: "anchored".to_owned(),
+    })
+}
+
+fn collider_for_class(class: &str) -> NodeCollider {
+    match class {
+        "document" | "page" | "note" => NodeCollider::Square { half: 22.0 },
+        "device" | "tool" => NodeCollider::RoundedSquare {
+            half: 24.0,
+            border: 7.0,
+        },
+        "event" => NodeCollider::Hull {
+            points: vec![(0.0, -27.0), (27.0, 0.0), (0.0, 27.0), (-27.0, 0.0)],
+            fallback: 24.0,
+        },
+        "place" | "person" | "community" => NodeCollider::Ball { radius: 25.0 },
+        _ => NodeCollider::Ball { radius: 22.0 },
+    }
+}
+
+impl GraphPhysics {
+    fn apply_arrangement(&mut self, positions: &str, mobility: &str) -> Result<(), String> {
+        if !matches!(mobility, "frozen" | "anchored" | "free") {
+            return Err(format!("unsupported mobility {mobility}"));
+        }
+        let positions: Vec<GraphNodePosition> = serde_json::from_str(positions)
+            .map_err(|error| format!("invalid arrangement positions: {error}"))?;
+        if positions.len() != self.key_by_id.len() {
+            return Err("arrangement did not position every graph node".to_owned());
+        }
+
+        let current = self.simulation.positions().collect::<HashMap<_, _>>();
+        for key in self.id_by_key.keys().copied().collect::<Vec<_>>() {
+            self.simulation.unpin(key);
+        }
+        let mut targets = Vec::with_capacity(positions.len());
+        for position in positions {
+            let key = self
+                .key_by_id
+                .get(&position.id)
+                .copied()
+                .ok_or_else(|| format!("arrangement contains unknown node {}", position.id))?;
+            let target = if self.manually_pinned.contains(&position.id) {
+                current
+                    .get(&key)
+                    .copied()
+                    .unwrap_or_else(|| Point2D::new(position.x, position.y))
+            } else {
+                Point2D::new(position.x, position.y)
+            };
+            targets.push((key, target));
+        }
+        self.simulation.seed_positions(targets.iter().copied());
+        self.simulation.set_anchor_force(match mobility {
+            "anchored" => Some(
+                AnchorSpring::new(
+                    targets
+                        .iter()
+                        .map(|(key, point)| (*key, (point.x, point.y))),
+                )
+                .with_stiffness(13.0),
+            ),
+            _ => None,
+        });
+        if mobility == "frozen" {
+            for (key, point) in &targets {
+                self.simulation.pin(*key, *point);
+            }
+        } else {
+            for id in &self.manually_pinned {
+                let Some(key) = self.key_by_id.get(id).copied() else {
+                    continue;
+                };
+                let point = current
+                    .get(&key)
+                    .copied()
+                    .or_else(|| {
+                        targets
+                            .iter()
+                            .find(|(candidate, _)| *candidate == key)
+                            .map(|(_, p)| *p)
+                    })
+                    .unwrap_or_else(Point2D::origin);
+                self.simulation.pin(key, point);
+            }
+        }
+        self.mobility = mobility.to_owned();
+        Ok(())
+    }
+
+    fn apply_backdrop(&mut self, backdrop: &str, tangible: bool) -> Result<(), String> {
+        match backdrop {
+            "clear" | "ambient" => {
+                self.simulation.clear_scene();
+                self.simulation.set_scene_field(None);
+                self.simulation.set_gravity((0.0, 0.0));
+                self.simulation.set_nodes_tangible(false);
+            }
+            "props" => {
+                self.simulation.load_scene(&sandbox_props_scene());
+                self.simulation.set_nodes_tangible(tangible);
+            }
+            "field" => {
+                self.simulation.load_scene(&seiche::whirlpool_scene());
+                self.simulation.set_scene_field(Some(SceneField::Vortex {
+                    center: (0.0, 0.0),
+                    strength: 54.0,
+                    inward: 18.0,
+                }));
+                self.simulation.set_nodes_tangible(tangible);
+            }
+            _ => return Err(format!("unsupported backdrop {backdrop}")),
+        }
+        Ok(())
+    }
+
+    fn frame_json(&self) -> Result<String, String> {
+        let mut nodes = self
+            .simulation
+            .positions()
+            .filter_map(|(key, position)| {
+                let id = self.id_by_key.get(&key)?.clone();
+                Some(PhysicsNode {
+                    pinned: self.is_pinned(&id),
+                    id,
+                    x: position.x,
+                    y: position.y,
+                })
+            })
+            .collect::<Vec<_>>();
+        nodes.sort_by(|left, right| left.id.cmp(&right.id));
+        let props = self
+            .simulation
+            .scene_bodies()
+            .map(|body| physics_prop(body.position, body.rotation, body.collider))
+            .collect();
+        serde_json::to_string(&PhysicsFrame {
+            schema: "mer3ly.graph-physics-frame/v1",
+            nodes,
+            props,
+            at_rest: self.simulation.is_at_rest(0.35),
+        })
+        .map_err(|error| format!("could not serialize physics frame: {error}"))
+    }
+}
+
+fn sandbox_props_scene() -> SceneSpec {
+    let horizontal = NodeCollider::Hull {
+        points: vec![
+            (-370.0, -10.0),
+            (370.0, -10.0),
+            (370.0, 10.0),
+            (-370.0, 10.0),
+        ],
+        fallback: 10.0,
+    };
+    let vertical = NodeCollider::Hull {
+        points: vec![
+            (-10.0, -280.0),
+            (10.0, -280.0),
+            (10.0, 280.0),
+            (-10.0, 280.0),
+        ],
+        fallback: 10.0,
+    };
+    SceneSpec {
+        bodies: vec![
+            SceneBodySpec::fixed(horizontal.clone(), (0.0, -290.0)),
+            SceneBodySpec::fixed(horizontal, (0.0, 290.0)),
+            SceneBodySpec::fixed(vertical.clone(), (-380.0, 0.0)),
+            SceneBodySpec::fixed(vertical, (380.0, 0.0)),
+            SceneBodySpec::dynamic(NodeCollider::Square { half: 19.0 }, (-90.0, -120.0))
+                .velocity((42.0, 28.0))
+                .restitution(0.85)
+                .gravity_scale(0.0),
+            SceneBodySpec::dynamic(NodeCollider::Ball { radius: 17.0 }, (120.0, 90.0))
+                .velocity((-34.0, -46.0))
+                .restitution(0.9)
+                .gravity_scale(0.0),
+        ],
+        gravity: (0.0, 0.0),
+        default_tangible: true,
+        perpetual: true,
+        joints: Vec::new(),
+    }
+}
+
+fn physics_prop(position: Point2D<f32>, rotation: f32, collider: NodeCollider) -> PhysicsProp {
+    match collider {
+        NodeCollider::Ball { radius } => PhysicsProp {
+            x: position.x,
+            y: position.y,
+            rotation,
+            shape: "ball",
+            radius: Some(radius),
+            half: None,
+            points: Vec::new(),
+        },
+        NodeCollider::Square { half } | NodeCollider::RoundedSquare { half, .. } => PhysicsProp {
+            x: position.x,
+            y: position.y,
+            rotation,
+            shape: "square",
+            radius: None,
+            half: Some(half),
+            points: Vec::new(),
+        },
+        NodeCollider::Hull { points, fallback } => PhysicsProp {
+            x: position.x,
+            y: position.y,
+            rotation,
+            shape: "hull",
+            radius: Some(fallback),
+            half: None,
+            points,
+        },
+    }
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -735,6 +1113,9 @@ fn arrangement_positions(
 }
 
 fn focal_node(input: &GraphInput) -> &str {
+    if let Some(focus) = input.focus.as_deref() {
+        return focus;
+    }
     input
         .nodes
         .iter()
@@ -884,6 +1265,10 @@ fn timestamp_coordinate(value: &str) -> Result<f64, String> {
 
 fn arrangement_description(id: &str, registry_description: Option<String>) -> String {
     match id {
+        "graph_layout:radial" => "Neighborhood rings around the selected node.".to_owned(),
+        "graph_layout:stack" => {
+            "Directed relations arranged into readable topology layers.".to_owned()
+        }
         "graph_layout:timeline" => {
             "Repositories grouped by their last public push date.".to_owned()
         }
@@ -913,6 +1298,16 @@ fn validate(input: &GraphInput) -> Result<(), String> {
         if !node_ids.insert(node.id.as_str()) {
             return Err(format!("duplicate repository graph node {}", node.id));
         }
+    }
+    if input
+        .focus
+        .as_deref()
+        .is_some_and(|focus| !node_ids.contains(focus))
+    {
+        return Err(format!(
+            "repository graph focus {} is not a graph node",
+            input.focus.as_deref().unwrap_or_default()
+        ));
     }
     let mut edge_ids = HashSet::with_capacity(input.edges.len());
     for edge in &input.edges {
@@ -969,7 +1364,7 @@ mod tests {
                 .as_array()
                 .expect("arrangements")
                 .len(),
-            7
+            8
         );
         assert_eq!(
             value["unavailable_arrangements"]
@@ -1048,6 +1443,7 @@ mod tests {
                 "graph_layout:phyllotaxis",
                 "graph_layout:radial",
                 "graph_layout:semantic_embedding",
+                "graph_layout:stack",
                 "graph_layout:timeline",
             ]
         );
@@ -1099,5 +1495,57 @@ mod tests {
         assert_eq!(receipt.active_items, 3);
         assert_eq!(receipt.active_relations, 1);
         assert_eq!(receipt.picked_source, "mere");
+    }
+
+    #[test]
+    fn sandbox_binds_arrangement_slots_to_real_seiche_motion_and_props() {
+        let mut physics = graph_physics(SAMPLE).expect("sandbox physics");
+        let positions = serde_json::to_string(&vec![
+            GraphNodePosition {
+                id: "mere".to_owned(),
+                x: -120.0,
+                y: 0.0,
+            },
+            GraphNodePosition {
+                id: "genet".to_owned(),
+                x: 0.0,
+                y: 0.0,
+            },
+            GraphNodePosition {
+                id: "turnstone".to_owned(),
+                x: 120.0,
+                y: 0.0,
+            },
+        ])
+        .expect("positions");
+
+        physics
+            .apply_arrangement(&positions, "anchored")
+            .expect("anchor slots");
+        assert_eq!(physics.simulation.anchor_count(), 3);
+        physics
+            .apply_backdrop("props", true)
+            .expect("collidable props");
+        assert_eq!(physics.simulation.scene_body_count(), 6);
+
+        let frame: serde_json::Value =
+            serde_json::from_str(&physics.frame_json().expect("physics frame")).expect("JSON");
+        assert_eq!(frame["schema"], "mer3ly.graph-physics-frame/v1");
+        assert_eq!(frame["nodes"].as_array().expect("nodes").len(), 3);
+        assert_eq!(frame["props"].as_array().expect("props").len(), 6);
+
+        physics
+            .apply_arrangement(&positions, "free")
+            .expect("free motion");
+        assert_eq!(physics.simulation.anchor_count(), 0);
+    }
+
+    #[test]
+    fn radial_focus_is_host_configurable() {
+        let mut value: serde_json::Value = serde_json::from_str(SAMPLE).expect("sample");
+        value["focus"] = serde_json::Value::String("turnstone".to_owned());
+        let encoded = layout_graph_json(&value.to_string()).expect("focused layout");
+        let layout: serde_json::Value = serde_json::from_str(&encoded).expect("layout JSON");
+        assert_eq!(layout["focus"], "turnstone");
     }
 }

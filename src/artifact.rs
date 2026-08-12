@@ -24,6 +24,7 @@ const BASE_FILES: &[&str] = &[
     "CNAME",
     "devices.css",
     "favicon.svg",
+    "graph-sandbox.js",
     "devices/index.html",
     "index.html",
     "message-path-lab.js",
@@ -288,6 +289,15 @@ pub fn validate_public_artifact(
     let relation_text_projections = relation_ids.len();
     if !repositories.contains("<script type=\"module\" src=\"/repo-graph.js?v=") {
         errors.push("repository page is missing the optional graph module".to_owned());
+    }
+    if !repositories.contains("<script type=\"module\" src=\"/graph-sandbox.js?v=") {
+        errors.push("repository page is missing the Graphshell sandbox module".to_owned());
+    }
+    if !repositories.contains("data-graph-sandbox")
+        || !repositories.contains("id=\"graph-sandbox-data\"")
+    {
+        errors
+            .push("repository page is missing the Graphshell sandbox landmark or data".to_owned());
     }
 
     let mut project_ids = Vec::new();

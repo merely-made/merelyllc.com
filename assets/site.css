@@ -1143,6 +1143,473 @@ h1 {
   background: var(--ember);
 }
 
+.graph-sandbox-section {
+  padding-top: 10px;
+}
+
+.graph-sandbox-heading {
+  max-width: 760px;
+  margin-bottom: 24px;
+}
+
+.graph-sandbox-heading h3 {
+  font: 500 clamp(1.42rem, 2.4vw, 2rem)/1.12 var(--font-display);
+}
+
+.graph-sandbox-heading p {
+  max-width: 720px;
+  margin-top: 10px;
+  color: var(--muted);
+}
+
+.graph-sandbox-contract {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-bottom: 18px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--paper) 88%, var(--parchment));
+}
+
+.graph-sandbox-contract > div {
+  min-height: 92px;
+  padding: 16px;
+}
+
+.graph-sandbox-contract > div + div {
+  border-left: 1px solid var(--line);
+}
+
+.graph-sandbox-contract dt {
+  color: var(--ink);
+  font: 650 0.64rem/1.3 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.graph-sandbox-contract dd {
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.4;
+}
+
+.graph-sandbox-fallback {
+  padding: 20px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+}
+
+.graph-sandbox-shell {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  box-shadow: 0 18px 45px rgba(59, 47, 32, 0.08);
+}
+
+.graph-sandbox-shell[hidden] {
+  display: none;
+}
+
+.graph-sandbox-toolbar {
+  display: flex;
+  align-items: end;
+  gap: 11px;
+  padding: 13px 15px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--paper) 90%, var(--parchment));
+}
+
+.graph-sandbox-select {
+  display: grid;
+  flex: 1 0 116px;
+  gap: 5px;
+  color: var(--faint);
+  font: 600 0.56rem/1.2 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.graph-sandbox-select select {
+  min-height: 34px;
+  padding: 6px 27px 6px 9px;
+  border: 1px solid var(--line);
+  border-radius: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font: 500 0.66rem/1.2 var(--font-mono);
+  text-transform: none;
+}
+
+.graph-sandbox-select select:focus-visible,
+.graph-sandbox-toggle input:focus-visible,
+.graph-sandbox-pin:focus-visible,
+.graph-sandbox-node:focus-visible,
+.graph-sandbox-matrix button:focus-visible {
+  outline: 2px solid var(--ember);
+  outline-offset: 2px;
+}
+
+.graph-sandbox-select select:disabled {
+  opacity: 0.45;
+}
+
+.graph-sandbox-toggle {
+  display: flex;
+  min-height: 34px;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 7px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  background: var(--paper);
+  font: 0.62rem/1.2 var(--font-mono);
+}
+
+.graph-sandbox-toggle input {
+  accent-color: var(--oxblood);
+}
+
+.graph-sandbox-caption {
+  min-height: 42px;
+  padding: 11px 15px;
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--muted);
+  font: 0.61rem/1.5 var(--font-mono);
+}
+
+.graph-sandbox-workbench {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 252px;
+  min-height: 620px;
+}
+
+.graph-sandbox-stage {
+  position: relative;
+  min-width: 0;
+  min-height: 620px;
+  overflow: hidden;
+  border-right: 1px solid var(--line);
+  background:
+    linear-gradient(rgba(86, 72, 53, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(86, 72, 53, 0.035) 1px, transparent 1px),
+    var(--parchment);
+  background-size: 32px 32px;
+  touch-action: none;
+}
+
+.graph-sandbox-stage[data-sandbox-backdrop="clear"] {
+  background: var(--parchment);
+}
+
+.graph-sandbox-stage[data-sandbox-backdrop="field"] {
+  background:
+    radial-gradient(circle at 50% 50%, rgba(146, 91, 49, 0.08), transparent 48%),
+    var(--parchment);
+}
+
+.graph-sandbox-canvas,
+.graph-sandbox-nodes {
+  position: absolute;
+  inset: 0;
+}
+
+.graph-sandbox-nodes {
+  pointer-events: none;
+}
+
+.graph-sandbox-node {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 78px;
+  height: 78px;
+  padding: 0;
+  border: 0;
+  color: var(--ink);
+  background: transparent;
+  pointer-events: auto;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+
+.graph-sandbox-node:active {
+  cursor: grabbing;
+}
+
+.graph-sandbox-node-mark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  width: 45px;
+  height: 45px;
+  place-items: center;
+  transform: translate(-50%, -50%);
+  border: 1px solid rgba(63, 52, 39, 0.42);
+  border-radius: 50%;
+  color: var(--paper);
+  background: var(--lake);
+  box-shadow: 0 4px 12px rgba(48, 39, 28, 0.18);
+  font: 700 0.59rem/1 var(--font-mono);
+  letter-spacing: 0.04em;
+}
+
+.graph-sandbox-node.class-product .graph-sandbox-node-mark,
+.graph-sandbox-node.class-software .graph-sandbox-node-mark,
+.graph-sandbox-node.class-platform .graph-sandbox-node-mark {
+  border-radius: 0;
+  background: var(--lake);
+  clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0 50%);
+}
+
+.graph-sandbox-node.class-device .graph-sandbox-node-mark,
+.graph-sandbox-node.class-tool .graph-sandbox-node-mark {
+  border-radius: 11px;
+  background: var(--ember);
+}
+
+.graph-sandbox-node.class-document .graph-sandbox-node-mark,
+.graph-sandbox-node.class-page .graph-sandbox-node-mark,
+.graph-sandbox-node.class-note .graph-sandbox-node-mark {
+  border-radius: 2px;
+  color: var(--ink);
+  background: var(--paper);
+}
+
+.graph-sandbox-node.class-event .graph-sandbox-node-mark {
+  border-radius: 0;
+  background: var(--oxblood);
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+}
+
+.graph-sandbox-node.class-place .graph-sandbox-node-mark {
+  background: #6f785b;
+}
+
+.graph-sandbox-node.class-person .graph-sandbox-node-mark {
+  background: var(--oxblood);
+}
+
+.graph-sandbox-node.class-community .graph-sandbox-node-mark {
+  background: #6c5a79;
+}
+
+.graph-sandbox-node-label {
+  position: absolute;
+  top: 67px;
+  left: 50%;
+  width: max-content;
+  max-width: 128px;
+  transform: translateX(-50%);
+  overflow: hidden;
+  color: var(--ink);
+  font: 600 0.58rem/1.2 var(--font-mono);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+[data-sandbox-mobility="free"] .graph-sandbox-node-label {
+  padding: 3px 5px;
+  opacity: 0;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 2px 7px rgba(37, 31, 45, 0.08);
+}
+
+[data-sandbox-mobility="free"] .graph-sandbox-node:hover .graph-sandbox-node-label,
+[data-sandbox-mobility="free"] .graph-sandbox-node:focus-visible .graph-sandbox-node-label,
+[data-sandbox-mobility="free"] .graph-sandbox-node.is-selected .graph-sandbox-node-label {
+  opacity: 1;
+}
+
+.graph-sandbox-node-change {
+  position: absolute;
+  top: -1px;
+  right: -5px;
+  display: none;
+  padding: 3px 5px;
+  border: 1px solid currentColor;
+  color: var(--muted);
+  background: var(--paper);
+  font: 600 0.46rem/1 var(--font-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+[data-sandbox-scene="changes"] .graph-sandbox-node-change {
+  display: block;
+}
+
+[data-sandbox-scene="changes"] .graph-sandbox-node.change-added .graph-sandbox-node-change {
+  color: #466447;
+}
+
+[data-sandbox-scene="changes"] .graph-sandbox-node.change-updated .graph-sandbox-node-change {
+  color: var(--ember);
+}
+
+[data-sandbox-scene="changes"] .graph-sandbox-node.change-removed .graph-sandbox-node-change {
+  color: var(--oxblood);
+}
+
+.graph-sandbox-node.is-change-muted {
+  opacity: 0.28;
+}
+
+.graph-sandbox-node.change-removed .graph-sandbox-node-mark {
+  filter: grayscale(1);
+}
+
+.graph-sandbox-node.change-removed .graph-sandbox-node-mark::after {
+  content: "";
+  position: absolute;
+  width: 56px;
+  height: 1px;
+  transform: rotate(-38deg);
+  background: var(--oxblood);
+}
+
+.graph-sandbox-node:hover,
+.graph-sandbox-node:focus-visible,
+.graph-sandbox-node.is-selected {
+  z-index: 4;
+}
+
+.graph-sandbox-node.is-selected .graph-sandbox-node-mark {
+  box-shadow:
+    0 0 0 2px var(--parchment),
+    0 0 0 5px var(--oxblood),
+    0 5px 15px rgba(48, 39, 28, 0.2);
+}
+
+.graph-sandbox-node.is-pinned::before {
+  content: "pin";
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--oxblood);
+  font: 650 0.47rem/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.graph-sandbox-inspector {
+  padding: 24px 20px;
+  background: var(--paper);
+}
+
+.graph-sandbox-inspector h4 {
+  margin-top: 8px;
+  font: 600 1.18rem/1.15 var(--font-display);
+}
+
+.graph-sandbox-inspector > p:not(.eyebrow):not(.graph-sandbox-inspector-note) {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+.graph-sandbox-inspector-facts {
+  margin-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.graph-sandbox-inspector-facts > div {
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.graph-sandbox-inspector-facts dt {
+  color: var(--faint);
+  font: 600 0.53rem/1.2 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.graph-sandbox-inspector-facts dd {
+  margin-top: 5px;
+  color: var(--ink);
+  font: 0.61rem/1.45 var(--font-mono);
+}
+
+.graph-sandbox-pin {
+  width: 100%;
+  min-height: 36px;
+  margin-top: 18px;
+  border: 1px solid var(--ink);
+  color: var(--paper);
+  background: var(--ink);
+  font: 600 0.6rem/1 var(--font-mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.graph-sandbox-pin:disabled {
+  border-color: var(--line);
+  color: var(--faint);
+  background: var(--parchment);
+}
+
+.graph-sandbox-inspector-note {
+  margin-top: 16px;
+  color: var(--faint);
+  font: 0.55rem/1.5 var(--font-mono);
+}
+
+.graph-sandbox-matrix {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: minmax(86px, 1.4fr) repeat(var(--matrix-size), minmax(48px, 1fr));
+  grid-auto-rows: minmax(42px, 1fr);
+  overflow: auto;
+  padding: 16px;
+  background: var(--parchment);
+}
+
+.graph-sandbox-matrix[hidden] {
+  display: none;
+}
+
+.graph-sandbox-matrix button,
+.graph-sandbox-matrix-corner {
+  display: grid;
+  min-width: 0;
+  place-items: center;
+  padding: 5px;
+  border: 0;
+  border-right: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.28);
+  font: 0.52rem/1.2 var(--font-mono);
+}
+
+.graph-sandbox-matrix-header {
+  color: var(--ink) !important;
+  background: var(--paper) !important;
+  font-weight: 650 !important;
+}
+
+.graph-sandbox-matrix-header.is-column {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.graph-sandbox-matrix-cell.has-relation {
+  color: var(--paper);
+  background: var(--lake);
+  font-size: 0.78rem;
+}
+
+.graph-sandbox-matrix button.is-selected {
+  box-shadow: inset 0 0 0 2px var(--oxblood);
+}
+
 .index-intro {
   max-width: 720px;
   margin-bottom: 24px;
@@ -2813,6 +3280,36 @@ tbody tr:last-child td {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .graph-sandbox-contract {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .graph-sandbox-contract > div + div {
+    border-left: 0;
+  }
+
+  .graph-sandbox-contract > div:nth-child(even) {
+    border-left: 1px solid var(--line);
+  }
+
+  .graph-sandbox-contract > div:nth-child(n + 3) {
+    border-top: 1px solid var(--line);
+  }
+
+  .graph-sandbox-workbench {
+    grid-template-columns: 1fr;
+  }
+
+  .graph-sandbox-stage {
+    min-height: 560px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .graph-sandbox-inspector {
+    min-height: 270px;
+  }
+
   .feature-card,
   .pilot-grid {
     grid-template-columns: 1fr;
@@ -3161,6 +3658,53 @@ tbody tr:last-child td {
 
   .repository-graph-stage {
     height: 500px;
+  }
+
+  .graph-sandbox-contract {
+    grid-template-columns: 1fr;
+  }
+
+  .graph-sandbox-contract > div:nth-child(even) {
+    border-left: 0;
+  }
+
+  .graph-sandbox-contract > div + div,
+  .graph-sandbox-contract > div:nth-child(n + 3) {
+    border-top: 1px solid var(--line);
+  }
+
+  .graph-sandbox-toolbar {
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .graph-sandbox-select {
+    flex-basis: calc(50% - 6px);
+  }
+
+  .graph-sandbox-toggle {
+    flex: 1 0 calc(50% - 6px);
+    justify-content: center;
+  }
+
+  .graph-sandbox-stage {
+    min-height: 500px;
+  }
+
+  .graph-sandbox-node {
+    width: 66px;
+    height: 66px;
+  }
+
+  .graph-sandbox-node-mark {
+    width: 38px;
+    height: 38px;
+  }
+
+  .graph-sandbox-node-label {
+    top: 59px;
+    max-width: 94px;
+    font-size: 0.52rem;
   }
 
   [data-graph-node-form="flag"] .repository-graph-stage {
