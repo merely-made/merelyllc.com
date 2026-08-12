@@ -110,6 +110,11 @@ jobs:
             throw "public artifact validation failed"
           }
           Set-Content -LiteralPath ".tmp/m9-static-receipt.json" -Value $receipt -Encoding utf8
+          $projectionReceipt = cargo run --quiet --manifest-path crates/repo-graph/Cargo.toml --locked --bin projection-receipt -- "$artifact/projection-scene.json"
+          if ($LASTEXITCODE -ne 0) {
+            throw "native Scenograph projection consumer failed"
+          }
+          Set-Content -LiteralPath ".tmp/m9-projection-receipt.json" -Value $projectionReceipt -Encoding utf8
 
       - name: Install headed-smoke browser
         run: npx playwright install --with-deps chromium
@@ -125,6 +130,7 @@ jobs:
           path: |
             content/github-metadata.json
             .tmp/m9-static-receipt.json
+            .tmp/m9-projection-receipt.json
             .tmp/m9-headed/
           if-no-files-found: warn
           retention-days: 30

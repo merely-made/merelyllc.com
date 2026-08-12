@@ -15,6 +15,7 @@ const mimeTypes = {
   ".html": "text/html; charset=utf-8",
   ".jpg": "image/jpeg",
   ".js": "text/javascript; charset=utf-8",
+  ".json": "application/json; charset=utf-8",
   ".png": "image/png",
   ".svg": "image/svg+xml",
   ".txt": "text/plain; charset=utf-8",
@@ -582,6 +583,341 @@ try {
     horizontal_overflow: 0,
   };
   await visualProject.close();
+
+  const projectionArtifactResponse = await fetch(`${baseUrl}/projection-scene.json`);
+  assert.equal(projectionArtifactResponse.status, 200);
+  const projectionArtifact = await projectionArtifactResponse.json();
+  assert.equal(projectionArtifact.schema, "mer3ly.portable-projection/v1");
+  assert.equal(projectionArtifact.adapter, "mer3ly.repository-graph/v1");
+  assert.equal(projectionArtifact.score.items.length, 8);
+  assert.equal(projectionArtifact.snapshot.tables.items.length, 8);
+  assert.equal(projectionArtifact.snapshot.tables.relations.length, 9);
+  assert.equal(projectionArtifact.default_trace.length, 7);
+
+  const projectionDesktop = await browser.newPage({
+    viewport: { width: 1440, height: 1000 },
+  });
+  const projectionDesktopDiagnostics = collectDiagnostics(projectionDesktop);
+  await projectionDesktop.goto(`${baseUrl}/projects/mere/`, {
+    waitUntil: "networkidle",
+  });
+  try {
+    await projectionDesktop.waitForFunction(
+      () =>
+        document.querySelector("[data-projection-proof]")?.dataset.ready ===
+        "true",
+    );
+  } catch (error) {
+    const state = await projectionDesktop
+      .locator("[data-projection-proof]")
+      .evaluate((element) => ({ ...element.dataset }));
+    throw new Error(
+      `portable projection did not initialize: ${JSON.stringify({ state, diagnostics: projectionDesktopDiagnostics })}`,
+      { cause: error },
+    );
+  }
+  const projectionProof = projectionDesktop.locator("[data-projection-proof]");
+  const canvasProjection = projectionProof.locator(
+    '[data-projection-view="canvas"]',
+  );
+  const swatchProjection = projectionProof.locator(
+    '[data-projection-view="swatch"]',
+  );
+  assert.equal(await canvasProjection.locator("[data-projection-node]").count(), 8);
+  assert.equal(await swatchProjection.locator("[data-projection-node]").count(), 8);
+  assert.equal(await canvasProjection.locator("[data-projection-edge]").count(), 9);
+  assert.equal(await swatchProjection.locator("[data-projection-edge]").count(), 9);
+  assert.equal(
+    await canvasProjection
+      .locator('[data-projection-node="mere"]')
+      .getAttribute("data-x"),
+    await swatchProjection
+      .locator('[data-projection-node="mere"]')
+      .getAttribute("data-x"),
+  );
+
+  await projectionProof.locator('[data-projection-action="replay"]').click();
+  await projectionDesktop.waitForFunction(
+    () => {
+      const root = document.querySelector("[data-projection-proof]");
+      return root.dataset.cursor === root.dataset.actionCount;
+    },
+  );
+  assert.equal(await projectionProof.getAttribute("data-cursor"), "7");
+  assert.equal(await projectionProof.getAttribute("data-scene-revision"), "5");
+  await projectionProof.locator('[data-projection-action="reset"]').click();
+  assert.equal(await projectionProof.getAttribute("data-cursor"), "0");
+  assert.equal(await projectionProof.getAttribute("data-scene-revision"), "1");
+
+  const canvasTurnstone = canvasProjection.locator(
+    '[data-projection-node="turnstone"]',
+  );
+  const turnstoneBefore = Number(await canvasTurnstone.getAttribute("data-x"));
+  const turnstoneBox = await canvasTurnstone.boundingBox();
+  assert.ok(turnstoneBox, "canvas Turnstone node needs a draggable box");
+  await projectionDesktop.mouse.move(
+    turnstoneBox.x + turnstoneBox.width / 2,
+    turnstoneBox.y + turnstoneBox.height / 2,
+  );
+  await projectionDesktop.mouse.down();
+  await projectionDesktop.mouse.move(
+    turnstoneBox.x + turnstoneBox.width / 2 - 46,
+    turnstoneBox.y + turnstoneBox.height / 2 + 24,
+    { steps: 5 },
+  );
+  await projectionDesktop.mouse.up();
+  const canvasTurnstoneX = Number(await canvasTurnstone.getAttribute("data-x"));
+  const swatchTurnstoneX = Number(
+    await swatchProjection
+      .locator('[data-projection-node="turnstone"]')
+      .getAttribute("data-x"),
+  );
+  assert.ok(
+    Math.abs(canvasTurnstoneX - turnstoneBefore) > 0.03,
+    "dragging did not move Turnstone",
+  );
+  assert.equal(canvasTurnstoneX, swatchTurnstoneX);
+
+  const swatchHostEdge = swatchProjection.locator(
+    '[data-projection-edge-control="turnstone-hosts-mere"]',
+  );
+  await swatchHostEdge.click();
+  assert.equal(await projectionProof.getAttribute("data-selected-kind"), "edge");
+  assert.equal(
+    await projectionProof.getAttribute("data-selected-id"),
+    "turnstone-hosts-mere",
+  );
+  await projectionProof.locator('[data-projection-action="edge"]').click();
+  assert.equal(
+    await canvasProjection
+      .locator('[data-projection-edge="turnstone-hosts-mere"]')
+      .evaluate((edge) => edge.classList.contains("is-curated-out")),
+    true,
+  );
+  assert.equal(
+    await swatchProjection
+      .locator('[data-projection-edge="turnstone-hosts-mere"]')
+      .evaluate((edge) => edge.classList.contains("is-curated-out")),
+    true,
+  );
+
+  await canvasProjection.locator('[data-projection-node="mere"]').click();
+  await projectionProof.locator('[data-projection-action="fold"]').click();
+  assert.equal(await projectionProof.getAttribute("data-folded"), "mere");
+  assert.equal(
+    await canvasProjection.locator('[data-projection-node="genet"]').isHidden(),
+    true,
+  );
+  assert.equal(
+    await swatchProjection.locator('[data-projection-node="genet"]').isHidden(),
+    true,
+  );
+  assert.equal(
+    await canvasProjection
+      .locator('[data-projection-edge="mere-depends-on-genet"]')
+      .isHidden(),
+    true,
+    "folded dependency edge remains painted",
+  );
+  assert.equal(
+    await canvasProjection
+      .locator('[data-projection-node="woodshed"] .projection-proof-node-fold')
+      .isHidden(),
+    true,
+    "unfolded nodes display an empty fold badge",
+  );
+
+  await projectionProof.locator('[data-projection-action="share"]').click();
+  const sharedProjectionUrl = new URL(projectionDesktop.url());
+  const sharedProjectionParams = new URLSearchParams(
+    sharedProjectionUrl.hash.slice(1),
+  );
+  assert.equal(sharedProjectionParams.get("projection-scene"), "v2");
+  assert.equal(
+    sharedProjectionParams.get("authority"),
+    projectionArtifact.authority_sha256,
+  );
+  assert.ok((sharedProjectionParams.get("trace") ?? "").length > 20);
+  const sharedProjectionActions = Number(
+    await projectionProof.getAttribute("data-action-count"),
+  );
+  const sharedProjectionCursor = Number(
+    await projectionProof.getAttribute("data-cursor"),
+  );
+
+  const projectionReceiver = await browser.newPage({
+    viewport: { width: 1000, height: 900 },
+  });
+  const projectionReceiverDiagnostics = collectDiagnostics(projectionReceiver);
+  await projectionReceiver.goto(sharedProjectionUrl.toString(), {
+    waitUntil: "networkidle",
+  });
+  await projectionReceiver.waitForFunction(
+    () =>
+      document.querySelector("[data-projection-proof]")?.dataset.ready ===
+      "true",
+  );
+  const receivedProof = projectionReceiver.locator("[data-projection-proof]");
+  assert.equal(
+    Number(await receivedProof.getAttribute("data-action-count")),
+    sharedProjectionActions,
+  );
+  assert.equal(
+    Number(await receivedProof.getAttribute("data-cursor")),
+    sharedProjectionCursor,
+  );
+  assert.equal(await receivedProof.getAttribute("data-folded"), "mere");
+  const receivedCursor = receivedProof.locator("[data-projection-cursor]");
+  await receivedCursor.press("Home");
+  assert.equal(await receivedProof.getAttribute("data-cursor"), "0");
+  assert.equal(
+    await receivedProof.locator('[data-projection-node="genet"]').first().isVisible(),
+    true,
+  );
+  await receivedCursor.press("End");
+  assert.equal(
+    Number(await receivedProof.getAttribute("data-cursor")),
+    sharedProjectionActions,
+  );
+  assert.equal(await receivedProof.getAttribute("data-folded"), "mere");
+  assert.equal(await horizontalOverflow(projectionReceiver), 0);
+  assert.deepEqual(
+    projectionReceiverDiagnostics,
+    [],
+    "shared portable scene emitted browser errors",
+  );
+  await projectionReceiver.close();
+
+  assert.equal(await horizontalOverflow(projectionDesktop), 0);
+  assert.deepEqual(
+    projectionDesktopDiagnostics,
+    [],
+    "desktop projection proof emitted browser errors",
+  );
+  await projectionProof.screenshot({
+    path: path.join(receiptRoot, "mere-projection-proof-desktop.png"),
+  });
+  receipt.projects.projection_proof = {
+    nodes: 8,
+    edges: 9,
+    projections: 2,
+    contract: "sceno-score-scene-scenotime-diff",
+    initial_revision: projectionArtifact.snapshot.revision,
+    supplied_trace_steps: projectionArtifact.default_trace.length,
+    shared_state: true,
+    shared_trace: true,
+    horizontal_overflow: 0,
+  };
+  await projectionDesktop.close();
+
+  const projectionMobile = await browser.newPage({
+    viewport: { width: 375, height: 812 },
+  });
+  const projectionMobileDiagnostics = collectDiagnostics(projectionMobile);
+  await projectionMobile.goto(`${baseUrl}/projects/mere/`, {
+    waitUntil: "networkidle",
+  });
+  await projectionMobile.waitForFunction(
+    () =>
+      document.querySelector("[data-projection-proof]")?.dataset.ready ===
+      "true",
+  );
+  const mobileProof = projectionMobile.locator("[data-projection-proof]");
+  const mobileCanvas = mobileProof.locator('[data-projection-view="canvas"]');
+  const mobileSwatch = mobileProof.locator('[data-projection-view="swatch"]');
+  const mobileTargets = await mobileProof
+    .locator("[data-projection-node]")
+    .evaluateAll((nodes) =>
+      nodes.map((node) => {
+        const rect = node.getBoundingClientRect();
+        return { width: rect.width, height: rect.height };
+      }),
+    );
+  assert.equal(
+    mobileTargets.every(({ width, height }) => width >= 44 && height >= 44),
+    true,
+    "portable scene nodes need 44px mobile targets",
+  );
+  const mobileSwatchMere = mobileSwatch.locator('[data-projection-node="mere"]');
+  await mobileSwatchMere.press("ArrowRight");
+  assert.equal(
+    await mobileSwatchMere.getAttribute("data-x"),
+    await mobileCanvas
+      .locator('[data-projection-node="mere"]')
+      .getAttribute("data-x"),
+  );
+  assert.equal(await horizontalOverflow(projectionMobile), 0);
+  assert.deepEqual(
+    projectionMobileDiagnostics,
+    [],
+    "mobile projection proof emitted browser errors",
+  );
+  await projectionMobile.evaluate(() => document.activeElement?.blur());
+  await mobileProof.screenshot({
+    path: path.join(receiptRoot, "mere-projection-proof-mobile.png"),
+  });
+  receipt.projects.projection_proof.mobile = {
+    width: 375,
+    minimum_node_target: 44,
+    swatch_controls_canvas: true,
+    horizontal_overflow: 0,
+  };
+  await projectionMobile.close();
+
+  const projectionReduced = await browser.newPage({
+    viewport: { width: 900, height: 900 },
+  });
+  const projectionReducedDiagnostics = collectDiagnostics(projectionReduced);
+  await projectionReduced.emulateMedia({ reducedMotion: "reduce" });
+  await projectionReduced.goto(`${baseUrl}/projects/mere/`, {
+    waitUntil: "networkidle",
+  });
+  await projectionReduced.waitForFunction(
+    () =>
+      document.querySelector("[data-projection-proof]")?.dataset.ready ===
+      "true",
+  );
+  const reducedProof = projectionReduced.locator("[data-projection-proof]");
+  await reducedProof.locator('[data-projection-action="replay"]').click();
+  assert.equal(
+    await reducedProof.getAttribute("data-cursor"),
+    await reducedProof.getAttribute("data-action-count"),
+  );
+  assert.deepEqual(
+    projectionReducedDiagnostics,
+    [],
+    "reduced-motion projection proof emitted browser errors",
+  );
+  receipt.projects.projection_proof.reduced_motion = "jumps-to-final-state";
+  await projectionReduced.close();
+
+  const projectionFallback = await browser.newPage({
+    viewport: { width: 900, height: 900 },
+  });
+  const projectionFallbackDiagnostics = collectDiagnostics(projectionFallback);
+  await projectionFallback.goto(`${baseUrl}/projects/mere/?projection=no-scene`, {
+    waitUntil: "networkidle",
+  });
+  await projectionFallback.waitForFunction(
+    () =>
+      document.querySelector("[data-projection-proof]")?.dataset.state ===
+      "unavailable",
+  );
+  assert.equal(
+    await projectionFallback.locator("[data-projection-fallback]").isVisible(),
+    true,
+  );
+  assert.equal(
+    await projectionFallback.locator("[data-projection-interface]").isHidden(),
+    true,
+  );
+  assert.deepEqual(
+    projectionFallbackDiagnostics,
+    [],
+    "portable scene fallback emitted browser errors",
+  );
+  receipt.projects.projection_proof.fallback = "semantic-relations-remain";
+  await projectionFallback.close();
 
   const textProject = await browser.newPage({
     viewport: { width: 375, height: 812 },
@@ -1203,13 +1539,21 @@ try {
 
 function collectDiagnostics(page) {
   const diagnostics = [];
-  page.on("pageerror", () => diagnostics.push("pageerror"));
+  page.on("pageerror", (error) => diagnostics.push(`pageerror: ${error.message}`));
   page.on("console", (message) => {
     if (message.type() === "error") {
-      if (process.env.MER3LY_DEBUG_DIAGNOSTICS === "1") {
-        process.stderr.write(`browser console error: ${message.text()}\n`);
+      const location = message.location();
+      if (
+        message.text().startsWith("Failed to load resource:") &&
+        location.url.startsWith("https://fonts.gstatic.com/")
+      ) {
+        return;
       }
-      diagnostics.push("console-error");
+      const diagnostic = `console-error: ${message.text()}${location.url ? ` @ ${location.url}` : ""}`;
+      if (process.env.MER3LY_DEBUG_DIAGNOSTICS === "1") {
+        process.stderr.write(`${diagnostic}\n`);
+      }
+      diagnostics.push(diagnostic);
     }
   });
   return diagnostics;

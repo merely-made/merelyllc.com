@@ -59,6 +59,7 @@ cargo test --manifest-path crates/repo-graph/Cargo.toml --locked
 cargo clippy --locked --all-targets -- -D warnings
 cargo run --locked --bin authority -- validate
 cargo run --locked --bin authority -- validate-metadata
+cargo run --manifest-path crates/repo-graph/Cargo.toml --locked --bin projection-receipt -- html/projection-scene.json
 npm ci --ignore-scripts
 npx playwright install chromium
 npm run smoke
@@ -78,7 +79,8 @@ patterns, local paths, and private network addresses. The artifact is a
 conventional, self-contained site root: `index.html`, `repos/index.html`,
 `projects/<id>/index.html`, `devices/index.html`,
 `devices/<id>/index.html`, `radio.html`, `sitemap.xml`, `robots.txt`, their
-approved styles, showcase images and runtime assets, and `CNAME` all live
+approved styles, showcase images and runtime assets, the serialized
+`projection-scene.json` Scenograph score/snapshot/trace, and `CNAME` all live
 directly beneath the supplied directory.
 The exact public contact
 `markik@mer3ly.net` is allowed; other contact addresses are rejected. The

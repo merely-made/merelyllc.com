@@ -7,7 +7,13 @@ use arrangements::{
     RadialUnreachablePolicy, StaticLayoutState, Timeline, TimelineConfig,
 };
 use euclid::default::Point2D;
+use sceno::{
+    Arrangement as SceneArrangement, Footprint, Placement, Representation, RoutedRelation, Score,
+    ScoreItem, SourceRef, Spiral, Vec2,
+};
+use scenotime::{RelationId, Revision, SceneDiff, SceneEpoch, SceneOp, SceneSnapshot};
 use serde::{Deserialize, Serialize};
+use sha2::{Digest, Sha256};
 use wasm_bindgen::prelude::*;
 
 const PREFERRED_FOCUS_REPOSITORY: &str = "mere";
@@ -29,15 +35,17 @@ const UNAVAILABLE_ARRANGEMENTS: &[(&str, &str)] = &[(
     "graph_layout:semantic_embedding",
     "This site does not yet publish semantic coordinates.",
 )];
+const PORTABLE_PROJECTION_SCHEMA: &str = "mer3ly.portable-projection/v1";
+const PROJECTION_ADAPTER: &str = "mer3ly.repository-graph/v1";
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 struct GraphInput {
     schema: String,
     nodes: Vec<GraphNodeInput>,
     edges: Vec<GraphEdge>,
 }
 
-#[derive(Clone, Debug, Deserialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 struct GraphNodeInput {
     id: String,
     name: String,
@@ -100,6 +108,434 @@ struct UnavailableArrangement {
     id: String,
     name: String,
     reason: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct PortableProjectionArtifact {
+    pub schema: String,
+    pub adapter: String,
+    pub authority_schema: String,
+    pub authority_sha256: String,
+    pub score: Score,
+    pub snapshot: SceneSnapshot,
+    pub nodes: Vec<ProjectionNodeMetadata>,
+    pub relations: Vec<ProjectionRelationMetadata>,
+    pub default_trace: Vec<ProjectionStep>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ProjectionNodeMetadata {
+    pub id: String,
+    pub name: String,
+    pub class: String,
+    pub status: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ProjectionRelationMetadata {
+    pub index: RelationId,
+    pub id: String,
+    pub source: String,
+    pub target: String,
+    pub kind: String,
+    pub provenance: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ProjectionSelection {
+    pub kind: String,
+    pub id: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ProjectionStep {
+    pub label: String,
+    pub selection: Option<ProjectionSelection>,
+    pub diff: Option<SceneDiff>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ProjectionReceipt {
+    pub schema: String,
+    pub authority_sha256: String,
+    pub score_items: usize,
+    pub initial_revision: u64,
+    pub final_revision: u64,
+    pub active_items: usize,
+    pub active_relations: usize,
+    pub picked_source: String,
+    pub trace_steps: usize,
+}
+
+pub fn portable_projection_json(input: &str) -> Result<String, String> {
+    let artifact = portable_projection(input)?;
+    serde_json::to_string(&artifact)
+        .map_err(|error| format!("could not serialize portable projection: {error}"))
+}
+
+pub fn portable_projection(input: &str) -> Result<PortableProjectionArtifact, String> {
+    let input: GraphInput =
+        serde_json::from_str(input).map_err(|error| format!("invalid graph JSON: {error}"))?;
+    validate(&input)?;
+
+    let authority_digest = Sha256::digest(
+        serde_json::to_vec(&input)
+            .map_err(|error| format!("could not canonicalize graph authority: {error}"))?,
+    );
+    let authority_sha256 = format!("{authority_digest:x}");
+    let generation = u64::from_be_bytes(
+        authority_digest[..8]
+            .try_into()
+            .expect("SHA-256 prefix is eight bytes"),
+    );
+
+    let mut score = Score::new(SceneArrangement::Spiral(Spiral::default()));
+    score.generation = generation;
+    let mut ordered_nodes = input.nodes.iter().enumerate().collect::<Vec<_>>();
+    ordered_nodes.sort_by_key(|(index, node)| (node.id != PREFERRED_FOCUS_REPOSITORY, *index));
+    for (ordinal, (_, node)) in ordered_nodes.into_iter().enumerate() {
+        score.items.push(ScoreItem {
+            source: SourceRef::new(PROJECTION_ADAPTER, &node.id),
+            ordinal: ordinal as u32,
+            footprint: Footprint::Circle { radius: 28.0 },
+            representation: Representation::Glyph,
+            placement: Placement::Ordinal,
+            layer: 0,
+            visible: true,
+        });
+    }
+
+    let mut scene = scenomise::solve(&score);
+    let instance_by_source = scene
+        .items
+        .iter()
+        .enumerate()
+        .map(|(index, item)| {
+            let source = &scene.sources[item.source.0 as usize];
+            (source.id.as_str(), sceno::InstanceId(index as u32))
+        })
+        .collect::<HashMap<_, _>>();
+    let mut relations = Vec::with_capacity(input.edges.len());
+    for edge in &input.edges {
+        let from = *instance_by_source
+            .get(edge.source.as_str())
+            .ok_or_else(|| format!("projection lost relation source {}", edge.source))?;
+        let to = *instance_by_source
+            .get(edge.target.as_str())
+            .ok_or_else(|| format!("projection lost relation target {}", edge.target))?;
+        let from_point = scene.items[from.0 as usize].transform.translate;
+        let to_point = scene.items[to.0 as usize].transform.translate;
+        let index = RelationId(scene.relations.len() as u32);
+        scene.relations.push(RoutedRelation {
+            from,
+            to,
+            space: sceno::Scene::WORLD,
+            points: vec![from_point, to_point],
+            kind: Some(edge.kind.clone()),
+            weight: Some(1.0),
+        });
+        relations.push(ProjectionRelationMetadata {
+            index,
+            id: edge.id.clone(),
+            source: edge.source.clone(),
+            target: edge.target.clone(),
+            kind: edge.kind.clone(),
+            provenance: edge.provenance.clone(),
+        });
+    }
+
+    let snapshot = SceneSnapshot::from_dense(SceneEpoch(generation), Revision(1), scene)
+        .map_err(|error| format!("Scenograph rejected the solved scene: {error:?}"))?;
+    let default_trace = default_projection_trace(&input, &relations, &snapshot)?;
+    let artifact = PortableProjectionArtifact {
+        schema: PORTABLE_PROJECTION_SCHEMA.to_owned(),
+        adapter: PROJECTION_ADAPTER.to_owned(),
+        authority_schema: input.schema.clone(),
+        authority_sha256,
+        score,
+        snapshot,
+        nodes: input
+            .nodes
+            .iter()
+            .map(|node| ProjectionNodeMetadata {
+                id: node.id.clone(),
+                name: node.name.clone(),
+                class: node.class.clone(),
+                status: node.status.clone(),
+            })
+            .collect(),
+        relations,
+        default_trace,
+    };
+    consume_portable_projection(&artifact)?;
+    Ok(artifact)
+}
+
+pub fn consume_portable_projection_json(input: &str) -> Result<ProjectionReceipt, String> {
+    let artifact: PortableProjectionArtifact = serde_json::from_str(input)
+        .map_err(|error| format!("invalid portable projection JSON: {error}"))?;
+    consume_portable_projection(&artifact)
+}
+
+pub fn consume_portable_projection(
+    artifact: &PortableProjectionArtifact,
+) -> Result<ProjectionReceipt, String> {
+    if artifact.schema != PORTABLE_PROJECTION_SCHEMA {
+        return Err(format!(
+            "unsupported portable projection schema {}",
+            artifact.schema
+        ));
+    }
+    if artifact.adapter != PROJECTION_ADAPTER {
+        return Err(format!(
+            "unsupported projection adapter {}",
+            artifact.adapter
+        ));
+    }
+    artifact
+        .snapshot
+        .validate()
+        .map_err(|error| format!("invalid initial scene snapshot: {error:?}"))?;
+    if artifact.score.items.len() != artifact.nodes.len()
+        || artifact.snapshot.active_item_count() != artifact.nodes.len()
+    {
+        return Err("score, scene, and node metadata counts diverge".to_owned());
+    }
+    if artifact.snapshot.tables.relations.len() != artifact.relations.len() {
+        return Err("scene and relation metadata counts diverge".to_owned());
+    }
+
+    let initial_revision = artifact.snapshot.revision.0;
+    let mut snapshot = artifact.snapshot.clone();
+    for step in &artifact.default_trace {
+        if let Some(diff) = &step.diff {
+            snapshot
+                .apply_diff(diff)
+                .map_err(|error| format!("portable trace step {} failed: {error:?}", step.label))?;
+        }
+    }
+    snapshot
+        .validate()
+        .map_err(|error| format!("invalid final scene snapshot: {error:?}"))?;
+
+    let mere = instance_for_source(&snapshot, PREFERRED_FOCUS_REPOSITORY)
+        .ok_or_else(|| "portable scene lost Mere".to_owned())?;
+    let mere_item = snapshot
+        .active_item(mere)
+        .ok_or_else(|| "portable scene tombstoned Mere".to_owned())?;
+    let picked = snapshot
+        .pick(mere_item.transform.translate)
+        .ok_or_else(|| "native Scenotime consumer could not pick Mere".to_owned())?;
+    let picked_item = snapshot
+        .active_item(picked)
+        .ok_or_else(|| "native Scenotime consumer picked a tombstone".to_owned())?;
+    let picked_source = snapshot.tables.sources[picked_item.source.0 as usize]
+        .as_ref()
+        .ok_or_else(|| "picked item has no source".to_owned())?
+        .id
+        .clone();
+    if picked_source != PREFERRED_FOCUS_REPOSITORY {
+        return Err(format!(
+            "native Scenotime consumer picked {picked_source}, not Mere"
+        ));
+    }
+
+    Ok(ProjectionReceipt {
+        schema: "mer3ly.portable-projection-receipt/v1".to_owned(),
+        authority_sha256: artifact.authority_sha256.clone(),
+        score_items: artifact.score.items.len(),
+        initial_revision,
+        final_revision: snapshot.revision.0,
+        active_items: snapshot.active_item_count(),
+        active_relations: snapshot.tables.relations.iter().flatten().count(),
+        picked_source,
+        trace_steps: artifact.default_trace.len(),
+    })
+}
+
+fn default_projection_trace(
+    input: &GraphInput,
+    relations: &[ProjectionRelationMetadata],
+    snapshot: &SceneSnapshot,
+) -> Result<Vec<ProjectionStep>, String> {
+    let mut trace = Vec::new();
+    let mut current = snapshot.clone();
+
+    if let Some(turnstone) = instance_for_source(&current, "turnstone") {
+        trace.push(selection_step("Select Turnstone", "node", "turnstone"));
+        let diff = move_diff(&current, turnstone, Vec2::new(48.0, 24.0))?;
+        current
+            .apply_diff(&diff)
+            .map_err(|error| format!("default move diff failed: {error:?}"))?;
+        trace.push(diff_step("Move Turnstone", diff));
+    }
+
+    if let Some(relation) = relations
+        .iter()
+        .find(|relation| relation.id == "turnstone-hosts-mere")
+    {
+        trace.push(selection_step(
+            "Select the Turnstone host relationship",
+            "edge",
+            &relation.id,
+        ));
+        let diff = next_diff(
+            &current,
+            vec![SceneOp::TombstoneRelation {
+                index: relation.index,
+            }],
+        );
+        current
+            .apply_diff(&diff)
+            .map_err(|error| format!("default relation diff failed: {error:?}"))?;
+        trace.push(diff_step("Remove the relationship from the scene", diff));
+    }
+
+    trace.push(selection_step(
+        "Select Mere",
+        "node",
+        PREFERRED_FOCUS_REPOSITORY,
+    ));
+    let dependencies = input
+        .edges
+        .iter()
+        .filter(|edge| edge.source == PREFERRED_FOCUS_REPOSITORY)
+        .filter_map(|edge| instance_for_source(&current, &edge.target))
+        .collect::<Vec<_>>();
+    if !dependencies.is_empty() {
+        let fold = visibility_diff(&current, PREFERRED_FOCUS_REPOSITORY, &dependencies, false)?;
+        current
+            .apply_diff(&fold)
+            .map_err(|error| format!("default fold diff failed: {error:?}"))?;
+        trace.push(diff_step("Fold Mere dependencies", fold));
+        let expand = visibility_diff(&current, PREFERRED_FOCUS_REPOSITORY, &dependencies, true)?;
+        current
+            .apply_diff(&expand)
+            .map_err(|error| format!("default expand diff failed: {error:?}"))?;
+        trace.push(diff_step("Expand Mere dependencies", expand));
+    }
+
+    Ok(trace)
+}
+
+fn selection_step(label: &str, kind: &str, id: &str) -> ProjectionStep {
+    ProjectionStep {
+        label: label.to_owned(),
+        selection: Some(ProjectionSelection {
+            kind: kind.to_owned(),
+            id: id.to_owned(),
+        }),
+        diff: None,
+    }
+}
+
+fn diff_step(label: &str, diff: SceneDiff) -> ProjectionStep {
+    ProjectionStep {
+        label: label.to_owned(),
+        selection: None,
+        diff: Some(diff),
+    }
+}
+
+fn next_diff(snapshot: &SceneSnapshot, operations: Vec<SceneOp>) -> SceneDiff {
+    SceneDiff {
+        epoch: snapshot.epoch,
+        base: snapshot.revision,
+        revision: Revision(snapshot.revision.0 + 1),
+        operations,
+    }
+}
+
+fn move_diff(
+    snapshot: &SceneSnapshot,
+    instance: sceno::InstanceId,
+    delta: Vec2,
+) -> Result<SceneDiff, String> {
+    let mut moved = snapshot
+        .active_item(instance)
+        .ok_or_else(|| format!("cannot move absent instance {}", instance.0))?
+        .clone();
+    moved.transform.translate.x += delta.x;
+    moved.transform.translate.y += delta.y;
+    let mut operations = vec![SceneOp::UpdateItem {
+        index: instance,
+        value: moved.clone(),
+    }];
+    for (index, relation) in snapshot.tables.relations.iter().enumerate() {
+        let Some(relation) = relation else { continue };
+        if relation.from != instance && relation.to != instance {
+            continue;
+        }
+        let mut updated = relation.clone();
+        let endpoint = |id: sceno::InstanceId| {
+            if id == instance {
+                moved.transform.translate
+            } else {
+                snapshot
+                    .active_item(id)
+                    .expect("validated relation endpoint is active")
+                    .transform
+                    .translate
+            }
+        };
+        updated.points = vec![endpoint(updated.from), endpoint(updated.to)];
+        operations.push(SceneOp::UpdateRelation {
+            index: RelationId(index as u32),
+            value: updated,
+        });
+    }
+    Ok(next_diff(snapshot, operations))
+}
+
+fn visibility_diff(
+    snapshot: &SceneSnapshot,
+    root: &str,
+    dependencies: &[sceno::InstanceId],
+    visible: bool,
+) -> Result<SceneDiff, String> {
+    let root_id = instance_for_source(snapshot, root)
+        .ok_or_else(|| format!("cannot fold absent source {root}"))?;
+    let mut root_item = snapshot
+        .active_item(root_id)
+        .ok_or_else(|| format!("cannot fold absent instance {}", root_id.0))?
+        .clone();
+    root_item.channels.retain(|(name, _)| name != "fold");
+    if !visible {
+        root_item.channels.push(("fold".to_owned(), 1.0));
+    }
+    let mut operations = vec![SceneOp::UpdateItem {
+        index: root_id,
+        value: root_item,
+    }];
+    for dependency in dependencies {
+        let mut item = snapshot
+            .active_item(*dependency)
+            .ok_or_else(|| format!("cannot update absent dependency {}", dependency.0))?
+            .clone();
+        item.visible = visible;
+        operations.push(SceneOp::UpdateItem {
+            index: *dependency,
+            value: item,
+        });
+    }
+    Ok(next_diff(snapshot, operations))
+}
+
+fn instance_for_source(snapshot: &SceneSnapshot, source_id: &str) -> Option<sceno::InstanceId> {
+    snapshot
+        .tables
+        .items
+        .iter()
+        .enumerate()
+        .find_map(|(index, item)| {
+            let item = item.as_ref()?;
+            let source = snapshot
+                .tables
+                .sources
+                .get(item.source.0 as usize)?
+                .as_ref()?;
+            (source.id == source_id).then_some(sceno::InstanceId(index as u32))
+        })
 }
 
 #[wasm_bindgen]
@@ -642,5 +1078,26 @@ mod tests {
         let before = timestamp_coordinate("2026-07-30T23:59:59Z").expect("before midnight");
         let after = timestamp_coordinate("2026-07-31T00:00:01Z").expect("after midnight");
         assert_eq!(after - before, 2.0);
+    }
+
+    #[test]
+    fn portable_projection_is_a_real_scenograph_score_scene_and_trace() {
+        let json = portable_projection_json(SAMPLE).expect("portable projection");
+        let artifact: PortableProjectionArtifact =
+            serde_json::from_str(&json).expect("portable projection JSON");
+        assert_eq!(artifact.schema, PORTABLE_PROJECTION_SCHEMA);
+        assert_eq!(artifact.score.items.len(), 3);
+        assert_eq!(artifact.snapshot.active_item_count(), 3);
+        assert_eq!(artifact.snapshot.tables.relations.len(), 2);
+        assert_eq!(artifact.default_trace.len(), 7);
+        assert_eq!(artifact.default_trace[1].label, "Move Turnstone");
+        assert!(artifact.default_trace[1].diff.is_some());
+
+        let receipt = consume_portable_projection_json(&json).expect("native receipt");
+        assert_eq!(receipt.initial_revision, 1);
+        assert_eq!(receipt.final_revision, 5);
+        assert_eq!(receipt.active_items, 3);
+        assert_eq!(receipt.active_relations, 1);
+        assert_eq!(receipt.picked_source, "mere");
     }
 }

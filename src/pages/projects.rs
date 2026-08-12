@@ -2,16 +2,20 @@ use std::collections::BTreeMap;
 use std::path::Path;
 
 use serde_json::{Map, Value, json};
+use sha2::{Digest, Sha256};
 
 use crate::repositories::{
     AuthorityError, PublicRepositoryMetadata, PublicSiteData, RelationRecord, RepositoryRecord,
     ShowcaseRecord,
 };
+use crate::repository_history::RepositoryGraph;
 use crate::site::{
     ActivePage, DEFAULT_SOCIAL_IMAGE_ALT, DEFAULT_SOCIAL_IMAGE_URL, DocumentMetadata,
     ORGANIZATION_ID, SiteView, SocialImage, WEBSITE_ID, base_schema_graph, element, external_link,
-    json_ld_for_script, link, render_with_dynamic, section_heading, shell, txt,
+    json_ld_for_script, link, render_with_dynamic_and_body_end, section_heading, shell, txt,
 };
+
+const PROJECTION_PROOF: &[u8] = include_bytes!("../../assets/projection-proof.js");
 
 pub fn documents(data: &PublicSiteData) -> Vec<(String, String)> {
     data.authority
@@ -70,7 +74,12 @@ pub fn document_for(data: &PublicSiteData, repository: &RepositoryRecord) -> Str
         },
         json_ld: &json_ld,
     };
-    render_with_dynamic(&metadata, || view(data, repository))
+    let bootstrap = if repository.id == "mere" {
+        projection_bootstrap(data)
+    } else {
+        String::new()
+    };
+    render_with_dynamic_and_body_end(&metadata, || view(data, repository), &bootstrap)
 }
 
 fn project_json_ld(
@@ -149,6 +158,21 @@ pub fn view(data: &PublicSiteData, repository: &RepositoryRecord) -> SiteView {
         .find(|metadata| metadata.id == repository.id);
     let showcase = data.showcases.for_repository(&repository.id);
 
+    let mut sections = vec![
+        hero(repository),
+        showcase_section(showcase),
+        place_in_family(data, repository),
+    ];
+    if repository.id == "mere" {
+        sections.push(projection_proof_section());
+    }
+    sections.push(project_facts(
+        if repository.id == "mere" { "04" } else { "03" },
+        repository,
+        metadata,
+    ));
+    sections.push(profile_closing(repository));
+
     shell(
         ActivePage::Repositories,
         element(
@@ -158,14 +182,280 @@ pub fn view(data: &PublicSiteData, repository: &RepositoryRecord) -> SiteView {
                 ("class", "project-profile-main"),
                 ("data-project-id", repository.id.as_str()),
             ],
-            vec![
-                hero(repository),
-                showcase_section(showcase),
-                place_in_family(data, repository),
-                project_facts(repository, metadata),
-                profile_closing(repository),
-            ],
+            sections,
         ),
+    )
+}
+
+fn projection_proof_section() -> SiteView {
+    element(
+        "section",
+        &[
+            ("class", "content-section projection-proof-section"),
+            ("aria-labelledby", "projection-proof-title"),
+        ],
+        vec![
+            section_heading("03", "portable scene"),
+            element(
+                "div",
+                &[("class", "projection-proof-heading")],
+                vec![
+                    element(
+                        "div",
+                        &[],
+                        vec![
+                            element(
+                                "h2",
+                                &[("id", "projection-proof-title")],
+                                vec![txt("One portable scene. Two working projections.")],
+                            ),
+                            element(
+                                "p",
+                                &[],
+                                vec![txt(
+                                    "Move or select a project in either view. Remove a relationship from the scene, fold Mere's dependencies, scrub the revisioned trace, and both projections follow the same serialized state.",
+                                )],
+                            ),
+                        ],
+                    ),
+                    element(
+                        "p",
+                        &[("class", "projection-proof-boundary")],
+                        vec![txt(
+                            "Scenograph supplies the score, solved scene, stable slots, and revisioned diffs · Mer3ly supplies the public-authority adapter",
+                        )],
+                    ),
+                ],
+            ),
+            element(
+                "figure",
+                &[
+                    ("class", "projection-proof"),
+                    ("data-projection-proof", ""),
+                    ("data-ready", "false"),
+                    ("data-state", "pending"),
+                    ("data-cursor", "0"),
+                ],
+                vec![
+                    element(
+                        "p",
+                        &[
+                            ("class", "projection-proof-fallback"),
+                            ("data-projection-fallback", ""),
+                        ],
+                        vec![txt(
+                            "The synchronized scene requires JavaScript. The relationship lists above preserve the same public nodes and edges as ordinary text.",
+                        )],
+                    ),
+                    element(
+                        "div",
+                        &[
+                            ("class", "projection-proof-interface"),
+                            ("data-projection-interface", ""),
+                            ("hidden", "hidden"),
+                        ],
+                        vec![
+                            projection_proof_controls(),
+                            element(
+                                "div",
+                                &[("class", "projection-proof-views")],
+                                vec![
+                                    projection_view(
+                                        "canvas",
+                                        "Canvas projection",
+                                        "A full working view of the Mere repository neighborhood.",
+                                    ),
+                                    projection_view(
+                                        "swatch",
+                                        "Swatch projection",
+                                        "The same scene in a compact, independently operable view.",
+                                    ),
+                                ],
+                            ),
+                            element(
+                                "figcaption",
+                                &[],
+                                vec![txt(
+                                    "Eight public projects and nine validated relationships enter one serialized Scenograph score and scene snapshot. A native receipt and both page projections consume the same artifact and revisioned trace.",
+                                )],
+                            ),
+                        ],
+                    ),
+                    element(
+                        "p",
+                        &[
+                            ("class", "projection-proof-status sr-only"),
+                            ("data-projection-status", ""),
+                            ("role", "status"),
+                            ("aria-live", "polite"),
+                        ],
+                        vec![txt("Portable scene not initialized.")],
+                    ),
+                ],
+            ),
+        ],
+    )
+}
+
+fn projection_proof_controls() -> SiteView {
+    element(
+        "div",
+        &[
+            ("class", "projection-proof-controls"),
+            ("aria-label", "Portable scene controls"),
+        ],
+        vec![
+            element(
+                "button",
+                &[
+                    ("class", "button button-primary"),
+                    ("type", "button"),
+                    ("data-projection-action", "replay"),
+                ],
+                vec![txt("Replay changes")],
+            ),
+            element(
+                "button",
+                &[
+                    ("class", "button button-quiet"),
+                    ("type", "button"),
+                    ("data-projection-action", "fold"),
+                ],
+                vec![txt("Fold dependencies")],
+            ),
+            element(
+                "button",
+                &[
+                    ("class", "button button-quiet"),
+                    ("type", "button"),
+                    ("data-projection-action", "edge"),
+                    ("disabled", "disabled"),
+                ],
+                vec![txt("Select an edge")],
+            ),
+            element(
+                "button",
+                &[
+                    ("class", "button button-quiet"),
+                    ("type", "button"),
+                    ("data-projection-action", "reset"),
+                ],
+                vec![txt("Reset trace")],
+            ),
+            element(
+                "label",
+                &[("class", "projection-proof-scrubber")],
+                vec![
+                    element(
+                        "span",
+                        &[],
+                        vec![
+                            txt("Scene history "),
+                            element(
+                                "output",
+                                &[("data-projection-cursor-output", "")],
+                                vec![txt("0 of 0")],
+                            ),
+                        ],
+                    ),
+                    element(
+                        "input",
+                        &[
+                            ("type", "range"),
+                            ("min", "0"),
+                            ("max", "0"),
+                            ("step", "1"),
+                            ("value", "0"),
+                            ("data-projection-cursor", ""),
+                        ],
+                        vec![],
+                    ),
+                ],
+            ),
+            element(
+                "button",
+                &[
+                    ("class", "button button-quiet"),
+                    ("type", "button"),
+                    ("data-projection-action", "share"),
+                ],
+                vec![txt("Share scene")],
+            ),
+            element(
+                "p",
+                &[("class", "projection-proof-readout")],
+                vec![
+                    element("span", &[], vec![txt("Selected")]),
+                    element(
+                        "strong",
+                        &[("data-projection-readout", "")],
+                        vec![txt("Mere")],
+                    ),
+                ],
+            ),
+        ],
+    )
+}
+
+fn projection_view(kind: &str, heading: &str, description: &str) -> SiteView {
+    element(
+        "section",
+        &[
+            ("class", "projection-proof-view"),
+            ("data-projection-view", kind),
+            ("aria-label", heading),
+        ],
+        vec![
+            element(
+                "header",
+                &[("class", "projection-proof-view-heading")],
+                vec![
+                    element("h3", &[], vec![txt(heading)]),
+                    element(
+                        "p",
+                        &[("data-projection-selection", "")],
+                        vec![txt("Mere selected")],
+                    ),
+                ],
+            ),
+            element("p", &[("class", "sr-only")], vec![txt(description)]),
+            element(
+                "div",
+                &[
+                    ("class", "projection-proof-stage"),
+                    ("data-projection-stage", kind),
+                ],
+                vec![
+                    element(
+                        "svg",
+                        &[
+                            ("class", "projection-proof-edges"),
+                            ("data-projection-edges", ""),
+                            ("aria-hidden", "true"),
+                        ],
+                        vec![],
+                    ),
+                    element(
+                        "div",
+                        &[
+                            ("class", "projection-proof-edge-controls"),
+                            ("data-projection-edge-controls", ""),
+                        ],
+                        vec![],
+                    ),
+                    element(
+                        "div",
+                        &[
+                            ("class", "projection-proof-nodes"),
+                            ("data-projection-nodes", ""),
+                            ("role", "group"),
+                            ("aria-label", "Project nodes"),
+                        ],
+                        vec![],
+                    ),
+                ],
+            ),
+        ],
     )
 }
 
@@ -400,6 +690,7 @@ fn relation_group(
 }
 
 fn project_facts(
+    number: &str,
     repository: &RepositoryRecord,
     metadata: Option<&PublicRepositoryMetadata>,
 ) -> SiteView {
@@ -430,7 +721,7 @@ fn project_facts(
         "section",
         &[("class", "content-section project-facts-section")],
         vec![
-            section_heading("03", "project facts"),
+            section_heading(number, "project facts"),
             element(
                 "div",
                 &[("class", "project-facts-layout")],
@@ -493,4 +784,53 @@ fn profile_closing(repository: &RepositoryRecord) -> SiteView {
 
 fn format_date(timestamp: &str) -> String {
     timestamp.get(..10).unwrap_or(timestamp).to_owned()
+}
+
+pub fn projection_artifact_json(data: &PublicSiteData) -> String {
+    let authority = RepositoryGraph::from_parts(
+        &data.authority.repositories,
+        &data.authority.relations,
+        &data.metadata,
+    )
+    .expect("validated public site data projects a repository graph");
+    let edges = authority
+        .edges
+        .into_iter()
+        .filter(|edge| edge.source == "mere" || edge.target == "mere")
+        .collect::<Vec<_>>();
+    let node_ids = edges
+        .iter()
+        .flat_map(|edge| [edge.source.clone(), edge.target.clone()])
+        .collect::<std::collections::BTreeSet<_>>();
+    let nodes = authority
+        .nodes
+        .into_iter()
+        .filter(|node| node_ids.contains(&node.id))
+        .collect::<Vec<_>>();
+    let graph = RepositoryGraph {
+        schema: authority.schema,
+        nodes,
+        edges,
+    };
+    let graph_json =
+        serde_json::to_string(&graph).expect("Mere projection proof authority is serializable");
+    mer3ly_repo_graph::portable_projection_json(&graph_json)
+        .expect("validated Mere authority projects through Scenograph")
+}
+
+fn projection_bootstrap(data: &PublicSiteData) -> String {
+    let artifact = projection_artifact_json(data);
+    let embedded = artifact
+        .replace('<', "\\u003c")
+        .replace('>', "\\u003e")
+        .replace('&', "\\u0026");
+    let mut digest = Sha256::new();
+    digest.update(PROJECTION_PROOF);
+    digest.update(artifact.as_bytes());
+    let digest = format!("{:x}", digest.finalize());
+    format!(
+        "<script id=\"mere-projection-artifact\" type=\"application/json\">{embedded}</script>\n\
+<script type=\"module\" src=\"/projection-proof.js?v={}\"></script>",
+        &digest[..12]
+    )
 }

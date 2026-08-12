@@ -4,6 +4,7 @@ use std::fs;
 use std::net::IpAddr;
 use std::path::{Path, PathBuf};
 
+use mer3ly_repo_graph::consume_portable_projection_json;
 use regex::Regex;
 use serde::Serialize;
 use serde_json::Value;
@@ -29,6 +30,8 @@ const BASE_FILES: &[&str] = &[
     "mer3ly_repo_graph.js",
     "mer3ly_repo_graph_bg.wasm",
     "og.jpg",
+    "projection-proof.js",
+    "projection-scene.json",
     "radio.html",
     "radio-simulator.js",
     "repo-graph.js",
@@ -54,6 +57,9 @@ pub struct ArtifactReceipt {
     sitemap_urls: usize,
     project_social_previews: usize,
     project_structured_records: usize,
+    projection_score_items: usize,
+    projection_final_revision: u64,
+    projection_active_relations: usize,
     device_profiles: usize,
     device_structured_records: usize,
     sellable_devices: usize,
@@ -201,6 +207,14 @@ pub fn validate_public_artifact(
     validate_copied_asset(
         artifact_root,
         source_root,
+        "projection-proof.js",
+        "assets/projection-proof.js",
+        "portable projection proof",
+        &mut errors,
+    );
+    validate_copied_asset(
+        artifact_root,
+        source_root,
         "radio-simulator.js",
         "assets/radio-simulator.js",
         "radio simulator",
@@ -210,6 +224,7 @@ pub fn validate_public_artifact(
     let home = read_text(artifact_root, "index.html", &mut errors);
     let radio = read_text(artifact_root, "radio.html", &mut errors);
     let repositories = read_text(artifact_root, "repos/index.html", &mut errors);
+    let projection_scene = read_text(artifact_root, "projection-scene.json", &mut errors);
     let device_index = read_text(artifact_root, "devices/index.html", &mut errors);
     let robots = read_text(artifact_root, "robots.txt", &mut errors);
     let sitemap = read_text(artifact_root, "sitemap.xml", &mut errors);
@@ -279,6 +294,13 @@ pub fn validate_public_artifact(
     let mut project_relation_ids = Vec::new();
     let mut project_social_previews = 0;
     let mut project_structured_records = 0;
+    let projection_receipt = match consume_portable_projection_json(&projection_scene) {
+        Ok(receipt) => Some(receipt),
+        Err(error) => {
+            errors.push(format!("portable projection artifact is invalid: {error}"));
+            None
+        }
+    };
     for repository in authority
         .repositories
         .repository
@@ -346,6 +368,30 @@ pub fn validate_public_artifact(
         {
             errors.push(format!(
                 "project profile {} is missing approved showcase evidence",
+                repository.id
+            ));
+        }
+        if repository.id == "mere" {
+            if !project.contains("data-projection-proof")
+                || !project.contains("<script type=\"module\" src=\"/projection-proof.js?v=")
+            {
+                errors.push(
+                    "Mere project profile is missing its portable projection proof".to_owned(),
+                );
+            }
+            match inline_json(&project, "mere-projection-artifact") {
+                Some(embedded) if embedded == projection_scene => {}
+                Some(_) => errors
+                    .push("Mere project profile and public projection artifact differ".to_owned()),
+                None => errors.push(
+                    "Mere project profile is missing its serialized projection artifact".to_owned(),
+                ),
+            }
+        } else if project.contains("data-projection-proof")
+            || project.contains("/projection-proof.js?v=")
+        {
+            errors.push(format!(
+                "project profile {} unexpectedly includes the Mere projection proof",
                 repository.id
             ));
         }
@@ -511,6 +557,15 @@ pub fn validate_public_artifact(
             sitemap_urls,
             project_social_previews,
             project_structured_records,
+            projection_score_items: projection_receipt
+                .as_ref()
+                .map_or(0, |receipt| receipt.score_items),
+            projection_final_revision: projection_receipt
+                .as_ref()
+                .map_or(0, |receipt| receipt.final_revision),
+            projection_active_relations: projection_receipt
+                .as_ref()
+                .map_or(0, |receipt| receipt.active_relations),
             device_profiles: device_ids.len(),
             device_structured_records,
             sellable_devices,
@@ -553,6 +608,7 @@ fn is_scannable(path: &str) -> bool {
     path.ends_with(".html")
         || path.ends_with(".css")
         || path.ends_with(".js")
+        || path.ends_with(".json")
         || path.ends_with(".svg")
         || path.ends_with(".txt")
         || path.ends_with(".xml")
@@ -1143,6 +1199,13 @@ fn parse_graph_payload(document: &str, errors: &mut Vec<String>) -> Option<Graph
             None
         }
     }
+}
+
+fn inline_json<'a>(document: &'a str, id: &str) -> Option<&'a str> {
+    let marker = format!("<script id=\"{id}\" type=\"application/json\">");
+    let start = document.find(&marker)? + marker.len();
+    let end = document[start..].find("</script>")? + start;
+    Some(&document[start..end])
 }
 
 fn attribute_values(document: &str, attribute: &str) -> Vec<String> {

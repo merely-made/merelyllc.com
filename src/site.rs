@@ -310,6 +310,14 @@ pub fn render_with_dynamic(metadata: &DocumentMetadata<'_>, view: impl Fn() -> S
     render_body(metadata, view, "", None)
 }
 
+pub fn render_with_dynamic_and_body_end(
+    metadata: &DocumentMetadata<'_>,
+    view: impl Fn() -> SiteView,
+    body_end: &str,
+) -> String {
+    render_body(metadata, view, body_end, None)
+}
+
 pub fn render_with_dynamic_stylesheet(
     metadata: &DocumentMetadata<'_>,
     view: impl Fn() -> SiteView,

@@ -112,6 +112,95 @@ fn visual_and_text_only_profiles_state_their_evidence_boundary() {
 }
 
 #[test]
+fn mere_profile_projects_one_authority_into_canvas_and_swatch_views() {
+    let root = workspace_root();
+    let data = PublicSiteData::load(&root).expect("load validated public site data");
+    let mere = projects::document(&root, "mere").expect("render Mere profile");
+
+    assert!(mere.contains("data-projection-proof"));
+    assert_eq!(mere.matches("data-projection-view=").count(), 2);
+    assert!(mere.contains("data-projection-view=\"canvas\""));
+    assert!(mere.contains("data-projection-view=\"swatch\""));
+    assert!(mere.contains("<script type=\"module\" src=\"/projection-proof.js?v="));
+    assert!(mere.contains("Scenograph supplies the score"));
+    assert!(mere.contains("portable scene"));
+    assert!(mere.contains("project facts"));
+
+    let marker = "<script id=\"mere-projection-artifact\" type=\"application/json\">";
+    let start = mere.find(marker).expect("Mere projection artifact") + marker.len();
+    let end = mere[start..]
+        .find("</script>")
+        .map(|offset| start + offset)
+        .expect("Mere projection artifact terminator");
+    let artifact_json = projects::projection_artifact_json(&data);
+    assert_eq!(&mere[start..end], artifact_json);
+    let native_receipt = mer3ly_repo_graph::consume_portable_projection_json(&artifact_json)
+        .expect("native Scenotime consumer accepts the exact page artifact");
+    assert_eq!(native_receipt.score_items, 8);
+    assert_eq!(native_receipt.initial_revision, 1);
+    assert_eq!(native_receipt.final_revision, 5);
+    assert_eq!(native_receipt.active_items, 8);
+    assert_eq!(native_receipt.active_relations, 8);
+    assert_eq!(native_receipt.picked_source, "mere");
+    let artifact: serde_json::Value =
+        serde_json::from_str(&mere[start..end]).expect("valid portable projection JSON");
+    assert_eq!(artifact["schema"], "mer3ly.portable-projection/v1");
+    assert_eq!(artifact["adapter"], "mer3ly.repository-graph/v1");
+    assert_eq!(artifact["score"]["version"], 1);
+    assert_eq!(
+        artifact["score"]["items"]
+            .as_array()
+            .expect("score items")
+            .len(),
+        8
+    );
+    assert_eq!(
+        artifact["snapshot"]["tables"]["items"]
+            .as_array()
+            .expect("scene items")
+            .len(),
+        8
+    );
+    assert_eq!(
+        artifact["relations"].as_array().expect("relations").len(),
+        9
+    );
+    assert_eq!(
+        artifact["default_trace"]
+            .as_array()
+            .expect("revision trace")
+            .len(),
+        7
+    );
+    assert!(
+        artifact["relations"]
+            .as_array()
+            .expect("relations")
+            .iter()
+            .all(|relation| relation["source"] == "mere" || relation["target"] == "mere")
+    );
+
+    for repository in data
+        .authority
+        .repositories
+        .repository
+        .iter()
+        .filter(|repository| repository.public && repository.id != "mere")
+    {
+        let document = projects::document_for(&data, repository);
+        assert!(!document.contains("data-projection-proof"));
+        assert!(!document.contains("/projection-proof.js?v="));
+    }
+    assert!(
+        root.join("assets/projection-proof.js")
+            .metadata()
+            .expect("projection proof asset")
+            .len()
+            < 32 * 1024
+    );
+}
+
+#[test]
 fn showcase_styles_cover_responsive_images_and_profile_relations() {
     for contract in [
         ".home-showcase-card",
@@ -120,6 +209,9 @@ fn showcase_styles_cover_responsive_images_and_profile_relations() {
         ".project-relation-columns",
         ".project-facts-layout",
         ".project-profile-hero",
+        ".projection-proof-views",
+        ".projection-proof-node",
+        ".projection-proof-edge-control",
         "@media (max-width: 760px)",
         "@media (max-width: 440px)",
     ] {
