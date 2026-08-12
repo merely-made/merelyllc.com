@@ -1149,6 +1149,51 @@ h1 {
   color: var(--muted);
 }
 
+.repository-activity-intro {
+  max-width: 720px;
+  margin-bottom: 24px;
+  color: var(--muted);
+}
+
+.repository-activity-feed {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+  list-style: none;
+}
+
+.repository-activity-item {
+  min-width: 0;
+  padding: 17px 20px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.repository-activity-item:nth-child(odd) {
+  border-right: 1px solid var(--line);
+}
+
+.repository-activity-item:nth-last-child(-n + 2) {
+  border-bottom: 0;
+}
+
+.repository-activity-project {
+  color: var(--oxblood);
+  font-weight: 600;
+}
+
+.repository-activity-time {
+  flex: 0 0 auto;
+  color: var(--faint);
+  font: 0.58rem/1.4 var(--font-mono);
+}
+
 .repository-filter-shell {
   min-width: 0;
   margin: 0;
@@ -3032,6 +3077,18 @@ tbody tr:last-child td {
 
   .repository-card {
     padding: 24px 20px 0;
+  }
+
+  .repository-activity-feed {
+    grid-template-columns: 1fr;
+  }
+
+  .repository-activity-item:nth-child(odd) {
+    border-right: 0;
+  }
+
+  .repository-activity-item:nth-last-child(2) {
+    border-bottom: 1px solid var(--line);
   }
 
   .repository-card-header {

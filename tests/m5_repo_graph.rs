@@ -19,7 +19,14 @@ struct GraphAuthority {
     schema: String,
     nodes: Vec<GraphNode>,
     edges: Vec<GraphEdge>,
+    feed: Vec<GraphEvent>,
     history: Option<GraphHistory>,
+}
+
+#[derive(Deserialize)]
+struct GraphEvent {
+    id: String,
+    repository: String,
 }
 
 #[derive(Deserialize)]
@@ -115,6 +122,16 @@ fn graph_and_semantic_index_share_exact_public_ids() {
         assert!(node_ids.contains(edge.source.as_str()));
         assert!(node_ids.contains(edge.target.as_str()));
     }
+    assert_eq!(graph.feed.len(), data.metadata.event.len());
+    assert!(graph.feed.iter().all(|event| {
+        !event.id.is_empty()
+            && data
+                .authority
+                .repositories
+                .repository
+                .iter()
+                .any(|repository| repository.github_slug == event.repository)
+    }));
     for repository in &data.authority.repositories.repository {
         assert!(document.contains(&format!("id=\"repo-{}\"", repository.id)));
         assert!(document.contains(&format!("data-repository-id=\"{}\"", repository.id)));

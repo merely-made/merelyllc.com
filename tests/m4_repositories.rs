@@ -67,6 +67,8 @@ fn repository_page_is_static_semantic_and_filterable() {
     assert!(document.contains("href=\"mailto:markik@mer3ly.net\""));
     assert!(document.contains(">Merely organization profile</a></h2>"));
     assert!(document.contains("data-project-href=\"/projects/mere/\""));
+    assert!(document.contains("recent organization activity"));
+    assert!(document.contains("data-activity-repository=\"mere\""));
     assert!(!document.contains(">Merely Made organization profile</a></h2>"));
 
     for forbidden in [
@@ -102,19 +104,34 @@ fn public_metadata_cache_is_reduced_and_bounded() {
     // compact line per JSON structure, while the surrounding document keeps
     // two-space indentation.
     assert!(
-        bytes < 240 * 1024,
+        bytes < 280 * 1024,
         "repository HTML, CSS, and public metadata use {bytes} bytes"
     );
     assert_eq!(
         data.metadata.repository.len(),
         data.authority.repositories.repository.len()
     );
+    assert_eq!(data.metadata.schema, "mer3ly.github-organization/v2");
+    assert_eq!(data.metadata.organization, "merely-made");
+    assert!(!data.metadata.event.is_empty());
+    assert!(data.metadata.event.len() <= 40);
+    assert!(data.metadata.event.iter().all(|event| {
+        data.authority
+            .repositories
+            .repository
+            .iter()
+            .any(|repository| repository.github_slug == event.repository)
+    }));
+    assert!(!cache.contains("merely-made/esp"));
+    assert!(!cache.contains("merely-made/tulpa"));
+    assert!(!cache.contains("merely-made/mer3ly-net"));
     for forbidden_field in [
         "\"private\"",
         "\"visibility\"",
         "\"viewer_permission\"",
         "\"token\"",
-        "\"description\"",
+        "\"actor\"",
+        "\"payload\"",
         "\"ssh_url\"",
     ] {
         assert!(
@@ -132,6 +149,7 @@ fn stylesheet_contains_keyboard_and_narrow_filter_contracts() {
         ".repository-card:not(.class-product)",
         ".relationship-grid",
         ".repository-profile-link",
+        ".repository-activity-feed",
         "@media (max-width: 760px)",
         "@media (max-width: 440px)",
     ] {

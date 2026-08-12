@@ -24,8 +24,8 @@ local_locator = "repos/merely-made.github"
 
 [[migration]]
 id = "mer3ly"
-current_slug = "merely-made/mer3ly-net"
-target_slug = "merely-made/mer3ly-net"
+current_slug = "merely-made/merelyllc.com"
+target_slug = "merely-made/merelyllc.com"
 classification = "product"
 batch = "infrastructure"
 disposition = "already-in-org"
@@ -41,7 +41,7 @@ actions_workflows = 1
 old_owner_files = 21
 old_owner_manifests = 0
 local_locator = "repos/mer3ly"
-source_aliases = ["merely-made/mer3ly.net"]
+source_aliases = ["merely-made/mer3ly.net", "merely-made/mer3ly-net"]
 
 [[migration]]
 id = "netrender"
@@ -400,29 +400,6 @@ actions_workflows = 0
 old_owner_files = 0
 old_owner_manifests = 0
 local_locator = "repos/paredros"
-
-[[migration]]
-id = "tulpa"
-current_slug = "merely-made/tulpa"
-target_slug = "merely-made/tulpa"
-classification = "foundation"
-batch = "foundation"
-disposition = "already-in-org"
-visibility = "public"
-default_branch = "main"
-head = "9551a9d552f25e1690a665a66d6c674bbecd0664"
-license_status = "MIT-OR-Apache-2.0"
-provenance_status = "reviewed-original"
-sensitive_information_status = "current-and-history-detector-clean"
-public_scope = "Tulpa name-reservation package and public memorial-layer description."
-publication_gate_status = "ready"
-history_remediation = "No remediation required."
-pages_status = "none"
-packages_status = "none-detected"
-actions_workflows = 0
-old_owner_files = 0
-old_owner_manifests = 0
-local_locator = "repos/tulpa"
 
 [[migration]]
 id = "arboard-fork"

@@ -25,8 +25,16 @@ authenticated `gh` access is available:
 .\scripts\refresh-public-metadata.ps1
 ```
 
-The refresh validates a complete temporary snapshot before replacing the
-cache. A failed refresh leaves the last valid public snapshot in place.
+The refresh treats GitHub's public `merely-made` repository listing as the live
+membership authority. `content/repositories.toml` remains the editorial overlay
+for project roles, summaries, statuses, and meaningful relationships. New
+public repositories receive a conservative generated profile; repositories
+removed from the organization disappear from the site. The cache also keeps a
+reduced public activity feed containing only event type, repository, and time.
+
+The graph's Timeline arrangement uses the latest public push date from this
+snapshot. The refresh validates a complete temporary snapshot before replacing
+the cache. A failed refresh leaves the last valid public snapshot in place.
 
 When changing the repository graph client, rebuild its committed Wasm runtime:
 

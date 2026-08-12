@@ -54,15 +54,27 @@ pub struct ShowcaseRecord {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct PublicMetadataCache {
     pub schema: String,
+    #[serde(default)]
+    pub organization: String,
     pub generated_at_utc: String,
     #[serde(default)]
     pub repository: Vec<PublicRepositoryMetadata>,
+    #[serde(default)]
+    pub event: Vec<PublicOrganizationEvent>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct PublicRepositoryMetadata {
     pub id: String,
     pub github_slug: String,
+    #[serde(default)]
+    pub name: String,
+    #[serde(default)]
+    pub description: String,
+    #[serde(default)]
+    pub homepage: Option<String>,
+    #[serde(default)]
+    pub license: Option<String>,
     pub updated_at: String,
     pub pushed_at: String,
     #[serde(default)]
@@ -72,6 +84,14 @@ pub struct PublicRepositoryMetadata {
     pub fork: bool,
     #[serde(default)]
     pub topics: Vec<String>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct PublicOrganizationEvent {
+    pub id: String,
+    pub kind: String,
+    pub repository: String,
+    pub created_at: String,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
@@ -661,6 +681,72 @@ impl Authority {
             unresolved_products: self.migration.unresolved_product.clone(),
         }
     }
+
+    fn with_live_github_repositories(mut self, metadata: &PublicMetadataCache) -> Self {
+        let live_by_slug = metadata
+            .repository
+            .iter()
+            .map(|repository| (repository.github_slug.as_str(), repository))
+            .collect::<BTreeMap<_, _>>();
+        let editorial_slugs = self
+            .repositories
+            .repository
+            .iter()
+            .map(|repository| repository.github_slug.as_str())
+            .collect::<BTreeSet<_>>();
+        let mut repositories = self
+            .repositories
+            .repository
+            .iter()
+            .filter(|repository| live_by_slug.contains_key(repository.github_slug.as_str()))
+            .cloned()
+            .collect::<Vec<_>>();
+        repositories.extend(
+            metadata
+                .repository
+                .iter()
+                .filter(|live| !editorial_slugs.contains(live.github_slug.as_str()))
+                .map(|live| RepositoryRecord {
+                    id: live.id.clone(),
+                    github_slug: live.github_slug.clone(),
+                    name: live.name.clone(),
+                    summary: if live.description.is_empty() {
+                        "A public repository in the Merely GitHub organization.".to_owned()
+                    } else {
+                        live.description.clone()
+                    },
+                    class: if live.fork {
+                        RepositoryClass::MaintainedFork
+                    } else {
+                        RepositoryClass::Tool
+                    },
+                    status: if live.archived {
+                        RepositoryStatus::Archived
+                    } else {
+                        RepositoryStatus::Active
+                    },
+                    license: live
+                        .license
+                        .clone()
+                        .unwrap_or_else(|| "NOASSERTION".to_owned()),
+                    homepage: live
+                        .homepage
+                        .clone()
+                        .unwrap_or_else(|| format!("https://github.com/{}", live.github_slug)),
+                    public: true,
+                }),
+        );
+        let live_ids = repositories
+            .iter()
+            .map(|repository| repository.id.as_str())
+            .collect::<BTreeSet<_>>();
+        self.relations.relation.retain(|relation| {
+            live_ids.contains(relation.source.as_str())
+                && live_ids.contains(relation.target.as_str())
+        });
+        self.repositories.repository = repositories;
+        self
+    }
 }
 
 impl PublicSiteData {
@@ -680,7 +766,9 @@ impl PublicSiteData {
                 errors.join("\n")
             ))
         })?;
-        let showcases: ShowcaseManifest = read_toml(root.join(SHOWCASES_PATH))?;
+        let authority = authority.with_live_github_repositories(&metadata);
+        let mut showcases: ShowcaseManifest = read_toml(root.join(SHOWCASES_PATH))?;
+        showcases.retain_live_repositories(&authority);
         showcases.validate(root, &authority).map_err(|errors| {
             AuthorityError::new(format!(
                 "showcase validation failed:\n{}",
@@ -698,6 +786,17 @@ impl PublicSiteData {
 }
 
 impl ShowcaseManifest {
+    fn retain_live_repositories(&mut self, authority: &Authority) {
+        let live_ids = authority
+            .repositories
+            .repository
+            .iter()
+            .map(|repository| repository.id.as_str())
+            .collect::<BTreeSet<_>>();
+        self.showcase
+            .retain(|showcase| live_ids.contains(showcase.repository.as_str()));
+    }
+
     pub fn validate(&self, root: &Path, authority: &Authority) -> Result<(), Vec<String>> {
         let mut errors = Vec::new();
         let repositories = authority
@@ -830,26 +929,47 @@ impl PublicMetadataCache {
 
     pub fn validate(&self, authority: &Authority) -> Result<(), Vec<String>> {
         let mut errors = Vec::new();
-        if self.schema != "mer3ly.github-metadata/v1" {
+        if self.schema != "mer3ly.github-organization/v2" {
             errors.push(format!("unexpected public metadata schema {}", self.schema));
+        }
+        if self.organization != "merely-made" {
+            errors.push(format!(
+                "unexpected public metadata organization {}",
+                self.organization
+            ));
         }
         check_timestamp(
             "public metadata generated_at_utc",
             &self.generated_at_utc,
             &mut errors,
         );
+        if self.repository.is_empty() {
+            errors.push("public metadata has no repository records".to_owned());
+        }
 
-        let expected: BTreeMap<_, _> = authority
+        let editorial_by_slug: BTreeMap<_, _> = authority
             .repositories
             .repository
             .iter()
             .filter(|repository| repository.public)
-            .map(|repository| (repository.id.as_str(), repository))
+            .map(|repository| (repository.github_slug.as_str(), repository))
             .collect();
         let mut seen_ids = BTreeSet::new();
         let mut seen_slugs = BTreeSet::new();
 
         for metadata in &self.repository {
+            let valid_id = !metadata.id.is_empty()
+                && !metadata.id.starts_with('-')
+                && !metadata.id.ends_with('-')
+                && metadata.id.chars().all(|character| {
+                    character.is_ascii_lowercase() || character.is_ascii_digit() || character == '-'
+                });
+            if !valid_id {
+                errors.push(format!(
+                    "public metadata repository id is not lowercase kebab-case: {}",
+                    metadata.id
+                ));
+            }
             if !seen_ids.insert(metadata.id.as_str()) {
                 errors.push(format!("duplicate public metadata id {}", metadata.id));
             }
@@ -859,18 +979,36 @@ impl PublicMetadataCache {
                     metadata.github_slug
                 ));
             }
-            let Some(repository) = expected.get(metadata.id.as_str()) else {
+            if !metadata.github_slug.starts_with("merely-made/") {
                 errors.push(format!(
-                    "public metadata contains unknown or non-public repository {}",
-                    metadata.id
+                    "public metadata {} is outside merely-made",
+                    metadata.github_slug
                 ));
-                continue;
-            };
-            if metadata.github_slug != repository.github_slug {
+            }
+            check_slug(
+                &format!("public metadata {} github_slug", metadata.id),
+                &metadata.github_slug,
+                &mut errors,
+            );
+            check_nonempty(
+                &format!("public metadata {} name", metadata.id),
+                &metadata.name,
+                &mut errors,
+            );
+            if let Some(repository) = editorial_by_slug.get(metadata.github_slug.as_str())
+                && metadata.id != repository.id
+            {
                 errors.push(format!(
-                    "public metadata {} slug {} disagrees with authority {}",
-                    metadata.id, metadata.github_slug, repository.github_slug
+                    "public metadata {} id disagrees with editorial id {}",
+                    metadata.github_slug, repository.id
                 ));
+            }
+            if let Some(homepage) = &metadata.homepage {
+                check_https_or_github(
+                    &format!("public metadata {} homepage", metadata.id),
+                    homepage,
+                    &mut errors,
+                );
             }
             check_timestamp(
                 &format!("public metadata {} updated_at", metadata.id),
@@ -913,12 +1051,32 @@ impl PublicMetadataCache {
             }
         }
 
-        for repository_id in expected.keys() {
-            if !seen_ids.contains(repository_id) {
+        let mut event_ids = BTreeSet::new();
+        let mut previous_event_time: Option<&str> = None;
+        if self.event.len() > 40 {
+            errors.push("public metadata has more than 40 organization events".to_owned());
+        }
+        for event in &self.event {
+            check_nonempty("public organization event id", &event.id, &mut errors);
+            if !event_ids.insert(event.id.as_str()) {
+                errors.push(format!("duplicate public organization event {}", event.id));
+            }
+            check_nonempty("public organization event kind", &event.kind, &mut errors);
+            if !seen_slugs.contains(event.repository.as_str()) {
                 errors.push(format!(
-                    "public metadata is missing repository {repository_id}"
+                    "public organization event {} names unknown repository {}",
+                    event.id, event.repository
                 ));
             }
+            check_timestamp(
+                &format!("public organization event {} created_at", event.id),
+                &event.created_at,
+                &mut errors,
+            );
+            if previous_event_time.is_some_and(|previous| event.created_at.as_str() > previous) {
+                errors.push("public organization events are not newest-first".to_owned());
+            }
+            previous_event_time = Some(&event.created_at);
         }
 
         if errors.is_empty() {
@@ -1263,5 +1421,52 @@ mod tests {
                 assert!(!locator.starts_with('/'));
             }
         }
+    }
+
+    #[test]
+    fn live_github_roster_adds_fallbacks_and_removes_stale_relations() {
+        let root = workspace_root();
+        let authority = Authority::load(&root).expect("load authority files");
+        let mut metadata = PublicMetadataCache::load(root.join(PUBLIC_METADATA_PATH))
+            .expect("load public metadata");
+        metadata
+            .repository
+            .retain(|repository| repository.id != "mere");
+        metadata.repository.push(PublicRepositoryMetadata {
+            id: "new-public-tool".to_owned(),
+            github_slug: "merely-made/new-public-tool".to_owned(),
+            name: "new-public-tool".to_owned(),
+            description: "A newly discovered public tool.".to_owned(),
+            homepage: None,
+            license: Some("mit".to_owned()),
+            updated_at: "2026-08-11T00:00:00Z".to_owned(),
+            pushed_at: "2026-08-11T00:00:00Z".to_owned(),
+            primary_language: Some("Rust".to_owned()),
+            stargazer_count: 0,
+            archived: false,
+            fork: false,
+            topics: Vec::new(),
+        });
+
+        let reconciled = authority.with_live_github_repositories(&metadata);
+        let ids = reconciled
+            .repositories
+            .repository
+            .iter()
+            .map(|repository| repository.id.as_str())
+            .collect::<BTreeSet<_>>();
+        assert!(!ids.contains("mere"));
+        assert!(ids.contains("new-public-tool"));
+        let discovered = reconciled
+            .repositories
+            .repository
+            .iter()
+            .find(|repository| repository.id == "new-public-tool")
+            .expect("new GitHub repository gets a fallback profile");
+        assert_eq!(discovered.class, RepositoryClass::Tool);
+        assert_eq!(discovered.summary, "A newly discovered public tool.");
+        assert!(reconciled.relations.relation.iter().all(|relation| {
+            ids.contains(relation.source.as_str()) && ids.contains(relation.target.as_str())
+        }));
     }
 }

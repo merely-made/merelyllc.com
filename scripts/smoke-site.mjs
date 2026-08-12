@@ -102,8 +102,8 @@ try {
   const sitemapUrls = [...sitemapText.matchAll(/<loc>([^<]+)<\/loc>/g)].map(
     (match) => match[1],
   );
-  assert.equal(sitemapUrls.length, 25);
-  assert.equal(new Set(sitemapUrls).size, 25);
+  assert.ok(sitemapUrls.length > 6);
+  assert.equal(new Set(sitemapUrls).size, sitemapUrls.length);
   assert.equal(
     sitemapUrls.every((url) => url.startsWith("https://mer3ly.net/")),
     true,
@@ -983,10 +983,25 @@ try {
   assert.equal(desktopResponse?.status(), 200);
   await waitForGraphState(desktop);
   let desktopState = await graphState(desktop);
-  assert.equal(desktopState.repositories, 19);
-  assert.equal(desktopState.relation_text_projections, 50);
-  assert.equal(desktopState.graph_nodes, 19);
-  assert.equal(desktopState.graph_edges, 25);
+  const expectedRepositoryCount = await desktop
+    .locator("[data-repository-id]")
+    .count();
+  const expectedRelationProjectionCount = await desktop
+    .locator("[data-relation-id]")
+    .count();
+  assert.ok(expectedRepositoryCount > 0);
+  assert.equal(
+    sitemapUrls.filter((url) => url.includes("/projects/")).length,
+    expectedRepositoryCount,
+  );
+  assert.equal(expectedRelationProjectionCount % 2, 0);
+  assert.equal(desktopState.repositories, expectedRepositoryCount);
+  assert.equal(
+    desktopState.relation_text_projections,
+    expectedRelationProjectionCount,
+  );
+  assert.equal(desktopState.graph_nodes, expectedRepositoryCount);
+  assert.equal(desktopState.graph_edges, expectedRelationProjectionCount / 2);
   assert.equal(desktopState.horizontal_overflow, 0);
   assert.ok(
     desktopState.state === "ready" || desktopState.state === "unavailable",
@@ -1220,7 +1235,10 @@ try {
           await receiver.locator("[data-graph-status]").textContent(),
           /source cursor is unavailable/,
         );
-        assert.equal(await receiver.locator("[data-graph-node-id]").count(), 19);
+        assert.equal(
+          await receiver.locator("[data-graph-node-id]").count(),
+          expectedRepositoryCount,
+        );
         assert.deepEqual(
           receiverDiagnostics,
           [],
@@ -1255,7 +1273,10 @@ try {
           await historyControls.locator("[data-graph-history-status]").textContent(),
           /^Live authority/,
         );
-        assert.equal(await desktop.locator("[data-graph-node-id]").count(), 19);
+        assert.equal(
+          await desktop.locator("[data-graph-node-id]").count(),
+          expectedRepositoryCount,
+        );
         desktopState.source_time = "public-lineage-and-live";
         desktopState.history_checkpoints = historySnapshots.length;
         desktopState.source_time_arrangement_matrix = historicalArrangementIds;
@@ -1312,7 +1333,7 @@ try {
   await mobile.goto(`${baseUrl}/repos/`, { waitUntil: "networkidle" });
   await waitForGraphState(mobile);
   const mobileState = await graphState(mobile);
-  assert.equal(mobileState.repositories, 19);
+  assert.equal(mobileState.repositories, expectedRepositoryCount);
   assert.equal(mobileState.horizontal_overflow, 0);
   if (mobileState.state === "ready") {
     const arrangementPicker = mobile.locator("select[data-graph-arrangement]");
@@ -1339,7 +1360,7 @@ try {
         arrangementId,
       );
       const scene = await graphSceneState(mobile);
-      assert.equal(scene.nodes, 19);
+      assert.equal(scene.nodes, expectedRepositoryCount);
       assert.equal(scene.outside_stage, 0);
       assert.equal(scene.outside_node_bounds, 0);
       assert.equal(scene.selected, "mere");
@@ -1504,7 +1525,7 @@ try {
   await waitForGraphState(fallback);
   const fallbackState = await graphState(fallback);
   assert.equal(fallbackState.state, "unavailable");
-  assert.equal(fallbackState.repositories, 19);
+  assert.equal(fallbackState.repositories, expectedRepositoryCount);
   assert.equal(fallbackState.horizontal_overflow, 0);
   assert.equal(
     await fallback

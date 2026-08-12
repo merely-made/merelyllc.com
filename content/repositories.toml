@@ -11,7 +11,7 @@ public = true
 
 [[repository]]
 id = "mer3ly"
-github_slug = "merely-made/mer3ly-net"
+github_slug = "merely-made/merelyllc.com"
 name = "Mer3ly"
 summary = "The public Merely company site and repository-family map."
 class = "product"
@@ -183,17 +183,6 @@ class = "product"
 status = "prototype"
 license = "MIT OR Apache-2.0"
 homepage = "https://github.com/merely-made/paredros"
-public = true
-
-[[repository]]
-id = "tulpa"
-github_slug = "merely-made/tulpa"
-name = "Tulpa"
-summary = "The legend and memorial layer: a view of what memory makes of history, sustained by continued attention."
-class = "foundation"
-status = "research"
-license = "MIT OR Apache-2.0"
-homepage = "https://github.com/merely-made/tulpa"
 public = true
 
 [[repository]]

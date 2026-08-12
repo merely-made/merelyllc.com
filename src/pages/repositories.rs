@@ -5,8 +5,8 @@ use serde::Serialize;
 use sha2::{Digest, Sha256};
 
 use crate::repositories::{
-    AuthorityError, PublicRepositoryMetadata, PublicSiteData, RelationRecord, RepositoryClass,
-    RepositoryRecord,
+    AuthorityError, PublicOrganizationEvent, PublicRepositoryMetadata, PublicSiteData,
+    RelationRecord, RepositoryClass, RepositoryRecord,
 };
 use crate::repository_history::{
     GitAuthorityHistoryProjection, RepositoryGraph, public_history_projection,
@@ -61,6 +61,7 @@ pub fn view(data: &PublicSiteData) -> SiteView {
             vec![
                 hero(data),
                 repository_graph(data),
+                organization_activity(data),
                 repository_index(data),
                 source_note(data),
             ],
@@ -137,7 +138,7 @@ fn repository_graph(data: &PublicSiteData) -> SiteView {
                         "p",
                         &[],
                         vec![txt(
-                            "Select a node to inspect its neighborhood. Open it to move to the complete semantic entry below.",
+                            "GitHub supplies the live membership and latest push dates; Mer3ly supplies the project roles and relationships. Choose Timeline to arrange the family by its latest public pushes.",
                         )],
                     ),
                 ],
@@ -212,6 +213,95 @@ fn repository_graph(data: &PublicSiteData) -> SiteView {
             ),
         ],
     )
+}
+
+fn organization_activity(data: &PublicSiteData) -> SiteView {
+    let repositories_by_slug: BTreeMap<_, _> = data
+        .authority
+        .repositories
+        .repository
+        .iter()
+        .map(|repository| (repository.github_slug.as_str(), repository))
+        .collect();
+    let events = data
+        .metadata
+        .event
+        .iter()
+        .take(12)
+        .filter_map(|event| {
+            repositories_by_slug
+                .get(event.repository.as_str())
+                .map(|repository| activity_item(event, repository))
+        })
+        .collect();
+
+    element(
+        "section",
+        &[
+            ("class", "content-section repository-activity-section"),
+            ("aria-label", "Recent merely-made GitHub activity"),
+        ],
+        vec![
+            section_heading("02", "recent organization activity"),
+            element(
+                "p",
+                &[("class", "repository-activity-intro")],
+                vec![txt(
+                    "A reduced view of the public merely-made GitHub feed. Each deployment refreshes repository membership, metadata, and these events before rebuilding the graph.",
+                )],
+            ),
+            element("ol", &[("class", "repository-activity-feed")], events),
+        ],
+    )
+}
+
+fn activity_item(event: &PublicOrganizationEvent, repository: &RepositoryRecord) -> SiteView {
+    let project_href = format!("/projects/{}/", repository.id);
+    element(
+        "li",
+        &[
+            ("class", "repository-activity-item"),
+            ("data-activity-kind", event.kind.as_str()),
+            ("data-activity-repository", repository.id.as_str()),
+        ],
+        vec![
+            element(
+                "span",
+                &[("class", "repository-activity-statement")],
+                vec![
+                    link(
+                        &project_href,
+                        &repository.name,
+                        "repository-activity-project",
+                    ),
+                    txt(format!(" {}", activity_label(&event.kind))),
+                ],
+            ),
+            element(
+                "time",
+                &[
+                    ("class", "repository-activity-time"),
+                    ("datetime", event.created_at.as_str()),
+                ],
+                vec![txt(format_timestamp(&event.created_at))],
+            ),
+        ],
+    )
+}
+
+fn activity_label(kind: &str) -> &'static str {
+    match kind {
+        "PushEvent" => "pushed code",
+        "PullRequestEvent" => "updated a pull request",
+        "CreateEvent" => "created a branch or tag",
+        "DeleteEvent" => "deleted a branch or tag",
+        "ReleaseEvent" => "published a release",
+        "IssuesEvent" => "updated an issue",
+        "IssueCommentEvent" => "commented on an issue",
+        "ForkEvent" => "created a fork",
+        "WatchEvent" => "received a star",
+        _ => "recorded public activity",
+    }
 }
 
 fn graph_toolbar() -> SiteView {
@@ -499,7 +589,7 @@ fn repository_index(data: &PublicSiteData) -> SiteView {
             ("aria-label", "Repository index"),
         ],
         vec![
-            section_heading("02", "repository index"),
+            section_heading("03", "repository index"),
             element(
                 "p",
                 &[("class", "index-intro")],
@@ -931,13 +1021,13 @@ fn source_note(data: &PublicSiteData) -> SiteView {
             element(
                 "h2",
                 &[("id", "repository-source-title")],
-                vec![txt("One authority. Two projections.")],
+                vec![txt("Two inputs. One public projection.")],
             ),
             element(
                 "p",
                 &[],
                 vec![txt(format!(
-                    "The semantic index and optional Mere canvas consume the same committed repository ids and relationship ids. Public GitHub metadata was refreshed {}. If a future refresh fails, the last validated snapshot remains in place.",
+                    "GitHub owns public organization membership, repository facts, push dates, and activity. Mer3ly owns the editorial roles, summaries, statuses, and meaningful relationships layered over that roster. Both the semantic index and the Mere canvas consume the reconciled result. Refreshed {}. If a future refresh fails, the last validated snapshot remains in place.",
                     format_timestamp(&data.metadata.generated_at_utc)
                 ))],
             ),
@@ -959,8 +1049,10 @@ fn graph_bootstrap(
         serde_json::to_string(&authority.schema).expect("repository graph schema is serializable");
     let nodes = serialize_json_records(&authority.nodes);
     let edges = serialize_json_records(&authority.edges);
-    let mut json =
-        format!("{{\n\"schema\":{schema},\n\"nodes\":[\n{nodes}\n],\n\"edges\":[\n{edges}\n]");
+    let feed = serialize_json_records(&data.metadata.event);
+    let mut json = format!(
+        "{{\n\"schema\":{schema},\n\"nodes\":[\n{nodes}\n],\n\"edges\":[\n{edges}\n],\n\"feed\":[\n{feed}\n]"
+    );
     if let Some(history) = history {
         let history_schema = serde_json::to_string(&history.schema)
             .expect("repository history schema is serializable");
