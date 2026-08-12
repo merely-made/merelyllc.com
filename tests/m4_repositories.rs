@@ -102,9 +102,10 @@ fn public_metadata_cache_is_reduced_and_bounded() {
 
     // Generated HTML is intentionally readable source. The graph data uses one
     // compact line per JSON structure, while the surrounding document keeps
-    // two-space indentation.
+    // two-space indentation. This bound also covers the scene sandbox controls
+    // and their representation-registry styles.
     assert!(
-        bytes < 280 * 1024,
+        bytes < 300 * 1024,
         "repository HTML, CSS, and public metadata use {bytes} bytes"
     );
     assert_eq!(

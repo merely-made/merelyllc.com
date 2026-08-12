@@ -96,7 +96,7 @@ fn graph_sandbox() -> SiteView {
                         "p",
                         &[],
                         vec![txt(
-                            "A heterogeneous specimen graph rendered through the same arrangement crate as the repository map, then handed to Seiche for motion and collision. It is a public Graphshell projection sandbox, not the whole browser shell.",
+                            "Switch between the live merely-made graph and a heterogeneous specimen. Both consume Mere's arrangement and representation registries, then hand motion and collision to Seiche. This is a public Graphshell projection sandbox, not the whole browser shell.",
                         )],
                     ),
                 ],
@@ -121,6 +121,7 @@ fn graph_sandbox() -> SiteView {
                 ],
                 vec![
                     sandbox_toolbar(),
+                    sandbox_scene_tools(),
                     element(
                         "p",
                         &[
@@ -223,6 +224,12 @@ fn sandbox_toolbar() -> SiteView {
         ],
         vec![
             sandbox_select(
+                "Dataset",
+                "dataset",
+                &[("live", "merely-made feed"), ("specimen", "Specimen")],
+                "live",
+            ),
+            sandbox_select(
                 "Scene",
                 "scene",
                 &[
@@ -276,6 +283,59 @@ fn sandbox_toolbar() -> SiteView {
                     ),
                     element("span", &[], vec![txt("collidable")]),
                 ],
+            ),
+        ],
+    )
+}
+
+fn sandbox_scene_tools() -> SiteView {
+    element(
+        "div",
+        &[("class", "graph-sandbox-scene-tools")],
+        vec![
+            element(
+                "label",
+                &[
+                    ("class", "graph-sandbox-history"),
+                    ("data-sandbox-history-control", ""),
+                ],
+                vec![
+                    element("span", &[], vec![txt("Source time")]),
+                    element(
+                        "input",
+                        &[
+                            ("type", "range"),
+                            ("min", "0"),
+                            ("max", "0"),
+                            ("value", "0"),
+                            ("data-sandbox-history", ""),
+                            ("aria-label", "Sandbox source time"),
+                        ],
+                        vec![],
+                    ),
+                    element(
+                        "output",
+                        &[("data-sandbox-history-status", "")],
+                        vec![txt("loading source")],
+                    ),
+                ],
+            ),
+            element(
+                "button",
+                &[
+                    ("type", "button"),
+                    ("class", "graph-sandbox-share"),
+                    ("data-sandbox-share", ""),
+                ],
+                vec![txt("copy portable scene")],
+            ),
+            element(
+                "span",
+                &[
+                    ("class", "graph-sandbox-share-status"),
+                    ("data-sandbox-share-status", ""),
+                ],
+                vec![txt("scene state stays in the link")],
             ),
         ],
     )
@@ -371,7 +431,7 @@ fn sandbox_inspector() -> SiteView {
                 "p",
                 &[("class", "graph-sandbox-inspector-note")],
                 vec![txt(
-                    "Drag ends in a pin. Double-click toggles it. Select in Neighborhood to recenter the rings.",
+                    "Pins survive readings, arrangements, and source-time changes. Copy the scene to reopen the same dataset, source, controls, selection, and pins.",
                 )],
             ),
         ],
@@ -1391,18 +1451,18 @@ fn graph_sandbox_json() -> String {
         "schema": "mer3ly.repo-graph/v1",
         "focus": "merecat",
         "nodes": [
-            {"id":"merecat","name":"merecat","class":"product","status":"live","pushed_at":"2026-08-11T16:20:00Z","change":"updated","summary":"A graph browser hosted on the local device.","script":"select: inspect · drag: pin · follow: open neighborhood"},
-            {"id":"mere","name":"Mere","class":"platform","status":"live","pushed_at":"2026-08-10T09:12:00Z","change":"updated","summary":"The modular graph GUI and canvas library.","script":"select: inspect · double-click: toggle pin"},
-            {"id":"turnstone","name":"Turnstone","class":"device","status":"present","pushed_at":"2026-08-07T14:30:00Z","change":"stable","summary":"A physical host in the trusted device group.","script":"select: inspect · drag: move body"},
-            {"id":"ashland","name":"Ashland","class":"place","status":"present","pushed_at":"2026-07-29T12:00:00Z","change":"stable","summary":"A place node, drawn and collided as a circle.","script":"select: inspect · follow: reveal contained actors"},
-            {"id":"merely-made","name":"merely-made","class":"community","status":"live","pushed_at":"2026-08-11T15:42:00Z","change":"added","summary":"A public organization and software community.","script":"select: inspect · follow: show members"},
-            {"id":"mark","name":"Mark","class":"person","status":"present","pushed_at":"2026-08-11T15:00:00Z","change":"stable","summary":"A person actor, distinct from their devices and projects.","script":"select: inspect · follow: authored things"},
-            {"id":"field-notes","name":"Field notes","class":"document","status":"draft","pushed_at":"2026-08-09T18:05:00Z","change":"updated","summary":"A square document primitive carrying observations.","script":"select: inspect · open: read document"},
-            {"id":"radio-session","name":"Radio session","class":"event","status":"past","pushed_at":"2026-08-05T20:00:00Z","change":"stable","summary":"A time-bound event represented as a diamond.","script":"select: inspect · follow: participants and place"},
-            {"id":"relay","name":"Neighborhood relay","class":"device","status":"present","pushed_at":"2026-08-06T08:30:00Z","change":"added","summary":"A peer radio carrying local messages.","script":"select: inspect · drag: pin relay"},
-            {"id":"message","name":"Shared message","class":"note","status":"received","pushed_at":"2026-08-06T08:33:00Z","change":"added","summary":"A small piece of content moving between peers.","script":"select: inspect · follow: provenance"},
-            {"id":"strophe","name":"Strophe","class":"software","status":"research","pushed_at":"2026-08-08T11:14:00Z","change":"stable","summary":"A sibling software system sharing the same surface stack.","script":"select: inspect · follow: dependencies"},
-            {"id":"old-mock","name":"Old mock","class":"page","status":"retired","pushed_at":"2026-07-18T10:10:00Z","change":"removed","summary":"A removed representation retained in the changes scene.","script":"select: inspect · compare: replacement"}
+            {"id":"merecat","name":"merecat","class":"product","status":"live","pushed_at":"2026-08-11T16:20:00Z","change":"updated","summary":"A graph browser hosted on the local device."},
+            {"id":"mere","name":"Mere","class":"platform","status":"live","pushed_at":"2026-08-10T09:12:00Z","change":"updated","summary":"The modular graph GUI and canvas library."},
+            {"id":"turnstone","name":"Turnstone","class":"device","status":"present","pushed_at":"2026-08-07T14:30:00Z","change":"stable","summary":"A physical host in the trusted device group."},
+            {"id":"ashland","name":"Ashland","class":"place","status":"present","pushed_at":"2026-07-29T12:00:00Z","change":"stable","summary":"A place node, drawn and collided as a circle."},
+            {"id":"merely-made","name":"merely-made","class":"community","status":"live","pushed_at":"2026-08-11T15:42:00Z","change":"added","summary":"A public organization and software community."},
+            {"id":"mark","name":"Mark","class":"person","status":"present","pushed_at":"2026-08-11T15:00:00Z","change":"stable","summary":"A person actor, distinct from their devices and projects."},
+            {"id":"field-notes","name":"Field notes","class":"document","status":"draft","pushed_at":"2026-08-09T18:05:00Z","change":"updated","summary":"A square document primitive carrying observations."},
+            {"id":"radio-session","name":"Radio session","class":"event","status":"past","pushed_at":"2026-08-05T20:00:00Z","change":"stable","summary":"A time-bound event represented as a diamond."},
+            {"id":"relay","name":"Neighborhood relay","class":"device","status":"present","pushed_at":"2026-08-06T08:30:00Z","change":"added","summary":"A peer radio carrying local messages."},
+            {"id":"message","name":"Shared message","class":"note","status":"received","pushed_at":"2026-08-06T08:33:00Z","change":"added","summary":"A small piece of content moving between peers."},
+            {"id":"strophe","name":"Strophe","class":"software","status":"research","pushed_at":"2026-08-08T11:14:00Z","change":"stable","summary":"A sibling software system sharing the same surface stack."},
+            {"id":"old-mock","name":"Old mock","class":"page","status":"retired","pushed_at":"2026-07-18T10:10:00Z","change":"removed","summary":"A removed representation retained in the changes scene."}
         ],
         "edges": [
             {"id":"merecat-uses-mere","source":"merecat","target":"mere","kind":"uses","provenance":"curated"},
@@ -1420,9 +1480,11 @@ fn graph_sandbox_json() -> String {
             {"id":"old-mock-replaced-merecat","source":"old-mock","target":"merecat","kind":"replaced_by","provenance":"curated"}
         ],
         "sandbox": {
-            "schema": "mer3ly.graphshell-sandbox/v1",
-            "primitive_rule": "class chooses face and collider; data remains authoritative",
-            "behavior_rule": "named bindings invoke host actions; scripts do not own graph position",
+            "schema": "mer3ly.graphshell-sandbox/v2",
+            "scene_state_schema": "mer3ly.graphshell-scene-state/v1",
+            "representation_registry_schema": "mere.graph-representation-registry/v1",
+            "primitive_rule": "Mere's registry maps class to one body shared by paint and collision",
+            "behavior_rule": "named host bindings remain distinct from endpoint domain actions",
             "views": ["graph", "changes", "activity", "matrix"]
         }
     }))

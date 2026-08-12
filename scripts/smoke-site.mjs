@@ -1017,12 +1017,31 @@ try {
   const sandboxRoot = desktop.locator("[data-graph-sandbox]");
   const sandboxState = await sandboxRoot.getAttribute("data-sandbox-state");
   assert.equal(sandboxState, "ready", "the real Wasm physics sandbox must initialize");
-  assert.equal(await sandboxRoot.locator("[data-sandbox-node]").count(), 12);
+  assert.equal(
+    await sandboxRoot.getAttribute("data-sandbox-scene-schema"),
+    "mer3ly.graphshell-scene-state/v1",
+  );
+  assert.equal(await sandboxRoot.getAttribute("data-sandbox-dataset"), "live");
+  assert.equal(
+    await sandboxRoot.locator("[data-sandbox-node]").count(),
+    expectedRepositoryCount,
+  );
   const sandboxArrangement = sandboxRoot.locator('[data-sandbox-control="arrangement"]');
   assert.equal(await sandboxArrangement.locator("option").count(), 8);
   assert.equal(await sandboxArrangement.inputValue(), "graph_layout:stack");
 
   await sandboxRoot.locator('[data-sandbox-control="scene"]').selectOption("changes");
+  assert.ok(
+    (await sandboxRoot.locator('[data-sandbox-node]:not([data-change="stable"])').count()) > 0,
+    "live Changes must derive at least one change from adjacent public checkpoints",
+  );
+  assert.equal(await sandboxRoot.locator("[data-sandbox-history-control]").isVisible(), true);
+  const sourceTime = sandboxRoot.locator("[data-sandbox-history]");
+  assert.ok(Number(await sourceTime.getAttribute("max")) > 0);
+
+  await sandboxRoot.locator('[data-sandbox-control="dataset"]').selectOption("specimen");
+  assert.equal(await sandboxRoot.getAttribute("data-sandbox-dataset"), "specimen");
+  assert.equal(await sandboxRoot.locator("[data-sandbox-node]").count(), 12);
   assert.equal(
     await sandboxRoot.locator('[data-sandbox-node][data-change="added"]').count(),
     3,
@@ -1051,19 +1070,68 @@ try {
         .querySelector('[data-sandbox-node="ashland"]')
         ?.classList.contains("is-pinned") === true,
   );
+  await sandboxArrangement.selectOption("graph_layout:grid");
+  assert.equal(
+    await sandboxRoot.locator('[data-sandbox-node="ashland"]').getAttribute("class").then(
+      (value) => value.includes("is-pinned"),
+    ),
+    true,
+    "pins must survive arrangement changes",
+  );
+  await sandboxArrangement.selectOption("graph_layout:radial");
+  await sandboxRoot.locator("[data-sandbox-share]").click();
+  assert.match(desktop.url(), /#graphshell-scene=[A-Za-z0-9_-]+$/);
+  const portableSceneUrl = desktop.url();
+
+  const portableScene = await browser.newPage({ viewport: { width: 1100, height: 900 } });
+  const portableSceneDiagnostics = collectDiagnostics(portableScene);
+  await portableScene.goto(portableSceneUrl, { waitUntil: "networkidle" });
+  await portableScene.waitForFunction(
+    () => document.querySelector("[data-graph-sandbox]")?.dataset.sandboxState === "ready",
+  );
+  const receivedSandbox = portableScene.locator("[data-graph-sandbox]");
+  assert.equal(await receivedSandbox.getAttribute("data-sandbox-dataset"), "specimen");
+  assert.equal(
+    await receivedSandbox.locator('[data-sandbox-control="arrangement"]').inputValue(),
+    "graph_layout:radial",
+  );
+  assert.equal(
+    await receivedSandbox.locator('[data-sandbox-control="mobility"]').inputValue(),
+    "free",
+  );
+  assert.equal(
+    await receivedSandbox.locator('[data-sandbox-control="backdrop"]').inputValue(),
+    "props",
+  );
+  assert.equal(await receivedSandbox.locator("[data-sandbox-tangible]").isChecked(), true);
+  await portableScene.waitForFunction(
+    () =>
+      document
+        .querySelector('[data-sandbox-node="ashland"]')
+        ?.classList.contains("is-pinned") === true,
+  );
+  assert.deepEqual(
+    portableSceneDiagnostics,
+    [],
+    "reopened portable Graphshell scene emitted browser errors",
+  );
+  await portableScene.close();
   await sandboxRoot.screenshot({
     path: path.join(receiptRoot, "graphshell-sandbox-desktop.png"),
   });
   receipt.graph_sandbox = {
     state: sandboxState,
-    actors: 12,
-    relations: 13,
+    datasets: { live: expectedRepositoryCount, specimen: 12 },
     scenes: ["graph", "changes", "activity", "matrix"],
     arrangement: "graph_layout:radial",
     motion: "free",
     backdrop: "props",
     collidable: true,
     pin: "ashland",
+    pin_survives_arrangement: true,
+    portable_scene: "reopened-from-url",
+    changes: "adjacent-public-checkpoint-diff",
+    representation_registry: "mere.graph-representation-registry/v1",
   };
 
   let selectedProfile = "fallback-not-applicable";

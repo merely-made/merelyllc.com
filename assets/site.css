@@ -1220,6 +1220,58 @@ h1 {
   background: color-mix(in srgb, var(--paper) 90%, var(--parchment));
 }
 
+.graph-sandbox-scene-tools {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 15px;
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--faint);
+  background: var(--paper);
+  font: 0.56rem/1.3 var(--font-mono);
+}
+
+.graph-sandbox-history {
+  display: grid;
+  min-width: min(420px, 58vw);
+  grid-template-columns: auto minmax(120px, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.graph-sandbox-history[hidden] {
+  display: none;
+}
+
+.graph-sandbox-history input {
+  min-height: 32px;
+  accent-color: var(--oxblood);
+}
+
+.graph-sandbox-history output,
+.graph-sandbox-share-status {
+  color: var(--muted);
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+}
+
+.graph-sandbox-share {
+  min-height: 32px;
+  margin-left: auto;
+  padding: 0 12px;
+  border: 1px solid var(--ink);
+  color: var(--paper);
+  background: var(--ink);
+  font: 600 0.56rem/1 var(--font-mono);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
 .graph-sandbox-select {
   display: grid;
   flex: 1 0 116px;
@@ -1243,6 +1295,8 @@ h1 {
 
 .graph-sandbox-select select:focus-visible,
 .graph-sandbox-toggle input:focus-visible,
+.graph-sandbox-history input:focus-visible,
+.graph-sandbox-share:focus-visible,
 .graph-sandbox-pin:focus-visible,
 .graph-sandbox-node:focus-visible,
 .graph-sandbox-matrix button:focus-visible {
@@ -1357,29 +1411,24 @@ h1 {
   letter-spacing: 0.04em;
 }
 
-.graph-sandbox-node.class-product .graph-sandbox-node-mark,
-.graph-sandbox-node.class-software .graph-sandbox-node-mark,
-.graph-sandbox-node.class-platform .graph-sandbox-node-mark {
+.graph-sandbox-node.primitive-hexagon .graph-sandbox-node-mark {
   border-radius: 0;
   background: var(--lake);
   clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0 50%);
 }
 
-.graph-sandbox-node.class-device .graph-sandbox-node-mark,
-.graph-sandbox-node.class-tool .graph-sandbox-node-mark {
+.graph-sandbox-node.primitive-rounded_square .graph-sandbox-node-mark {
   border-radius: 11px;
   background: var(--ember);
 }
 
-.graph-sandbox-node.class-document .graph-sandbox-node-mark,
-.graph-sandbox-node.class-page .graph-sandbox-node-mark,
-.graph-sandbox-node.class-note .graph-sandbox-node-mark {
+.graph-sandbox-node.primitive-square .graph-sandbox-node-mark {
   border-radius: 2px;
   color: var(--ink);
   background: var(--paper);
 }
 
-.graph-sandbox-node.class-event .graph-sandbox-node-mark {
+.graph-sandbox-node.primitive-diamond .graph-sandbox-node-mark {
   border-radius: 0;
   background: var(--oxblood);
   clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
@@ -3296,6 +3345,19 @@ tbody tr:last-child td {
     border-top: 1px solid var(--line);
   }
 
+  .graph-sandbox-scene-tools {
+    flex-wrap: wrap;
+  }
+
+  .graph-sandbox-history {
+    min-width: 100%;
+    flex: 1 0 100%;
+  }
+
+  .graph-sandbox-share {
+    margin-left: 0;
+  }
+
   .graph-sandbox-workbench {
     grid-template-columns: 1fr;
   }
@@ -3574,6 +3636,21 @@ tbody tr:last-child td {
 
   .repository-card {
     padding: 24px 20px 0;
+  }
+
+  .graph-sandbox-history {
+    grid-template-columns: 1fr;
+    gap: 3px;
+  }
+
+  .graph-sandbox-history input,
+  .graph-sandbox-share {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .graph-sandbox-share-status {
+    flex-basis: 100%;
   }
 
   .repository-activity-feed {

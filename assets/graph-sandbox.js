@@ -1,7 +1,10 @@
 const runtimeVersion = new URL(import.meta.url).search;
+const SCENE_STATE_SCHEMA = "mer3ly.graphshell-scene-state/v1";
+const REGISTRY_SCHEMA = "mere.graph-representation-registry/v1";
 const {
   default: initWasm,
   layout_graph: layoutGraph,
+  representation_registry: representationRegistry,
   GraphPhysics,
 } = await import(`./mer3ly_repo_graph.js${runtimeVersion}`);
 
@@ -19,10 +22,16 @@ if (root) {
 }
 
 async function startSandbox(sandboxRoot) {
-  const dataElement = document.querySelector("#graph-sandbox-data");
-  if (!dataElement) throw new Error("graph sandbox data is absent");
-  const authority = JSON.parse(dataElement.textContent);
-  validateAuthority(authority);
+  const specimenElement = document.querySelector("#graph-sandbox-data");
+  const repositoryElement = document.querySelector("#repository-graph-data");
+  if (!specimenElement || !repositoryElement) {
+    throw new Error("graph sandbox authorities are absent");
+  }
+
+  const specimen = JSON.parse(specimenElement.textContent);
+  const repositories = JSON.parse(repositoryElement.textContent);
+  validateAuthority(specimen);
+  validateAuthority(repositories);
 
   await initWasm({
     module_or_path: new URL(
@@ -30,18 +39,88 @@ async function startSandbox(sandboxRoot) {
       import.meta.url,
     ),
   });
-  const layout = JSON.parse(layoutGraph(JSON.stringify(authority)));
-  const physics = new GraphPhysics(JSON.stringify(authority));
-  const sandbox = new GraphSandbox(sandboxRoot, authority, layout, physics);
+  const registry = JSON.parse(representationRegistry());
+  validateRegistry(registry);
+  const datasets = buildDatasets(specimen, repositories);
+  const sharedState = decodeSceneState(window.location.hash);
+  const sandbox = new GraphSandbox(
+    sandboxRoot,
+    datasets,
+    registry,
+    sharedState,
+  );
   sandbox.start();
 
   sandboxRoot.dataset.sandboxState = "ready";
+  sandboxRoot.dataset.sandboxSceneSchema = SCENE_STATE_SCHEMA;
   sandboxRoot.querySelector("[data-sandbox-fallback]").hidden = true;
   sandboxRoot.querySelector("[data-sandbox-interface]").hidden = false;
   announce(
     sandboxRoot,
-    `${authority.nodes.length} heterogeneous actors and ${authority.edges.length} typed relations loaded into the Graphshell sandbox.`,
+    `${sandbox.authority.nodes.length} actors and ${sandbox.authority.edges.length} typed relations loaded from ${sandbox.datasetLabel()}.`,
   );
+}
+
+function buildDatasets(specimen, repositories) {
+  const snapshots = collapseEquivalentSnapshots(
+    (repositories.history?.checkpoints ?? [])
+      .filter((checkpoint) => checkpoint.availability === "available")
+      .map((checkpoint) => ({ cursor: checkpoint.cursor, graph: checkpoint.graph })),
+  );
+  return new Map([
+    [
+      "live",
+      {
+        id: "live",
+        label: "merely-made feed",
+        graph: graphOnly(repositories),
+        snapshots,
+      },
+    ],
+    [
+      "specimen",
+      {
+        id: "specimen",
+        label: "heterogeneous specimen",
+        graph: graphOnly(specimen),
+        snapshots: [],
+      },
+    ],
+  ]);
+}
+
+function collapseEquivalentSnapshots(snapshots) {
+  const meaningful = [];
+  for (const snapshot of snapshots) {
+    const previous = meaningful.at(-1);
+    if (previous && graphSignature(previous.graph) === graphSignature(snapshot.graph)) {
+      meaningful[meaningful.length - 1] = snapshot;
+    } else {
+      meaningful.push(snapshot);
+    }
+  }
+  return meaningful;
+}
+
+function graphSignature(graph) {
+  const nodes = graph.nodes
+    .map((node) => `${node.id}:${nodeSignature(node)}`)
+    .sort()
+    .join("|");
+  const edges = graph.edges
+    .map((edge) => [edge.id, edge.source, edge.target, edge.kind, edge.provenance].join(":"))
+    .sort()
+    .join("|");
+  return `${nodes}\u0001${edges}`;
+}
+
+function graphOnly(authority) {
+  return {
+    schema: authority.schema,
+    ...(authority.focus ? { focus: authority.focus } : {}),
+    nodes: authority.nodes.map((node) => ({ ...node })),
+    edges: authority.edges.map((edge) => ({ ...edge })),
+  };
 }
 
 function validateAuthority(authority) {
@@ -62,12 +141,22 @@ function validateAuthority(authority) {
   }
 }
 
+function validateRegistry(registry) {
+  if (
+    registry.schema !== REGISTRY_SCHEMA ||
+    !Array.isArray(registry.profiles) ||
+    !registry.fallback
+  ) {
+    throw new Error("Mere representation registry schema mismatch");
+  }
+}
+
 class GraphSandbox {
-  constructor(sandboxRoot, authority, layout, physics) {
+  constructor(sandboxRoot, datasets, registry, sharedState) {
     this.root = sandboxRoot;
-    this.authority = authority;
-    this.layout = layout;
-    this.physics = physics;
+    this.datasets = datasets;
+    this.registry = registry;
+    this.sharedState = sharedState;
     this.stage = sandboxRoot.querySelector("[data-sandbox-stage]");
     this.canvas = sandboxRoot.querySelector("[data-sandbox-canvas]");
     this.context = this.canvas.getContext("2d");
@@ -82,20 +171,24 @@ class GraphSandbox {
     );
     this.tangibleControl = sandboxRoot.querySelector("[data-sandbox-tangible]");
     this.pinControl = sandboxRoot.querySelector("[data-sandbox-pin]");
-    this.arrangements = new Map(
-      layout.arrangements.map((arrangement) => [arrangement.id, arrangement]),
-    );
-    this.currentArrangement = this.arrangements.has("graph_layout:stack")
-      ? "graph_layout:stack"
-      : layout.default_arrangement;
+    this.historyGroup = sandboxRoot.querySelector("[data-sandbox-history-control]");
+    this.historyControl = sandboxRoot.querySelector("[data-sandbox-history]");
+    this.historyStatus = sandboxRoot.querySelector("[data-sandbox-history-status]");
+    this.shareControl = sandboxRoot.querySelector("[data-sandbox-share]");
+    this.shareStatus = sandboxRoot.querySelector("[data-sandbox-share-status]");
+    this.datasetId = "live";
+    this.historyIndex = 0;
+    this.currentArrangement = "graph_layout:stack";
     this.scene = "graph";
     this.mobility = "anchored";
     this.backdrop = "ambient";
     this.physicsMode = "live";
+    this.collidable = false;
+    this.selectedId = null;
+    this.pinsByDataset = new Map();
     this.frame = null;
     this.frameById = new Map();
     this.nodeButtons = new Map();
-    this.selectedId = authority.focus ?? authority.nodes[0].id;
     this.lastTime = performance.now();
     this.settleFrames = 0;
     this.animationFrame = null;
@@ -104,25 +197,133 @@ class GraphSandbox {
   }
 
   start() {
-    this.stage.dataset.sandboxMobility = this.mobility;
-    this.installArrangementOptions();
-    this.installNodes();
     this.installControls();
-    this.buildMatrix();
-    this.physics.setBackdrop(this.backdrop, false);
-    this.applyArrangement();
-    this.frame = JSON.parse(this.physics.frame());
-    this.indexFrame();
-    this.select(this.selectedId, false);
+    this.applySharedState(this.sharedState);
+    this.setLatestHistoryUnlessShared();
+    this.loadAuthority();
     this.resize();
-    this.updateCaption();
-    this.render();
     this.resizeObserver = new ResizeObserver(() => {
       this.resize();
       this.schedule();
     });
     this.resizeObserver.observe(this.stage);
     this.schedule();
+  }
+
+  dataset() {
+    return this.datasets.get(this.datasetId);
+  }
+
+  datasetLabel() {
+    return this.dataset()?.label ?? this.datasetId;
+  }
+
+  currentPins() {
+    if (!this.pinsByDataset.has(this.datasetId)) {
+      this.pinsByDataset.set(this.datasetId, new Map());
+    }
+    return this.pinsByDataset.get(this.datasetId);
+  }
+
+  setLatestHistoryUnlessShared() {
+    const snapshots = this.dataset()?.snapshots ?? [];
+    if (!snapshots.length) {
+      this.historyIndex = 0;
+      return;
+    }
+    if (!this.sharedState?.source) this.historyIndex = snapshots.length - 1;
+  }
+
+  applySharedState(state) {
+    if (!state || state.schema !== SCENE_STATE_SCHEMA) return;
+    if (this.datasets.has(state.dataset)) this.datasetId = state.dataset;
+    if (["graph", "changes", "activity", "matrix"].includes(state.reading)) {
+      this.scene = state.reading;
+    }
+    if (typeof state.arrangement === "string") {
+      this.currentArrangement = state.arrangement;
+    }
+    if (["frozen", "anchored", "free"].includes(state.motion)) {
+      this.mobility = state.motion;
+    }
+    if (["clear", "ambient", "props", "field"].includes(state.backdrop?.kind)) {
+      this.backdrop = state.backdrop.kind;
+      this.collidable = Boolean(state.backdrop.collidable);
+    }
+    if (["paused", "settle", "live"].includes(state.physics)) {
+      this.physicsMode = state.physics;
+    }
+    if (typeof state.selection === "string") this.selectedId = state.selection;
+
+    const snapshots = this.dataset()?.snapshots ?? [];
+    const sourceIndex = snapshots.findIndex(
+      ({ cursor }) =>
+        cursor.source === state.source?.source && cursor.commit === state.source?.commit,
+    );
+    this.historyIndex = sourceIndex >= 0 ? sourceIndex : Math.max(0, snapshots.length - 1);
+
+    const pins = new Map();
+    for (const pin of Array.isArray(state.pins) ? state.pins.slice(0, 64) : []) {
+      if (
+        typeof pin.id === "string" &&
+        Number.isFinite(pin.x) &&
+        Number.isFinite(pin.y)
+      ) {
+        pins.set(pin.id, {
+          x: clamp(pin.x, -2000, 2000),
+          y: clamp(pin.y, -2000, 2000),
+        });
+      }
+    }
+    this.pinsByDataset.set(this.datasetId, pins);
+  }
+
+  authorityForState() {
+    const dataset = this.dataset();
+    const snapshots = dataset.snapshots;
+    if (!snapshots.length) return decorateSpecimen(dataset.graph);
+
+    const current = snapshots[this.historyIndex]?.graph ?? dataset.graph;
+    const previous = this.historyIndex > 0 ? snapshots[this.historyIndex - 1].graph : null;
+    const diff = diffGraphs(previous, current);
+    if (this.scene === "changes") return diff;
+    const changes = new Map(diff.nodes.map((node) => [node.id, node.change]));
+    return {
+      ...graphOnly(current),
+      nodes: current.nodes.map((node) => enrichNode(node, changes.get(node.id) ?? "stable")),
+    };
+  }
+
+  loadAuthority() {
+    this.authority = this.authorityForState();
+    validateAuthority(this.authority);
+    this.layout = JSON.parse(layoutGraph(JSON.stringify(this.authority)));
+    this.arrangements = new Map(
+      this.layout.arrangements.map((arrangement) => [arrangement.id, arrangement]),
+    );
+    if (!this.arrangements.has(this.currentArrangement)) {
+      this.currentArrangement = this.layout.default_arrangement;
+    }
+    if (this.scene === "activity" && this.arrangements.has("graph_layout:timeline")) {
+      this.currentArrangement = "graph_layout:timeline";
+    }
+
+    this.physics = new GraphPhysics(JSON.stringify(this.authority));
+    this.physics.setBackdrop(this.backdrop, this.collidable);
+    this.installArrangementOptions();
+    this.installNodes();
+    this.buildMatrix();
+    this.applyArrangement();
+    if (!this.authority.nodes.some(({ id }) => id === this.selectedId)) {
+      this.selectedId = this.authority.focus ?? this.authority.nodes[0].id;
+    }
+    this.select(this.selectedId, false);
+    this.syncControls();
+    this.applySceneVisibility();
+    this.updateHistoryControl();
+    this.updateCaption();
+    this.root.dataset.sandboxDataset = this.datasetId;
+    this.root.dataset.sandboxSource = this.sourceLabel();
   }
 
   installArrangementOptions() {
@@ -144,18 +345,36 @@ class GraphSandbox {
       control.addEventListener("change", () => this.changeControl(name, control.value));
     }
     this.tangibleControl.addEventListener("change", () => {
-      this.physics.setBackdrop(this.backdrop, this.tangibleControl.checked);
+      this.collidable = this.tangibleControl.checked;
+      this.physics.setBackdrop(this.backdrop, this.collidable);
       this.physicsMode = "live";
       this.controls.get("physics").value = "live";
       this.updateCaption();
       this.schedule();
     });
     this.pinControl.addEventListener("click", () => this.togglePin(this.selectedId));
+    this.historyControl.addEventListener("input", () => {
+      this.historyIndex = Number(this.historyControl.value);
+      this.loadAuthority();
+      this.schedule();
+    });
+    this.shareControl.addEventListener("click", () => this.copySceneLink());
   }
 
   changeControl(name, value) {
+    if (name === "dataset") {
+      this.datasetId = this.datasets.has(value) ? value : "live";
+      const snapshots = this.dataset().snapshots;
+      this.historyIndex = Math.max(0, snapshots.length - 1);
+      this.selectedId = null;
+      this.loadAuthority();
+      this.schedule();
+      return;
+    }
     if (name === "scene") {
-      this.setScene(value);
+      this.scene = value;
+      this.loadAuthority();
+      this.schedule();
       return;
     }
     if (name === "arrangement") {
@@ -179,8 +398,11 @@ class GraphSandbox {
       this.stage.dataset.sandboxBackdrop = value;
       const supportsCollision = value === "props" || value === "field";
       this.tangibleControl.disabled = !supportsCollision;
-      if (!supportsCollision) this.tangibleControl.checked = false;
-      this.physics.setBackdrop(value, this.tangibleControl.checked);
+      if (!supportsCollision) {
+        this.collidable = false;
+        this.tangibleControl.checked = false;
+      }
+      this.physics.setBackdrop(value, this.collidable);
       this.updateCaption();
       this.schedule();
       return;
@@ -193,19 +415,29 @@ class GraphSandbox {
     }
   }
 
-  setScene(scene) {
-    this.scene = scene;
-    this.stage.dataset.sandboxScene = scene;
-    const matrix = scene === "matrix";
+  syncControls() {
+    for (const [name, value] of [
+      ["dataset", this.datasetId],
+      ["scene", this.scene],
+      ["arrangement", this.currentArrangement],
+      ["mobility", this.mobility],
+      ["backdrop", this.backdrop],
+      ["physics", this.physicsMode],
+    ]) {
+      if (this.controls.has(name)) this.controls.get(name).value = value;
+    }
+    this.stage.dataset.sandboxScene = this.scene;
+    this.stage.dataset.sandboxMobility = this.mobility;
+    this.stage.dataset.sandboxBackdrop = this.backdrop;
+    this.tangibleControl.checked = this.collidable;
+  }
+
+  applySceneVisibility() {
+    const matrix = this.scene === "matrix";
     this.canvas.hidden = matrix;
     this.nodeLayer.hidden = matrix;
     this.matrix.hidden = !matrix;
-    if (scene === "activity") {
-      this.currentArrangement = "graph_layout:timeline";
-      this.controls.get("arrangement").value = this.currentArrangement;
-      this.applyArrangement();
-    }
-    this.controls.get("arrangement").disabled = matrix || scene === "activity";
+    this.controls.get("arrangement").disabled = matrix || this.scene === "activity";
     this.controls.get("mobility").disabled = matrix;
     this.controls.get("backdrop").disabled = matrix;
     this.controls.get("physics").disabled = matrix;
@@ -213,14 +445,37 @@ class GraphSandbox {
       matrix || !(this.backdrop === "props" || this.backdrop === "field");
     this.updateNodeScenes();
     this.updateMatrixSelection();
-    this.updateCaption();
-    this.schedule();
+  }
+
+  updateHistoryControl() {
+    const snapshots = this.dataset().snapshots;
+    this.historyGroup.hidden = snapshots.length < 2;
+    if (!snapshots.length) {
+      this.historyStatus.textContent = "authored specimen";
+      return;
+    }
+    this.historyControl.min = "0";
+    this.historyControl.max = String(snapshots.length - 1);
+    this.historyControl.value = String(this.historyIndex);
+    this.historyStatus.textContent = this.sourceLabel();
+  }
+
+  sourceLabel() {
+    const snapshot = this.dataset()?.snapshots?.[this.historyIndex];
+    if (!snapshot) return "authored specimen";
+    const date = snapshot.cursor.committed_at.slice(0, 10);
+    return `${date} · ${snapshot.cursor.commit.slice(0, 7)}`;
   }
 
   applyArrangement() {
     const arrangement = this.arrangements.get(this.currentArrangement);
     if (!arrangement) return;
     this.physics.setArrangement(JSON.stringify(arrangement.nodes), this.mobility);
+    for (const [id, point] of this.currentPins()) {
+      if (this.authority.nodes.some((node) => node.id === id)) {
+        this.physics.pinNode(id, point.x, point.y);
+      }
+    }
     this.frame = JSON.parse(this.physics.frame());
     this.indexFrame();
   }
@@ -231,19 +486,25 @@ class GraphSandbox {
     this.arrangements = new Map(
       this.layout.arrangements.map((arrangement) => [arrangement.id, arrangement]),
     );
-    if (this.currentArrangement === "graph_layout:radial") {
-      this.applyArrangement();
-    }
+    if (this.currentArrangement === "graph_layout:radial") this.applyArrangement();
   }
 
   installNodes() {
     this.nodeLayer.replaceChildren();
+    this.nodeButtons.clear();
     for (const node of this.authority.nodes) {
+      const profile = this.profileFor(node.class);
       const button = document.createElement("button");
       button.type = "button";
-      button.className = `graph-sandbox-node class-${safeToken(node.class)} change-${safeToken(node.change)}`;
+      button.className = [
+        "graph-sandbox-node",
+        `class-${safeToken(node.class)}`,
+        `primitive-${safeToken(profile.primitive.body)}`,
+        `change-${safeToken(node.change)}`,
+      ].join(" ");
       button.dataset.sandboxNode = node.id;
       button.dataset.change = node.change;
+      button.dataset.primitive = profile.primitive.id;
       button.setAttribute("aria-label", `${node.name}, ${node.class}, ${node.status}`);
       const mark = document.createElement("span");
       mark.className = "graph-sandbox-node-mark";
@@ -275,8 +536,11 @@ class GraphSandbox {
   updateNodeScenes() {
     for (const node of this.authority.nodes) {
       const button = this.nodeButtons.get(node.id);
-      button.classList.toggle("is-change-muted", this.scene === "changes" && node.change === "stable");
-      button.classList.toggle("is-activity", this.scene === "activity");
+      button?.classList.toggle(
+        "is-change-muted",
+        this.scene === "changes" && node.change === "stable",
+      );
+      button?.classList.toggle("is-activity", this.scene === "activity");
     }
   }
 
@@ -315,6 +579,7 @@ class GraphSandbox {
     }
     if (!this.drag.moved) return;
     const point = this.worldFromPointer(event);
+    this.currentPins().set(this.drag.id, point);
     this.physics.pinNode(this.drag.id, point.x, point.y);
     this.frame = JSON.parse(this.physics.frame());
     this.indexFrame();
@@ -364,10 +629,13 @@ class GraphSandbox {
     if (!id || this.mobility === "frozen") return;
     const point = this.frameById.get(id);
     if (!point) return;
-    if (this.physics.isPinned(id)) {
+    if (this.currentPins().has(id)) {
+      this.currentPins().delete(id);
       this.physics.unpinNode(id);
     } else {
-      this.physics.pinNode(id, point.x, point.y);
+      const pinned = { x: point.x, y: point.y };
+      this.currentPins().set(id, pinned);
+      this.physics.pinNode(id, pinned.x, pinned.y);
     }
     this.frame = JSON.parse(this.physics.frame());
     this.indexFrame();
@@ -379,14 +647,22 @@ class GraphSandbox {
     return this.authority.nodes.find((node) => node.id === id);
   }
 
+  profileFor(className) {
+    return (
+      this.registry.profiles.find((profile) => profile.classes.includes(className)) ??
+      this.registry.fallback
+    );
+  }
+
   updateInspector() {
     const node = this.node(this.selectedId);
     if (!node) return;
+    const profile = this.profileFor(node.class);
     this.root.querySelector("[data-sandbox-inspector-title]").textContent = node.name;
     this.root.querySelector("[data-sandbox-inspector-summary]").textContent = node.summary;
-    this.root.querySelector("[data-sandbox-primitive]").textContent = primitiveName(node.class);
-    this.root.querySelector("[data-sandbox-script]").textContent = node.script;
-    const pinned = this.physics.isPinned(node.id);
+    this.root.querySelector("[data-sandbox-primitive]").textContent = profile.primitive.label;
+    this.root.querySelector("[data-sandbox-script]").textContent = behaviorText(profile);
+    const pinned = this.currentPins().has(node.id);
     this.root.querySelector("[data-sandbox-node-motion]").textContent = pinned
       ? this.mobility === "frozen"
         ? "frozen by scene"
@@ -401,7 +677,10 @@ class GraphSandbox {
     const arrangement = this.arrangements.get(this.currentArrangement);
     const sceneText = {
       graph: "Graph shows actors and typed relations",
-      changes: "Changes styles added, updated, stable, and removed actors",
+      changes:
+        this.datasetId === "live"
+          ? "Changes compares this public checkpoint with its predecessor"
+          : "Changes shows the specimen's authored transition states",
       activity: "Activity binds the same actors to their source times",
       matrix: "Matrix replaces position with an exact relation lookup",
     }[this.scene];
@@ -409,11 +688,12 @@ class GraphSandbox {
       this.currentArrangement === "graph_layout:radial"
         ? "Neighborhood"
         : arrangement?.name ?? "none";
-    const collision = this.tangibleControl.checked ? "collidable" : "intangible";
-    this.caption.textContent = `${sceneText}. ${arrangementName} slots; ${this.mobility} motion; ${this.backdrop} backdrop (${collision}); physics ${this.physicsMode}.`;
+    const collision = this.collidable ? "collidable" : "intangible";
+    this.caption.textContent = `${this.datasetLabel()} · ${this.sourceLabel()}. ${sceneText}. ${arrangementName} slots; ${this.mobility} motion; ${this.backdrop} backdrop (${collision}); physics ${this.physicsMode}.`;
   }
 
   buildMatrix() {
+    this.matrix.replaceChildren();
     const nodes = this.authority.nodes;
     this.matrix.style.setProperty("--matrix-size", String(nodes.length));
     const corner = document.createElement("span");
@@ -467,6 +747,44 @@ class GraphSandbox {
     }
   }
 
+  sceneState() {
+    const source = this.dataset().snapshots[this.historyIndex]?.cursor ?? {
+      source: "mer3ly/specimen",
+      commit: "authored",
+      committed_at: "static",
+    };
+    return {
+      schema: SCENE_STATE_SCHEMA,
+      dataset: this.datasetId,
+      source,
+      reading: this.scene,
+      arrangement: this.currentArrangement,
+      motion: this.mobility,
+      backdrop: { kind: this.backdrop, collidable: this.collidable },
+      physics: this.physicsMode,
+      selection: this.selectedId,
+      pins: [...this.currentPins()].map(([id, point]) => ({ id, ...point })),
+    };
+  }
+
+  async copySceneLink() {
+    const encoded = encodeSceneState(this.sceneState());
+    const url = new URL(window.location.href);
+    url.hash = `graphshell-scene=${encoded}`;
+    window.history.replaceState(null, "", url);
+    let copied = false;
+    try {
+      await navigator.clipboard.writeText(url.toString());
+      copied = true;
+    } catch {
+      copied = false;
+    }
+    this.shareStatus.textContent = copied
+      ? "portable scene copied"
+      : "portable scene written to this URL";
+    announce(this.root, this.shareStatus.textContent);
+  }
+
   resize() {
     const rect = this.stage.getBoundingClientRect();
     const ratio = Math.min(window.devicePixelRatio || 1, 2);
@@ -475,8 +793,7 @@ class GraphSandbox {
     this.canvas.style.width = `${rect.width}px`;
     this.canvas.style.height = `${rect.height}px`;
     this.context.setTransform(ratio, 0, 0, ratio, 0, 0);
-    this.scale = Math.min(rect.width / 820, rect.height / 640).toFixed(4);
-    this.scale = Number(this.scale);
+    this.scale = Number(Math.min(rect.width / 820, rect.height / 640).toFixed(4));
   }
 
   screenPoint(point) {
@@ -540,7 +857,7 @@ class GraphSandbox {
       button.hidden = false;
       const point = this.screenPoint(position);
       button.style.transform = `translate(${point.x}px, ${point.y}px) translate(-50%, -50%)`;
-      button.classList.toggle("is-pinned", position.pinned);
+      button.classList.toggle("is-pinned", this.currentPins().has(node.id));
     }
   }
 
@@ -592,7 +909,8 @@ class GraphSandbox {
       const b = this.screenPoint(target);
       const selected = edge.source === this.selectedId || edge.target === this.selectedId;
       const changed =
-        this.node(edge.source).change !== "stable" || this.node(edge.target).change !== "stable";
+        this.node(edge.source)?.change !== "stable" ||
+        this.node(edge.target)?.change !== "stable";
       context.save();
       context.lineWidth = selected ? 1.9 : 0.9;
       context.strokeStyle = selected
@@ -654,17 +972,109 @@ class GraphSandbox {
   }
 }
 
-function primitiveName(className) {
-  if (["document", "page", "note"].includes(className)) return "square document face + collider";
-  if (className === "event") return "diamond event hull + collider";
-  if (["device", "tool"].includes(className)) return "rounded device body + collider";
-  if (["place", "person", "community"].includes(className)) return "circular actor + collider";
-  return "circular software actor + collider";
+function decorateSpecimen(graph) {
+  return {
+    ...graphOnly(graph),
+    nodes: graph.nodes.map((node) => enrichNode(node, node.change ?? "stable")),
+  };
+}
+
+function diffGraphs(previous, current) {
+  const before = new Map((previous?.nodes ?? []).map((node) => [node.id, node]));
+  const after = new Map(current.nodes.map((node) => [node.id, node]));
+  const beforeEdges = edgeSignatures(previous?.edges ?? []);
+  const afterEdges = edgeSignatures(current.edges);
+  const nodes = [];
+  for (const node of current.nodes) {
+    let change = "stable";
+    const prior = before.get(node.id);
+    if (!prior) change = "added";
+    else if (nodeSignature(prior) !== nodeSignature(node)) change = "updated";
+    else if (beforeEdges.get(node.id) !== afterEdges.get(node.id)) change = "updated";
+    nodes.push(enrichNode(node, change));
+  }
+  for (const node of previous?.nodes ?? []) {
+    if (!after.has(node.id)) nodes.push(enrichNode(node, "removed"));
+  }
+  const ids = new Set(nodes.map((node) => node.id));
+  const edges = new Map(current.edges.map((edge) => [edge.id, { ...edge }]));
+  for (const edge of previous?.edges ?? []) {
+    if (!edges.has(edge.id) && ids.has(edge.source) && ids.has(edge.target)) {
+      edges.set(edge.id, { ...edge, change: "removed" });
+    }
+  }
+  return {
+    schema: current.schema,
+    focus: ids.has(current.focus) ? current.focus : nodes[0]?.id,
+    nodes,
+    edges: [...edges.values()],
+  };
+}
+
+function enrichNode(node, change) {
+  return {
+    ...node,
+    change,
+    summary:
+      node.summary ??
+      `${node.name} is a ${humanize(node.class)} in the selected public checkpoint.`,
+  };
+}
+
+function nodeSignature(node) {
+  return [node.name, node.class, node.status, node.pushed_at].join("\u0000");
+}
+
+function edgeSignatures(edges) {
+  const byNode = new Map();
+  for (const edge of edges) {
+    const signature = [edge.id, edge.source, edge.target, edge.kind, edge.provenance].join(":");
+    for (const id of [edge.source, edge.target]) {
+      if (!byNode.has(id)) byNode.set(id, []);
+      byNode.get(id).push(signature);
+    }
+  }
+  return new Map(
+    [...byNode].map(([id, signatures]) => [id, signatures.sort().join("|")]),
+  );
+}
+
+function behaviorText(profile) {
+  return profile.behaviors
+    .map(({ gesture, behavior }) => `${humanize(gesture)}: ${humanize(behavior)}`)
+    .join(" · ");
+}
+
+function encodeSceneState(state) {
+  const bytes = new TextEncoder().encode(JSON.stringify(state));
+  let binary = "";
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary).replaceAll("+", "-").replaceAll("/", "_").replaceAll("=", "");
+}
+
+function decodeSceneState(hash) {
+  const match = hash.match(/^#graphshell-scene=([A-Za-z0-9_-]+)$/);
+  if (!match) return null;
+  try {
+    const base64 = match[1].replaceAll("-", "+").replaceAll("_", "/");
+    const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, "=");
+    const binary = atob(padded);
+    const bytes = Uint8Array.from(binary, (character) => character.charCodeAt(0));
+    return JSON.parse(new TextDecoder().decode(bytes));
+  } catch {
+    return null;
+  }
 }
 
 function shortName(value) {
   const words = value.trim().split(/\s+/);
-  if (words.length > 1) return words.slice(0, 2).map((word) => word[0]).join("").toUpperCase();
+  if (words.length > 1) {
+    return words
+      .slice(0, 2)
+      .map((word) => word[0])
+      .join("")
+      .toUpperCase();
+  }
   return value.slice(0, 2).toUpperCase();
 }
 
@@ -673,7 +1083,11 @@ function safeToken(value) {
 }
 
 function humanize(value) {
-  return value.replaceAll("_", " ");
+  return String(value).replaceAll("_", " ");
+}
+
+function clamp(value, minimum, maximum) {
+  return Math.min(Math.max(value, minimum), maximum);
 }
 
 function announce(sandboxRoot, message) {

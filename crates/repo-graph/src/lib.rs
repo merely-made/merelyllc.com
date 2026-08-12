@@ -6,6 +6,7 @@ use arrangements::{
     AxisValue, Layout, LayoutExtras, LayoutRegistry, Radial, RadialAngularPolicy, RadialConfig,
     RadialUnreachablePolicy, StaticLayoutState, Timeline, TimelineConfig,
 };
+use cartography::{PrimitiveBody, default_graph_representation_registry};
 use euclid::default::Point2D;
 use sceno::{
     Arrangement as SceneArrangement, Footprint, Placement, Representation, RoutedRelation, Score,
@@ -274,19 +275,40 @@ fn graph_physics(input: &str) -> Result<GraphPhysics, String> {
 }
 
 fn collider_for_class(class: &str) -> NodeCollider {
-    match class {
-        "document" | "page" | "note" => NodeCollider::Square { half: 22.0 },
-        "device" | "tool" => NodeCollider::RoundedSquare {
+    let registry = default_graph_representation_registry();
+    match registry.resolve(class).primitive.body {
+        PrimitiveBody::Square => NodeCollider::Square { half: 22.0 },
+        PrimitiveBody::RoundedSquare => NodeCollider::RoundedSquare {
             half: 24.0,
             border: 7.0,
         },
-        "event" => NodeCollider::Hull {
+        PrimitiveBody::Diamond => NodeCollider::Hull {
             points: vec![(0.0, -27.0), (27.0, 0.0), (0.0, 27.0), (-27.0, 0.0)],
             fallback: 24.0,
         },
-        "place" | "person" | "community" => NodeCollider::Ball { radius: 25.0 },
-        _ => NodeCollider::Ball { radius: 22.0 },
+        PrimitiveBody::Hexagon => NodeCollider::Hull {
+            points: vec![
+                (-22.0, -13.0),
+                (0.0, -26.0),
+                (22.0, -13.0),
+                (22.0, 13.0),
+                (0.0, 26.0),
+                (-22.0, 13.0),
+            ],
+            fallback: 24.0,
+        },
+        PrimitiveBody::Circle => NodeCollider::Ball { radius: 24.0 },
     }
+}
+
+/// The same portable primitive and host-behavior registry consumed by Mere.
+#[wasm_bindgen]
+pub fn representation_registry() -> Result<String, JsValue> {
+    serde_json::to_string(&default_graph_representation_registry()).map_err(|error| {
+        JsValue::from_str(&format!(
+            "could not encode representation registry: {error}"
+        ))
+    })
 }
 
 impl GraphPhysics {
@@ -1547,5 +1569,18 @@ mod tests {
         let encoded = layout_graph_json(&value.to_string()).expect("focused layout");
         let layout: serde_json::Value = serde_json::from_str(&encoded).expect("layout JSON");
         assert_eq!(layout["focus"], "turnstone");
+    }
+
+    #[test]
+    fn sandbox_exports_meres_primitive_and_behavior_registry() {
+        let encoded = representation_registry().expect("representation registry");
+        let registry: serde_json::Value =
+            serde_json::from_str(&encoded).expect("representation registry JSON");
+        assert_eq!(registry["schema"], "mere.graph-representation-registry/v1");
+        assert_eq!(registry["profiles"][0]["primitive"]["body"], "hexagon");
+        assert_eq!(
+            registry["profiles"][0]["behaviors"][0]["behavior"],
+            "inspect"
+        );
     }
 }

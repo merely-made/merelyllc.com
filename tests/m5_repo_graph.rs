@@ -338,7 +338,15 @@ fn graphshell_sandbox_keeps_scene_arrangement_motion_and_backdrop_distinct() {
         classes.len() >= 8,
         "the specimen graph is meaningfully heterogeneous"
     );
-    assert_eq!(sandbox["sandbox"]["schema"], "mer3ly.graphshell-sandbox/v1");
+    assert_eq!(sandbox["sandbox"]["schema"], "mer3ly.graphshell-sandbox/v2");
+    assert_eq!(
+        sandbox["sandbox"]["scene_state_schema"],
+        "mer3ly.graphshell-scene-state/v1"
+    );
+    assert_eq!(
+        sandbox["sandbox"]["representation_registry_schema"],
+        "mere.graph-representation-registry/v1"
+    );
     assert!(document.contains("data-graph-sandbox"));
     assert!(document.contains("One graph, several readings, real Mere physics."));
     assert!(document.contains("Graphshell projection sandbox, not the whole browser shell"));
@@ -354,6 +362,10 @@ fn graphshell_sandbox_keeps_scene_arrangement_motion_and_backdrop_distinct() {
         "recomputeNeighborhood",
         "buildMatrix",
         "dataset.sandboxScene",
+        "representationRegistry",
+        "diffGraphs",
+        "encodeSceneState",
+        "pinsByDataset",
         "physics.tick",
         "ResizeObserver",
     ] {
@@ -364,8 +376,10 @@ fn graphshell_sandbox_keeps_scene_arrangement_motion_and_backdrop_distinct() {
     }
     for contract in [
         ".graph-sandbox-contract",
-        ".graph-sandbox-node.class-event",
-        ".graph-sandbox-node.class-document",
+        ".graph-sandbox-node.primitive-diamond",
+        ".graph-sandbox-node.primitive-square",
+        ".graph-sandbox-history",
+        ".graph-sandbox-share",
         "[data-sandbox-scene=\"changes\"]",
         ".graph-sandbox-matrix-cell.has-relation",
     ] {
@@ -375,7 +389,7 @@ fn graphshell_sandbox_keeps_scene_arrangement_motion_and_backdrop_distinct() {
         );
     }
     assert!(
-        GRAPH_SANDBOX.len() < 32 * 1024,
+        GRAPH_SANDBOX.len() < 48 * 1024,
         "sandbox loader is too large"
     );
 }
