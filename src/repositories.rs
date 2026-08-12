@@ -683,69 +683,99 @@ impl Authority {
     }
 
     fn with_live_github_repositories(mut self, metadata: &PublicMetadataCache) -> Self {
-        let live_by_slug = metadata
+        let (repositories, relations) =
+            reconcile_live_github_repositories(&self.repositories, &self.relations, metadata);
+        self.repositories = repositories;
+        self.relations = relations;
+        self
+    }
+}
+
+pub(crate) fn reconcile_live_github_repositories(
+    editorial: &RepositoryManifest,
+    relations: &RelationManifest,
+    metadata: &PublicMetadataCache,
+) -> (RepositoryManifest, RelationManifest) {
+    if metadata.schema != "mer3ly.github-organization/v2" {
+        return (editorial.clone(), relations.clone());
+    }
+
+    let live_by_slug = metadata
+        .repository
+        .iter()
+        .map(|repository| (repository.github_slug.as_str(), repository))
+        .collect::<BTreeMap<_, _>>();
+    let editorial_slugs = editorial
+        .repository
+        .iter()
+        .map(|repository| repository.github_slug.as_str())
+        .collect::<BTreeSet<_>>();
+    let mut repositories = editorial
+        .repository
+        .iter()
+        .filter(|repository| live_by_slug.contains_key(repository.github_slug.as_str()))
+        .cloned()
+        .collect::<Vec<_>>();
+    repositories.extend(
+        metadata
             .repository
             .iter()
-            .map(|repository| (repository.github_slug.as_str(), repository))
-            .collect::<BTreeMap<_, _>>();
-        let editorial_slugs = self
-            .repositories
-            .repository
-            .iter()
-            .map(|repository| repository.github_slug.as_str())
-            .collect::<BTreeSet<_>>();
-        let mut repositories = self
-            .repositories
-            .repository
-            .iter()
-            .filter(|repository| live_by_slug.contains_key(repository.github_slug.as_str()))
-            .cloned()
-            .collect::<Vec<_>>();
-        repositories.extend(
-            metadata
-                .repository
-                .iter()
-                .filter(|live| !editorial_slugs.contains(live.github_slug.as_str()))
-                .map(|live| RepositoryRecord {
-                    id: live.id.clone(),
-                    github_slug: live.github_slug.clone(),
-                    name: live.name.clone(),
-                    summary: if live.description.is_empty() {
-                        "A public repository in the Merely GitHub organization.".to_owned()
-                    } else {
-                        live.description.clone()
-                    },
-                    class: if live.fork {
-                        RepositoryClass::MaintainedFork
-                    } else {
-                        RepositoryClass::Tool
-                    },
-                    status: if live.archived {
-                        RepositoryStatus::Archived
-                    } else {
-                        RepositoryStatus::Active
-                    },
-                    license: live
-                        .license
-                        .clone()
-                        .unwrap_or_else(|| "NOASSERTION".to_owned()),
-                    homepage: live
-                        .homepage
-                        .clone()
-                        .unwrap_or_else(|| format!("https://github.com/{}", live.github_slug)),
-                    public: true,
-                }),
-        );
-        let live_ids = repositories
-            .iter()
-            .map(|repository| repository.id.as_str())
-            .collect::<BTreeSet<_>>();
-        self.relations.relation.retain(|relation| {
+            .filter(|live| !editorial_slugs.contains(live.github_slug.as_str()))
+            .map(repository_fallback_from_github),
+    );
+    let live_ids = repositories
+        .iter()
+        .map(|repository| repository.id.as_str())
+        .collect::<BTreeSet<_>>();
+    let relations = relations
+        .relation
+        .iter()
+        .filter(|relation| {
             live_ids.contains(relation.source.as_str())
                 && live_ids.contains(relation.target.as_str())
-        });
-        self.repositories.repository = repositories;
-        self
+        })
+        .cloned()
+        .collect();
+
+    (
+        RepositoryManifest {
+            repository: repositories,
+        },
+        RelationManifest {
+            relation: relations,
+        },
+    )
+}
+
+fn repository_fallback_from_github(live: &PublicRepositoryMetadata) -> RepositoryRecord {
+    RepositoryRecord {
+        id: live.id.clone(),
+        github_slug: live.github_slug.clone(),
+        name: live.name.clone(),
+        summary: if live.description.is_empty() {
+            "A public repository in the Merely GitHub organization.".to_owned()
+        } else {
+            live.description.clone()
+        },
+        class: if live.fork {
+            RepositoryClass::MaintainedFork
+        } else {
+            RepositoryClass::Tool
+        },
+        status: if live.archived {
+            RepositoryStatus::Archived
+        } else {
+            RepositoryStatus::Active
+        },
+        license: live
+            .license
+            .clone()
+            .unwrap_or_else(|| "NOASSERTION".to_owned()),
+        homepage: live
+            .homepage
+            .clone()
+            .unwrap_or_else(|| format!("https://github.com/{}", live.github_slug)),
+        public: true,
     }
 }
 

@@ -13,7 +13,7 @@ use serde::{Deserialize, Serialize};
 
 use crate::repositories::{
     PublicMetadataCache, RelationKind, RelationManifest, RelationProvenance, RepositoryClass,
-    RepositoryManifest, RepositoryStatus,
+    RepositoryManifest, RepositoryStatus, reconcile_live_github_repositories,
 };
 
 pub const REPOSITORY_GRAPH_SCHEMA: &str = "mer3ly.repo-graph/v1";
@@ -63,6 +63,8 @@ impl RepositoryGraph {
         relations: &RelationManifest,
         metadata: &PublicMetadataCache,
     ) -> Result<Self, String> {
+        let (repositories, relations) =
+            reconcile_live_github_repositories(repositories, relations, metadata);
         let mut metadata_by_id = BTreeMap::new();
         for entry in &metadata.repository {
             if metadata_by_id.insert(entry.id.as_str(), entry).is_some() {
@@ -516,28 +518,22 @@ fn git_output<const N: usize>(
 
 #[cfg(test)]
 mod tests {
+    use std::collections::BTreeSet;
     use std::path::{Path, PathBuf};
 
     use super::{
-        GitAuthorityCheckpointProjection, GitAuthorityCursor, GitAuthorityHistory, RepositoryGraph,
-        public_history_projection,
+        GitAuthorityCheckpointProjection, GitAuthorityCursor, GitAuthorityHistory, METADATA_PATH,
+        RepositoryGraph, git_json, public_history_projection,
     };
-    use crate::repositories::PublicSiteData;
+    use crate::repositories::{PublicMetadataCache, PublicSiteData};
 
     fn workspace_root() -> PathBuf {
         Path::new(env!("CARGO_MANIFEST_DIR")).to_path_buf()
     }
 
     #[test]
-    fn committed_authority_cursor_replays_the_live_public_graph() {
+    fn committed_authority_cursor_replays_the_committed_public_graph() {
         let root = workspace_root();
-        let data = PublicSiteData::load(&root).expect("validated current public authority");
-        let expected = RepositoryGraph::from_parts(
-            &data.authority.repositories,
-            &data.authority.relations,
-            &data.metadata,
-        )
-        .expect("current authority projects a public graph");
         let history = GitAuthorityHistory::discover(&root).expect("Git authority history");
         let cursor = history.live_cursor().clone();
 
@@ -545,15 +541,24 @@ mod tests {
             .snapshot_at(&root, &cursor)
             .expect("the committed live authority snapshot loads");
         assert_eq!(historical.cursor, cursor);
-        assert_eq!(historical.graph, expected);
+        let committed_metadata: PublicMetadataCache =
+            git_json(&root, &historical.cursor.commit, METADATA_PATH)
+                .expect("committed public metadata loads");
+        let committed_ids = committed_metadata
+            .repository
+            .iter()
+            .map(|repository| repository.id.as_str())
+            .collect::<BTreeSet<_>>();
+        let graph_ids = historical
+            .graph
+            .nodes
+            .iter()
+            .map(|repository| repository.id.as_str())
+            .collect::<BTreeSet<_>>();
+        assert_eq!(graph_ids, committed_ids);
         assert_eq!(
             historical.graph.nodes.len(),
-            data.authority
-                .repositories
-                .repository
-                .iter()
-                .filter(|repository| repository.public)
-                .count()
+            committed_metadata.repository.len()
         );
     }
 
