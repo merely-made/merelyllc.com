@@ -61,7 +61,15 @@ foreach ($metadata in $organizationRepositories) {
     }
     $topics = @(
         $metadata.repositoryTopics |
-            ForEach-Object { $_.name } |
+            ForEach-Object {
+                if ($null -ne $_) {
+                    if ($_ -is [string]) {
+                        $_
+                    } else {
+                        [string]$_.name
+                    }
+                }
+            } |
             Sort-Object -Unique
     )
     $records.Add([ordered]@{
