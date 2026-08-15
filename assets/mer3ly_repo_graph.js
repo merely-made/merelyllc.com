@@ -1,8 +1,9 @@
 /**
  * Stateful browser adapter over Mere's real Seiche simulation.
  *
- * Arrangements supply slots. This adapter decides whether those slots are
- * frozen positions, anchor springs, or initial conditions for free physics.
+ * Arrangements supply slots. This adapter uses those slots as anchor-spring
+ * targets or as initial conditions for free physics. Frozen output belongs to
+ * a non-interactive renderer, not this interactive simulation.
  */
 export class GraphPhysics {
     __destroy_into_raw() {

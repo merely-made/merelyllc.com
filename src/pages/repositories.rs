@@ -23,7 +23,6 @@ pub const METADATA: PageMetadata = PageMetadata {
     canonical_url: "https://mer3ly.net/repos/",
 };
 
-const REPO_GRAPH_LOADER: &[u8] = include_bytes!("../../assets/repo-graph.js");
 const GRAPH_SANDBOX_LOADER: &[u8] = include_bytes!("../../assets/graph-sandbox.js");
 const REPO_GRAPH_WASM_GLUE: &[u8] = include_bytes!("../../assets/mer3ly_repo_graph.js");
 const REPO_GRAPH_WASM: &[u8] = include_bytes!("../../assets/mer3ly_repo_graph_bg.wasm");
@@ -62,7 +61,6 @@ pub fn view(data: &PublicSiteData) -> SiteView {
             &[("id", "main"), ("class", "repositories-main")],
             vec![
                 hero(data),
-                repository_graph(data),
                 graph_sandbox(),
                 organization_activity(data),
                 repository_index(data),
@@ -82,7 +80,7 @@ fn graph_sandbox() -> SiteView {
             ("data-sandbox-state", "pending"),
         ],
         vec![
-            section_heading("02", "graphshell sandbox"),
+            section_heading("01", "graphshell sandbox"),
             element(
                 "div",
                 &[("class", "graph-sandbox-heading")],
@@ -90,18 +88,17 @@ fn graph_sandbox() -> SiteView {
                     element(
                         "h3",
                         &[("id", "graph-sandbox-title")],
-                        vec![txt("One graph, several readings, real Mere physics.")],
+                        vec![txt("The graph is also its own control surface.")],
                     ),
                     element(
                         "p",
                         &[],
                         vec![txt(
-                            "Switch between the live merely-made graph and a heterogeneous specimen. Both consume Mere's reading, arrangement, and representation registries, then hand motion and collision to Seiche. This is a public Graphshell projection sandbox, not the whole browser shell.",
+                            "Switch the graph from inside the graph. Reading changes membership and face; arrangement changes placement; anchored or free motion decides what happens after you move a node. The typed actors and relations remain the same beneath every projection.",
                         )],
                     ),
                 ],
             ),
-            sandbox_contract(),
             element(
                 "p",
                 &[
@@ -109,7 +106,7 @@ fn graph_sandbox() -> SiteView {
                     ("data-sandbox-fallback", ""),
                 ],
                 vec![txt(
-                    "The sandbox requires WebAssembly. Its model is: arrangements choose slots; motion decides how strongly nodes obey them; backdrops may be paint, props, or force fields.",
+                    "The sandbox requires WebAssembly. Its semantic repository index remains available below.",
                 )],
             ),
             element(
@@ -119,64 +116,55 @@ fn graph_sandbox() -> SiteView {
                     ("data-sandbox-interface", ""),
                     ("hidden", "hidden"),
                 ],
-                vec![
-                    sandbox_toolbar(),
-                    sandbox_scene_tools(),
-                    element(
-                        "p",
-                        &[
-                            ("class", "graph-sandbox-caption"),
-                            ("data-sandbox-caption", ""),
-                        ],
-                        vec![txt("Loading the graph runtime…")],
-                    ),
-                    element(
-                        "div",
-                        &[("class", "graph-sandbox-workbench")],
-                        vec![
-                            element(
-                                "div",
-                                &[
-                                    ("class", "graph-sandbox-stage"),
-                                    ("data-sandbox-stage", ""),
-                                    ("data-sandbox-scene", "graph"),
-                                    ("data-sandbox-backdrop", "ambient"),
-                                ],
-                                vec![
-                                    element(
-                                        "canvas",
-                                        &[
-                                            ("class", "graph-sandbox-canvas"),
-                                            ("data-sandbox-canvas", ""),
-                                            ("aria-hidden", "true"),
-                                        ],
-                                        vec![],
-                                    ),
-                                    element(
-                                        "div",
-                                        &[
-                                            ("class", "graph-sandbox-nodes"),
-                                            ("data-sandbox-nodes", ""),
-                                            ("role", "group"),
-                                            ("aria-label", "Graph sandbox nodes"),
-                                        ],
-                                        vec![],
-                                    ),
-                                    element(
-                                        "div",
-                                        &[
-                                            ("class", "graph-sandbox-matrix"),
-                                            ("data-sandbox-matrix", ""),
-                                            ("hidden", "hidden"),
-                                        ],
-                                        vec![],
-                                    ),
-                                ],
-                            ),
-                            sandbox_inspector(),
-                        ],
-                    ),
-                ],
+                vec![element(
+                    "div",
+                    &[
+                        ("class", "graph-sandbox-stage"),
+                        ("data-sandbox-stage", ""),
+                        ("data-sandbox-scene", "graph"),
+                        ("data-sandbox-backdrop", "ambient"),
+                    ],
+                    vec![
+                        element(
+                            "canvas",
+                            &[
+                                ("class", "graph-sandbox-canvas"),
+                                ("data-sandbox-canvas", ""),
+                                ("aria-hidden", "true"),
+                            ],
+                            vec![],
+                        ),
+                        element(
+                            "div",
+                            &[
+                                ("class", "graph-sandbox-nodes"),
+                                ("data-sandbox-nodes", ""),
+                                ("role", "group"),
+                                ("aria-label", "Graph sandbox nodes"),
+                            ],
+                            vec![],
+                        ),
+                        element(
+                            "div",
+                            &[
+                                ("class", "graph-sandbox-matrix"),
+                                ("data-sandbox-matrix", ""),
+                                ("hidden", "hidden"),
+                            ],
+                            vec![],
+                        ),
+                        sandbox_graph_controls(),
+                        sandbox_scene_tools(),
+                        element(
+                            "p",
+                            &[
+                                ("class", "graph-sandbox-caption"),
+                                ("data-sandbox-caption", ""),
+                            ],
+                            vec![txt("Loading the graph runtime…")],
+                        ),
+                    ],
+                )],
             ),
             element(
                 "p",
@@ -187,92 +175,56 @@ fn graph_sandbox() -> SiteView {
                 ],
                 vec![txt("Graphshell sandbox not initialized.")],
             ),
+            element(
+                "p",
+                &[("class", "graph-sandbox-range-note")],
+                vec![txt(
+                    "A Mermaid diagram or spreadsheet chart can be another projection of the same graph. Their boxes, bars, axes, lanes, and labels are faces and scene marks; a frozen export simply omits the interaction layer.",
+                )],
+            ),
         ],
     )
 }
 
-fn sandbox_contract() -> SiteView {
-    element(
-        "dl",
-        &[("class", "graph-sandbox-contract")],
-        vec![
-            sandbox_contract_item("Reading", "actor scope, surface, emphasis"),
-            sandbox_contract_item("Arrangement", "deterministic target slots"),
-            sandbox_contract_item("Motion", "frozen, anchored, or free"),
-            sandbox_contract_item("Backdrop", "paint, colliders, or a field"),
-        ],
-    )
-}
-
-fn sandbox_contract_item(term: &str, definition: &str) -> SiteView {
-    element(
-        "div",
-        &[],
-        vec![
-            element("dt", &[], vec![txt(term)]),
-            element("dd", &[], vec![txt(definition)]),
-        ],
-    )
-}
-
-fn sandbox_toolbar() -> SiteView {
+fn sandbox_graph_controls() -> SiteView {
     element(
         "div",
         &[
-            ("class", "graph-sandbox-toolbar"),
-            ("aria-label", "Sandbox controls"),
+            ("class", "graph-sandbox-control-actors"),
+            ("role", "group"),
+            ("aria-label", "Graph controls"),
         ],
         vec![
-            sandbox_select(
-                "Dataset",
-                "dataset",
-                &[("live", "merely-made feed"), ("specimen", "Specimen")],
-                "live",
-            ),
-            sandbox_select("Reading", "scene", &[("graph", "Graph")], "graph"),
-            sandbox_select("Arrangement", "arrangement", &[], ""),
-            sandbox_select(
-                "Motion",
-                "mobility",
-                &[
-                    ("frozen", "Frozen"),
-                    ("anchored", "Anchored"),
-                    ("free", "Free"),
-                ],
-                "anchored",
-            ),
-            sandbox_select(
-                "Backdrop",
-                "backdrop",
-                &[
-                    ("clear", "Clear"),
-                    ("ambient", "Ambient"),
-                    ("props", "Props"),
-                    ("field", "Field"),
-                ],
-                "ambient",
-            ),
-            sandbox_select(
-                "Physics",
-                "physics",
-                &[("paused", "Paused"), ("settle", "Settle"), ("live", "Live")],
-                "live",
+            sandbox_control_actor("dataset", "Source", "merely-made feed"),
+            sandbox_control_actor("reading", "Reading", "Graph"),
+            sandbox_control_actor("arrangement", "Arrangement", "Stack"),
+            sandbox_control_actor("mobility", "Motion", "Anchored"),
+            sandbox_control_actor("environment", "Field", "Ambient"),
+        ],
+    )
+}
+
+fn sandbox_control_actor(name: &str, label: &str, value: &str) -> SiteView {
+    element(
+        "button",
+        &[
+            ("type", "button"),
+            ("class", "graph-sandbox-control-actor"),
+            ("data-sandbox-cycle", name),
+        ],
+        vec![
+            element(
+                "span",
+                &[("class", "graph-sandbox-control-kind")],
+                vec![txt(label)],
             ),
             element(
-                "label",
-                &[("class", "graph-sandbox-toggle")],
-                vec![
-                    element(
-                        "input",
-                        &[
-                            ("type", "checkbox"),
-                            ("data-sandbox-tangible", ""),
-                            ("disabled", "disabled"),
-                        ],
-                        vec![],
-                    ),
-                    element("span", &[], vec![txt("collidable")]),
+                "span",
+                &[
+                    ("class", "graph-sandbox-control-value"),
+                    ("data-sandbox-cycle-value", ""),
                 ],
+                vec![txt(value)],
             ),
         ],
     )
@@ -317,7 +269,7 @@ fn sandbox_scene_tools() -> SiteView {
                     ("class", "graph-sandbox-share"),
                     ("data-sandbox-share", ""),
                 ],
-                vec![txt("copy portable scene")],
+                vec![txt("share scene")],
             ),
             element(
                 "span",
@@ -325,104 +277,7 @@ fn sandbox_scene_tools() -> SiteView {
                     ("class", "graph-sandbox-share-status"),
                     ("data-sandbox-share-status", ""),
                 ],
-                vec![txt("scene state stays in the link")],
-            ),
-        ],
-    )
-}
-
-fn sandbox_select(label: &str, name: &str, options: &[(&str, &str)], selected: &str) -> SiteView {
-    element(
-        "label",
-        &[("class", "graph-sandbox-select")],
-        vec![
-            element("span", &[], vec![txt(label)]),
-            element(
-                "select",
-                &[("data-sandbox-control", name), ("aria-label", label)],
-                options
-                    .iter()
-                    .map(|(value, text)| {
-                        let attrs = if *value == selected {
-                            vec![("value", *value), ("selected", "selected")]
-                        } else {
-                            vec![("value", *value)]
-                        };
-                        element("option", &attrs, vec![txt(*text)])
-                    })
-                    .collect(),
-            ),
-        ],
-    )
-}
-
-fn sandbox_inspector() -> SiteView {
-    element(
-        "aside",
-        &[
-            ("class", "graph-sandbox-inspector"),
-            ("aria-live", "polite"),
-        ],
-        vec![
-            element("p", &[("class", "eyebrow")], vec![txt("selected actor")]),
-            element(
-                "h4",
-                &[("data-sandbox-inspector-title", "")],
-                vec![txt("Nothing selected")],
-            ),
-            element(
-                "p",
-                &[("data-sandbox-inspector-summary", "")],
-                vec![txt(
-                    "Select a node to inspect its primitive and behavior bindings.",
-                )],
-            ),
-            element(
-                "dl",
-                &[("class", "graph-sandbox-inspector-facts")],
-                vec![
-                    element(
-                        "div",
-                        &[],
-                        vec![
-                            element("dt", &[], vec![txt("Primitive")]),
-                            element("dd", &[("data-sandbox-primitive", "")], vec![txt("—")]),
-                        ],
-                    ),
-                    element(
-                        "div",
-                        &[],
-                        vec![
-                            element("dt", &[], vec![txt("Behavior")]),
-                            element("dd", &[("data-sandbox-script", "")], vec![txt("—")]),
-                        ],
-                    ),
-                    element(
-                        "div",
-                        &[],
-                        vec![
-                            element("dt", &[], vec![txt("Motion")]),
-                            element("dd", &[("data-sandbox-node-motion", "")], vec![txt("—")]),
-                        ],
-                    ),
-                ],
-            ),
-            element(
-                "button",
-                &[
-                    ("type", "button"),
-                    ("class", "graph-sandbox-pin"),
-                    ("data-sandbox-pin", ""),
-                    ("disabled", "disabled"),
-                ],
-                vec![txt("pin selected")],
-            ),
-            element(
-                "p",
-                &[("class", "graph-sandbox-inspector-note")],
-                vec![txt(
-                    "Pins survive readings, arrangements, and source-time changes. Copy the scene to reopen the same dataset, source, controls, selection, and pins.",
-                )],
+                vec![txt("state stays in the link")],
             ),
         ],
     )
@@ -475,105 +330,6 @@ fn hero(data: &PublicSiteData) -> SiteView {
     )
 }
 
-fn repository_graph(data: &PublicSiteData) -> SiteView {
-    element(
-        "section",
-        &[
-            ("class", "content-section repository-graph-section"),
-            ("aria-label", "Live repository relationship map"),
-        ],
-        vec![
-            section_heading("01", "live relationship map"),
-            element(
-                "div",
-                &[("class", "repository-graph-heading")],
-                vec![
-                    element(
-                        "h3",
-                        &[],
-                        vec![txt("A small Mere canvas for the public project family.")],
-                    ),
-                    element(
-                        "p",
-                        &[],
-                        vec![txt(
-                            "GitHub supplies the live membership and latest push dates; Mer3ly supplies the project roles and relationships. Choose Timeline to arrange the family by its latest public pushes.",
-                        )],
-                    ),
-                ],
-            ),
-            element(
-                "div",
-                &[
-                    ("class", "repository-graph-shell"),
-                    ("data-repository-graph", ""),
-                    ("data-graph-state", "pending"),
-                ],
-                vec![
-                    element(
-                        "p",
-                        &[
-                            ("class", "repository-graph-fallback"),
-                            ("data-graph-fallback", ""),
-                        ],
-                        vec![txt(
-                            "The interactive map requires WebGPU and WebAssembly. The complete repository index remains available below.",
-                        )],
-                    ),
-                    element(
-                        "div",
-                        &[
-                            ("class", "repository-graph-interface"),
-                            ("data-graph-interface", ""),
-                            ("hidden", "hidden"),
-                        ],
-                        vec![
-                            graph_toolbar(),
-                            element(
-                                "div",
-                                &[
-                                    ("class", "repository-graph-stage"),
-                                    ("data-graph-stage", ""),
-                                ],
-                                vec![
-                                    element(
-                                        "canvas",
-                                        &[
-                                            ("class", "repository-graph-canvas"),
-                                            ("aria-hidden", "true"),
-                                        ],
-                                        vec![],
-                                    ),
-                                    element(
-                                        "div",
-                                        &[
-                                            ("class", "repository-graph-nodes"),
-                                            ("data-graph-nodes", ""),
-                                            ("role", "group"),
-                                            ("aria-label", "Repository graph nodes"),
-                                        ],
-                                        vec![],
-                                    ),
-                                ],
-                            ),
-                            graph_legend(data),
-                        ],
-                    ),
-                    element(
-                        "p",
-                        &[
-                            ("class", "repository-graph-status sr-only"),
-                            ("data-graph-status", ""),
-                            ("aria-live", "polite"),
-                        ],
-                        vec![txt("Interactive repository map not initialized.")],
-                    ),
-                ],
-            ),
-        ],
-    )
-}
-
 fn organization_activity(data: &PublicSiteData) -> SiteView {
     let repositories_by_slug: BTreeMap<_, _> = data
         .authority
@@ -601,7 +357,7 @@ fn organization_activity(data: &PublicSiteData) -> SiteView {
             ("aria-label", "Recent merely-made GitHub activity"),
         ],
         vec![
-            section_heading("03", "recent organization activity"),
+            section_heading("02", "recent organization activity"),
             element(
                 "p",
                 &[("class", "repository-activity-intro")],
@@ -663,245 +419,6 @@ fn activity_label(kind: &str) -> &'static str {
     }
 }
 
-fn graph_toolbar() -> SiteView {
-    element(
-        "div",
-        &[
-            ("class", "repository-graph-toolbar"),
-            ("data-graph-controls", ""),
-            ("aria-label", "Repository map controls"),
-        ],
-        vec![
-            element(
-                "label",
-                &[("class", "repository-graph-arrangement-picker")],
-                vec![
-                    element("span", &[], vec![txt("Arrangement")]),
-                    element(
-                        "select",
-                        &[
-                            ("data-graph-arrangement", ""),
-                            ("aria-label", "Repository graph arrangement"),
-                        ],
-                        vec![],
-                    ),
-                ],
-            ),
-            element(
-                "div",
-                &[
-                    ("class", "repository-graph-history-picker"),
-                    ("data-graph-history-controls", ""),
-                    ("role", "group"),
-                    ("aria-label", "Repository graph source history"),
-                    ("hidden", "hidden"),
-                ],
-                vec![
-                    element("span", &[], vec![txt("Source time")]),
-                    element(
-                        "input",
-                        &[
-                            ("type", "range"),
-                            ("min", "0"),
-                            ("max", "0"),
-                            ("value", "0"),
-                            ("step", "1"),
-                            ("data-graph-history", ""),
-                            ("aria-label", "Repository graph source time"),
-                        ],
-                        vec![],
-                    ),
-                    element(
-                        "output",
-                        &[("data-graph-history-status", "")],
-                        vec![txt("Live authority")],
-                    ),
-                    graph_button("return-live", "Return to live authority", "live"),
-                ],
-            ),
-            graph_button("share", "Copy shareable repository scene link", "share"),
-            element(
-                "p",
-                &[
-                    ("class", "repository-graph-scene-caption"),
-                    ("data-graph-scene-caption", ""),
-                    ("aria-live", "polite"),
-                ],
-                vec![txt(
-                    "Constellation medallions · relationships remain fully drawn",
-                )],
-            ),
-            element(
-                "div",
-                &[
-                    ("class", "repository-graph-control-group"),
-                    ("role", "group"),
-                    ("aria-label", "Zoom controls"),
-                ],
-                vec![
-                    graph_button("zoom-out", "Zoom out", "−"),
-                    graph_button("fit", "Fit the graph", "fit"),
-                    graph_button("zoom-in", "Zoom in", "+"),
-                ],
-            ),
-            element(
-                "div",
-                &[
-                    ("class", "repository-graph-control-group graph-pan-controls"),
-                    ("role", "group"),
-                    ("aria-label", "Pan controls"),
-                ],
-                vec![
-                    graph_button("pan-left", "Pan left", "←"),
-                    graph_button("pan-up", "Pan up", "↑"),
-                    graph_button("pan-down", "Pan down", "↓"),
-                    graph_button("pan-right", "Pan right", "→"),
-                ],
-            ),
-            graph_button("open", "Open selected project profile", "open selected"),
-        ],
-    )
-}
-
-fn graph_button(action: &str, label: &str, text: &str) -> SiteView {
-    element(
-        "button",
-        &[
-            ("type", "button"),
-            ("class", "repository-graph-control"),
-            ("data-graph-action", action),
-            ("aria-label", label),
-        ],
-        vec![txt(text)],
-    )
-}
-
-fn graph_legend(data: &PublicSiteData) -> SiteView {
-    let mut relation_kinds = data
-        .authority
-        .relations
-        .relation
-        .iter()
-        .map(|relation| relation.kind)
-        .collect::<Vec<_>>();
-    relation_kinds.sort_by_key(|kind| kind.slug());
-    relation_kinds.dedup();
-
-    element(
-        "aside",
-        &[
-            ("class", "repository-graph-legend"),
-            ("aria-label", "Repository map legend"),
-        ],
-        vec![
-            element(
-                "div",
-                &[],
-                vec![
-                    element("h3", &[], vec![txt("Repository role")]),
-                    element(
-                        "ul",
-                        &[],
-                        [
-                            RepositoryClass::Product,
-                            RepositoryClass::Platform,
-                            RepositoryClass::Foundation,
-                            RepositoryClass::Tool,
-                        ]
-                        .into_iter()
-                        .map(|class| {
-                            element(
-                                "li",
-                                &[],
-                                vec![
-                                    element(
-                                        "span",
-                                        &[(
-                                            "class",
-                                            &format!("graph-legend-node class-{}", class.slug()),
-                                        )],
-                                        vec![],
-                                    ),
-                                    txt(class.label()),
-                                ],
-                            )
-                        })
-                        .collect(),
-                    ),
-                ],
-            ),
-            element(
-                "div",
-                &[],
-                vec![
-                    element("h3", &[], vec![txt("Relationship")]),
-                    element(
-                        "ul",
-                        &[],
-                        relation_kinds
-                            .into_iter()
-                            .map(|kind| {
-                                element(
-                                    "li",
-                                    &[],
-                                    vec![
-                                        element(
-                                            "span",
-                                            &[(
-                                                "class",
-                                                &format!("graph-legend-edge kind-{}", kind.slug()),
-                                            )],
-                                            vec![],
-                                        ),
-                                        txt(kind.label()),
-                                    ],
-                                )
-                            })
-                            .collect(),
-                    ),
-                ],
-            ),
-            element(
-                "div",
-                &[],
-                vec![
-                    element("h3", &[], vec![txt("Evidence")]),
-                    element(
-                        "ul",
-                        &[],
-                        vec![
-                            element(
-                                "li",
-                                &[],
-                                vec![
-                                    element(
-                                        "span",
-                                        &[("class", "provenance-badge provenance-derived")],
-                                        vec![txt("derived")],
-                                    ),
-                                    txt(" manifests"),
-                                ],
-                            ),
-                            element(
-                                "li",
-                                &[],
-                                vec![
-                                    element(
-                                        "span",
-                                        &[("class", "provenance-badge provenance-curated")],
-                                        vec![txt("curated")],
-                                    ),
-                                    txt(" documentation"),
-                                ],
-                            ),
-                        ],
-                    ),
-                ],
-            ),
-        ],
-    )
-}
-
 fn overview_stat(label: &str, value: usize) -> SiteView {
     element(
         "div",
@@ -948,7 +465,7 @@ fn repository_index(data: &PublicSiteData) -> SiteView {
             ("aria-label", "Repository index"),
         ],
         vec![
-            section_heading("04", "repository index"),
+            section_heading("03", "repository index"),
             element(
                 "p",
                 &[("class", "index-intro")],
@@ -1425,12 +942,10 @@ fn graph_bootstrap(
         .replace('<', "\\u003c")
         .replace('>', "\\u003e")
         .replace('&', "\\u0026");
-    let graph_runtime_href = graph_runtime_href();
     let sandbox_runtime_href = graph_sandbox_runtime_href();
     let sandbox_json = graph_sandbox_json();
     format!(
         "<script id=\"repository-graph-data\" type=\"application/json\">{json}</script>\n\
-<script type=\"module\" src=\"{graph_runtime_href}\"></script>\n\
 <script id=\"graph-sandbox-data\" type=\"application/json\">{sandbox_json}</script>\n\
 <script type=\"module\" src=\"{sandbox_runtime_href}\"></script>"
     )
@@ -1470,13 +985,15 @@ fn graph_sandbox_json() -> String {
             {"id":"old-mock-replaced-merecat","source":"old-mock","target":"merecat","kind":"replaced_by","provenance":"curated"}
         ],
         "sandbox": {
-            "schema": "mer3ly.graphshell-sandbox/v3",
+            "schema": "mer3ly.graphshell-sandbox/v4",
             "scene_state_schema": "mer3ly.graphshell-scene-state/v1",
             "reading_registry_schema": "mere.graph-reading-registry/v1",
             "representation_registry_schema": "mere.graph-representation-registry/v1",
             "reading_rule": "Mere selects actor scope, surface, emphasis, and an initial arrangement",
+            "face_rule": "the host may give the same typed actor a different face for each reading",
             "primitive_rule": "Mere's registry maps class to one body shared by paint and collision",
             "behavior_rule": "named host bindings remain distinct from endpoint domain actions",
+            "motion_rule": "interactive actors are anchored or free; frozen belongs to static renderers",
             "views": ["graph", "changes", "activity", "neighbors", "matrix"]
         }
     }))
@@ -1495,15 +1012,6 @@ fn serialize_json_records<T: Serialize>(records: &[T]) -> String {
         })
         .collect::<Vec<_>>()
         .join(",\n")
-}
-
-fn graph_runtime_href() -> String {
-    let mut digest = Sha256::new();
-    digest.update(REPO_GRAPH_LOADER);
-    digest.update(REPO_GRAPH_WASM_GLUE);
-    digest.update(REPO_GRAPH_WASM);
-    let digest = format!("{:x}", digest.finalize());
-    format!("/repo-graph.js?v={}", &digest[..12])
 }
 
 fn graph_sandbox_runtime_href() -> String {

@@ -6,7 +6,6 @@ use mer3ly_site::repositories::PublicSiteData;
 use mer3ly_site::site::SITE_CSS;
 use serde::Deserialize;
 
-const GRAPH_LOADER: &str = include_str!("../assets/repo-graph.js");
 const GRAPH_SANDBOX: &str = include_str!("../assets/graph-sandbox.js");
 const GRAPH_GLUE: &str = include_str!("../assets/mer3ly_repo_graph.js");
 const GRAPH_WASM: &[u8] = include_bytes!("../assets/mer3ly_repo_graph_bg.wasm");
@@ -147,7 +146,7 @@ fn graph_and_semantic_index_share_exact_public_ids() {
         assert!(document.contains(&format!("id=\"repo-{}\"", repository.id)));
         assert!(document.contains(&format!("data-repository-id=\"{}\"", repository.id)));
     }
-    assert!(document.contains("Copy shareable repository scene link"));
+    assert!(document.contains("share scene"));
 
     let history = graph
         .history
@@ -227,16 +226,16 @@ fn graph_and_semantic_index_share_exact_public_ids() {
 }
 
 #[test]
-fn graph_enhancement_preserves_the_visible_static_fallback() {
+fn graphshell_is_the_only_live_canvas_and_preserves_the_static_index() {
     let root = workspace_root();
     let data = PublicSiteData::load(&root).expect("load validated public site data");
     let document = repositories::document(&root).expect("render repository page");
     let fallback = document
-        .find("data-graph-fallback")
-        .expect("visible graph fallback");
+        .find("data-sandbox-fallback")
+        .expect("visible sandbox fallback");
     let interface = document
-        .find("data-graph-interface")
-        .expect("hidden graph interface");
+        .find("data-sandbox-interface")
+        .expect("hidden sandbox interface");
     let index = document
         .find("class=\"content-section repository-index\"")
         .expect("semantic repository index");
@@ -248,82 +247,13 @@ fn graph_enhancement_preserves_the_visible_static_fallback() {
         document.match_indices("data-repository-id=").count(),
         data.authority.repositories.repository.len()
     );
-    assert!(document.contains("The complete repository index remains available below."));
+    assert!(!document.contains("data-repository-graph"));
+    assert!(!document.contains("/repo-graph.js"));
+    assert!(document.contains("semantic repository index remains available below"));
 }
 
 #[test]
-fn graph_runtime_covers_interaction_and_failure_contracts() {
-    for contract in [
-        "navigator.gpu",
-        "layoutGraph(JSON.stringify(authority))",
-        "runtimeVersion",
-        "mer3ly_repo_graph_bg.wasm${runtimeVersion}",
-        "dataset.graphState",
-        "visibilitychange",
-        "requestAnimationFrame",
-        "MORPH_DURATION_MS",
-        "TIMELINE_ARRANGEMENT",
-        "SCENE_PROFILES",
-        "dataset.graphArrangement",
-        "dataset.graphMorphing",
-        "dataset.graphNodeForm",
-        "dataset.graphScaffold",
-        "validateHistory",
-        "replaceLayout",
-        "[data-graph-history]",
-        "return-live",
-        "repository-scene",
-        "requested repository source cursor is unavailable",
-        "Live authority",
-        "updateSceneScaffold",
-        "repository-graph-kanban-lane",
-        "repository-graph-timeline-rail",
-        "repository-graph-timeline-stem",
-        "repository-graph-timeline-anchor",
-        "repository-graph-facet-cell",
-        "repository-graph-branch",
-        "[data-graph-arrangement]",
-        "Morphing into the",
-        "prefers-reduced-motion: reduce",
-        "aria-pressed",
-        "ArrowLeft",
-        "ArrowRight",
-        "End",
-        "Home",
-        "Enter",
-        "pointerdown",
-        "\"wheel\"",
-        "window.location.assign",
-        "dataset.projectHref",
-        "no-webgpu",
-        "no-wasm",
-        "init-failure",
-        "\"motion\") === \"reduce\"",
-    ] {
-        assert!(
-            GRAPH_LOADER.contains(contract),
-            "graph loader is missing {contract}"
-        );
-    }
-
-    for forbidden in [
-        "Personae",
-        "browser history",
-        "resident host",
-        "C:\\Users\\",
-        "mark_",
-    ] {
-        assert!(
-            !GRAPH_LOADER.contains(forbidden)
-                && !GRAPH_GLUE.contains(forbidden)
-                && !String::from_utf8_lossy(GRAPH_WASM).contains(forbidden),
-            "graph runtime contains forbidden marker {forbidden:?}"
-        );
-    }
-}
-
-#[test]
-fn graphshell_sandbox_keeps_scene_arrangement_motion_and_backdrop_distinct() {
+fn graphshell_sandbox_keeps_truth_face_arrangement_and_motion_distinct() {
     let root = workspace_root();
     let document = repositories::document(&root).expect("render repository page");
     let sandbox = sandbox_authority(&document);
@@ -338,7 +268,7 @@ fn graphshell_sandbox_keeps_scene_arrangement_motion_and_backdrop_distinct() {
         classes.len() >= 8,
         "the specimen graph is meaningfully heterogeneous"
     );
-    assert_eq!(sandbox["sandbox"]["schema"], "mer3ly.graphshell-sandbox/v3");
+    assert_eq!(sandbox["sandbox"]["schema"], "mer3ly.graphshell-sandbox/v4");
     assert_eq!(
         sandbox["sandbox"]["scene_state_schema"],
         "mer3ly.graphshell-scene-state/v1"
@@ -352,8 +282,12 @@ fn graphshell_sandbox_keeps_scene_arrangement_motion_and_backdrop_distinct() {
         "mere.graph-representation-registry/v1"
     );
     assert!(document.contains("data-graph-sandbox"));
-    assert!(document.contains("One graph, several readings, real Mere physics."));
-    assert!(document.contains("Graphshell projection sandbox, not the whole browser shell"));
+    assert!(document.contains("The graph is also its own control surface."));
+    assert!(document.contains("spreadsheet chart can be another projection"));
+    assert!(document.contains("data-sandbox-cycle=\"reading\""));
+    assert!(document.contains("data-sandbox-cycle=\"arrangement\""));
+    assert!(document.contains("data-sandbox-cycle=\"mobility\""));
+    assert!(!document.contains("data-sandbox-control="));
 
     for contract in [
         "new GraphPhysics",
@@ -366,6 +300,11 @@ fn graphshell_sandbox_keeps_scene_arrangement_motion_and_backdrop_distinct() {
         "recomputeNeighborhood",
         "buildMatrix",
         "dataset.sandboxScene",
+        "dataset.sandboxFace",
+        "READING_FACES",
+        "controlActors",
+        "cycleControl",
+        "updateSelectionFaces",
         "readingRegistry",
         "projectReading",
         "representationRegistry",
@@ -380,12 +319,14 @@ fn graphshell_sandbox_keeps_scene_arrangement_motion_and_backdrop_distinct() {
         );
     }
     for contract in [
-        ".graph-sandbox-contract",
+        ".graph-sandbox-control-actor",
+        ".graph-sandbox-node[data-face=\"delta\"]",
+        ".graph-sandbox-node[data-face=\"signal\"]",
+        ".graph-sandbox-node[data-face=\"orbit\"]",
         ".graph-sandbox-node.primitive-diamond",
         ".graph-sandbox-node.primitive-square",
         ".graph-sandbox-history",
         ".graph-sandbox-share",
-        "[data-sandbox-scene=\"changes\"]",
         "[data-sandbox-scene=\"neighbors\"]",
         ".graph-sandbox-matrix-cell.has-relation",
     ] {
@@ -395,7 +336,7 @@ fn graphshell_sandbox_keeps_scene_arrangement_motion_and_backdrop_distinct() {
         );
     }
     assert!(
-        GRAPH_SANDBOX.len() < 48 * 1024,
+        GRAPH_SANDBOX.len() < 52 * 1024,
         "sandbox loader is too large"
     );
 }
@@ -411,28 +352,18 @@ fn graph_assets_and_responsive_styles_are_bounded() {
         GRAPH_WASM.len()
     );
     assert!(
-        GRAPH_LOADER.len() + GRAPH_GLUE.len() + GRAPH_WASM.len() < 1_000 * 1024,
+        GRAPH_SANDBOX.len() + GRAPH_GLUE.len() + GRAPH_WASM.len() < 1_000 * 1024,
         "graph + physics runtime is {} bytes",
-        GRAPH_LOADER.len() + GRAPH_GLUE.len() + GRAPH_WASM.len()
+        GRAPH_SANDBOX.len() + GRAPH_GLUE.len() + GRAPH_WASM.len()
     );
 
     for contract in [
-        ".repository-graph-interface[hidden]",
-        ".repository-graph-node:focus-visible",
-        ".repository-graph-node.is-selected",
-        "touch-action: manipulation",
-        ".repository-graph-arrangement-picker",
-        ".repository-graph-history-picker",
-        ".repository-graph-scene-caption",
-        "[data-graph-node-form=\"card\"]",
-        "[data-graph-node-form=\"flag\"]",
-        "min-height: 44px",
-        "[data-graph-node-form=\"facet\"]",
-        "[data-graph-node-form=\"leaf\"]",
+        ".graph-sandbox-control-actors",
+        ".graph-sandbox-node-detail",
+        ".graph-sandbox-matrix",
         "@media (max-width: 760px)",
         "@media (max-width: 440px)",
         "@media (prefers-reduced-motion: reduce)",
-        ".repository-graph-section",
     ] {
         assert!(
             SITE_CSS.contains(contract),

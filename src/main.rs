@@ -13,7 +13,6 @@ const MESSAGE_PATH_LAB: &[u8] = include_bytes!("../assets/message-path-lab.js");
 const OG_IMAGE: &[u8] = include_bytes!("../assets/og.jpg");
 const PROJECTION_PROOF: &[u8] = include_bytes!("../assets/projection-proof.js");
 const RADIO_SIMULATOR: &[u8] = include_bytes!("../assets/radio-simulator.js");
-const REPO_GRAPH_LOADER: &[u8] = include_bytes!("../assets/repo-graph.js");
 const REPO_GRAPH_WASM_GLUE: &[u8] = include_bytes!("../assets/mer3ly_repo_graph.js");
 const REPO_GRAPH_WASM: &[u8] = include_bytes!("../assets/mer3ly_repo_graph_bg.wasm");
 
@@ -49,6 +48,10 @@ fn build_site(output: &Path) -> std::io::Result<()> {
     let root = Path::new(env!("CARGO_MANIFEST_DIR"));
     let data = PublicSiteData::load(root).map_err(std::io::Error::other)?;
     fs::create_dir_all(output)?;
+    let obsolete_repository_canvas = output.join("repo-graph.js");
+    if obsolete_repository_canvas.exists() {
+        fs::remove_file(obsolete_repository_canvas)?;
+    }
     fs::create_dir_all(output.join("repos"))?;
     fs::create_dir_all(output.join("projects"))?;
     fs::create_dir_all(output.join("devices"))?;
@@ -90,7 +93,6 @@ fn build_site(output: &Path) -> std::io::Result<()> {
         projects::projection_artifact_json(&data),
     )?;
     fs::write(output.join("radio-simulator.js"), RADIO_SIMULATOR)?;
-    fs::write(output.join("repo-graph.js"), REPO_GRAPH_LOADER)?;
     fs::write(output.join("mer3ly_repo_graph.js"), REPO_GRAPH_WASM_GLUE)?;
     fs::write(output.join("mer3ly_repo_graph_bg.wasm"), REPO_GRAPH_WASM)?;
     fs::write(output.join("og.jpg"), OG_IMAGE)?;

@@ -166,8 +166,9 @@ struct PhysicsProp {
 
 /// Stateful browser adapter over Mere's real Seiche simulation.
 ///
-/// Arrangements supply slots. This adapter decides whether those slots are
-/// frozen positions, anchor springs, or initial conditions for free physics.
+/// Arrangements supply slots. This adapter uses those slots as anchor-spring
+/// targets or as initial conditions for free physics. Frozen output belongs to
+/// a non-interactive renderer, not this interactive simulation.
 #[wasm_bindgen]
 pub struct GraphPhysics {
     simulation: Simulation,
@@ -216,15 +217,13 @@ impl GraphPhysics {
             .copied()
             .ok_or_else(|| JsValue::from_str(&format!("unknown graph node {id}")))?;
         self.manually_pinned.remove(id);
-        if self.mobility != "frozen" {
-            self.simulation.unpin(key);
-        }
+        self.simulation.unpin(key);
         Ok(())
     }
 
     #[wasm_bindgen(js_name = isPinned)]
     pub fn is_pinned(&self, id: &str) -> bool {
-        self.manually_pinned.contains(id) || self.mobility == "frozen"
+        self.manually_pinned.contains(id)
     }
 
     pub fn tick(&mut self, dt: f32) -> Result<String, JsValue> {
@@ -567,7 +566,7 @@ fn humanize_identifier(value: &str) -> String {
 
 impl GraphPhysics {
     fn apply_arrangement(&mut self, positions: &str, mobility: &str) -> Result<(), String> {
-        if !matches!(mobility, "frozen" | "anchored" | "free") {
+        if !matches!(mobility, "anchored" | "free") {
             return Err(format!("unsupported mobility {mobility}"));
         }
         let positions: Vec<GraphNodePosition> = serde_json::from_str(positions)
@@ -609,27 +608,21 @@ impl GraphPhysics {
             ),
             _ => None,
         });
-        if mobility == "frozen" {
-            for (key, point) in &targets {
-                self.simulation.pin(*key, *point);
-            }
-        } else {
-            for id in &self.manually_pinned {
-                let Some(key) = self.key_by_id.get(id).copied() else {
-                    continue;
-                };
-                let point = current
-                    .get(&key)
-                    .copied()
-                    .or_else(|| {
-                        targets
-                            .iter()
-                            .find(|(candidate, _)| *candidate == key)
-                            .map(|(_, p)| *p)
-                    })
-                    .unwrap_or_else(Point2D::origin);
-                self.simulation.pin(key, point);
-            }
+        for id in &self.manually_pinned {
+            let Some(key) = self.key_by_id.get(id).copied() else {
+                continue;
+            };
+            let point = current
+                .get(&key)
+                .copied()
+                .or_else(|| {
+                    targets
+                        .iter()
+                        .find(|(candidate, _)| *candidate == key)
+                        .map(|(_, p)| *p)
+                })
+                .unwrap_or_else(Point2D::origin);
+            self.simulation.pin(key, point);
         }
         self.mobility = mobility.to_owned();
         Ok(())
@@ -1814,6 +1807,12 @@ mod tests {
             .apply_arrangement(&positions, "free")
             .expect("free motion");
         assert_eq!(physics.simulation.anchor_count(), 0);
+        assert_eq!(
+            physics
+                .apply_arrangement(&positions, "frozen")
+                .expect_err("interactive graphs reject frozen motion"),
+            "unsupported mobility frozen"
+        );
     }
 
     #[test]
