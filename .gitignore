@@ -1,4 +1,6 @@
-/target/
+# Unanchored on purpose, unlike the rules below: crates/repo-graph is its own
+# Cargo workspace, so building it directly drops a target/ beside its manifest.
+target/
 /.tmp/
 /.receipts/
 /node_modules/
