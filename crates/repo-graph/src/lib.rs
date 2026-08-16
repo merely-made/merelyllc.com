@@ -12,8 +12,8 @@ use cartography::{
 };
 use euclid::default::Point2D;
 use sceno::{
-    Arrangement as SceneArrangement, Footprint, Placement, Representation, RoutedRelation, Score,
-    ScoreItem, SourceRef, Spiral, Vec2,
+    Arrangement as SceneArrangement, Footprint, HeldPlacement, Hold, Placement, Representation,
+    RoutedRelation, Score, ScoreItem, SourceRef, Spiral, Vec2,
 };
 use scenotime::{RelationId, Revision, SceneDiff, SceneEpoch, SceneOp, SceneSnapshot};
 use seiche::{
@@ -342,6 +342,7 @@ pub fn reading_registry() -> Result<String, JsValue> {
 pub fn project_reading(input: &str) -> Result<String, JsValue> {
     project_reading_json(input).map_err(|error| JsValue::from_str(&error))
 }
+
 
 fn project_reading_json(input: &str) -> Result<String, String> {
     let request: ReadingRequest =
@@ -801,6 +802,58 @@ pub struct ProjectionSelection {
     pub id: String,
 }
 
+/// One visitor-placed node, in the shape the sandbox already shares.
+///
+/// This is the wire's `pins` entry verbatim, so the seam reads the record the
+/// live path already produces rather than inventing a second one.
+#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+pub struct PlacementPin {
+    pub id: String,
+    pub x: f32,
+    pub y: f32,
+}
+
+/// The placement half of a shared scene state: what a visitor did to the
+/// arrangement that the authority does not know.
+///
+/// Deserialized straight from the sandbox's scene state, extra fields ignored,
+/// so a caller may hand over the whole record.
+#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+pub struct PlacementDelta {
+    /// `free`, `anchored`, or `frozen`. Absent means free.
+    #[serde(default)]
+    pub motion: Option<String>,
+    #[serde(default)]
+    pub pins: Vec<PlacementPin>,
+}
+
+impl PlacementDelta {
+    /// Translate the live path's placement into score holds.
+    ///
+    /// A manual pin is hard in the sandbox (it survives every mobility except
+    /// by being removed), so it becomes [`Hold::Pinned`]. Under `anchored` the
+    /// arrangement is a suggestion for everything, so a pin placed in that
+    /// mode is recorded as [`Hold::Anchored`]: best effort by the visitor's own
+    /// choice. `frozen` hard-pins whatever it names.
+    ///
+    /// The class is *recorded* here rather than left to be re-inferred from a
+    /// spring stiffness, which is the whole point of the seam.
+    fn holds(&self) -> Vec<HeldPlacement> {
+        let hold = match self.motion.as_deref() {
+            Some("anchored") => Hold::Anchored,
+            _ => Hold::Pinned,
+        };
+        self.pins
+            .iter()
+            .map(|pin| HeldPlacement {
+                source: SourceRef::new(PROJECTION_ADAPTER, &pin.id),
+                at: Vec2::new(pin.x, pin.y),
+                hold,
+            })
+            .collect()
+    }
+}
+
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ProjectionStep {
     pub label: String,
@@ -819,6 +872,13 @@ pub struct ProjectionReceipt {
     pub active_relations: usize,
     pub picked_source: String,
     pub trace_steps: usize,
+    /// How many authored holds the realized scene actually honored.
+    ///
+    /// Equal to the score's hold count on a sound artifact. Consuming checks
+    /// it rather than trusting it, because a citation that says "pinned here"
+    /// and reconstitutes elsewhere is the exact failure the seam exists to
+    /// close.
+    pub honored_holds: usize,
 }
 
 pub fn portable_projection_json(input: &str) -> Result<String, String> {
@@ -827,7 +887,32 @@ pub fn portable_projection_json(input: &str) -> Result<String, String> {
         .map_err(|error| format!("could not serialize portable projection: {error}"))
 }
 
+/// The seam: a live arrangement's placement reaching a portable score.
+///
+/// `placement` is the sandbox's own scene state (or just its placement half).
+/// The pins it carries become [`Score::holds`], the solver honors them ahead of
+/// the arrangement, and [`consume_portable_projection`] proves afterwards that
+/// each one landed where the visitor put it. Before this, a pinned arrangement
+/// could only travel as site-local JSON that no score could express.
+pub fn portable_projection_with_placement_json(
+    input: &str,
+    placement: &str,
+) -> Result<String, String> {
+    let delta: PlacementDelta = serde_json::from_str(placement)
+        .map_err(|error| format!("invalid placement delta: {error}"))?;
+    let artifact = portable_projection_holding(input, &delta)?;
+    serde_json::to_string(&artifact)
+        .map_err(|error| format!("could not serialize portable projection: {error}"))
+}
+
 pub fn portable_projection(input: &str) -> Result<PortableProjectionArtifact, String> {
+    portable_projection_holding(input, &PlacementDelta::default())
+}
+
+pub fn portable_projection_holding(
+    input: &str,
+    placement: &PlacementDelta,
+) -> Result<PortableProjectionArtifact, String> {
     let input: GraphInput =
         serde_json::from_str(input).map_err(|error| format!("invalid graph JSON: {error}"))?;
     validate(&input)?;
@@ -845,6 +930,14 @@ pub fn portable_projection(input: &str) -> Result<PortableProjectionArtifact, St
 
     let mut score = Score::new(SceneArrangement::Spiral(Spiral::default()));
     score.generation = generation;
+    // A pin naming a node this authority does not contain is a broken citation,
+    // not a placement. Say so rather than solving a scene that quietly omits it.
+    for pin in &placement.pins {
+        if !input.nodes.iter().any(|node| node.id == pin.id) {
+            return Err(format!("placement pins unknown node {}", pin.id));
+        }
+    }
+    score.holds = placement.holds();
     let mut ordered_nodes = input.nodes.iter().enumerate().collect::<Vec<_>>();
     ordered_nodes.sort_by_key(|(index, node)| (node.id != PREFERRED_FOCUS_REPOSITORY, *index));
     for (ordinal, (_, node)) in ordered_nodes.into_iter().enumerate() {
@@ -959,6 +1052,28 @@ pub fn consume_portable_projection(
         return Err("scene and relation metadata counts diverge".to_owned());
     }
 
+    // Holds are checked against the scene as solved, not the scene after the
+    // trace: the trace deliberately moves things, and an authored move later is
+    // not a broken pin. What must hold is that the solver placed each held
+    // source where the citation said.
+    let mut honored_holds = 0usize;
+    for held in &artifact.score.holds {
+        let instance = instance_for_source(&artifact.snapshot, &held.source.id)
+            .ok_or_else(|| format!("held source {} is absent from the scene", held.source.id))?;
+        let item = artifact
+            .snapshot
+            .active_item(instance)
+            .ok_or_else(|| format!("held source {} is tombstoned", held.source.id))?;
+        let at = item.transform.translate;
+        if at.x != held.at.x || at.y != held.at.y {
+            return Err(format!(
+                "hold on {} was not honored: asked ({}, {}), realized ({}, {})",
+                held.source.id, held.at.x, held.at.y, at.x, at.y
+            ));
+        }
+        honored_holds += 1;
+    }
+
     let initial_revision = artifact.snapshot.revision.0;
     let mut snapshot = artifact.snapshot.clone();
     for step in &artifact.default_trace {
@@ -1004,6 +1119,7 @@ pub fn consume_portable_projection(
         active_relations: snapshot.tables.relations.iter().flatten().count(),
         picked_source,
         trace_steps: artifact.default_trace.len(),
+        honored_holds,
     })
 }
 
@@ -1771,6 +1887,83 @@ mod tests {
         assert_eq!(receipt.active_items, 3);
         assert_eq!(receipt.active_relations, 1);
         assert_eq!(receipt.picked_source, "mere");
+        assert_eq!(receipt.honored_holds, 0);
+    }
+
+    /// The sandbox's own shared-scene shape, extra fields and all, so the test
+    /// proves the seam accepts what the live path really emits.
+    const SHARED_SCENE: &str = r#"{
+      "schema": "mer3ly.graphshell-scene-state/v1",
+      "dataset": "public-repos",
+      "source": {"source":"mer3ly/specimen","commit":"authored","committed_at":"static"},
+      "reading": "neighbors",
+      "arrangement": "graph_layout:radial",
+      "motion": "free",
+      "backdrop": {"kind":"ambient","collidable":false},
+      "physics": "settled",
+      "selection": "mere",
+      "pins": [{"id":"genet","x":-120.5,"y":64.25}]
+    }"#;
+
+    #[test]
+    fn a_visitor_pin_reaches_the_score_and_the_solver_honors_it() {
+        let json = portable_projection_with_placement_json(SAMPLE, SHARED_SCENE)
+            .expect("portable projection with placement");
+        let artifact: PortableProjectionArtifact = serde_json::from_str(&json).unwrap();
+
+        assert_eq!(artifact.score.holds.len(), 1, "the pin reached the score");
+        let held = &artifact.score.holds[0];
+        assert_eq!(held.source.id, "genet");
+        assert_eq!(held.hold, Hold::Pinned);
+
+        // Spiral is the arrangement, and Spiral is exactly the family that used
+        // to discard an authored coordinate without saying so.
+        let instance = instance_for_source(&artifact.snapshot, "genet").expect("genet is placed");
+        let at = artifact.snapshot.active_item(instance).unwrap().transform.translate;
+        assert_eq!((at.x, at.y), (-120.5, 64.25));
+
+        let receipt = consume_portable_projection_json(&json).expect("receipt");
+        assert_eq!(receipt.honored_holds, 1);
+    }
+
+    #[test]
+    fn anchored_motion_records_a_softer_hold() {
+        let anchored = SHARED_SCENE.replace(r#""motion": "free""#, r#""motion": "anchored""#);
+        let artifact = portable_projection_holding(
+            SAMPLE,
+            &serde_json::from_str::<PlacementDelta>(&anchored).unwrap(),
+        )
+        .expect("anchored projection");
+        assert_eq!(artifact.score.holds[0].hold, Hold::Anchored);
+    }
+
+    #[test]
+    fn an_unpinned_share_projects_exactly_as_the_plain_path() {
+        let no_pins = SHARED_SCENE.replace(r#""pins": [{"id":"genet","x":-120.5,"y":64.25}]"#, r#""pins": []"#);
+        let held = portable_projection_with_placement_json(SAMPLE, &no_pins).unwrap();
+        let plain = portable_projection_json(SAMPLE).unwrap();
+        assert_eq!(held, plain, "an empty delta must not perturb the receipt");
+    }
+
+    #[test]
+    fn a_pin_naming_an_unknown_node_is_refused() {
+        let ghost = SHARED_SCENE.replace(r#""id":"genet""#, r#""id":"no-such-repo""#);
+        let error = portable_projection_with_placement_json(SAMPLE, &ghost)
+            .expect_err("a pin on a node the authority lacks is a broken citation");
+        assert!(error.contains("no-such-repo"), "{error}");
+    }
+
+    #[test]
+    fn consuming_catches_a_hold_the_scene_did_not_honor() {
+        // Forge the failure the seam exists to make impossible: an artifact
+        // claiming a pin the scene does not actually satisfy.
+        let json = portable_projection_with_placement_json(SAMPLE, SHARED_SCENE).unwrap();
+        let mut artifact: PortableProjectionArtifact = serde_json::from_str(&json).unwrap();
+        artifact.score.holds[0].at = Vec2::new(999.0, 999.0);
+        let forged = serde_json::to_string(&artifact).unwrap();
+        let error = consume_portable_projection_json(&forged)
+            .expect_err("an unhonored hold must not pass consumption");
+        assert!(error.contains("was not honored"), "{error}");
     }
 
     #[test]

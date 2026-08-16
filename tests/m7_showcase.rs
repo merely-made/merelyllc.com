@@ -146,7 +146,10 @@ fn mere_profile_projects_one_authority_into_canvas_and_swatch_views() {
         serde_json::from_str(&mere[start..end]).expect("valid portable projection JSON");
     assert_eq!(artifact["schema"], "mer3ly.portable-projection/v1");
     assert_eq!(artifact["adapter"], "mer3ly.repository-graph/v1");
-    assert_eq!(artifact["score"]["version"], 1);
+    // Score wire version 2 added holds. An adapter that only knew version 1
+    // must reject rather than silently drop an authored placement, so this
+    // assertion moving is the contract change announcing itself.
+    assert_eq!(artifact["score"]["version"], 2);
     assert_eq!(
         artifact["score"]["items"]
             .as_array()

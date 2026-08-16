@@ -170,7 +170,7 @@ name = "Mesocosm"
 summary = "A first-person game of lineages set in an enclosed ecosystem shaped across generations."
 class = "product"
 status = "prototype"
-license = "MIT OR Apache-2.0"
+license = "MPL-2.0"
 homepage = "https://github.com/merely-made/mesocosm"
 public = true
 
@@ -181,7 +181,7 @@ name = "Paredros"
 summary = "A second-person action RPG about companions who remain peers, outlive you, and can take your place."
 class = "product"
 status = "prototype"
-license = "MIT OR Apache-2.0"
+license = "MPL-2.0"
 homepage = "https://github.com/merely-made/paredros"
 public = true
 

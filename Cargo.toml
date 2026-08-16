@@ -5,7 +5,7 @@ edition = "2024"
 rust-version = "1.92"
 publish = false
 description = "Static Mer3ly site builder and public repository authority."
-repository = "https://github.com/merely-made/mer3ly-net"
+repository = "https://github.com/merely-made/merelyllc.com"
 license = "MPL-2.0"
 
 [lib]
