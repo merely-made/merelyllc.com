@@ -35,7 +35,6 @@ const BASE_FILES: &[&str] = &[
     "projection-scene.json",
     "radio.html",
     "radio-simulator.js",
-    "repo-graph.js",
     "repos/index.html",
     "robots.txt",
     "sitemap.xml",
@@ -287,9 +286,6 @@ pub fn validate_public_artifact(
     validate_static_authority(&repository_ids, &relation_ids, authority, &mut errors);
     let repository_count = repository_ids.len();
     let relation_text_projections = relation_ids.len();
-    if !repositories.contains("<script type=\"module\" src=\"/repo-graph.js?v=") {
-        errors.push("repository page is missing the optional graph module".to_owned());
-    }
     if !repositories.contains("<script type=\"module\" src=\"/graph-sandbox.js?v=") {
         errors.push("repository page is missing the Graphshell sandbox module".to_owned());
     }

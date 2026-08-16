@@ -166,8 +166,9 @@ struct PhysicsProp {
 
 /// Stateful browser adapter over Mere's real Seiche simulation.
 ///
-/// Arrangements supply slots. This adapter decides whether those slots are
-/// frozen positions, anchor springs, or initial conditions for free physics.
+/// Arrangements supply slots. This adapter uses those slots as anchor-spring
+/// targets or as initial conditions for free physics. Frozen output belongs to
+/// a non-interactive renderer, not this interactive simulation.
 #[wasm_bindgen]
 pub struct GraphPhysics {
     simulation: Simulation,
@@ -216,15 +217,13 @@ impl GraphPhysics {
             .copied()
             .ok_or_else(|| JsValue::from_str(&format!("unknown graph node {id}")))?;
         self.manually_pinned.remove(id);
-        if self.mobility != "frozen" {
-            self.simulation.unpin(key);
-        }
+        self.simulation.unpin(key);
         Ok(())
     }
 
     #[wasm_bindgen(js_name = isPinned)]
     pub fn is_pinned(&self, id: &str) -> bool {
-        self.manually_pinned.contains(id) || self.mobility == "frozen"
+        self.manually_pinned.contains(id)
     }
 
     pub fn tick(&mut self, dt: f32) -> Result<String, JsValue> {
@@ -568,7 +567,7 @@ fn humanize_identifier(value: &str) -> String {
 
 impl GraphPhysics {
     fn apply_arrangement(&mut self, positions: &str, mobility: &str) -> Result<(), String> {
-        if !matches!(mobility, "frozen" | "anchored" | "free") {
+        if !matches!(mobility, "anchored" | "free") {
             return Err(format!("unsupported mobility {mobility}"));
         }
         let positions: Vec<GraphNodePosition> = serde_json::from_str(positions)
@@ -610,27 +609,21 @@ impl GraphPhysics {
             ),
             _ => None,
         });
-        if mobility == "frozen" {
-            for (key, point) in &targets {
-                self.simulation.pin(*key, *point);
-            }
-        } else {
-            for id in &self.manually_pinned {
-                let Some(key) = self.key_by_id.get(id).copied() else {
-                    continue;
-                };
-                let point = current
-                    .get(&key)
-                    .copied()
-                    .or_else(|| {
-                        targets
-                            .iter()
-                            .find(|(candidate, _)| *candidate == key)
-                            .map(|(_, p)| *p)
-                    })
-                    .unwrap_or_else(Point2D::origin);
-                self.simulation.pin(key, point);
-            }
+        for id in &self.manually_pinned {
+            let Some(key) = self.key_by_id.get(id).copied() else {
+                continue;
+            };
+            let point = current
+                .get(&key)
+                .copied()
+                .or_else(|| {
+                    targets
+                        .iter()
+                        .find(|(candidate, _)| *candidate == key)
+                        .map(|(_, p)| *p)
+                })
+                .unwrap_or_else(Point2D::origin);
+            self.simulation.pin(key, point);
         }
         self.mobility = mobility.to_owned();
         Ok(())
@@ -820,7 +813,8 @@ pub struct PlacementPin {
 /// so a caller may hand over the whole record.
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]
 pub struct PlacementDelta {
-    /// `free`, `anchored`, or `frozen`. Absent means free.
+    /// `anchored` or `free`, the live path's two motion classes. Absent means
+    /// free, so an unlabelled share still records its pins as ensure-class.
     #[serde(default)]
     pub motion: Option<String>,
     #[serde(default)]
@@ -830,11 +824,16 @@ pub struct PlacementDelta {
 impl PlacementDelta {
     /// Translate the live path's placement into score holds.
     ///
-    /// A manual pin is hard in the sandbox (it survives every mobility except
-    /// by being removed), so it becomes [`Hold::Pinned`]. Under `anchored` the
-    /// arrangement is a suggestion for everything, so a pin placed in that
-    /// mode is recorded as [`Hold::Anchored`]: best effort by the visitor's own
-    /// choice. `frozen` hard-pins whatever it names.
+    /// A manual pin is hard in the sandbox: it survives until it is removed,
+    /// so it becomes [`Hold::Pinned`]. Under `anchored` the arrangement is a
+    /// suggestion for everything, so a pin placed in that mode is recorded as
+    /// [`Hold::Anchored`]: best effort by the visitor's own choice.
+    ///
+    /// The live path carries two motion classes, `anchored` and `free`; the
+    /// former `frozen` class became a non-interactive renderer's concern
+    /// rather than this simulation's. Score holds keep both classes anyway,
+    /// because a frozen realization still needs to say which placements were
+    /// ensure-class when it records one.
     ///
     /// The class is *recorded* here rather than left to be re-inferred from a
     /// spring stiffness, which is the whole point of the seam.
@@ -2007,6 +2006,12 @@ mod tests {
             .apply_arrangement(&positions, "free")
             .expect("free motion");
         assert_eq!(physics.simulation.anchor_count(), 0);
+        assert_eq!(
+            physics
+                .apply_arrangement(&positions, "frozen")
+                .expect_err("interactive graphs reject frozen motion"),
+            "unsupported mobility frozen"
+        );
     }
 
     #[test]

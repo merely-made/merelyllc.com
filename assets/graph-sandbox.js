@@ -2,6 +2,21 @@ const runtimeVersion = new URL(import.meta.url).search;
 const SCENE_STATE_SCHEMA = "mer3ly.graphshell-scene-state/v1";
 const REGISTRY_SCHEMA = "mere.graph-representation-registry/v1";
 const READING_REGISTRY_SCHEMA = "mere.graph-reading-registry/v1";
+const READING_FACES = new Map([
+  ["graph", "identity"],
+  ["changes", "delta"],
+  ["activity", "signal"],
+  ["neighbors", "orbit"],
+  ["matrix", "table"],
+]);
+const ENVIRONMENT_MODES = [
+  { id: "clear", label: "Clear", backdrop: "clear", collidable: false },
+  { id: "ambient", label: "Ambient", backdrop: "ambient", collidable: false },
+  { id: "props", label: "Props", backdrop: "props", collidable: false },
+  { id: "props-tangible", label: "Props · tangible", backdrop: "props", collidable: true },
+  { id: "field", label: "Field", backdrop: "field", collidable: false },
+  { id: "field-tangible", label: "Field · tangible", backdrop: "field", collidable: true },
+];
 const {
   default: initWasm,
   layout_graph: layoutGraph,
@@ -17,7 +32,7 @@ if (root) {
     const fallback = root.querySelector("[data-sandbox-fallback]");
     if (fallback) {
       fallback.textContent =
-        "The graph sandbox could not initialize. The repository map and semantic index remain available.";
+        "The graph sandbox could not initialize. The semantic repository index remains available.";
     }
     root.dataset.sandboxState = "unavailable";
     console.warn("Mer3ly graph sandbox unavailable:", error);
@@ -25,6 +40,9 @@ if (root) {
 }
 
 async function startSandbox(sandboxRoot) {
+  if (new URLSearchParams(window.location.search).get("graph-sandbox") === "no-wasm") {
+    throw new Error("forced Graphshell fallback");
+  }
   const specimenElement = document.querySelector("#graph-sandbox-data");
   const repositoryElement = document.querySelector("#repository-graph-data");
   if (!specimenElement || !repositoryElement) {
@@ -183,14 +201,12 @@ class GraphSandbox {
     this.nodeLayer = sandboxRoot.querySelector("[data-sandbox-nodes]");
     this.matrix = sandboxRoot.querySelector("[data-sandbox-matrix]");
     this.caption = sandboxRoot.querySelector("[data-sandbox-caption]");
-    this.controls = new Map(
-      [...sandboxRoot.querySelectorAll("[data-sandbox-control]")].map((control) => [
-        control.dataset.sandboxControl,
+    this.controlActors = new Map(
+      [...sandboxRoot.querySelectorAll("[data-sandbox-cycle]")].map((control) => [
+        control.dataset.sandboxCycle,
         control,
       ]),
     );
-    this.tangibleControl = sandboxRoot.querySelector("[data-sandbox-tangible]");
-    this.pinControl = sandboxRoot.querySelector("[data-sandbox-pin]");
     this.historyGroup = sandboxRoot.querySelector("[data-sandbox-history-control]");
     this.historyControl = sandboxRoot.querySelector("[data-sandbox-history]");
     this.historyStatus = sandboxRoot.querySelector("[data-sandbox-history-status]");
@@ -203,7 +219,6 @@ class GraphSandbox {
       readingRegistry.profiles[0].default_arrangement ?? "graph_layout:stack";
     this.mobility = "anchored";
     this.backdrop = "ambient";
-    this.physicsMode = "live";
     this.collidable = false;
     this.selectedId = null;
     this.pinsByDataset = new Map();
@@ -211,15 +226,13 @@ class GraphSandbox {
     this.frameById = new Map();
     this.nodeButtons = new Map();
     this.lastTime = performance.now();
-    this.settleFrames = 0;
     this.animationFrame = null;
     this.drag = null;
     this.scale = 1;
   }
 
   start() {
-    this.installReadingOptions();
-    this.installControls();
+    this.installControlActors();
     this.applySharedState(this.sharedState);
     this.setLatestHistoryUnlessShared();
     this.loadAuthority();
@@ -273,15 +286,14 @@ class GraphSandbox {
     if (typeof state.arrangement === "string") {
       this.currentArrangement = state.arrangement;
     }
-    if (["frozen", "anchored", "free"].includes(state.motion)) {
+    if (["anchored", "free"].includes(state.motion)) {
       this.mobility = state.motion;
+    } else if (state.motion === "frozen") {
+      this.mobility = "anchored";
     }
     if (["clear", "ambient", "props", "field"].includes(state.backdrop?.kind)) {
       this.backdrop = state.backdrop.kind;
       this.collidable = Boolean(state.backdrop.collidable);
-    }
-    if (["paused", "settle", "live"].includes(state.physics)) {
-      this.physicsMode = state.physics;
     }
     if (typeof state.selection === "string") this.selectedId = state.selection;
 
@@ -348,7 +360,6 @@ class GraphSandbox {
 
     this.physics = new GraphPhysics(JSON.stringify(this.authority));
     this.physics.setBackdrop(this.backdrop, this.collidable);
-    this.installArrangementOptions();
     this.installNodes();
     this.buildMatrix();
     this.applyArrangement();
@@ -356,7 +367,7 @@ class GraphSandbox {
       this.selectedId = this.authority.focus ?? this.authority.nodes[0].id;
     }
     this.select(this.selectedId, false);
-    this.syncControls();
+    this.syncControlActors();
     this.applySceneVisibility();
     this.updateHistoryControl();
     this.updateCaption();
@@ -364,52 +375,76 @@ class GraphSandbox {
     this.root.dataset.sandboxSource = this.sourceLabel();
   }
 
-  installArrangementOptions() {
-    const picker = this.controls.get("arrangement");
-    picker.replaceChildren();
-    for (const arrangement of this.layout.arrangements) {
-      const option = document.createElement("option");
-      option.value = arrangement.id;
-      option.textContent =
-        arrangement.id === "graph_layout:radial" ? "Neighborhood" : arrangement.name;
-      option.title = arrangement.description;
-      picker.append(option);
+  installControlActors() {
+    for (const [name, control] of this.controlActors) {
+      control.addEventListener("click", (event) => {
+        this.cycleControl(name, event.shiftKey ? -1 : 1);
+      });
+      control.addEventListener("keydown", (event) => {
+        const delta = ["ArrowLeft", "ArrowUp"].includes(event.key)
+          ? -1
+          : ["ArrowRight", "ArrowDown"].includes(event.key)
+            ? 1
+            : 0;
+        if (delta !== 0) {
+          event.preventDefault();
+          this.cycleControl(name, delta);
+        }
+      });
     }
-    picker.value = this.currentArrangement;
-  }
-
-  installReadingOptions() {
-    const picker = this.controls.get("scene");
-    picker.replaceChildren();
-    for (const reading of this.readingRegistry.profiles) {
-      const option = document.createElement("option");
-      option.value = reading.id;
-      option.textContent = reading.label;
-      option.title = reading.description;
-      picker.append(option);
-    }
-    picker.value = this.scene;
-  }
-
-  installControls() {
-    for (const [name, control] of this.controls) {
-      control.addEventListener("change", () => this.changeControl(name, control.value));
-    }
-    this.tangibleControl.addEventListener("change", () => {
-      this.collidable = this.tangibleControl.checked;
-      this.physics.setBackdrop(this.backdrop, this.collidable);
-      this.physicsMode = "live";
-      this.controls.get("physics").value = "live";
-      this.updateCaption();
-      this.schedule();
-    });
-    this.pinControl.addEventListener("click", () => this.togglePin(this.selectedId));
     this.historyControl.addEventListener("input", () => {
       this.historyIndex = Number(this.historyControl.value);
       this.loadAuthority();
       this.schedule();
     });
     this.shareControl.addEventListener("click", () => this.copySceneLink());
+  }
+
+  controlOptions(name) {
+    if (name === "dataset") {
+      return [...this.datasets].map(([id, dataset]) => ({ id, label: dataset.label }));
+    }
+    if (name === "reading") {
+      return this.readingRegistry.profiles.map(({ id, label }) => ({ id, label }));
+    }
+    if (name === "arrangement") {
+      return [...(this.arrangements ?? new Map()).values()].map(({ id, name: label }) => ({
+        id,
+        label: id === "graph_layout:radial" ? "Neighborhood" : label,
+      }));
+    }
+    if (name === "mobility") {
+      return [
+        { id: "anchored", label: "Anchored" },
+        { id: "free", label: "Free" },
+      ];
+    }
+    if (name === "environment") return ENVIRONMENT_MODES;
+    return [];
+  }
+
+  controlValue(name) {
+    if (name === "dataset") return this.datasetId;
+    if (name === "reading") return this.scene;
+    if (name === "arrangement") return this.currentArrangement;
+    if (name === "mobility") return this.mobility;
+    if (name === "environment") {
+      return (
+        ENVIRONMENT_MODES.find(
+          ({ backdrop, collidable }) =>
+            backdrop === this.backdrop && collidable === this.collidable,
+        )?.id ?? "ambient"
+      );
+    }
+    return "";
+  }
+
+  cycleControl(name, delta) {
+    const options = this.controlOptions(name);
+    if (!options.length) return;
+    const current = options.findIndex(({ id }) => id === this.controlValue(name));
+    const next = (Math.max(0, current) + delta + options.length) % options.length;
+    this.changeControl(name, options[next].id);
   }
 
   changeControl(name, value) {
@@ -422,7 +457,7 @@ class GraphSandbox {
       this.schedule();
       return;
     }
-    if (name === "scene") {
+    if (name === "reading") {
       this.scene = value;
       const reading = this.readingProfile();
       if (reading.default_arrangement) {
@@ -436,6 +471,7 @@ class GraphSandbox {
       this.currentArrangement = value;
       this.applyArrangement();
       this.updateCaption();
+      this.syncControlActors();
       this.schedule();
       return;
     }
@@ -443,48 +479,42 @@ class GraphSandbox {
       this.mobility = value;
       this.stage.dataset.sandboxMobility = value;
       this.applyArrangement();
-      this.updateInspector();
+      this.updateSelectionFaces();
       this.updateCaption();
+      this.syncControlActors();
       this.schedule();
       return;
     }
-    if (name === "backdrop") {
-      this.backdrop = value;
-      this.stage.dataset.sandboxBackdrop = value;
-      const supportsCollision = value === "props" || value === "field";
-      this.tangibleControl.disabled = !supportsCollision;
-      if (!supportsCollision) {
-        this.collidable = false;
-        this.tangibleControl.checked = false;
-      }
-      this.physics.setBackdrop(value, this.collidable);
+    if (name === "environment") {
+      const environment = ENVIRONMENT_MODES.find(({ id }) => id === value);
+      if (!environment) return;
+      this.backdrop = environment.backdrop;
+      this.collidable = environment.collidable;
+      this.stage.dataset.sandboxBackdrop = this.backdrop;
+      this.physics.setBackdrop(this.backdrop, this.collidable);
       this.updateCaption();
-      this.schedule();
-      return;
-    }
-    if (name === "physics") {
-      this.physicsMode = value;
-      this.settleFrames = 0;
-      this.updateCaption();
+      this.syncControlActors();
       this.schedule();
     }
   }
 
-  syncControls() {
-    for (const [name, value] of [
-      ["dataset", this.datasetId],
-      ["scene", this.scene],
-      ["arrangement", this.currentArrangement],
-      ["mobility", this.mobility],
-      ["backdrop", this.backdrop],
-      ["physics", this.physicsMode],
-    ]) {
-      if (this.controls.has(name)) this.controls.get(name).value = value;
+  syncControlActors() {
+    for (const [name, control] of this.controlActors) {
+      const options = this.controlOptions(name);
+      const value = this.controlValue(name);
+      const label = options.find(({ id }) => id === value)?.label ?? value;
+      control.dataset.sandboxControlValue = value;
+      control.querySelector("[data-sandbox-cycle-value]").textContent = label;
+      const kind = control.querySelector(".graph-sandbox-control-kind").textContent;
+      control.setAttribute(
+        "aria-label",
+        `${kind}: ${label}. Activate for the next value; use arrow keys for either direction.`,
+      );
     }
     this.stage.dataset.sandboxScene = this.scene;
+    this.stage.dataset.sandboxFace = READING_FACES.get(this.scene) ?? "identity";
     this.stage.dataset.sandboxMobility = this.mobility;
     this.stage.dataset.sandboxBackdrop = this.backdrop;
-    this.tangibleControl.checked = this.collidable;
   }
 
   applySceneVisibility() {
@@ -493,12 +523,9 @@ class GraphSandbox {
     this.canvas.hidden = matrix;
     this.nodeLayer.hidden = matrix;
     this.matrix.hidden = !matrix;
-    this.controls.get("arrangement").disabled = matrix || reading.arrangement_locked;
-    this.controls.get("mobility").disabled = matrix;
-    this.controls.get("backdrop").disabled = matrix;
-    this.controls.get("physics").disabled = matrix;
-    this.tangibleControl.disabled =
-      matrix || !(this.backdrop === "props" || this.backdrop === "field");
+    this.controlActors.get("arrangement").disabled = matrix || reading.arrangement_locked;
+    this.controlActors.get("mobility").disabled = matrix;
+    this.controlActors.get("environment").disabled = matrix;
     this.updateNodeScenes();
     this.updateMatrixSelection();
   }
@@ -561,18 +588,9 @@ class GraphSandbox {
       button.dataset.sandboxNode = node.id;
       button.dataset.change = node.change;
       button.dataset.primitive = profile.primitive.id;
+      button.dataset.face = READING_FACES.get(this.scene) ?? "identity";
       button.setAttribute("aria-label", `${node.name}, ${node.class}, ${node.status}`);
-      const mark = document.createElement("span");
-      mark.className = "graph-sandbox-node-mark";
-      mark.setAttribute("aria-hidden", "true");
-      mark.textContent = shortName(node.name);
-      const label = document.createElement("span");
-      label.className = "graph-sandbox-node-label";
-      label.textContent = node.name;
-      const badge = document.createElement("span");
-      badge.className = "graph-sandbox-node-change";
-      badge.textContent = node.change;
-      button.append(mark, label, badge);
+      button.append(...this.nodeFace(node, profile));
       button.addEventListener("click", () => {
         if (!button.dataset.dragged) this.select(node.id);
         delete button.dataset.dragged;
@@ -589,6 +607,39 @@ class GraphSandbox {
     this.updateNodeScenes();
   }
 
+  nodeFace(node, profile) {
+    const face = READING_FACES.get(this.scene) ?? "identity";
+    const mark = document.createElement("span");
+    mark.className = "graph-sandbox-node-mark";
+    mark.setAttribute("aria-hidden", "true");
+    if (face === "delta") {
+      mark.textContent = { added: "+", updated: "~", removed: "−", stable: "·" }[
+        node.change
+      ];
+    } else if (face === "signal") {
+      mark.textContent = compactDate(node.pushed_at);
+    } else {
+      mark.textContent = shortName(node.name);
+    }
+
+    const label = document.createElement("span");
+    label.className = "graph-sandbox-node-label";
+    label.textContent = node.name;
+
+    const meta = document.createElement("span");
+    meta.className = "graph-sandbox-node-meta";
+    if (face === "delta") meta.textContent = node.change;
+    else if (face === "signal") meta.textContent = node.status;
+    else if (face === "orbit") {
+      meta.textContent = node.id === this.authority.focus ? "focus" : "one relation";
+    } else meta.textContent = node.class;
+
+    const detail = document.createElement("span");
+    detail.className = "graph-sandbox-node-detail";
+    detail.textContent = `${node.summary} ${profile.primitive.label}; ${behaviorText(profile)}. ${this.mobility} motion. Press P or double-click to pin.`;
+    return [mark, label, meta, detail];
+  }
+
   updateNodeScenes() {
     const emphasis = this.readingProfile().emphasis;
     for (const node of this.authority.nodes) {
@@ -603,6 +654,7 @@ class GraphSandbox {
         emphasis === "focus_distance" && node.id === this.authority.focus,
       );
     }
+    this.updateSelectionFaces();
   }
 
   startDrag(event, id, button) {
@@ -623,16 +675,23 @@ class GraphSandbox {
       startX: event.clientX,
       startY: event.clientY,
       moved: false,
+      persistent: this.currentPins().has(id),
     };
     const move = (moveEvent) => this.dragNode(moveEvent);
     const finish = (finishEvent) => {
       if (!this.drag || finishEvent.pointerId !== this.drag.pointerId) return;
-      if (this.drag.moved) this.drag.button.dataset.dragged = "true";
-      this.drag.button.removeEventListener("pointermove", move);
-      this.drag.button.removeEventListener("pointerup", finish);
-      this.drag.button.removeEventListener("pointercancel", finish);
+      const finished = this.drag;
+      if (finished.moved) finished.button.dataset.dragged = "true";
+      finished.button.removeEventListener("pointermove", move);
+      finished.button.removeEventListener("pointerup", finish);
+      finished.button.removeEventListener("pointercancel", finish);
+      if (finished.moved && !finished.persistent) {
+        this.physics.unpinNode(finished.id);
+        this.frame = JSON.parse(this.physics.frame());
+        this.indexFrame();
+      }
       this.drag = null;
-      this.updateInspector();
+      this.updateSelectionFaces();
       this.schedule();
     };
     button.addEventListener("pointermove", move);
@@ -647,7 +706,7 @@ class GraphSandbox {
     }
     if (!this.drag.moved) return;
     const point = this.worldFromPointer(event);
-    this.currentPins().set(this.drag.id, point);
+    if (this.drag.persistent) this.currentPins().set(this.drag.id, point);
     this.physics.pinNode(this.drag.id, point.x, point.y);
     this.frame = JSON.parse(this.physics.frame());
     this.indexFrame();
@@ -695,7 +754,7 @@ class GraphSandbox {
     if (this.currentArrangement === "graph_layout:radial") {
       this.recomputeNeighborhood(id);
     }
-    this.updateInspector();
+    this.updateSelectionFaces();
     this.updateMatrixSelection();
     if (speak) {
       announce(this.root, `${node.name} selected. ${node.summary}`);
@@ -704,7 +763,7 @@ class GraphSandbox {
   }
 
   togglePin(id) {
-    if (!id || this.mobility === "frozen") return;
+    if (!id) return;
     const point = this.frameById.get(id);
     if (!point) return;
     if (this.currentPins().has(id)) {
@@ -717,7 +776,7 @@ class GraphSandbox {
     }
     this.frame = JSON.parse(this.physics.frame());
     this.indexFrame();
-    this.updateInspector();
+    this.updateSelectionFaces();
     this.schedule();
   }
 
@@ -732,23 +791,19 @@ class GraphSandbox {
     );
   }
 
-  updateInspector() {
-    const node = this.node(this.selectedId);
-    if (!node) return;
-    const profile = this.profileFor(node.class);
-    this.root.querySelector("[data-sandbox-inspector-title]").textContent = node.name;
-    this.root.querySelector("[data-sandbox-inspector-summary]").textContent = node.summary;
-    this.root.querySelector("[data-sandbox-primitive]").textContent = profile.primitive.label;
-    this.root.querySelector("[data-sandbox-script]").textContent = behaviorText(profile);
-    const pinned = this.currentPins().has(node.id);
-    this.root.querySelector("[data-sandbox-node-motion]").textContent = pinned
-      ? this.mobility === "frozen"
-        ? "frozen by scene"
-        : "pinned by user"
-      : this.mobility;
-    this.pinControl.disabled = this.mobility === "frozen";
-    this.pinControl.textContent =
-      this.mobility === "frozen" ? "scene is frozen" : pinned ? "unpin selected" : "pin selected";
+  updateSelectionFaces() {
+    for (const node of this.authority.nodes) {
+      const button = this.nodeButtons.get(node.id);
+      if (!button) continue;
+      const pinned = this.currentPins().has(node.id);
+      button.classList.toggle("is-pinned", pinned);
+      const profile = this.profileFor(node.class);
+      const detail = button.querySelector(".graph-sandbox-node-detail");
+      if (detail) {
+        const motion = pinned ? "pinned" : this.mobility;
+        detail.textContent = `${node.summary} ${profile.primitive.label}; ${behaviorText(profile)}. ${motion} motion. Press P or double-click to pin.`;
+      }
+    }
   }
 
   updateCaption() {
@@ -763,7 +818,8 @@ class GraphSandbox {
         ? "Neighborhood"
         : arrangement?.name ?? "none";
     const collision = this.collidable ? "collidable" : "intangible";
-    this.caption.textContent = `${this.datasetLabel()} · ${this.sourceLabel()}. ${sceneText}. ${arrangementName} slots; ${this.mobility} motion; ${this.backdrop} backdrop (${collision}); physics ${this.physicsMode}.`;
+    const face = READING_FACES.get(this.scene) ?? "identity";
+    this.caption.textContent = `${this.datasetLabel()} · ${this.sourceLabel()}. ${sceneText}. ${face} face; ${arrangementName} arrangement; ${this.mobility}; ${this.backdrop} field (${collision}).`;
   }
 
   buildMatrix() {
@@ -835,7 +891,6 @@ class GraphSandbox {
       arrangement: this.currentArrangement,
       motion: this.mobility,
       backdrop: { kind: this.backdrop, collidable: this.collidable },
-      physics: this.physicsMode,
       selection: this.selectedId,
       pins: [...this.currentPins()].map(([id, point]) => ({ id, ...point })),
     };
@@ -899,23 +954,14 @@ class GraphSandbox {
     this.animationFrame = null;
     const dt = Math.min(Math.max((time - this.lastTime) / 1000, 1 / 120), 1 / 24);
     this.lastTime = time;
-    if (!this.isMatrix() && this.physicsMode !== "paused") {
-      const steps = this.physicsMode === "settle" ? 3 : 1;
-      for (let step = 0; step < steps; step += 1) {
-        this.frame = JSON.parse(this.physics.tick(dt / steps));
-      }
+    if (!this.isMatrix()) {
+      this.frame = JSON.parse(this.physics.tick(dt));
       this.indexFrame();
-      if (this.physicsMode === "settle") {
-        this.settleFrames += 1;
-        if (this.frame.at_rest && this.settleFrames > 18) {
-          this.physicsMode = "paused";
-          this.controls.get("physics").value = "paused";
-          this.updateCaption();
-        }
-      }
     }
     this.render();
-    if (!this.isMatrix() && this.physicsMode !== "paused") this.schedule();
+    if (!this.isMatrix() && (!this.frame.at_rest || this.backdrop === "field")) {
+      this.schedule();
+    }
   }
 
   render() {
@@ -1087,6 +1133,14 @@ function shortName(value) {
       .toUpperCase();
   }
   return value.slice(0, 2).toUpperCase();
+}
+
+function compactDate(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "--/--";
+  return `${String(date.getUTCMonth() + 1).padStart(2, "0")}/${String(
+    date.getUTCDate(),
+  ).padStart(2, "0")}`;
 }
 
 function safeToken(value) {
