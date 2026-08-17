@@ -342,6 +342,25 @@ pub fn project_reading(input: &str) -> Result<String, JsValue> {
     project_reading_json(input).map_err(|error| JsValue::from_str(&error))
 }
 
+/// Turn a shared scene state into a portable projection that keeps its pins.
+///
+/// The sandbox hands over the graph authority and its own scene state; what
+/// comes back is a Scenograph artifact whose score holds the visitor's
+/// placement. Distinct from sharing a scene: a share is a citation, small
+/// enough for a URL fragment, and this is the realized thing it cites.
+///
+/// This export is why the module's size ceiling is what it is. Reaching it
+/// pulls the whole portable path into the browser, score and scene serde plus
+/// `scenomise::solve`, which the live path alone never needed.
+#[wasm_bindgen]
+pub fn portable_projection_with_placement(
+    graph: &str,
+    placement: &str,
+) -> Result<String, JsValue> {
+    portable_projection_with_placement_json(graph, placement)
+        .map_err(|error| JsValue::from_str(&error))
+}
+
 
 fn project_reading_json(input: &str) -> Result<String, String> {
     let request: ReadingRequest =

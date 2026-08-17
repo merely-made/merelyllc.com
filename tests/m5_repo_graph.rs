@@ -344,16 +344,28 @@ fn graphshell_sandbox_keeps_truth_face_arrangement_and_motion_distinct() {
 #[test]
 fn graph_assets_and_responsive_styles_are_bounded() {
     assert_eq!(&GRAPH_WASM[..4], b"\0asm");
-    // The module now includes Seiche and Rapier rather than a positional-layout-only
-    // adapter. Keep a deliberate raw ceiling while accepting the real physics world.
+    // The module carries Seiche and Rapier rather than a positional-layout-only
+    // adapter, and since 2026-08-16 the portable projection path as well:
+    // exporting portable_projection_with_placement makes score and scene serde
+    // plus scenomise::solve reachable from the browser, which the live path
+    // alone never needed.
+    //
+    // That export was measured before it was accepted, because the ceiling is
+    // deliberate and not a formality. Against a 858,444-byte baseline without
+    // it: 932,204 bytes stripped of both the demo trace and the self-consume
+    // check, and 958,016 with them kept. No variant fit under the old 900 KiB
+    // bound, so the choice was to pay for the useful version or drop the
+    // feature. The ceilings below are the paid price, with roughly 65 KiB of
+    // headroom; they are still a bound, and a change that needs them raised
+    // again deserves the same measurement.
     assert!(
-        GRAPH_WASM.len() < 900 * 1024,
-        "graph + physics Wasm is {} bytes",
+        GRAPH_WASM.len() < 1_000 * 1024,
+        "graph + physics + portable projection Wasm is {} bytes",
         GRAPH_WASM.len()
     );
     assert!(
-        GRAPH_SANDBOX.len() + GRAPH_GLUE.len() + GRAPH_WASM.len() < 1_000 * 1024,
-        "graph + physics runtime is {} bytes",
+        GRAPH_SANDBOX.len() + GRAPH_GLUE.len() + GRAPH_WASM.len() < 1_100 * 1024,
+        "graph + physics + portable projection runtime is {} bytes",
         GRAPH_SANDBOX.len() + GRAPH_GLUE.len() + GRAPH_WASM.len()
     );
 

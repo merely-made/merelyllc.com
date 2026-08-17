@@ -23,6 +23,7 @@ const {
   project_reading: projectReading,
   reading_registry: readingRegistry,
   representation_registry: representationRegistry,
+  portable_projection_with_placement: portableProjectionWithPlacement,
   GraphPhysics,
 } = await import(`./mer3ly_repo_graph.js${runtimeVersion}`);
 
@@ -212,6 +213,8 @@ class GraphSandbox {
     this.historyStatus = sandboxRoot.querySelector("[data-sandbox-history-status]");
     this.shareControl = sandboxRoot.querySelector("[data-sandbox-share]");
     this.shareStatus = sandboxRoot.querySelector("[data-sandbox-share-status]");
+    this.exportControl = sandboxRoot.querySelector("[data-sandbox-export]");
+    this.exportStatus = sandboxRoot.querySelector("[data-sandbox-export-status]");
     this.datasetId = "live";
     this.historyIndex = 0;
     this.scene = readingRegistry.profiles[0].id;
@@ -398,6 +401,7 @@ class GraphSandbox {
       this.schedule();
     });
     this.shareControl.addEventListener("click", () => this.copySceneLink());
+    this.exportControl.addEventListener("click", () => this.copyPortableProjection());
   }
 
   controlOptions(name) {
@@ -912,6 +916,38 @@ class GraphSandbox {
       ? "portable scene copied"
       : "portable scene written to this URL";
     announce(this.root, this.shareStatus.textContent);
+  }
+
+  // Sharing hands over a citation; this hands over the thing it cites.
+  //
+  // The score carries the visitor's pins as holds, the solver honors them ahead
+  // of the arrangement, and the artifact only comes back if it consumed
+  // cleanly, so a reported pin count is a checked one rather than a claim.
+  async copyPortableProjection() {
+    let artifact;
+    try {
+      artifact = portableProjectionWithPlacement(
+        JSON.stringify(this.authority),
+        JSON.stringify(this.sceneState()),
+      );
+    } catch (error) {
+      this.exportStatus.textContent = `projection refused: ${error}`;
+      announce(this.root, this.exportStatus.textContent);
+      return;
+    }
+    const held = JSON.parse(artifact).score.holds?.length ?? 0;
+    let copied = false;
+    try {
+      await navigator.clipboard.writeText(artifact);
+      copied = true;
+    } catch {
+      copied = false;
+    }
+    const pins = held === 1 ? "1 pin" : `${held} pins`;
+    this.exportStatus.textContent = copied
+      ? `portable projection copied, ${pins} honored`
+      : `portable projection built, ${pins} honored, clipboard refused`;
+    announce(this.root, this.exportStatus.textContent);
   }
 
   resize() {

@@ -279,6 +279,24 @@ fn sandbox_scene_tools() -> SiteView {
                 ],
                 vec![txt("state stays in the link")],
             ),
+            element(
+                "button",
+                &[
+                    ("type", "button"),
+                    ("class", "graph-sandbox-share"),
+                    ("data-sandbox-export", ""),
+                ],
+                vec![txt("export projection")],
+            ),
+            element(
+                "span",
+                &[
+                    ("class", "graph-sandbox-share-status"),
+                    ("data-sandbox-export-status", ""),
+                    ("aria-live", "polite"),
+                ],
+                vec![txt("the realized scene, not the link")],
+            ),
         ],
     )
 }
