@@ -60,25 +60,59 @@ Cambium already survives the browser. It is in `graphshell-web`'s
 |---|---|---|
 | Input | `winit::keyboard` | DOM events |
 | Surface | `genet_winit_host::SurfaceHost` | `genet_render_host::{RenderCore, WindowSurface}` |
-| Accessibility | `cambium-winit-a11y`, an AccessKit tree attached to a window handle | the rendered DOM itself |
+| Accessibility | `cambium-winit-a11y`, an AccessKit tree attached to a window handle | a DOM and ARIA tree, not yet built |
 
-The third is not a port. AccessKit builds a parallel tree the platform queries;
-a browser's accessibility is the document already on screen. The host's use of
-it is small, `A11yHost::new`, one `sync` returning requests, and a drain, and
-the crux is `sync`'s `window` parameter: a browser has no handle to attach to.
-The neutral signature drops it and each event source holds its own.
+The third is not a port, and this plan's first draft was wrong about why. It
+said a browser's accessibility is the document already on screen, so the DOM
+discharges the duty AccessKit discharges on the desktop. That holds for an
+ordinary web page. It does not hold here: Cambium presents through netrender
+onto a `<canvas>`, and a canvas has no accessible structure. To a screen reader
+it is one opaque graphic, whatever is painted on it.
+
+So the browser needs exactly what the desktop needs, a parallel tree projected
+from the layout and kept in step with it. Only the material differs, DOM
+elements with ARIA rather than AccessKit nodes. That is a real projection to
+build, comparable in size to `cambium-winit-a11y`'s, and it is the largest
+piece of work this plan has that is not yet done.
+
+The seam itself is small and is settled: `A11yHost::new`, one `sync` returning
+requests, and a drain. The crux was `sync`'s `window` parameter, since a
+browser has no handle to attach to; the neutral signature drops it and each
+event source holds its own. The host's own accessibility machinery is neutral
+and already runs in a browser, focus tracking and the routing that turns a
+reader's Click or Focus into the same paths a pointer takes. What is missing is
+only the projection that would let a reader perceive the tree at all.
+
+`cambium-genet-web-host` therefore ships a documented gap rather than a
+plausible stub: a role and label on the canvas, and no projected tree. A
+partial projection would sound like a working interface while being
+confidently wrong, and would stop the gap being visible to whoever decides
+what to fix next.
 
 ### Landed so far
 
-`cambium-genet-host` exists and carries the input vocabulary, key lowering
-including the assistive-input path, caret movement, and spatial-navigation
-scoring. `cambium-genet-winit-host` converts winit input at one boundary and
-routes neutral presses; `HostState` holds neutral modifiers. Woodshed's
-application code no longer imports `winit::keyboard`. 52 tests green across the
-two crates, with woodshed building and passing against the changed API.
+The split is done and the browser source exists.
 
-Open: the accessibility request vocabulary, then `Host` itself, then the DOM
-event source.
+`cambium-rootstock` holds the host: lifecycle, state, hooks, the
+application-facing context, retained layout, input routing, focus and spatial
+navigation, frame pacing, and the accessibility contract. It compiles for
+`wasm32-unknown-unknown`, which is the first evidence for this plan rather than
+an argument for it.
+
+`cambium-genet-winit-host` is now one event source over it, holding the event
+loop, the winit conversions, the client-side window frame, and the headless
+harness. `cambium-genet-web-host` is the second: a canvas surface, the five
+window answers a tab can honestly give, DOM event conversion, a frame loop, and
+`mount`, which puts an application on a canvas the way `run` puts one in a
+window.
+
+Four seams cross the boundary, each drawn by what a browser can answer
+honestly: input, accessibility, surface, and window. Nothing in the
+application-facing API names a windowing system, which is why woodshed's own
+code stopped importing `winit::keyboard` along the way.
+
+Open: the ARIA projection above, WebAudio behind `woodshed-audio`'s seam, and
+woodshed's own web entry point.
 
 ## Payload, and the lever that moves it
 
