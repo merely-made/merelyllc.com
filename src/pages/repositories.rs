@@ -1004,9 +1004,9 @@ fn graph_sandbox_json() -> String {
         ],
         "sandbox": {
             "schema": "mer3ly.graphshell-sandbox/v4",
-            "scene_state_schema": "mer3ly.graphshell-scene-state/v1",
+            "scene_state_schema": "mer3ly.graphshell-scene-state/v2",
             "reading_registry_schema": "mere.graph-reading-registry/v1",
-            "representation_registry_schema": "mere.graph-representation-registry/v1",
+            "representation_registry_schema": "mere.graph-representation-registry/v2",
             "reading_rule": "Mere selects actor scope, surface, emphasis, and an initial arrangement",
             "face_rule": "the host may give the same typed actor a different face for each reading",
             "primitive_rule": "Mere's registry maps class to one body shared by paint and collision",

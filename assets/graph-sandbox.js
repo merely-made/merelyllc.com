@@ -1,6 +1,20 @@
 const runtimeVersion = new URL(import.meta.url).search;
-const SCENE_STATE_SCHEMA = "mer3ly.graphshell-scene-state/v1";
-const REGISTRY_SCHEMA = "mere.graph-representation-registry/v1";
+// The scene wire, converged on the shelfmark shape ruled in mere's
+// 2026-08-16 format note: authority / projection / expects / delta, with the
+// delta as named sections owned by their targets. v1 links keep decoding.
+const SCENE_STATE_SCHEMA = "mer3ly.graphshell-scene-state/v2";
+const SCENE_STATE_SCHEMA_V1 = "mer3ly.graphshell-scene-state/v1";
+const PROJECTION_ADAPTER = "mer3ly.repository-graph/v1";
+// Delta sections this reader honors; anything else is preserved and reported,
+// never dropped. The unhonored-section rule is the WebCoLa lesson at the
+// citation layer: silent best-effort is the warned failure mode.
+const HONORED_SECTIONS = new Set([
+  "placement",
+  "selection",
+  "mer3ly.motion",
+  "mer3ly.backdrop",
+]);
+const REGISTRY_SCHEMA = "mere.graph-representation-registry/v2";
 const READING_REGISTRY_SCHEMA = "mere.graph-reading-registry/v1";
 const READING_FACES = new Map([
   ["graph", "identity"],
@@ -24,6 +38,7 @@ const {
   reading_registry: readingRegistry,
   representation_registry: representationRegistry,
   portable_projection_with_placement: portableProjectionWithPlacement,
+  authority_generation: authorityGeneration,
   GraphPhysics,
 } = await import(`./mer3ly_repo_graph.js${runtimeVersion}`);
 
@@ -236,9 +251,12 @@ class GraphSandbox {
 
   start() {
     this.installControlActors();
+    this.unhonoredSections = {};
+    this.expectedGeneration = null;
     this.applySharedState(this.sharedState);
     this.setLatestHistoryUnlessShared();
     this.loadAuthority();
+    this.checkCitation();
     this.resize();
     this.resizeObserver = new ResizeObserver(() => {
       this.resize();
@@ -281,7 +299,12 @@ class GraphSandbox {
   }
 
   applySharedState(state) {
-    if (!state || state.schema !== SCENE_STATE_SCHEMA) return;
+    if (!state) return;
+    if (state.schema === SCENE_STATE_SCHEMA) {
+      this.applySharedStateV2(state);
+      return;
+    }
+    if (state.schema !== SCENE_STATE_SCHEMA_V1) return;
     if (this.datasets.has(state.dataset)) this.datasetId = state.dataset;
     if (this.readings.has(state.reading)) {
       this.scene = state.reading;
@@ -321,6 +344,86 @@ class GraphSandbox {
       }
     }
     this.pinsByDataset.set(this.datasetId, pins);
+  }
+
+  applySharedStateV2(state) {
+    const dataset = state.authority?.dataset;
+    if (this.datasets.has(dataset)) this.datasetId = dataset;
+    if (this.readings.has(state.projection?.reading)) {
+      this.scene = state.projection.reading;
+    }
+    if (typeof state.projection?.arrangement === "string") {
+      this.currentArrangement = state.projection.arrangement;
+    }
+    const delta = state.delta ?? {};
+    if (["anchored", "free"].includes(delta["mer3ly.motion"])) {
+      this.mobility = delta["mer3ly.motion"];
+    }
+    const backdrop = delta["mer3ly.backdrop"];
+    if (["clear", "ambient", "props", "field"].includes(backdrop?.kind)) {
+      this.backdrop = backdrop.kind;
+      this.collidable = Boolean(backdrop.collidable);
+    }
+    const target = Array.isArray(delta.selection?.targets)
+      ? delta.selection.targets[0]
+      : null;
+    if (target?.kind === "node" && typeof target.id === "string") {
+      this.selectedId = target.id;
+    }
+
+    const snapshots = this.dataset()?.snapshots ?? [];
+    const cursor = state.authority?.cursor;
+    const sourceIndex = snapshots.findIndex(
+      (snapshot) =>
+        snapshot.cursor.source === cursor?.source &&
+        snapshot.cursor.commit === cursor?.commit,
+    );
+    this.historyIndex = sourceIndex >= 0 ? sourceIndex : Math.max(0, snapshots.length - 1);
+
+    // Pins arrive as HeldPlacement; the live path keeps its own map shape.
+    const pins = new Map();
+    const placement = Array.isArray(delta.placement) ? delta.placement.slice(0, 64) : [];
+    for (const held of placement) {
+      if (
+        typeof held?.source?.id === "string" &&
+        Number.isFinite(held?.at?.x) &&
+        Number.isFinite(held?.at?.y)
+      ) {
+        pins.set(held.source.id, {
+          x: clamp(held.at.x, -2000, 2000),
+          y: clamp(held.at.y, -2000, 2000),
+        });
+      }
+    }
+    this.pinsByDataset.set(this.datasetId, pins);
+
+    // Sections this reader does not honor survive the round trip and are
+    // reported once the chrome exists to say so.
+    this.unhonoredSections = {};
+    for (const [name, value] of Object.entries(delta)) {
+      if (!HONORED_SECTIONS.has(name)) this.unhonoredSections[name] = value;
+    }
+    this.expectedGeneration = state.expects?.generation ?? null;
+  }
+
+  // The checkability half of a citation: recompute the generation over the
+  // authority this page actually loaded and compare with what the link
+  // expected. A mismatch is a report, not a failure — the graph may
+  // legitimately have moved since the link was written.
+  checkCitation() {
+    if (!this.expectedGeneration || !this.shareStatus) return;
+    const actual = authorityGeneration(JSON.stringify(this.authority));
+    this.shareStatus.textContent =
+      actual === this.expectedGeneration
+        ? "citation verified against this authority"
+        : "authority has moved since this link was written";
+    const carried = Object.keys(this.unhonoredSections ?? {});
+    if (carried.length > 0) {
+      this.shareStatus.textContent += `; ${carried.length} section${
+        carried.length === 1 ? "" : "s"
+      } carried unhonored`;
+    }
+    announce(this.root, this.shareStatus.textContent);
   }
 
   authorityForState() {
@@ -882,21 +985,40 @@ class GraphSandbox {
   }
 
   sceneState() {
-    const source = this.dataset().snapshots[this.historyIndex]?.cursor ?? {
+    const cursor = this.dataset().snapshots[this.historyIndex]?.cursor ?? {
       source: "mer3ly/specimen",
       commit: "authored",
       committed_at: "static",
     };
+    // Pins travel as HeldPlacement, the score's own record, one serialization
+    // of a pin rather than a site-local second one. Under anchored motion the
+    // visitor has already said best-effort, so the class is recorded here
+    // rather than re-inferred from a spring on the far side.
+    const hold = this.mobility === "anchored" ? "Anchored" : "Pinned";
+    const placement = [...this.currentPins()].map(([id, point]) => ({
+      source: { adapter: PROJECTION_ADAPTER, id },
+      at: { x: point.x, y: point.y },
+      hold,
+    }));
     return {
       schema: SCENE_STATE_SCHEMA,
-      dataset: this.datasetId,
-      source,
-      reading: this.scene,
-      arrangement: this.currentArrangement,
-      motion: this.mobility,
-      backdrop: { kind: this.backdrop, collidable: this.collidable },
-      selection: this.selectedId,
-      pins: [...this.currentPins()].map(([id, point]) => ({ id, ...point })),
+      authority: { dataset: this.datasetId, cursor },
+      projection: { reading: this.scene, arrangement: this.currentArrangement },
+      // What the citing party saw. A resolver recomputes and compares; a
+      // mismatch is a report, not a failure — the authority may have moved.
+      expects: { generation: authorityGeneration(JSON.stringify(this.authority)) },
+      delta: {
+        placement,
+        selection: {
+          source: "sandbox",
+          targets: this.selectedId
+            ? [{ kind: "node", id: this.selectedId }]
+            : [],
+        },
+        "mer3ly.motion": this.mobility,
+        "mer3ly.backdrop": { kind: this.backdrop, collidable: this.collidable },
+        ...this.unhonoredSections,
+      },
     };
   }
 

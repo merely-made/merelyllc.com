@@ -271,7 +271,7 @@ fn graphshell_sandbox_keeps_truth_face_arrangement_and_motion_distinct() {
     assert_eq!(sandbox["sandbox"]["schema"], "mer3ly.graphshell-sandbox/v4");
     assert_eq!(
         sandbox["sandbox"]["scene_state_schema"],
-        "mer3ly.graphshell-scene-state/v1"
+        "mer3ly.graphshell-scene-state/v2"
     );
     assert_eq!(
         sandbox["sandbox"]["reading_registry_schema"],
@@ -279,7 +279,7 @@ fn graphshell_sandbox_keeps_truth_face_arrangement_and_motion_distinct() {
     );
     assert_eq!(
         sandbox["sandbox"]["representation_registry_schema"],
-        "mere.graph-representation-registry/v1"
+        "mere.graph-representation-registry/v2"
     );
     assert!(document.contains("data-graph-sandbox"));
     assert!(document.contains("The graph is also its own control surface."));

@@ -612,7 +612,7 @@ function validateArtifact(artifact) {
   if (
     artifact?.schema !== "mer3ly.portable-projection/v1" ||
     artifact?.adapter !== "mer3ly.repository-graph/v1" ||
-    artifact?.score?.version !== 2 ||
+    artifact?.score?.version !== 3 ||
     !Array.isArray(artifact.nodes) ||
     !Array.isArray(artifact.relations) ||
     !Array.isArray(artifact.default_trace)

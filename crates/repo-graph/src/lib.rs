@@ -342,6 +342,20 @@ pub fn project_reading(input: &str) -> Result<String, JsValue> {
     project_reading_json(input).map_err(|error| JsValue::from_str(&error))
 }
 
+/// The generation a citation should expect for this authority.
+///
+/// A shared scene link carries `expects.generation`; opening the link
+/// recomputes this over the loaded authority and compares. Returned as a
+/// decimal string because a u64 does not survive a JS number.
+#[wasm_bindgen]
+pub fn authority_generation(graph: &str) -> Result<String, JsValue> {
+    let input: GraphInput = serde_json::from_str(graph)
+        .map_err(|error| JsValue::from_str(&format!("invalid graph JSON: {error}")))?;
+    let (_, generation) =
+        authority_identity(&input).map_err(|error| JsValue::from_str(&error))?;
+    Ok(generation.to_string())
+}
+
 /// Turn a shared scene state into a portable projection that keeps its pins.
 ///
 /// The sandbox hands over the graph authority and its own scene state; what
@@ -927,6 +941,25 @@ pub fn portable_projection(input: &str) -> Result<PortableProjectionArtifact, St
     portable_projection_holding(input, &PlacementDelta::default())
 }
 
+/// The authority's content identity: its SHA-256 and the score generation
+/// derived from that digest's first eight bytes.
+///
+/// One recipe, shared by the portable path and the citation check, because a
+/// citation is only checkable if the generation it carries was computed the
+/// same way the resolver recomputes it.
+fn authority_identity(input: &GraphInput) -> Result<(String, u64), String> {
+    let digest = Sha256::digest(
+        serde_json::to_vec(input)
+            .map_err(|error| format!("could not canonicalize graph authority: {error}"))?,
+    );
+    let generation = u64::from_be_bytes(
+        digest[..8]
+            .try_into()
+            .expect("SHA-256 prefix is eight bytes"),
+    );
+    Ok((format!("{digest:x}"), generation))
+}
+
 pub fn portable_projection_holding(
     input: &str,
     placement: &PlacementDelta,
@@ -935,16 +968,7 @@ pub fn portable_projection_holding(
         serde_json::from_str(input).map_err(|error| format!("invalid graph JSON: {error}"))?;
     validate(&input)?;
 
-    let authority_digest = Sha256::digest(
-        serde_json::to_vec(&input)
-            .map_err(|error| format!("could not canonicalize graph authority: {error}"))?,
-    );
-    let authority_sha256 = format!("{authority_digest:x}");
-    let generation = u64::from_be_bytes(
-        authority_digest[..8]
-            .try_into()
-            .expect("SHA-256 prefix is eight bytes"),
-    );
+    let (authority_sha256, generation) = authority_identity(&input)?;
 
     let mut score = Score::new(SceneArrangement::Spiral(Spiral::default()));
     score.generation = generation;
@@ -1924,6 +1948,19 @@ mod tests {
     }"#;
 
     #[test]
+    fn the_expected_generation_is_the_score_generation() {
+        // The checkability invariant: what a citation carries as
+        // expects.generation must be what the solved score stamps, or the
+        // check reports drift on every link ever written.
+        let expected = authority_generation(SAMPLE).expect("generation");
+        let artifact = portable_projection(SAMPLE).expect("portable projection");
+        assert_eq!(expected, artifact.score.generation.to_string());
+        // And it moves when the authority moves, or it checks nothing.
+        let altered = SAMPLE.replace("Turnstone", "Ternstone");
+        assert_ne!(authority_generation(&altered).expect("generation"), expected);
+    }
+
+    #[test]
     fn a_visitor_pin_reaches_the_score_and_the_solver_honors_it() {
         let json = portable_projection_with_placement_json(SAMPLE, SHARED_SCENE)
             .expect("portable projection with placement");
@@ -2047,7 +2084,7 @@ mod tests {
         let encoded = representation_registry().expect("representation registry");
         let registry: serde_json::Value =
             serde_json::from_str(&encoded).expect("representation registry JSON");
-        assert_eq!(registry["schema"], "mere.graph-representation-registry/v1");
+        assert_eq!(registry["schema"], "mere.graph-representation-registry/v2");
         assert_eq!(registry["profiles"][0]["primitive"]["body"], "hexagon");
         assert_eq!(
             registry["profiles"][0]["behaviors"][0]["behavior"],

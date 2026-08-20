@@ -1012,7 +1012,7 @@ try {
   const liveSandbox = sandboxDesktop.locator("[data-graph-sandbox]");
   assert.equal(
     await liveSandbox.getAttribute("data-sandbox-scene-schema"),
-    "mer3ly.graphshell-scene-state/v1",
+    "mer3ly.graphshell-scene-state/v2",
   );
   assert.equal(await liveSandbox.getAttribute("data-sandbox-dataset"), "live");
   assert.equal(await liveSandbox.locator("[data-sandbox-cycle]").count(), 5);
