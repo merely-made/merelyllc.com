@@ -77,17 +77,8 @@ pub enum NetworkSupportState {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct FlashRecipe {
+    pub package_id: String,
     pub name: String,
-    pub state: FlashRecipeState,
-    pub note: String,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
-#[serde(rename_all = "kebab-case")]
-pub enum FlashRecipeState {
-    Demonstrated,
-    Partial,
-    Upstream,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -249,21 +240,28 @@ impl DeviceCatalog {
                 errors.push(format!("device {} has no flash recipes", device.id));
             }
             let mut flash_names = BTreeSet::new();
+            let mut flash_packages = BTreeSet::new();
             for recipe in &device.flash_recipe {
-                check_public_text(
-                    &format!("device {} flash recipe name", device.id),
-                    &recipe.name,
+                check_package_id(
+                    &format!("device {} flash recipe package", device.id),
+                    &recipe.package_id,
                     &mut errors,
                 );
                 check_public_text(
-                    &format!("device {} flash recipe {} note", device.id, recipe.name),
-                    &recipe.note,
+                    &format!("device {} flash recipe name", device.id),
+                    &recipe.name,
                     &mut errors,
                 );
                 if !flash_names.insert(recipe.name.to_ascii_lowercase()) {
                     errors.push(format!(
                         "device {} repeats flash recipe {}",
                         device.id, recipe.name
+                    ));
+                }
+                if !flash_packages.insert(recipe.package_id.to_ascii_lowercase()) {
+                    errors.push(format!(
+                        "device {} repeats flash recipe package {}",
+                        device.id, recipe.package_id
                     ));
                 }
             }
@@ -426,16 +424,6 @@ impl NetworkSupportState {
     }
 }
 
-impl FlashRecipeState {
-    pub const fn label(self) -> &'static str {
-        match self {
-            Self::Demonstrated => "demonstrated recipe",
-            Self::Partial => "Merely recipe partial",
-            Self::Upstream => "upstream recipe",
-        }
-    }
-}
-
 impl AuthorizationState {
     pub const fn label(self) -> &'static str {
         match self {
@@ -474,6 +462,20 @@ fn check_slug(label: &str, value: &str, errors: &mut Vec<String>) {
     {
         errors.push(format!(
             "{label} must be a lowercase ASCII slug, got {value:?}"
+        ));
+    }
+}
+
+fn check_package_id(label: &str, value: &str, errors: &mut Vec<String>) {
+    if value.is_empty()
+        || value.starts_with('.')
+        || value.ends_with('.')
+        || !value.bytes().all(|byte| {
+            byte.is_ascii_lowercase() || byte.is_ascii_digit() || byte == b'.' || byte == b'-'
+        })
+    {
+        errors.push(format!(
+            "{label} must be a lowercase package id, got {value:?}"
         ));
     }
 }
@@ -567,9 +569,8 @@ state = "demonstrated"
 note = "Bench proof only."
 
 [[device.flash_recipe]]
+package_id = "retinue.test"
 name = "Retinue"
-state = "partial"
-note = "Developer installation only."
 
 [[device.evidence]]
 label = "Radio carriage"

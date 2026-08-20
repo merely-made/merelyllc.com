@@ -6,6 +6,7 @@ use std::path::{Path, PathBuf};
 use serde::{Deserialize, Serialize};
 
 use crate::devices::DeviceCatalog;
+use crate::firmware_catalog::FirmwareCatalog;
 
 const REPOSITORIES_PATH: &str = "content/repositories.toml";
 const RELATIONS_PATH: &str = "content/relations.toml";
@@ -260,6 +261,7 @@ pub struct PublicSiteData {
     pub metadata: PublicMetadataCache,
     pub showcases: ShowcaseManifest,
     pub devices: DeviceCatalog,
+    pub firmware: FirmwareCatalog,
 }
 
 #[derive(Clone, Debug, Serialize)]
@@ -806,11 +808,14 @@ impl PublicSiteData {
             ))
         })?;
         let devices = DeviceCatalog::load(root)?;
+        let firmware = FirmwareCatalog::load(root)?;
+        firmware.validate_device_recipes(&devices)?;
         Ok(Self {
             authority,
             metadata,
             showcases,
             devices,
+            firmware,
         })
     }
 }

@@ -15,7 +15,7 @@ interaction = "Built-in 128 x 64 OLED, one user button, and status LED"
 power = "USB bench power was used for the receipts; battery and off-grid runtime are not qualified"
 antenna = "A complete antenna recipe and placement receipt are still open"
 enclosure = "No Merely enclosure file or mechanical receipt is approved"
-recipe_state = "Board-level development specimen. The Retinue radio image can be built and flashed, but this is not yet a complete assembly or public installation recipe."
+recipe_state = "Board-level development specimen. The published firmware ledger below records the exact V4 installation and recovery evidence; enclosure, power, antenna, and assembled-product work remain open."
 source_repository = "https://github.com/merely-made/retinue"
 source_document = "design_docs/2026-07-31_retinue_small_plan.md"
 
@@ -46,24 +46,12 @@ state = "demonstrated"
 note = "Tucket exchanged authenticated adverts, encrypted text, acknowledgements, and reciprocal routes with official MeshCore companion firmware."
 
 [[device.flash_recipe]]
+package_id = "retinue.heltec-v4"
 name = "Retinue radio image"
-state = "partial"
-note = "The developer build and flash path works, and the image includes its RNode channel. A public installer, Bluetooth path, and recovery guide remain open."
 
 [[device.flash_recipe]]
-name = "Meshtastic"
-state = "upstream"
-note = "Upstream publishes owner-flashable firmware for supported board revisions. Selection and recovery through the Merely app remain open."
-
-[[device.flash_recipe]]
-name = "MeshCore"
-state = "upstream"
-note = "Upstream publishes owner-flashable firmware for supported hardware. Selection and recovery through the Merely app remain open."
-
-[[device.flash_recipe]]
-name = "RNode"
-state = "upstream"
-note = "The RNode project publishes owner-flashable firmware for supported boards. Retinue also carries a demonstrated RNode-compatible channel in its own image."
+package_id = "prns.hopspot.heltec-v4"
+name = "Prns Hopspot"
 
 [[device.evidence]]
 label = "On-device status face"
@@ -77,8 +65,8 @@ note = "The image exchanged a byte-exact 4 KiB Reticulum Resource in both direct
 
 [[device.evidence]]
 label = "Owner installation"
-state = "partial"
-note = "A reproducible developer build and flash command is recorded. A safe public flashing flow and recovery guide are not yet accepted."
+state = "proven"
+note = "The published V4 ledger retains installer and recovery receipts for the public cabled route. Firmware proof does not complete the enclosure, power, antenna, or sale recipe."
 
 [[device.open_requirement]]
 label = "Printed enclosure"
@@ -111,7 +99,7 @@ interaction = "Optional 240 x 135 color display, user switch, and activity LED"
 power = "USB bench power was used for the receipts; battery and off-grid runtime are not qualified"
 antenna = "A complete antenna recipe and placement receipt are still open"
 enclosure = "No Merely handheld enclosure file or mechanical receipt is approved"
-recipe_state = "Board-level development specimen. Retinue binary, serial DFU, and UF2 paths are recorded, but this is not yet a complete handheld assembly or public installation recipe."
+recipe_state = "Board-level development specimen. The published firmware ledger below records the Windows Retinue installation and recovery evidence; enclosure, power, antenna, and assembled-product work remain open."
 source_repository = "https://github.com/merely-made/retinue"
 source_document = "design_docs/2026-07-31_retinue_small_plan.md"
 
@@ -142,24 +130,12 @@ state = "demonstrated"
 note = "Official MeshCore repeater firmware on the T114 carried encrypted Tucket and stock-companion text and acknowledgements in both directions."
 
 [[device.flash_recipe]]
+package_id = "retinue.t114"
 name = "Retinue radio image"
-state = "partial"
-note = "Binary, serial DFU, and UF2 installation paths work, and the image includes native-node and RNode channels. A public app and Bluetooth recovery flow remain open."
 
 [[device.flash_recipe]]
+package_id = "meshtastic.heltec-mesh-node-t114"
 name = "Meshtastic"
-state = "upstream"
-note = "Upstream publishes owner-flashable firmware for supported board revisions. Selection and recovery through the Merely app remain open."
-
-[[device.flash_recipe]]
-name = "MeshCore"
-state = "upstream"
-note = "Upstream publishes owner-flashable companion and repeater firmware. Selection and recovery through the Merely app remain open."
-
-[[device.flash_recipe]]
-name = "RNode"
-state = "upstream"
-note = "The RNode project publishes owner-flashable firmware for supported boards. Retinue also carries a demonstrated RNode-compatible channel in its own image."
 
 [[device.evidence]]
 label = "Native Retinue node"
@@ -173,8 +149,8 @@ note = "The fitted display rendered board-local status, the fitted button traver
 
 [[device.evidence]]
 label = "Owner installation"
-state = "partial"
-note = "Binary, serial DFU, and UF2 packaging paths are recorded. A safe public flashing flow and recovery guide are not yet accepted."
+state = "proven"
+note = "The published T114 ledger retains Windows installer and recovery evidence for Retinue. Meshtastic remains partial until its own application interface is checked."
 
 [[device.open_requirement]]
 label = "Printed enclosure"

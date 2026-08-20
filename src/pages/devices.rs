@@ -4,6 +4,7 @@ use serde_json::json;
 use sha2::{Digest, Sha256};
 
 use crate::devices::{DeviceCatalog, DeviceRecord, DeviceStatus};
+use crate::firmware_catalog::{FirmwareCatalog, FirmwarePackage, FirmwareRecipeState};
 use crate::repositories::{AuthorityError, PublicSiteData};
 use crate::site::{
     ActivePage, DEFAULT_SOCIAL_IMAGE_ALT, DEFAULT_SOCIAL_IMAGE_URL, DEVICE_CSS, DocumentMetadata,
@@ -24,7 +25,7 @@ pub fn documents(data: &PublicSiteData) -> Vec<(String, String)> {
     data.devices
         .ordered()
         .into_iter()
-        .map(|device| (device.id.clone(), document_for(device)))
+        .map(|device| (device.id.clone(), document_for(device, &data.firmware)))
         .collect()
 }
 
@@ -47,10 +48,10 @@ pub fn document(root: &Path, device_id: &str) -> Result<String, AuthorityError> 
     let device = data.devices.by_id(device_id).ok_or_else(|| {
         AuthorityError::from_message(format!("unknown public device {device_id}"))
     })?;
-    Ok(document_for(device))
+    Ok(document_for(device, &data.firmware))
 }
 
-pub fn document_for(device: &DeviceRecord) -> String {
+pub fn document_for(device: &DeviceRecord, firmware: &FirmwareCatalog) -> String {
     let title = format!("{} | Merely", device.name);
     let canonical = format!("https://mer3ly.net/devices/{}/", device.id);
     let json_ld = device_json_ld(device, &canonical);
@@ -72,7 +73,7 @@ pub fn document_for(device: &DeviceRecord) -> String {
     };
     render_with_dynamic_stylesheet_and_body_end(
         &metadata,
-        || device_view(device),
+        || device_view(device, firmware),
         "/devices.css",
         DEVICE_CSS,
         &body_end,
@@ -290,7 +291,7 @@ fn catalog_principle() -> SiteView {
     )
 }
 
-fn device_view(device: &DeviceRecord) -> SiteView {
+fn device_view(device: &DeviceRecord, firmware: &FirmwareCatalog) -> SiteView {
     shell(
         ActivePage::Devices,
         element(
@@ -307,7 +308,7 @@ fn device_view(device: &DeviceRecord) -> SiteView {
                 build_section(device),
                 verify_section(device),
                 network_section(device),
-                flash_section(device),
+                flash_section(device, firmware),
                 authorization_section(device),
                 purchase_section(device),
             ],
@@ -770,7 +771,7 @@ fn network_section(device: &DeviceRecord) -> SiteView {
     )
 }
 
-fn flash_section(device: &DeviceRecord) -> SiteView {
+fn flash_section(device: &DeviceRecord, firmware: &FirmwareCatalog) -> SiteView {
     element(
         "section",
         &[("class", "content-section device-profile-section")],
@@ -784,6 +785,11 @@ fn flash_section(device: &DeviceRecord) -> SiteView {
                     "from network support, and one SX1262 radio runs one selected personality at a time.",
                 ))],
             ),
+            external_link(
+                firmware.source_url(),
+                "Read the published Retinue package index ↗",
+                "button button-quiet",
+            ),
             element(
                 "div",
                 &[("class", "catalog-choice-grid")],
@@ -791,24 +797,92 @@ fn flash_section(device: &DeviceRecord) -> SiteView {
                     .flash_recipe
                     .iter()
                     .map(|recipe| {
-                        element(
-                            "article",
-                            &[("class", "catalog-choice")],
-                            vec![
-                                element(
-                                    "p",
-                                    &[("class", "evidence-state")],
-                                    vec![txt(recipe.state.label())],
-                                ),
-                                element("h3", &[], vec![txt(&recipe.name)]),
-                                element("p", &[], vec![txt(&recipe.note)]),
-                            ],
-                        )
+                        let package = firmware.package(&recipe.package_id).expect(
+                            "PublicSiteData validates every device firmware package reference",
+                        );
+                        firmware_recipe_card(&recipe.name, package)
                     })
                     .collect(),
             ),
         ],
     )
+}
+
+fn firmware_recipe_card(name: &str, package: &FirmwarePackage) -> SiteView {
+    let mut contents = vec![
+        element(
+            "p",
+            &[("class", "evidence-state")],
+            vec![txt(package.state.label())],
+        ),
+        element("h3", &[], vec![txt(name)]),
+        element(
+            "p",
+            &[],
+            vec![txt(format!(
+                "Firmware publisher: {}.",
+                package.firmware_publisher
+            ))],
+        ),
+    ];
+
+    match package.state {
+        FirmwareRecipeState::ProvenRecipe | FirmwareRecipeState::Sellable => {
+            let hosts = package
+                .receipt_hosts
+                .iter()
+                .map(|host| receipt_host_label(host))
+                .collect::<Vec<_>>()
+                .join(", ");
+            contents.push(element(
+                "p",
+                &[],
+                vec![txt(format!(
+                    "Installer and recovery receipts are retained for: {hosts}."
+                ))],
+            ));
+            contents.push(external_link(
+                &package.instructions_url,
+                "Read installation instructions ↗",
+                "button button-quiet",
+            ));
+            contents.push(external_link(
+                &package.recovery_url,
+                "Read recovery instructions ↗",
+                "button button-quiet",
+            ));
+            contents.push(external_link(
+                &package.installer_receipts[0],
+                "Read installer receipt ↗",
+                "button button-quiet",
+            ));
+            contents.push(external_link(
+                &package.recovery_receipts[0],
+                "Read recovery receipt ↗",
+                "button button-quiet",
+            ));
+        }
+        FirmwareRecipeState::Partial => contents.push(element(
+            "p",
+            &[],
+            vec![txt(
+                "This package is retained in the public index, but it is not yet a proven public recipe. Its required external interface check is still open.",
+            )],
+        )),
+    }
+
+    element("article", &[("class", "catalog-choice")], contents)
+}
+
+fn receipt_host_label(host: &str) -> &'static str {
+    match host {
+        "windows-x86_64" => "Windows x86-64",
+        "macos-x86_64" => "Intel macOS",
+        "macos-aarch64" => "Apple-silicon macOS",
+        "linux-x86_64" => "Linux x86-64",
+        "linux-aarch64" => "Linux Arm64",
+        _ => "unrecognized host",
+    }
 }
 
 fn authorization_section(device: &DeviceRecord) -> SiteView {
