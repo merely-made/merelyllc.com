@@ -1,19 +1,16 @@
 use std::collections::{HashMap, HashSet};
 
-use arrangements::camera::CanvasViewport;
-use arrangements::scene::{CanvasEdge, CanvasNode, CanvasSceneInput};
-use arrangements::{
-    AxisValue, Layout, LayoutExtras, LayoutRegistry, Radial, RadialAngularPolicy, RadialConfig,
-    RadialUnreachablePolicy, StaticLayoutState, Timeline, TimelineConfig,
-};
+mod arrangement;
+
+use arrangement::{degree_weights, radial_rings, stack_layers};
 use cartography::{
     ActorScope, PrimitiveBody, default_graph_reading_registry,
     default_graph_representation_registry,
 };
 use euclid::default::Point2D;
 use sceno::{
-    Arrangement as SceneArrangement, Footprint, HeldPlacement, Hold, Placement, Representation,
-    RoutedRelation, Score, ScoreItem, SourceRef, Spiral, Vec2,
+    Arrangement as SceneArrangement, AxisValue, Footprint, HeldPlacement, Hold, Placement,
+    Representation, RoutedRelation, Score, ScoreItem, SourceRef, Spiral, Vec2,
 };
 use scenotime::{RelationId, Revision, SceneDiff, SceneEpoch, SceneOp, SceneSnapshot};
 use seiche::{
@@ -991,6 +988,11 @@ pub fn portable_projection_holding(
             placement: Placement::Ordinal,
             layer: 0,
             visible: true,
+            // A spiral places by ordinal alone, and this projection's ordinal
+            // already carries the focus-first ordering it wants.
+            axis: None,
+            embedding: None,
+            weight: None,
         });
     }
 
@@ -1361,49 +1363,27 @@ fn layout_graph_json(input: &str) -> Result<String, String> {
     validate(&input)?;
     let focus = focal_node(&input);
 
-    let scene = CanvasSceneInput {
-        nodes: input
-            .nodes
-            .iter()
-            .map(|node| CanvasNode {
-                id: node.id.clone(),
-                position: Point2D::origin(),
-                radius: 24.0,
-                label: Some(node.name.clone()),
-            })
-            .collect(),
-        edges: input
-            .edges
-            .iter()
-            .map(|edge| CanvasEdge::untagged(edge.source.clone(), edge.target.clone()))
-            .collect(),
-    };
-    let registry = LayoutRegistry::<String>::default();
     let mut arrangements = Vec::with_capacity(ARRANGEMENT_ORDER.len());
     for arrangement_id in ARRANGEMENT_ORDER {
-        let provider = registry
-            .resolve(arrangement_id)
-            .ok_or_else(|| format!("Mere arrangement registry is missing {arrangement_id}"))?;
-        let capability = provider.capability();
-        let positions = arrangement_positions(&input, &scene, arrangement_id, &provider, focus)?;
+        let spec = arrangement::spec(arrangement_id)
+            .ok_or_else(|| format!("arrangement catalog is missing {arrangement_id}"))?;
+        let positions = arrangement_positions(&input, arrangement_id, focus)?;
         arrangements.push(GraphArrangement {
-            id: capability.id.clone(),
-            name: capability.display_name,
-            description: arrangement_description(&capability.id, capability.description),
-            engine: capability.id,
+            id: spec.id.to_owned(),
+            name: spec.display_name.to_owned(),
+            description: spec.description.to_owned(),
+            engine: spec.id.to_owned(),
             nodes: positions,
         });
     }
     let unavailable_arrangements = UNAVAILABLE_ARRANGEMENTS
         .iter()
         .map(|(arrangement_id, reason)| {
-            let capability = registry
-                .resolve(arrangement_id)
-                .ok_or_else(|| format!("Mere arrangement registry is missing {arrangement_id}"))?
-                .capability();
+            let spec = arrangement::spec(arrangement_id)
+                .ok_or_else(|| format!("arrangement catalog is missing {arrangement_id}"))?;
             Ok(UnavailableArrangement {
-                id: capability.id,
-                name: capability.display_name,
+                id: spec.id.to_owned(),
+                name: spec.display_name.to_owned(),
                 reason: (*reason).to_owned(),
             })
         })
@@ -1449,95 +1429,153 @@ fn layout_graph_json(input: &str) -> Result<String, String> {
     .map_err(|error| format!("could not serialize graph layout: {error}"))
 }
 
+/// Place every node under `arrangement_id`, normalized into the site's frame.
+///
+/// Each arrangement is a `sceno` score: the arrangement and its config, plus
+/// whatever this site had to walk the graph to disclose. `scenomise` places it.
+/// Nothing here computes a position.
 fn arrangement_positions(
     input: &GraphInput,
-    scene: &CanvasSceneInput<String>,
     arrangement_id: &str,
-    provider: &std::sync::Arc<dyn arrangements::LayoutProvider<String>>,
     focus: &str,
 ) -> Result<Vec<GraphNodePosition>, String> {
-    let mut extras = LayoutExtras::default();
-    match arrangement_id {
+    let node_ids: HashSet<&str> = input.nodes.iter().map(|node| node.id.as_str()).collect();
+    let edges: Vec<(String, String)> = input
+        .edges
+        .iter()
+        .map(|edge| (edge.source.clone(), edge.target.clone()))
+        .collect();
+
+    // What the arrangement reads, and what this site had to walk the graph to
+    // know. An id absent from a map disclosed nothing, which every arrangement
+    // treats differently from disclosing a zero.
+    let mut axis: HashMap<String, AxisValue> = HashMap::new();
+    let mut weight: HashMap<String, f32> = HashMap::new();
+    let mut unreachable: Vec<&str> = Vec::new();
+
+    let arrangement = match arrangement_id {
+        "graph_layout:radial" => {
+            let rings = radial_rings(&node_ids, &edges, focus);
+            // Absent from the ring map means the walk never got there. The old
+            // path inferred this from a missing delta; reading it from the
+            // rings says the same thing without depending on what the solver
+            // chose to emit.
+            unreachable = input
+                .nodes
+                .iter()
+                .filter(|node| node.id != focus && !rings.contains_key(&node.id))
+                .map(|node| node.id.as_str())
+                .collect();
+            for (id, ring) in rings {
+                axis.insert(id, AxisValue::Numeric(ring as f64));
+            }
+            weight = degree_weights(&node_ids, &edges);
+            SceneArrangement::Radial(sceno::Radial {
+                center: Vec2::ZERO,
+                ring_spacing: 190.0,
+                angular_policy: sceno::RadialAngularPolicy::Weighted,
+                rotation_offset: 0.0,
+                unreachable_policy: sceno::RadialUnreachablePolicy::LeaveInPlace,
+            })
+        }
+        "graph_layout:stack" => {
+            for (id, layer) in stack_layers(&node_ids, &edges) {
+                axis.insert(id, AxisValue::Numeric(layer as f64));
+            }
+            SceneArrangement::Stack(sceno::Stack::default())
+        }
         "graph_layout:timeline" => {
             for node in &input.nodes {
-                extras.axis_value_by_node.insert(
+                axis.insert(
                     node.id.clone(),
                     AxisValue::Numeric(timestamp_coordinate(&node.pushed_at)?),
                 );
             }
+            SceneArrangement::Timeline(sceno::Timeline {
+                row_gap: 120.0,
+                ..sceno::Timeline::default()
+            })
         }
         "graph_layout:kanban" => {
             for node in &input.nodes {
-                extras
-                    .axis_value_by_node
-                    .insert(node.id.clone(), AxisValue::Categorical(node.status.clone()));
+                axis.insert(
+                    node.id.clone(),
+                    AxisValue::Categorical(node.status.clone()),
+                );
             }
+            SceneArrangement::Kanban(sceno::Kanban::default())
         }
-        _ => {}
-    }
-
-    let deltas = if arrangement_id == DEFAULT_ARRANGEMENT {
-        let mut layout = Radial::new(RadialConfig {
-            focus: Some(focus.to_owned()),
-            center: Point2D::origin(),
-            ring_spacing: 190.0,
-            angular_policy: RadialAngularPolicy::DegreeWeighted,
-            rotation_offset: 0.0,
-            unreachable_policy: RadialUnreachablePolicy::LeaveInPlace,
-        });
-        layout.step(
-            scene,
-            &mut StaticLayoutState::default(),
-            0.0,
-            &CanvasViewport::default(),
-            &extras,
-        )
-    } else if arrangement_id == "graph_layout:timeline" {
-        let mut layout = Timeline::new(TimelineConfig {
-            row_gap: 120.0,
-            ..TimelineConfig::default()
-        });
-        layout.step(
-            scene,
-            &mut StaticLayoutState::default(),
-            0.0,
-            &CanvasViewport::default(),
-            &extras,
-        )
-    } else {
-        let mut layout = provider.create_default();
-        let mut state = layout.default_state_erased();
-        layout.step_dyn(scene, &mut state, 0.0, &CanvasViewport::default(), &extras)
+        "graph_layout:grid" => SceneArrangement::Grid(sceno::Grid {
+            cell: Vec2::ZERO,
+            columns: (input.nodes.len() as f32).sqrt().ceil().max(1.0) as u32,
+            gap: 120.0,
+            ..sceno::Grid::default()
+        }),
+        "graph_layout:phyllotaxis" => SceneArrangement::Spiral(Spiral::default()),
+        "graph_layout:penrose" => SceneArrangement::Penrose(sceno::Penrose::default()),
+        "graph_layout:lsystem" => SceneArrangement::LSystem(sceno::LSystem::default()),
+        other => return Err(format!("no arrangement is wired for {other}")),
     };
 
-    let mut host_positions = HashMap::new();
-    if arrangement_id == DEFAULT_ARRANGEMENT {
-        let unreachable = input
-            .nodes
-            .iter()
-            .filter(|node| node.id != focus && !deltas.contains_key(&node.id))
-            .collect::<Vec<_>>();
-        let lane_center = unreachable.len().saturating_sub(1) as f32 * 0.5;
-        for (index, node) in unreachable.into_iter().enumerate() {
-            host_positions.insert(
-                node.id.clone(),
-                Point2D::new(-470.0, (index as f32 - lane_center) * 190.0),
-            );
-        }
+    let mut score = Score::new(arrangement);
+    for (ordinal, node) in input.nodes.iter().enumerate() {
+        score.items.push(ScoreItem {
+            source: SourceRef::new(PROJECTION_ADAPTER, node.id.clone()),
+            ordinal: ordinal as u32,
+            footprint: Footprint::Circle { radius: 24.0 },
+            representation: Representation::Glyph,
+            placement: Placement::Ordinal,
+            layer: 0,
+            visible: true,
+            axis: axis.get(&node.id).cloned(),
+            embedding: None,
+            weight: weight.get(&node.id).copied(),
+        });
     }
 
-    let raw_positions = input
+    let scene = scenomise::solve(&score);
+    if scene.items.len() != input.nodes.len() {
+        return Err(format!(
+            "arrangement {arrangement_id} placed {} of {} repositories",
+            scene.items.len(),
+            input.nodes.len()
+        ));
+    }
+    let mut placed: HashMap<&str, Point2D<f32>> = input
+        .nodes
+        .iter()
+        .zip(&scene.items)
+        .map(|(node, item)| {
+            (
+                node.id.as_str(),
+                Point2D::new(item.transform.translate.x, item.transform.translate.y),
+            )
+        })
+        .collect();
+
+    // The site's own lane for repositories outside the focus neighborhood: a
+    // column down the left, rather than wherever "leave in place" resolved to.
+    let lane_center = unreachable.len().saturating_sub(1) as f32 * 0.5;
+    for (index, id) in unreachable.into_iter().enumerate() {
+        placed.insert(
+            id,
+            Point2D::new(-470.0, (index as f32 - lane_center) * 190.0),
+        );
+    }
+
+    let raw_positions: Vec<(String, Point2D<f32>)> = input
         .nodes
         .iter()
         .map(|node| {
-            let point = host_positions.get(&node.id).copied().unwrap_or_else(|| {
-                deltas
-                    .get(&node.id)
-                    .map_or_else(Point2D::origin, |delta| Point2D::origin() + *delta)
-            });
-            (node.id.clone(), point)
+            (
+                node.id.clone(),
+                placed
+                    .get(node.id.as_str())
+                    .copied()
+                    .unwrap_or_else(Point2D::origin),
+            )
         })
-        .collect::<Vec<_>>();
+        .collect();
     let raw_positions = if arrangement_id == "graph_layout:timeline" {
         place_timeline_strips(raw_positions)
     } else {

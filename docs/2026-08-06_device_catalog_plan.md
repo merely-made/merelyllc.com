@@ -7,8 +7,9 @@ Add a public hardware catalog that begins with what a person wants the device to
 ## Authority boundary
 
 - Mer3ly owns the public catalog record, route, wording, and sale status.
-- Retinue remains the firmware and hardware-evidence source. Catalog records link to its public receipts rather than copying them into a second authority.
-- The future flashing app may consume a shared device or personality manifest. That extraction waits until it is a real second consumer.
+- Retinue owns the firmware package index, package manifests, and hardware receipts.
+- Mer3ly is a read-only consumer of that index. It retains the exact published bytes with an immutable source URL and SHA-256 digest, then derives recipe state, instructions, recovery, receipt hosts, and receipt links from them.
+- Device sale status remains Mer3ly catalog authority. A proven firmware recipe does not make the assembled hardware sellable.
 
 ## Public model
 
@@ -36,6 +37,8 @@ Every detail page is ordered: role, exact recipe state, build, verify, network s
 ## Acceptance receipts
 
 - `content/devices.toml` passes strict schema, slug, source-link, network-support, flash-recipe, authorization, status, and purchase-state validation.
+- The retained Retinue package index passes strict schema and state validation, matches its recorded digest, and resolves every device recipe before site generation.
+- Changed retained index bytes are refused before page rendering.
 - Both records disclose missing enclosure, power, antenna, and sale-readiness work instead of inventing specifications.
 - Static generation emits the index and both profiles, includes them in the sitemap, and exposes them in the main navigation.
 - Artifact validation requires exactly those public routes and rejects purchase links on non-sellable profiles.

@@ -1,6 +1,9 @@
 # Unanchored on purpose, unlike the rules below: crates/repo-graph is its own
 # Cargo workspace, so building it directly drops a target/ beside its manifest.
 target/
+# Local cargo path overrides resolving the mere siblings to the working
+# copy instead of a pinned rev. Local-dev only, same rule mere carries.
+.cargo/
 /.tmp/
 /.receipts/
 /node_modules/

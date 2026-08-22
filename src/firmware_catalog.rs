@@ -18,8 +18,7 @@ pub const PACKAGE_INDEX_PATH: &str = "content/retinue-package-index.toml";
 pub const PACKAGE_INDEX_SOURCE_PATH: &str = "content/retinue-package-index-source.toml";
 pub const PACKAGE_INDEX_SCHEMA: &str = "retinue.package-index/v1";
 pub const PACKAGE_INDEX_SOURCE_SCHEMA: &str = "mer3ly.firmware-index-source/v1";
-pub const RETINUE_PACKAGE_INDEX_URL: &str =
-    "https://github.com/merely-made/retinue/blob/05b37956e92b0e81714ae3de6c79a0995114641e/firmware/packages/index.toml";
+pub const RETINUE_PACKAGE_INDEX_URL: &str = "https://github.com/merely-made/retinue/blob/05b37956e92b0e81714ae3de6c79a0995114641e/firmware/packages/index.toml";
 
 #[derive(Clone, Debug)]
 pub struct FirmwareCatalog {
@@ -306,5 +305,15 @@ mod tests {
                 .state,
             FirmwareRecipeState::Partial
         );
+    }
+
+    #[test]
+    fn tampered_retained_bytes_are_refused_before_site_generation() {
+        let catalog = FirmwareCatalog::load(env!("CARGO_MANIFEST_DIR")).expect("firmware catalog");
+        let error = catalog
+            .validate(b"changed package-index bytes")
+            .expect_err("changed bytes must not reach page rendering");
+
+        assert!(error.to_string().contains("firmware index digest mismatch"));
     }
 }
