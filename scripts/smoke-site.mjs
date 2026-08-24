@@ -1012,7 +1012,7 @@ try {
   const liveSandbox = sandboxDesktop.locator("[data-graph-sandbox]");
   assert.equal(
     await liveSandbox.getAttribute("data-sandbox-scene-schema"),
-    "mer3ly.graphshell-scene-state/v2",
+    "mere.shelfmark/1",
   );
   assert.equal(await liveSandbox.getAttribute("data-sandbox-dataset"), "live");
   assert.equal(await liveSandbox.locator("[data-sandbox-cycle]").count(), 5);
@@ -1071,12 +1071,16 @@ try {
   assert.equal(await liveSandbox.locator("[data-sandbox-node]").count(), 5);
 
   await cycleActor(liveSandbox, "reading", "matrix");
-  assert.equal(await liveSandbox.locator(".graph-sandbox-matrix-cell").count(), 144);
-  assert.ok((await liveSandbox.locator(".graph-sandbox-matrix-cell.has-relation").count()) > 10);
+  const matrixRows = await liveSandbox.locator(".graph-sandbox-matrix tbody tr").count();
+  const matrixColumns =
+    (await liveSandbox.locator('.graph-sandbox-matrix thead th[scope="col"]').count()) - 1;
+  assert.equal(await liveSandbox.locator(".graph-sandbox-matrix-cell").count(), matrixRows * matrixColumns);
+  assert.ok((await liveSandbox.locator(".graph-sandbox-matrix-cell.has-relation").count()) > 0);
   await cycleActor(liveSandbox, "reading", "graph");
   assert.equal(await liveSandbox.locator('[data-sandbox-node][data-face="identity"]').count(), 12);
   const ashlandFace = liveSandbox.locator('[data-sandbox-node="ashland"]');
-  await ashlandFace.click();
+  await ashlandFace.focus();
+  await ashlandFace.press("Enter");
   assert.equal(await ashlandFace.locator(".graph-sandbox-node-detail").isVisible(), true);
   await cycleActor(liveSandbox, "mobility", "free");
   await cycleActor(liveSandbox, "environment", "props-tangible");
@@ -1086,6 +1090,38 @@ try {
   );
   await cycleActor(liveSandbox, "arrangement", "graph_layout:grid");
   assert.match(await ashlandFace.getAttribute("class"), /is-pinned/);
+
+  await cycleActor(liveSandbox, "reading", "matrix");
+  const matrixCell = liveSandbox.locator(".graph-sandbox-matrix-cell.has-relation").first();
+  await matrixCell.click();
+  assert.match(await matrixCell.getAttribute("class"), /is-facet-selected/);
+  assert.equal(await liveSandbox.locator("[data-sandbox-clear-matrix]").isEnabled(), true);
+  await liveSandbox.locator("[data-sandbox-clear-matrix]").click();
+  assert.equal(await liveSandbox.locator("[data-sandbox-clear-matrix]").isDisabled(), true);
+  await liveSandbox.locator("[data-sandbox-clear-facets]").click();
+  assert.equal(await liveSandbox.locator("[data-sandbox-clear-facets]").isDisabled(), true);
+  await matrixCell.click();
+  assert.equal(await liveSandbox.locator("[data-sandbox-clear-matrix]").isEnabled(), true);
+  await liveSandbox.locator("[data-sandbox-clear-facets]").click();
+  assert.equal(await liveSandbox.locator("[data-sandbox-clear-facets]").isDisabled(), true);
+  await cycleActor(liveSandbox, "reading", "graph");
+  const deckFacet = liveSandbox.locator('.graph-sandbox-deck-card[data-source-id="ashland"] .graph-sandbox-deck-title');
+  await deckFacet.click();
+  assert.equal(await deckFacet.getAttribute("aria-pressed"), "true");
+  assert.match(
+    await liveSandbox.locator('.graph-sandbox-deck-card[data-source-id="ashland"]').getAttribute("class"),
+    /is-facet-selected/,
+  );
+  await cycleActor(liveSandbox, "arrangement", "graph_layout:grid");
+  await liveSandbox.locator('[data-sandbox-camera="pan-right"]').click();
+  await liveSandbox.locator('[data-sandbox-camera="zoom-in"]').click();
+  assert.match(
+    await liveSandbox.locator("[data-sandbox-stage]").getAttribute("data-sandbox-camera-state"),
+    /80,0,1\.20/,
+  );
+  const dismissedDeck = liveSandbox.locator('.graph-sandbox-deck-card[data-source-id="ashland"]');
+  await dismissedDeck.locator(".graph-sandbox-deck-dismiss").click();
+  assert.equal(await dismissedDeck.isHidden(), true);
 
   await liveSandbox.locator("[data-sandbox-share]").click();
   assert.match(sandboxDesktop.url(), /#graphshell-scene=[A-Za-z0-9_-]+$/);
@@ -1115,6 +1151,24 @@ try {
       .locator('[data-sandbox-cycle="environment"]')
       .getAttribute("data-sandbox-control-value"),
     "props-tangible",
+  );
+  assert.equal(
+    await receivedGraphshell.locator("[data-sandbox-stage]").getAttribute("data-sandbox-camera-state"),
+    "80,0,1.20",
+  );
+  assert.equal(
+    await receivedGraphshell.locator('.graph-sandbox-deck-card[data-source-id="ashland"]').isHidden(),
+    true,
+  );
+  assert.ok(
+    (await receivedGraphshell.locator(".graph-sandbox-deck-card.is-facet-selected").count()) > 0,
+    "selected Deck facet reopens",
+  );
+  assert.equal(
+    await receivedGraphshell
+      .locator('.graph-sandbox-deck-card[data-source-id="ashland"] .graph-sandbox-deck-title')
+      .getAttribute("aria-pressed"),
+    "true",
   );
   assert.match(
     await receivedGraphshell.locator('[data-sandbox-node="ashland"]').getAttribute("class"),

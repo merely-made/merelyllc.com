@@ -1314,6 +1314,27 @@ h1 {
   display: none;
 }
 
+.graph-sandbox-camera-tools {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--paper) 90%, transparent);
+  pointer-events: auto;
+}
+
+.graph-sandbox-camera-control {
+  min-height: 26px;
+  padding: 0 6px;
+  border: 0;
+  color: var(--muted);
+  background: transparent;
+  font: 600 0.52rem/1 var(--font-mono);
+  text-transform: uppercase;
+}
+
 .graph-sandbox-history input {
   min-height: 26px;
   accent-color: var(--oxblood);
@@ -1345,6 +1366,7 @@ h1 {
 .graph-sandbox-control-actor:focus-visible,
 .graph-sandbox-history input:focus-visible,
 .graph-sandbox-share:focus-visible,
+.graph-sandbox-camera-control:focus-visible,
 .graph-sandbox-node:focus-visible,
 .graph-sandbox-matrix button:focus-visible {
   outline: 2px solid var(--ember);
@@ -1816,6 +1838,10 @@ h1 {
 [data-source-id].is-source-selected {
   outline: 2px solid var(--oxblood);
   outline-offset: 2px;
+}
+
+[data-source-id].is-facet-selected {
+  box-shadow: 0 0 0 2px var(--ember);
 }
 
 [data-source-id].is-filtered-out {
@@ -3799,9 +3825,14 @@ tbody tr:last-child td {
   }
 
   .graph-sandbox-history input,
-  .graph-sandbox-share {
+  .graph-sandbox-share,
+  .graph-sandbox-camera-control {
     width: 100%;
     min-height: 44px;
+  }
+
+  .graph-sandbox-camera-tools {
+    flex-wrap: wrap;
   }
 
   .graph-sandbox-share-status {

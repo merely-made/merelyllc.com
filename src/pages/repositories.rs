@@ -208,6 +208,15 @@ fn sandbox_receipt_views() -> SiteView {
                         vec![txt("clear Matrix filter")],
                     ),
                     element(
+                        "button",
+                        &[
+                            ("type", "button"),
+                            ("class", "graph-sandbox-clear-filter"),
+                            ("data-sandbox-clear-facets", ""),
+                        ],
+                        vec![txt("clear selected facets")],
+                    ),
+                    element(
                         "div",
                         &[
                             ("class", "graph-sandbox-matrix"),
@@ -338,6 +347,24 @@ fn sandbox_scene_tools() -> SiteView {
                 ],
             ),
             element(
+                "div",
+                &[
+                    ("class", "graph-sandbox-camera-tools"),
+                    ("role", "group"),
+                    ("aria-label", "View camera"),
+                ],
+                vec![
+                    element("span", &[], vec![txt("Camera")]),
+                    camera_control("pan-left", "Pan left"),
+                    camera_control("pan-right", "Pan right"),
+                    camera_control("pan-up", "Pan up"),
+                    camera_control("pan-down", "Pan down"),
+                    camera_control("zoom-out", "Zoom out"),
+                    camera_control("zoom-in", "Zoom in"),
+                    camera_control("reset", "Reset camera"),
+                ],
+            ),
+            element(
                 "button",
                 &[
                     ("type", "button"),
@@ -373,6 +400,18 @@ fn sandbox_scene_tools() -> SiteView {
                 vec![txt("the realized scene, not the link")],
             ),
         ],
+    )
+}
+
+fn camera_control(action: &'static str, label: &'static str) -> SiteView {
+    element(
+        "button",
+        &[
+            ("type", "button"),
+            ("class", "graph-sandbox-camera-control"),
+            ("data-sandbox-camera", action),
+        ],
+        vec![txt(label)],
     )
 }
 

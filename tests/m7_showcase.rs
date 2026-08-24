@@ -151,6 +151,12 @@ fn mere_profile_projects_one_authority_into_canvas_and_swatch_views() {
     // disclosures), and this assertion moving with it is the consumer noticing
     // rather than silently accepting a shape it never knew.
     assert_eq!(artifact["score"]["version"], 4);
+    let projection_proof = std::fs::read_to_string(root.join("assets/projection-proof.js"))
+        .expect("projection proof runtime");
+    assert!(
+        projection_proof.contains("artifact?.score?.version !== 4"),
+        "the browser consumer must recognize the same Score wire as the native consumer"
+    );
     assert_eq!(
         artifact["score"]["items"]
             .as_array()

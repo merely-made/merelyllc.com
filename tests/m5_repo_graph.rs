@@ -288,6 +288,8 @@ fn graphshell_sandbox_keeps_truth_face_arrangement_and_motion_distinct() {
     assert!(document.contains("data-sandbox-scatter"));
     assert!(document.contains("data-sandbox-deck"));
     assert!(document.contains("data-sandbox-clear-matrix"));
+    assert!(document.contains("data-sandbox-clear-facets"));
+    assert!(document.contains("data-sandbox-camera=\"pan-right\""));
     assert!(!document.contains("data-sandbox-control="));
 
     for contract in [
@@ -306,6 +308,12 @@ fn graphshell_sandbox_keeps_truth_face_arrangement_and_motion_distinct() {
         "buildRepeatedAppearances",
         "applyCoordinatedSelection",
         "clearMatrixFilter",
+        "clearFacets",
+        "selectFacet",
+        "changeCamera",
+        "spatialRequest",
+        "shelfmarkPlacement",
+        "mer3ly.camera",
         "dataset.sandboxScene",
         "dataset.sandboxFace",
         "READING_FACES",
@@ -340,6 +348,8 @@ fn graphshell_sandbox_keeps_truth_face_arrangement_and_motion_distinct() {
         ".graph-sandbox-scatter-point",
         ".graph-sandbox-deck-card",
         "[data-source-id].is-filtered-out",
+        ".graph-sandbox-camera-control",
+        "[data-source-id].is-facet-selected",
     ] {
         assert!(
             SITE_CSS.contains(contract),

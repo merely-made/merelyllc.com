@@ -197,9 +197,52 @@ struct MatrixInstanceDelta {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 struct ComposedShelfmarkRequest {
     matrix: MatrixProjectionRequest,
+    spatial: SpatialShelfmarkRequest,
     selection: CoordinatedSelection,
     #[serde(default)]
     instances: Vec<MatrixInstanceDelta>,
+    #[serde(default)]
+    placement: Vec<HeldPlacement>,
+    #[serde(default)]
+    motion: Option<String>,
+    #[serde(default)]
+    backdrop: Option<BackdropDelta>,
+    #[serde(default)]
+    facets: Vec<ProjectedInstanceAddress>,
+    #[serde(default)]
+    camera: Option<CameraDelta>,
+    #[serde(default)]
+    carried_delta: BTreeMap<String, String>,
+}
+
+/// The adjacent spatial projection belongs beside a Matrix citation, rather
+/// than being inferred from the Matrix axes.  It cites the same authority
+/// shape but keeps its reading and arrangement as an independently checkable
+/// Shelfmark input.
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct SpatialShelfmarkRequest {
+    dataset: String,
+    record: String,
+    reading: String,
+    current: GraphInput,
+    #[serde(default)]
+    previous: Option<GraphInput>,
+    #[serde(default)]
+    focus: Option<String>,
+    arrangement: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct BackdropDelta {
+    kind: String,
+    collidable: bool,
+}
+
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
+struct CameraDelta {
+    x: f32,
+    y: f32,
+    zoom: f32,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -215,12 +258,15 @@ struct MatrixShelfmarkResolutionRequest {
     datasets: BTreeMap<String, ResolvedMatrixDataset>,
 }
 
-#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
+#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
 struct MatrixShelfmarkReceipt {
     matrix: MatrixReceipt,
     input_generations: BTreeMap<String, String>,
     selection_resolution: SelectionResolution,
     honored_instance_deltas: usize,
+    honored_placements: usize,
+    honored_facets: usize,
+    camera: CameraDelta,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -985,6 +1031,63 @@ fn composed_matrix_shelfmark(
             },
         );
     }
+    validate(&request.spatial.current)?;
+    if let Some(previous) = &request.spatial.previous {
+        validate(previous)?;
+    }
+    let spatial_projection = project_reading_request(ReadingRequest {
+        reading: request.spatial.reading.clone(),
+        current: request.spatial.current.clone(),
+        previous: request.spatial.previous.clone(),
+        focus: request.spatial.focus.clone(),
+    })?;
+    let (_, spatial_generation) = authority_identity(&request.spatial.current)?;
+    let spatial_authority = MatrixAuthorityRecord {
+        dataset: request.spatial.dataset.clone(),
+        record: request.spatial.record.clone(),
+    };
+    let spatial_parameters = MatrixReadingParameters {
+        focus: request.spatial.focus.clone(),
+    };
+    shelfmark.inputs.insert(
+        "spatial".into(),
+        ShelfmarkInputV1 {
+            authority: ShelfmarkAuthorityV1 {
+                adapter: "mer3ly.dataset/v1".into(),
+                record: serde_json::to_string(&spatial_authority)
+                    .map_err(|error| format!("could not cite spatial authority: {error}"))?,
+            },
+            reading: request.spatial.reading.clone(),
+            reading_parameters: request.spatial.focus.as_ref().map(|_| {
+                serde_json::to_string(&spatial_parameters)
+                    .expect("spatial reading parameters are serializable")
+            }),
+            arrangement: Some(request.spatial.arrangement.clone()),
+            expects_generation: spatial_generation.to_string(),
+        },
+    );
+    let facet_sources = spatial_projection
+        .nodes
+        .iter()
+        .map(|node| node.id.clone())
+        .chain(
+            artifact
+                .rows
+                .sources
+                .iter()
+                .chain(&artifact.columns.sources)
+                .map(|source| source.source.id.clone()),
+        )
+        .collect::<HashSet<_>>();
+    validate_view_delta(
+        &spatial_projection,
+        &facet_sources,
+        &request.placement,
+        request.motion.as_deref(),
+        request.backdrop.as_ref(),
+        &request.facets,
+        request.camera.as_ref(),
+    )?;
     shelfmark.delta.insert(
         "selection".into(),
         serde_json::to_string(&request.selection)
@@ -995,6 +1098,44 @@ fn composed_matrix_shelfmark(
         serde_json::to_string(&request.instances)
             .map_err(|error| format!("could not cite instance state: {error}"))?,
     );
+    shelfmark.delta.insert(
+        "placement".into(),
+        serde_json::to_string(&request.placement)
+            .map_err(|error| format!("could not cite placement state: {error}"))?,
+    );
+    shelfmark.delta.insert(
+        "mer3ly.motion".into(),
+        serde_json::to_string(request.motion.as_deref().unwrap_or("anchored"))
+            .map_err(|error| format!("could not cite motion state: {error}"))?,
+    );
+    shelfmark.delta.insert(
+        "mer3ly.backdrop".into(),
+        serde_json::to_string(
+            &request
+                .backdrop
+                .clone()
+                .unwrap_or(BackdropDelta { kind: "ambient".into(), collidable: false }),
+        )
+        .map_err(|error| format!("could not cite backdrop state: {error}"))?,
+    );
+    shelfmark.delta.insert(
+        "mer3ly.facets".into(),
+        serde_json::to_string(&request.facets)
+            .map_err(|error| format!("could not cite facet state: {error}"))?,
+    );
+    shelfmark.delta.insert(
+        "mer3ly.camera".into(),
+        serde_json::to_string(
+            &request.camera.clone().unwrap_or(CameraDelta { x: 0.0, y: 0.0, zoom: 1.0 }),
+        )
+        .map_err(|error| format!("could not cite camera state: {error}"))?,
+    );
+    for (section, value) in &request.carried_delta {
+        if shelfmark.delta.contains_key(section) {
+            return Err(format!("carried section {section} shadows a target-owned delta"));
+        }
+        shelfmark.delta.insert(section.clone(), value.clone());
+    }
     shelfmark
         .validate()
         .map_err(|error| format!("invalid composed shelfmark: {error:?}"))?;
@@ -1024,6 +1165,27 @@ fn resolve_matrix_shelfmark_value(
     }
     let rows = resolve_matrix_axis("rows", &request.shelfmark, &request.datasets)?;
     let columns = resolve_matrix_axis("columns", &request.shelfmark, &request.datasets)?;
+    let spatial = resolve_matrix_axis("spatial", &request.shelfmark, &request.datasets)?;
+    let spatial_input = request
+        .shelfmark
+        .inputs
+        .get("spatial")
+        .expect("spatial input was resolved above");
+    if spatial_input
+        .arrangement
+        .as_deref()
+        .filter(|arrangement| arrangement::spec(arrangement).is_some())
+        .is_none()
+    {
+        return Err("spatial Shelfmark input has no offered arrangement".to_owned());
+    }
+    let spatial_projection = project_reading_request(ReadingRequest {
+        reading: spatial.reading.clone(),
+        current: spatial.current.clone(),
+        previous: spatial.previous.clone(),
+        focus: spatial.focus.clone(),
+    })?;
+    let (_, resolved_spatial_generation) = authority_identity(&spatial.current)?;
     let matrix_request = MatrixProjectionRequest { rows, columns };
     let artifact = matrix_projection(&matrix_request)?;
     let matrix = consume_matrix_projection(&artifact)?;
@@ -1043,30 +1205,144 @@ fn resolve_matrix_shelfmark_value(
             .ok_or_else(|| "Matrix shelfmark lacks instance state".to_owned())?,
     )
     .map_err(|error| format!("invalid Matrix instance section: {error}"))?;
+    let placement: Vec<HeldPlacement> = serde_json::from_str(
+        request
+            .shelfmark
+            .delta
+            .get("placement")
+            .ok_or_else(|| "Matrix shelfmark lacks placement state".to_owned())?,
+    )
+    .map_err(|error| format!("invalid placement section: {error}"))?;
+    let motion: String = serde_json::from_str(
+        request
+            .shelfmark
+            .delta
+            .get("mer3ly.motion")
+            .ok_or_else(|| "Matrix shelfmark lacks motion state".to_owned())?,
+    )
+    .map_err(|error| format!("invalid motion section: {error}"))?;
+    let backdrop: BackdropDelta = serde_json::from_str(
+        request
+            .shelfmark
+            .delta
+            .get("mer3ly.backdrop")
+            .ok_or_else(|| "Matrix shelfmark lacks backdrop state".to_owned())?,
+    )
+    .map_err(|error| format!("invalid backdrop section: {error}"))?;
+    let facets: Vec<ProjectedInstanceAddress> = serde_json::from_str(
+        request
+            .shelfmark
+            .delta
+            .get("mer3ly.facets")
+            .ok_or_else(|| "Matrix shelfmark lacks facet state".to_owned())?,
+    )
+    .map_err(|error| format!("invalid facet section: {error}"))?;
+    let camera: CameraDelta = serde_json::from_str(
+        request
+            .shelfmark
+            .delta
+            .get("mer3ly.camera")
+            .ok_or_else(|| "Matrix shelfmark lacks camera state".to_owned())?,
+    )
+    .map_err(|error| format!("invalid camera section: {error}"))?;
     let source_ids = artifact
         .rows
         .sources
         .iter()
         .chain(&artifact.columns.sources)
-        .map(|source| source.source.id.as_str())
+        .map(|source| source.source.id.clone())
         .collect::<HashSet<_>>();
     for delta in &instances {
         if delta.instance.view.trim().is_empty()
             || delta.instance.facet.trim().is_empty()
-            || !source_ids.contains(delta.instance.source.id.as_str())
+            || !source_ids.contains(&delta.instance.source.id)
         {
             return Err("instance-scoped authored state does not resolve".to_owned());
         }
     }
+    let mut facet_sources = source_ids.clone();
+    facet_sources.extend(spatial_projection.nodes.iter().map(|node| node.id.clone()));
+    validate_view_delta(
+        &spatial_projection,
+        &facet_sources,
+        &placement,
+        Some(&motion),
+        Some(&backdrop),
+        &facets,
+        Some(&camera),
+    )?;
     Ok(MatrixShelfmarkReceipt {
         matrix,
         input_generations: BTreeMap::from([
             ("columns".into(), artifact.columns.generation),
             ("rows".into(), artifact.rows.generation),
+            (
+                "spatial".into(),
+                resolved_spatial_generation.to_string(),
+            ),
         ]),
         selection_resolution: selection.resolution,
         honored_instance_deltas: instances.len(),
+        honored_placements: placement.len(),
+        honored_facets: facets.len(),
+        camera,
     })
+}
+
+fn validate_view_delta(
+    spatial: &GraphInput,
+    facet_sources: &HashSet<String>,
+    placement: &[HeldPlacement],
+    motion: Option<&str>,
+    backdrop: Option<&BackdropDelta>,
+    facets: &[ProjectedInstanceAddress],
+    camera: Option<&CameraDelta>,
+) -> Result<(), String> {
+    let sources = spatial
+        .nodes
+        .iter()
+        .map(|node| node.id.as_str())
+        .collect::<HashSet<_>>();
+    if placement.len() > 64
+        || placement.iter().any(|held| {
+            held.source.adapter != PROJECTION_ADAPTER
+                || !sources.contains(held.source.id.as_str())
+                || !held.at.x.is_finite()
+                || !held.at.y.is_finite()
+                || !(-2000.0..=2000.0).contains(&held.at.x)
+                || !(-2000.0..=2000.0).contains(&held.at.y)
+        })
+    {
+        return Err("placement delta does not address the spatial projection".to_owned());
+    }
+    if !matches!(motion, None | Some("anchored" | "free")) {
+        return Err("motion delta must be anchored or free".to_owned());
+    }
+    if let Some(backdrop) = backdrop {
+        if !matches!(backdrop.kind.as_str(), "clear" | "ambient" | "props" | "field") {
+            return Err("backdrop delta names an unsupported field".to_owned());
+        }
+    }
+    if facets.iter().any(|facet| {
+        facet.view.trim().is_empty()
+            || facet.facet.trim().is_empty()
+            || facet.source.adapter != PROJECTION_ADAPTER
+            || !facet_sources.contains(&facet.source.id)
+    }) {
+        return Err("facet delta does not address a cited projection".to_owned());
+    }
+    if let Some(camera) = camera {
+        if !camera.x.is_finite()
+            || !camera.y.is_finite()
+            || !camera.zoom.is_finite()
+            || !(-4000.0..=4000.0).contains(&camera.x)
+            || !(-4000.0..=4000.0).contains(&camera.y)
+            || !(0.25..=4.0).contains(&camera.zoom)
+        {
+            return Err("camera delta lies outside the portable view bounds".to_owned());
+        }
+    }
+    Ok(())
 }
 
 fn resolve_matrix_axis(
@@ -2982,7 +3258,7 @@ mod tests {
     }
 
     #[test]
-    fn composed_shelfmark_reconstitutes_two_authorities_and_instance_state() {
+    fn composed_shelfmark_restores_view_state_without_rewriting_authority() {
         let mut matrix = sample_matrix_request();
         let mut specimen: GraphInput = serde_json::from_str(SAMPLE).expect("specimen graph");
         specimen.nodes[0].status = "reviewed".into();
@@ -3001,6 +3277,15 @@ mod tests {
         );
         let request = ComposedShelfmarkRequest {
             matrix: matrix.clone(),
+            spatial: SpatialShelfmarkRequest {
+                dataset: "live".into(),
+                record: matrix.rows.record.clone(),
+                reading: "neighbors".into(),
+                current: matrix.rows.current.clone(),
+                previous: matrix.rows.previous.clone(),
+                focus: Some("mere".into()),
+                arrangement: "graph_layout:grid".into(),
+            },
             selection,
             instances: vec![MatrixInstanceDelta {
                 instance: ProjectedInstanceAddress {
@@ -3010,6 +3295,20 @@ mod tests {
                 },
                 visible: false,
             }],
+            placement: vec![HeldPlacement {
+                source: SourceRef::new(PROJECTION_ADAPTER, "mere"),
+                at: Vec2::new(12.0, -8.0),
+                hold: Hold::Pinned,
+            }],
+            motion: Some("free".into()),
+            backdrop: Some(BackdropDelta { kind: "props".into(), collidable: true }),
+            facets: vec![ProjectedInstanceAddress {
+                view: "deck".into(),
+                source: SourceRef::new(PROJECTION_ADAPTER, "mere"),
+                facet: "summary".into(),
+            }],
+            camera: Some(CameraDelta { x: 40.0, y: -20.0, zoom: 1.25 }),
+            carried_delta: BTreeMap::from([("other.reader".into(), "opaque".into())]),
         };
         let artifact = matrix_projection(&matrix).expect("composed Matrix");
         let shelfmark = composed_matrix_shelfmark(&request, &artifact).expect("shelfmark");
@@ -3017,6 +3316,36 @@ mod tests {
             shelfmark.inputs["rows"].expects_generation,
             shelfmark.inputs["columns"].expects_generation
         );
+        assert_eq!(
+            shelfmark.inputs["rows"].authority.record,
+            shelfmark.inputs["spatial"].authority.record,
+            "view state must not rewrite the cited authority bytes"
+        );
+        let mut altered_view = request.clone();
+        altered_view.selection = CoordinatedSelection::new(SelectionResolution::Single);
+        altered_view.placement.clear();
+        altered_view.backdrop = Some(BackdropDelta {
+            kind: "ambient".into(),
+            collidable: false,
+        });
+        altered_view.facets.clear();
+        altered_view.camera = Some(CameraDelta {
+            x: -160.0,
+            y: 120.0,
+            zoom: 0.8,
+        });
+        let altered_shelfmark =
+            composed_matrix_shelfmark(&altered_view, &artifact).expect("altered view shelfmark");
+        for role in ["rows", "columns", "spatial"] {
+            let before = &shelfmark.inputs[role];
+            let after = &altered_shelfmark.inputs[role];
+            assert_eq!(before.authority.record, after.authority.record);
+            assert_eq!(before.reading, after.reading);
+            assert_eq!(before.reading_parameters, after.reading_parameters);
+            assert_eq!(before.arrangement, after.arrangement);
+            assert_eq!(before.expects_generation, after.expects_generation);
+        }
+        assert_ne!(shelfmark.delta, altered_shelfmark.delta);
 
         let resolution = MatrixShelfmarkResolutionRequest {
             shelfmark: shelfmark.clone(),
@@ -3043,7 +3372,11 @@ mod tests {
             SelectionResolution::Crossfilter
         );
         assert_eq!(receipt.honored_instance_deltas, 1);
-        assert_eq!(receipt.input_generations.len(), 2);
+        assert_eq!(receipt.honored_placements, 1);
+        assert_eq!(receipt.honored_facets, 1);
+        assert_eq!(receipt.camera.zoom, 1.25);
+        assert_eq!(receipt.input_generations.len(), 3);
+        assert_eq!(shelfmark.delta["other.reader"], "opaque");
 
         let wire = serde_json::to_string(&shelfmark).expect("stable shelfmark wire");
         let far_side: ShelfmarkV1 = serde_json::from_str(&wire).expect("decode shelfmark");
