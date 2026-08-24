@@ -1169,6 +1169,8 @@ h1 {
 }
 
 .graph-sandbox-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(300px, 0.85fr);
   overflow: hidden;
   border: 1px solid var(--line);
   background: var(--paper);
@@ -1641,24 +1643,44 @@ h1 {
 }
 
 .graph-sandbox-matrix {
-  position: absolute;
-  z-index: 5;
-  inset: 82px 14px 104px;
-  display: grid;
-  grid-template-columns: minmax(86px, 1.4fr) repeat(var(--matrix-size), minmax(48px, 1fr));
-  grid-auto-rows: minmax(42px, 1fr);
+  display: block;
   overflow: auto;
-  padding: 12px;
-  background: var(--parchment);
+  max-height: 360px;
+  border: 1px solid var(--line-soft);
+  background: color-mix(in srgb, var(--parchment) 75%, var(--paper));
 }
 
 .graph-sandbox-matrix[hidden] {
   display: none;
 }
 
-.graph-sandbox-matrix button,
-.graph-sandbox-matrix-corner {
+.graph-sandbox-matrix table {
+  width: max-content;
+  min-width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.graph-sandbox-matrix caption {
+  padding: 8px;
+  color: var(--muted);
+  font: 0.52rem/1.3 var(--font-mono);
+  text-align: left;
+}
+
+.graph-sandbox-matrix th,
+.graph-sandbox-matrix td {
+  width: 44px;
+  min-width: 44px;
+  padding: 0;
+  border-right: 1px solid var(--line-soft);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.graph-sandbox-matrix button {
   display: grid;
+  width: 100%;
+  min-height: 38px;
   min-width: 0;
   place-items: center;
   padding: 5px;
@@ -1689,6 +1711,115 @@ h1 {
 
 .graph-sandbox-matrix button.is-selected {
   box-shadow: inset 0 0 0 2px var(--oxblood);
+}
+
+.graph-sandbox-receipts {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  overflow: auto;
+  max-height: 720px;
+  padding: 16px;
+  border-left: 1px solid var(--line);
+  background: var(--paper);
+}
+
+.graph-sandbox-receipt {
+  display: grid;
+  gap: 8px;
+}
+
+.graph-sandbox-receipt h4 {
+  margin: 0;
+  font: 650 0.62rem/1.2 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.graph-sandbox-receipt-note {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.68rem;
+}
+
+.graph-sandbox-clear-filter,
+.graph-sandbox-deck-dismiss {
+  justify-self: start;
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  background: transparent;
+  font: 0.48rem/1 var(--font-mono);
+  text-transform: uppercase;
+}
+
+.graph-sandbox-clear-filter:disabled {
+  opacity: 0.42;
+}
+
+.graph-sandbox-scatter {
+  position: relative;
+  min-height: 150px;
+  border: 1px solid var(--line-soft);
+  background:
+    linear-gradient(90deg, transparent 49.6%, var(--line-soft) 50%, transparent 50.4%),
+    linear-gradient(transparent 49.6%, var(--line-soft) 50%, transparent 50.4%);
+}
+
+.graph-sandbox-scatter-point {
+  position: absolute;
+  top: var(--scatter-y);
+  left: var(--scatter-x);
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--paper);
+  border-radius: 50%;
+  outline: 1px solid var(--lake-edge);
+  background: var(--lake);
+}
+
+.graph-sandbox-deck {
+  display: grid;
+  gap: 7px;
+}
+
+.graph-sandbox-deck-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px 8px;
+  padding: 9px;
+  border: 1px solid var(--line-soft);
+}
+
+.graph-sandbox-deck-card[hidden] {
+  display: none;
+}
+
+.graph-sandbox-deck-title {
+  justify-self: start;
+  padding: 0;
+  border: 0;
+  color: var(--ink);
+  background: transparent;
+  font: 650 0.58rem/1.2 var(--font-mono);
+}
+
+.graph-sandbox-deck-card p {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.62rem;
+}
+
+[data-source-id].is-source-selected {
+  outline: 2px solid var(--oxblood);
+  outline-offset: 2px;
+}
+
+[data-source-id].is-filtered-out {
+  opacity: 0.18;
 }
 
 .index-intro {
@@ -3378,12 +3509,22 @@ tbody tr:last-child td {
     min-height: 640px;
   }
 
+  .graph-sandbox-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .graph-sandbox-receipts {
+    max-height: none;
+    border-top: 1px solid var(--line);
+    border-left: 0;
+  }
+
   .graph-sandbox-caption {
     bottom: 108px;
   }
 
   .graph-sandbox-matrix {
-    inset: 126px 10px 150px;
+    max-height: 420px;
   }
 
   .feature-card,
@@ -3807,7 +3948,7 @@ tbody tr:last-child td {
   }
 
   .graph-sandbox-matrix {
-    inset: 144px 7px 196px;
+    max-height: 360px;
   }
 
   [data-graph-node-form="flag"] .repository-graph-stage {

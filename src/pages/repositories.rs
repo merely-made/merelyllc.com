@@ -116,55 +116,49 @@ fn graph_sandbox() -> SiteView {
                     ("data-sandbox-interface", ""),
                     ("hidden", "hidden"),
                 ],
-                vec![element(
-                    "div",
-                    &[
-                        ("class", "graph-sandbox-stage"),
-                        ("data-sandbox-stage", ""),
-                        ("data-sandbox-scene", "graph"),
-                        ("data-sandbox-backdrop", "ambient"),
-                    ],
-                    vec![
-                        element(
-                            "canvas",
-                            &[
-                                ("class", "graph-sandbox-canvas"),
-                                ("data-sandbox-canvas", ""),
-                                ("aria-hidden", "true"),
-                            ],
-                            vec![],
-                        ),
-                        element(
-                            "div",
-                            &[
-                                ("class", "graph-sandbox-nodes"),
-                                ("data-sandbox-nodes", ""),
-                                ("role", "group"),
-                                ("aria-label", "Graph sandbox nodes"),
-                            ],
-                            vec![],
-                        ),
-                        element(
-                            "div",
-                            &[
-                                ("class", "graph-sandbox-matrix"),
-                                ("data-sandbox-matrix", ""),
-                                ("hidden", "hidden"),
-                            ],
-                            vec![],
-                        ),
-                        sandbox_graph_controls(),
-                        sandbox_scene_tools(),
-                        element(
-                            "p",
-                            &[
-                                ("class", "graph-sandbox-caption"),
-                                ("data-sandbox-caption", ""),
-                            ],
-                            vec![txt("Loading the graph runtime…")],
-                        ),
-                    ],
-                )],
+                vec![
+                    element(
+                        "div",
+                        &[
+                            ("class", "graph-sandbox-stage"),
+                            ("data-sandbox-stage", ""),
+                            ("data-sandbox-scene", "graph"),
+                            ("data-sandbox-backdrop", "ambient"),
+                        ],
+                        vec![
+                            element(
+                                "canvas",
+                                &[
+                                    ("class", "graph-sandbox-canvas"),
+                                    ("data-sandbox-canvas", ""),
+                                    ("aria-hidden", "true"),
+                                ],
+                                vec![],
+                            ),
+                            element(
+                                "div",
+                                &[
+                                    ("class", "graph-sandbox-nodes"),
+                                    ("data-sandbox-nodes", ""),
+                                    ("role", "group"),
+                                    ("aria-label", "Graph sandbox nodes"),
+                                ],
+                                vec![],
+                            ),
+                            sandbox_graph_controls(),
+                            sandbox_scene_tools(),
+                            element(
+                                "p",
+                                &[
+                                    ("class", "graph-sandbox-caption"),
+                                    ("data-sandbox-caption", ""),
+                                ],
+                                vec![txt("Loading the graph runtime…")],
+                            ),
+                        ],
+                    ),
+                    sandbox_receipt_views(),
+                ],
             ),
             element(
                 "p",
@@ -180,6 +174,87 @@ fn graph_sandbox() -> SiteView {
                 &[("class", "graph-sandbox-range-note")],
                 vec![txt(
                     "A Mermaid diagram or spreadsheet chart can be another projection of the same graph. Their boxes, bars, axes, lanes, and labels are faces and scene marks; a frozen export simply omits the interaction layer.",
+                )],
+            ),
+        ],
+    )
+}
+
+fn sandbox_receipt_views() -> SiteView {
+    element(
+        "aside",
+        &[
+            ("class", "graph-sandbox-receipts"),
+            ("aria-label", "Coordinated projection receipts"),
+        ],
+        vec![
+            element(
+                "section",
+                &[("class", "graph-sandbox-receipt")],
+                vec![
+                    element("h4", &[], vec![txt("Matrix")]),
+                    element(
+                        "p",
+                        &[("class", "graph-sandbox-receipt-note")],
+                        vec![txt("Neighborhood rows crossed with change columns.")],
+                    ),
+                    element(
+                        "button",
+                        &[
+                            ("type", "button"),
+                            ("class", "graph-sandbox-clear-filter"),
+                            ("data-sandbox-clear-matrix", ""),
+                        ],
+                        vec![txt("clear Matrix filter")],
+                    ),
+                    element(
+                        "div",
+                        &[
+                            ("class", "graph-sandbox-matrix"),
+                            ("data-sandbox-matrix", ""),
+                        ],
+                        vec![],
+                    ),
+                ],
+            ),
+            element(
+                "section",
+                &[("class", "graph-sandbox-receipt")],
+                vec![
+                    element("h4", &[], vec![txt("Scatter")]),
+                    element(
+                        "div",
+                        &[
+                            ("class", "graph-sandbox-scatter"),
+                            ("data-sandbox-scatter", ""),
+                            ("role", "group"),
+                            ("aria-label", "Scatter appearances"),
+                        ],
+                        vec![],
+                    ),
+                ],
+            ),
+            element(
+                "section",
+                &[("class", "graph-sandbox-receipt")],
+                vec![
+                    element("h4", &[], vec![txt("Deck")]),
+                    element(
+                        "div",
+                        &[
+                            ("class", "graph-sandbox-deck"),
+                            ("data-sandbox-deck", ""),
+                            ("role", "list"),
+                        ],
+                        vec![],
+                    ),
+                ],
+            ),
+            element(
+                "p",
+                &[("class", "sr-only"), ("id", "graph-source-description")],
+                vec![txt(
+                    "Each appearance addresses the same repository source in a distinct projected view.",
                 )],
             ),
         ],
@@ -1003,8 +1078,8 @@ fn graph_sandbox_json() -> String {
             {"id":"old-mock-replaced-merecat","source":"old-mock","target":"merecat","kind":"replaced_by","provenance":"curated"}
         ],
         "sandbox": {
-            "schema": "mer3ly.graphshell-sandbox/v4",
-            "scene_state_schema": "mer3ly.graphshell-scene-state/v2",
+            "schema": "mer3ly.graphshell-sandbox/v5",
+            "scene_state_schema": "mere.shelfmark/1",
             "reading_registry_schema": "mere.graph-reading-registry/v1",
             "representation_registry_schema": "mere.graph-representation-registry/v2",
             "reading_rule": "Mere selects actor scope, surface, emphasis, and an initial arrangement",

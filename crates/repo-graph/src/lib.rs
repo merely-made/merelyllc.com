@@ -1,4 +1,4 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeMap, HashMap, HashSet};
 
 mod arrangement;
 
@@ -7,10 +7,15 @@ use cartography::{
     ActorScope, PrimitiveBody, default_graph_reading_registry,
     default_graph_representation_registry,
 };
+use chirograph::{
+    CoordinatedSelection, PROJECTION_CAPTURE_VERSION, ProjectionCaptureV1, SelectionResolution,
+};
 use euclid::default::Point2D;
+use incipit::{ShelfmarkAuthorityV1, ShelfmarkInputV1, ShelfmarkV1};
 use sceno::{
-    Arrangement as SceneArrangement, AxisValue, Footprint, HeldPlacement, Hold, Placement,
-    Representation, RoutedRelation, Score, ScoreItem, SourceRef, Spiral, Vec2,
+    Arrangement as SceneArrangement, AxisValue, Footprint, HeldPlacement, Hold, InstanceId,
+    Placement, ProjectedItem, Rect, Representation, RoutedRelation, Score, ScoreItem, Size2,
+    SourceRef, Spiral, Transform2, Vec2,
 };
 use scenotime::{RelationId, Revision, SceneDiff, SceneEpoch, SceneOp, SceneSnapshot};
 use seiche::{
@@ -43,6 +48,9 @@ const UNAVAILABLE_ARRANGEMENTS: &[(&str, &str)] = &[(
 )];
 const PORTABLE_PROJECTION_SCHEMA: &str = "mer3ly.portable-projection/v1";
 const PROJECTION_ADAPTER: &str = "mer3ly.repository-graph/v1";
+const MATRIX_PROJECTION_SCHEMA: &str = "mer3ly.two-reading-matrix/v1";
+const MATRIX_RELATION_ADAPTER: &str = "mer3ly.repository-relation/v1";
+const MATRIX_DERIVATION_ADAPTER: &str = "mer3ly.matrix-derivation/v1";
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 struct GraphInput {
@@ -83,6 +91,146 @@ struct ReadingRequest {
     current: GraphInput,
     #[serde(default)]
     previous: Option<GraphInput>,
+    #[serde(default)]
+    focus: Option<String>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct MatrixAxisRequest {
+    dataset: String,
+    record: String,
+    reading: String,
+    current: GraphInput,
+    #[serde(default)]
+    previous: Option<GraphInput>,
+    #[serde(default)]
+    focus: Option<String>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct MatrixProjectionRequest {
+    rows: MatrixAxisRequest,
+    columns: MatrixAxisRequest,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct MatrixAxisSource {
+    source: SourceRef,
+    name: String,
+    class: String,
+    status: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct MatrixAxis {
+    dataset: String,
+    record: String,
+    reading: String,
+    focus: Option<String>,
+    authority_sha256: String,
+    generation: String,
+    sources: Vec<MatrixAxisSource>,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Deserialize, Serialize)]
+#[serde(rename_all = "snake_case")]
+enum MatrixCellKind {
+    Relation,
+    IdentityMatch,
+    Absence,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct MatrixContributor {
+    authority: String,
+    source: SourceRef,
+    provenance: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct MatrixCell {
+    instance: InstanceId,
+    row: SourceRef,
+    column: SourceRef,
+    source: SourceRef,
+    kind: MatrixCellKind,
+    value: String,
+    description: String,
+    contributors: Vec<MatrixContributor>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct MatrixProjectionArtifact {
+    schema: String,
+    rows: MatrixAxis,
+    columns: MatrixAxis,
+    cells: Vec<MatrixCell>,
+    capture: ProjectionCaptureV1,
+    accessible_html: String,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
+struct MatrixReceipt {
+    schema: String,
+    row_sources: usize,
+    column_sources: usize,
+    cells: usize,
+    relation_cells: usize,
+    scene_instances: usize,
+    capture_bytes: usize,
+    accessible_table: bool,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
+struct ProjectedInstanceAddress {
+    view: String,
+    source: SourceRef,
+    facet: String,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
+struct MatrixInstanceDelta {
+    instance: ProjectedInstanceAddress,
+    visible: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct ComposedShelfmarkRequest {
+    matrix: MatrixProjectionRequest,
+    selection: CoordinatedSelection,
+    #[serde(default)]
+    instances: Vec<MatrixInstanceDelta>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct ResolvedMatrixDataset {
+    current: GraphInput,
+    #[serde(default)]
+    previous: Option<GraphInput>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct MatrixShelfmarkResolutionRequest {
+    shelfmark: ShelfmarkV1,
+    datasets: BTreeMap<String, ResolvedMatrixDataset>,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
+struct MatrixShelfmarkReceipt {
+    matrix: MatrixReceipt,
+    input_generations: BTreeMap<String, String>,
+    selection_resolution: SelectionResolution,
+    honored_instance_deltas: usize,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct MatrixAuthorityRecord {
+    dataset: String,
+    record: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+struct MatrixReadingParameters {
     #[serde(default)]
     focus: Option<String>,
 }
@@ -339,6 +487,26 @@ pub fn project_reading(input: &str) -> Result<String, JsValue> {
     project_reading_json(input).map_err(|error| JsValue::from_str(&error))
 }
 
+/// Build a Matrix over two independently produced readings and carry its
+/// scene through the Graphshell projection-capture envelope.
+#[wasm_bindgen]
+pub fn project_matrix(input: &str) -> Result<String, JsValue> {
+    matrix_projection_json(input).map_err(|error| JsValue::from_str(&error))
+}
+
+/// Cite a composed Matrix with each authority input separately checkable.
+#[wasm_bindgen]
+pub fn compose_matrix_shelfmark(input: &str) -> Result<String, JsValue> {
+    composed_matrix_shelfmark_json(input).map_err(|error| JsValue::from_str(&error))
+}
+
+/// Reconstitute and verify a composed Matrix citation against supplied
+/// authorities.
+#[wasm_bindgen]
+pub fn resolve_matrix_shelfmark(input: &str) -> Result<String, JsValue> {
+    resolve_matrix_shelfmark_json(input).map_err(|error| JsValue::from_str(&error))
+}
+
 /// The generation a citation should expect for this authority.
 ///
 /// A shared scene link carries `expects.generation`; opening the link
@@ -348,8 +516,7 @@ pub fn project_reading(input: &str) -> Result<String, JsValue> {
 pub fn authority_generation(graph: &str) -> Result<String, JsValue> {
     let input: GraphInput = serde_json::from_str(graph)
         .map_err(|error| JsValue::from_str(&format!("invalid graph JSON: {error}")))?;
-    let (_, generation) =
-        authority_identity(&input).map_err(|error| JsValue::from_str(&error))?;
+    let (_, generation) = authority_identity(&input).map_err(|error| JsValue::from_str(&error))?;
     Ok(generation.to_string())
 }
 
@@ -364,18 +531,20 @@ pub fn authority_generation(graph: &str) -> Result<String, JsValue> {
 /// pulls the whole portable path into the browser, score and scene serde plus
 /// `scenomise::solve`, which the live path alone never needed.
 #[wasm_bindgen]
-pub fn portable_projection_with_placement(
-    graph: &str,
-    placement: &str,
-) -> Result<String, JsValue> {
+pub fn portable_projection_with_placement(graph: &str, placement: &str) -> Result<String, JsValue> {
     portable_projection_with_placement_json(graph, placement)
         .map_err(|error| JsValue::from_str(&error))
 }
 
-
 fn project_reading_json(input: &str) -> Result<String, String> {
     let request: ReadingRequest =
         serde_json::from_str(input).map_err(|error| format!("invalid reading request: {error}"))?;
+    let projection = project_reading_request(request)?;
+    serde_json::to_string(&projection)
+        .map_err(|error| format!("could not encode graph reading: {error}"))
+}
+
+fn project_reading_request(request: ReadingRequest) -> Result<GraphInput, String> {
     validate(&request.current)?;
     if let Some(previous) = &request.previous {
         validate(previous)?;
@@ -404,8 +573,544 @@ fn project_reading_json(input: &str) -> Result<String, String> {
             focus_and_neighbors(&current, focus)
         }
     };
-    serde_json::to_string(&projection)
-        .map_err(|error| format!("could not encode graph reading: {error}"))
+    Ok(projection)
+}
+
+fn matrix_projection_json(input: &str) -> Result<String, String> {
+    let request: MatrixProjectionRequest = serde_json::from_str(input)
+        .map_err(|error| format!("invalid Matrix projection request: {error}"))?;
+    let artifact = matrix_projection(&request)?;
+    serde_json::to_string(&artifact)
+        .map_err(|error| format!("could not encode Matrix projection: {error}"))
+}
+
+fn matrix_axis(request: &MatrixAxisRequest) -> Result<(MatrixAxis, GraphInput), String> {
+    if request.dataset.trim().is_empty() || request.record.trim().is_empty() {
+        return Err("a Matrix axis needs a dataset and authority record".to_owned());
+    }
+    let (authority_sha256, generation) = authority_identity(&request.current)?;
+    let projection = project_reading_request(ReadingRequest {
+        reading: request.reading.clone(),
+        current: request.current.clone(),
+        previous: request.previous.clone(),
+        focus: request.focus.clone(),
+    })?;
+    let sources = projection
+        .nodes
+        .iter()
+        .map(|node| MatrixAxisSource {
+            source: SourceRef::new(PROJECTION_ADAPTER, &node.id),
+            name: node.name.clone(),
+            class: node.class.clone(),
+            status: node.status.clone(),
+        })
+        .collect();
+    Ok((
+        MatrixAxis {
+            dataset: request.dataset.clone(),
+            record: request.record.clone(),
+            reading: request.reading.clone(),
+            focus: request.focus.clone(),
+            authority_sha256,
+            generation: generation.to_string(),
+            sources,
+        },
+        projection,
+    ))
+}
+
+fn matrix_projection(
+    request: &MatrixProjectionRequest,
+) -> Result<MatrixProjectionArtifact, String> {
+    let (rows, row_projection) = matrix_axis(&request.rows)?;
+    let (columns, column_projection) = matrix_axis(&request.columns)?;
+    if rows.reading == columns.reading
+        && rows.dataset == columns.dataset
+        && rows.focus == columns.focus
+    {
+        return Err("Matrix axes must be independently produced readings".to_owned());
+    }
+    if rows.sources.is_empty() || columns.sources.is_empty() {
+        return Err("Matrix axes must each produce at least one source".to_owned());
+    }
+
+    let generation_material = serde_json::to_vec(&(
+        &rows.dataset,
+        &rows.authority_sha256,
+        &rows.reading,
+        &rows.focus,
+        &columns.dataset,
+        &columns.authority_sha256,
+        &columns.reading,
+        &columns.focus,
+    ))
+    .map_err(|error| format!("could not identify Matrix projection: {error}"))?;
+    let digest = Sha256::digest(generation_material);
+    let generation = u64::from_be_bytes(
+        digest[..8]
+            .try_into()
+            .expect("SHA-256 prefix is eight bytes"),
+    );
+
+    let mut scene = sceno::Scene::new();
+    scene.generation = generation;
+    let cell_size = 64.0;
+    let heading_footprint = Footprint::Rect {
+        size: Size2::new(cell_size - 8.0, cell_size - 8.0),
+    };
+    for (index, source) in rows.sources.iter().enumerate() {
+        let source_ix = scene.intern_source(source.source.clone());
+        scene.items.push(ProjectedItem {
+            source: source_ix,
+            space: sceno::Scene::WORLD,
+            transform: Transform2::translation(0.0, (index as f32 + 1.0) * cell_size),
+            footprint: heading_footprint.clone(),
+            representation: Representation::Open {
+                kind: "matrix.row-heading".into(),
+            },
+            layer: 1,
+            visible: true,
+            hit: None,
+            channels: Vec::new(),
+        });
+    }
+    for (index, source) in columns.sources.iter().enumerate() {
+        let source_ix = scene.intern_source(source.source.clone());
+        scene.items.push(ProjectedItem {
+            source: source_ix,
+            space: sceno::Scene::WORLD,
+            transform: Transform2::translation((index as f32 + 1.0) * cell_size, 0.0),
+            footprint: heading_footprint.clone(),
+            representation: Representation::Open {
+                kind: "matrix.column-heading".into(),
+            },
+            layer: 1,
+            visible: true,
+            hit: None,
+            channels: Vec::new(),
+        });
+    }
+
+    let mut cells = Vec::with_capacity(rows.sources.len() * columns.sources.len());
+    for (row_index, row) in rows.sources.iter().enumerate() {
+        for (column_index, column) in columns.sources.iter().enumerate() {
+            let contributors = matrix_cell_contributors(request, &row.source, &column.source);
+            let (kind, value, description, cell_source) = if contributors
+                .iter()
+                .any(|contributor| contributor.source.adapter == MATRIX_RELATION_ADAPTER)
+            {
+                let relation_names = contributors
+                    .iter()
+                    .filter(|contributor| contributor.source.adapter == MATRIX_RELATION_ADAPTER)
+                    .map(|contributor| contributor.source.id.as_str())
+                    .collect::<Vec<_>>();
+                (
+                    MatrixCellKind::Relation,
+                    "relation".to_owned(),
+                    format!(
+                        "{} relation{} from {} to {}",
+                        relation_names.len(),
+                        if relation_names.len() == 1 { "" } else { "s" },
+                        row.name,
+                        column.name
+                    ),
+                    SourceRef::new(MATRIX_RELATION_ADAPTER, relation_names.join("+")),
+                )
+            } else if row.source == column.source {
+                (
+                    MatrixCellKind::IdentityMatch,
+                    "same source".to_owned(),
+                    format!("{} is present in both readings", row.name),
+                    SourceRef::new(
+                        MATRIX_DERIVATION_ADAPTER,
+                        format!("identity:{}", row.source.id),
+                    ),
+                )
+            } else {
+                (
+                    MatrixCellKind::Absence,
+                    "no relation".to_owned(),
+                    format!("No direct relation from {} to {}", row.name, column.name),
+                    SourceRef::new(
+                        MATRIX_DERIVATION_ADAPTER,
+                        format!("absence:{}:{}", row.source.id, column.source.id),
+                    ),
+                )
+            };
+            let source_ix = scene.intern_source(cell_source.clone());
+            let instance = InstanceId(scene.items.len() as u32);
+            scene.items.push(ProjectedItem {
+                source: source_ix,
+                space: sceno::Scene::WORLD,
+                transform: Transform2::translation(
+                    (column_index as f32 + 1.0) * cell_size,
+                    (row_index as f32 + 1.0) * cell_size,
+                ),
+                footprint: Footprint::Rect {
+                    size: Size2::new(cell_size - 8.0, cell_size - 8.0),
+                },
+                representation: Representation::Open {
+                    kind: match kind {
+                        MatrixCellKind::Relation => "matrix.relation-cell",
+                        MatrixCellKind::IdentityMatch => "matrix.identity-cell",
+                        MatrixCellKind::Absence => "matrix.absence-cell",
+                    }
+                    .into(),
+                },
+                layer: 0,
+                visible: true,
+                hit: None,
+                channels: vec![(
+                    "matrix.value".into(),
+                    if kind == MatrixCellKind::Absence {
+                        0.0
+                    } else {
+                        1.0
+                    },
+                )],
+            });
+            cells.push(MatrixCell {
+                instance,
+                row: row.source.clone(),
+                column: column.source.clone(),
+                source: cell_source,
+                kind,
+                value,
+                description,
+                contributors,
+            });
+        }
+    }
+    scene.bounds = Rect::new(
+        Vec2::ZERO,
+        Size2::new(
+            (columns.sources.len() as f32 + 1.0) * cell_size,
+            (rows.sources.len() as f32 + 1.0) * cell_size,
+        ),
+    );
+    let snapshot = SceneSnapshot::from_dense(SceneEpoch(generation), Revision(1), scene)
+        .map_err(|error| format!("Scenograph rejected the Matrix scene: {error:?}"))?;
+    let capture = ProjectionCaptureV1 {
+        version: PROJECTION_CAPTURE_VERSION,
+        scene: snapshot,
+        presentation: chirograph::PresentationManifest::default(),
+    };
+    capture
+        .validate()
+        .map_err(|error| format!("Graphshell refused the Matrix capture: {error}"))?;
+    let accessible_html = matrix_accessible_html(&rows, &columns, &cells);
+    let artifact = MatrixProjectionArtifact {
+        schema: MATRIX_PROJECTION_SCHEMA.to_owned(),
+        rows,
+        columns,
+        cells,
+        capture,
+        accessible_html,
+    };
+    consume_matrix_projection(&artifact)?;
+    let _ = (row_projection, column_projection);
+    Ok(artifact)
+}
+
+fn matrix_cell_contributors(
+    request: &MatrixProjectionRequest,
+    row: &SourceRef,
+    column: &SourceRef,
+) -> Vec<MatrixContributor> {
+    let mut contributors = BTreeMap::new();
+    for axis in [&request.rows, &request.columns] {
+        for edge in &axis.current.edges {
+            if edge.source == row.id && edge.target == column.id {
+                let key = format!("{}:{}", axis.dataset, edge.id);
+                contributors
+                    .entry(key)
+                    .or_insert_with(|| MatrixContributor {
+                        authority: axis.dataset.clone(),
+                        source: SourceRef::new(MATRIX_RELATION_ADAPTER, &edge.id),
+                        provenance: edge.provenance.clone(),
+                    });
+            }
+        }
+    }
+    if contributors.is_empty() {
+        for (authority, source) in [
+            (&request.rows.dataset, row),
+            (&request.columns.dataset, column),
+        ] {
+            let key = format!("{authority}:{}", source.id);
+            contributors
+                .entry(key)
+                .or_insert_with(|| MatrixContributor {
+                    authority: authority.clone(),
+                    source: source.clone(),
+                    provenance: "axis input".into(),
+                });
+        }
+    }
+    contributors.into_values().collect()
+}
+
+fn matrix_accessible_html(rows: &MatrixAxis, columns: &MatrixAxis, cells: &[MatrixCell]) -> String {
+    let mut html =
+        String::from("<table data-projection-family=\"matrix\"><caption>Two-reading Matrix: ");
+    html.push_str(&escape_html(&rows.reading));
+    html.push_str(" by ");
+    html.push_str(&escape_html(&columns.reading));
+    html.push_str("</caption><thead><tr><th scope=\"col\">Rows / columns</th>");
+    for column in &columns.sources {
+        html.push_str("<th scope=\"col\">");
+        html.push_str(&escape_html(&column.name));
+        html.push_str("</th>");
+    }
+    html.push_str("</tr></thead><tbody>");
+    for (row_index, row) in rows.sources.iter().enumerate() {
+        html.push_str("<tr><th scope=\"row\">");
+        html.push_str(&escape_html(&row.name));
+        html.push_str("</th>");
+        for column_index in 0..columns.sources.len() {
+            let cell = &cells[row_index * columns.sources.len() + column_index];
+            html.push_str("<td data-projection-instance=\"");
+            html.push_str(&cell.instance.0.to_string());
+            html.push_str("\" aria-label=\"");
+            html.push_str(&escape_html(&cell.description));
+            html.push_str("\">");
+            html.push_str(&escape_html(&cell.value));
+            html.push_str("</td>");
+        }
+        html.push_str("</tr>");
+    }
+    html.push_str("</tbody></table>");
+    html
+}
+
+fn escape_html(input: &str) -> String {
+    input
+        .replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
+        .replace('\'', "&#39;")
+}
+
+fn consume_matrix_projection(artifact: &MatrixProjectionArtifact) -> Result<MatrixReceipt, String> {
+    if artifact.schema != MATRIX_PROJECTION_SCHEMA {
+        return Err(format!("unsupported Matrix schema {}", artifact.schema));
+    }
+    let capture_bytes = artifact
+        .capture
+        .encode()
+        .map_err(|error| format!("could not carry Matrix through Graphshell: {error}"))?;
+    let far_side = ProjectionCaptureV1::decode(&capture_bytes)
+        .map_err(|error| format!("could not restore Matrix from Graphshell: {error}"))?;
+    if far_side != artifact.capture {
+        return Err("Matrix capture changed during Graphshell carriage".to_owned());
+    }
+    let expected_cells = artifact.rows.sources.len() * artifact.columns.sources.len();
+    if artifact.cells.len() != expected_cells {
+        return Err("Matrix cell count does not match its axes".to_owned());
+    }
+    let expected_instances =
+        artifact.rows.sources.len() + artifact.columns.sources.len() + artifact.cells.len();
+    if far_side.scene.active_item_count() != expected_instances {
+        return Err("Matrix headings and cells did not all survive carriage".to_owned());
+    }
+    for cell in &artifact.cells {
+        if cell.contributors.is_empty() || far_side.scene.active_item(cell.instance).is_none() {
+            return Err(format!(
+                "Matrix cell {} lacks an instance or contributor provenance",
+                cell.instance.0
+            ));
+        }
+    }
+    let accessible_table = artifact.accessible_html.starts_with("<table")
+        && artifact.accessible_html.contains("<caption>")
+        && artifact.accessible_html.contains("scope=\"row\"")
+        && artifact.accessible_html.contains("scope=\"col\"");
+    if !accessible_table {
+        return Err("Matrix lacks its accessible table realization".to_owned());
+    }
+    Ok(MatrixReceipt {
+        schema: MATRIX_PROJECTION_SCHEMA.to_owned(),
+        row_sources: artifact.rows.sources.len(),
+        column_sources: artifact.columns.sources.len(),
+        cells: artifact.cells.len(),
+        relation_cells: artifact
+            .cells
+            .iter()
+            .filter(|cell| cell.kind == MatrixCellKind::Relation)
+            .count(),
+        scene_instances: expected_instances,
+        capture_bytes: capture_bytes.len(),
+        accessible_table,
+    })
+}
+
+fn composed_matrix_shelfmark_json(input: &str) -> Result<String, String> {
+    let request: ComposedShelfmarkRequest = serde_json::from_str(input)
+        .map_err(|error| format!("invalid composed shelfmark request: {error}"))?;
+    let artifact = matrix_projection(&request.matrix)?;
+    let shelfmark = composed_matrix_shelfmark(&request, &artifact)?;
+    serde_json::to_string(&shelfmark)
+        .map_err(|error| format!("could not encode composed shelfmark: {error}"))
+}
+
+fn composed_matrix_shelfmark(
+    request: &ComposedShelfmarkRequest,
+    artifact: &MatrixProjectionArtifact,
+) -> Result<ShelfmarkV1, String> {
+    let mut shelfmark = ShelfmarkV1::new("matrix");
+    for (role, axis) in [("rows", &artifact.rows), ("columns", &artifact.columns)] {
+        let authority = MatrixAuthorityRecord {
+            dataset: axis.dataset.clone(),
+            record: axis.record.clone(),
+        };
+        let parameters = MatrixReadingParameters {
+            focus: axis.focus.clone(),
+        };
+        shelfmark.inputs.insert(
+            role.to_owned(),
+            ShelfmarkInputV1 {
+                authority: ShelfmarkAuthorityV1 {
+                    adapter: "mer3ly.dataset/v1".into(),
+                    record: serde_json::to_string(&authority)
+                        .map_err(|error| format!("could not cite Matrix authority: {error}"))?,
+                },
+                reading: axis.reading.clone(),
+                reading_parameters: axis.focus.as_ref().map(|_| {
+                    serde_json::to_string(&parameters)
+                        .expect("Matrix reading parameters are serializable")
+                }),
+                arrangement: None,
+                expects_generation: axis.generation.clone(),
+            },
+        );
+    }
+    shelfmark.delta.insert(
+        "selection".into(),
+        serde_json::to_string(&request.selection)
+            .map_err(|error| format!("could not cite coordinated selection: {error}"))?,
+    );
+    shelfmark.delta.insert(
+        "mer3ly.instances".into(),
+        serde_json::to_string(&request.instances)
+            .map_err(|error| format!("could not cite instance state: {error}"))?,
+    );
+    shelfmark
+        .validate()
+        .map_err(|error| format!("invalid composed shelfmark: {error:?}"))?;
+    Ok(shelfmark)
+}
+
+fn resolve_matrix_shelfmark_json(input: &str) -> Result<String, String> {
+    let request: MatrixShelfmarkResolutionRequest = serde_json::from_str(input)
+        .map_err(|error| format!("invalid Matrix shelfmark resolution request: {error}"))?;
+    let receipt = resolve_matrix_shelfmark_value(&request)?;
+    serde_json::to_string(&receipt)
+        .map_err(|error| format!("could not encode Matrix shelfmark receipt: {error}"))
+}
+
+fn resolve_matrix_shelfmark_value(
+    request: &MatrixShelfmarkResolutionRequest,
+) -> Result<MatrixShelfmarkReceipt, String> {
+    request
+        .shelfmark
+        .validate()
+        .map_err(|error| format!("invalid Matrix shelfmark: {error:?}"))?;
+    if request.shelfmark.projection != "matrix" {
+        return Err(format!(
+            "shelfmark projection {} is not Matrix",
+            request.shelfmark.projection
+        ));
+    }
+    let rows = resolve_matrix_axis("rows", &request.shelfmark, &request.datasets)?;
+    let columns = resolve_matrix_axis("columns", &request.shelfmark, &request.datasets)?;
+    let matrix_request = MatrixProjectionRequest { rows, columns };
+    let artifact = matrix_projection(&matrix_request)?;
+    let matrix = consume_matrix_projection(&artifact)?;
+    let selection: CoordinatedSelection = serde_json::from_str(
+        request
+            .shelfmark
+            .delta
+            .get("selection")
+            .ok_or_else(|| "Matrix shelfmark lacks coordinated selection".to_owned())?,
+    )
+    .map_err(|error| format!("invalid coordinated selection section: {error}"))?;
+    let instances: Vec<MatrixInstanceDelta> = serde_json::from_str(
+        request
+            .shelfmark
+            .delta
+            .get("mer3ly.instances")
+            .ok_or_else(|| "Matrix shelfmark lacks instance state".to_owned())?,
+    )
+    .map_err(|error| format!("invalid Matrix instance section: {error}"))?;
+    let source_ids = artifact
+        .rows
+        .sources
+        .iter()
+        .chain(&artifact.columns.sources)
+        .map(|source| source.source.id.as_str())
+        .collect::<HashSet<_>>();
+    for delta in &instances {
+        if delta.instance.view.trim().is_empty()
+            || delta.instance.facet.trim().is_empty()
+            || !source_ids.contains(delta.instance.source.id.as_str())
+        {
+            return Err("instance-scoped authored state does not resolve".to_owned());
+        }
+    }
+    Ok(MatrixShelfmarkReceipt {
+        matrix,
+        input_generations: BTreeMap::from([
+            ("columns".into(), artifact.columns.generation),
+            ("rows".into(), artifact.rows.generation),
+        ]),
+        selection_resolution: selection.resolution,
+        honored_instance_deltas: instances.len(),
+    })
+}
+
+fn resolve_matrix_axis(
+    role: &str,
+    shelfmark: &ShelfmarkV1,
+    datasets: &BTreeMap<String, ResolvedMatrixDataset>,
+) -> Result<MatrixAxisRequest, String> {
+    let input = shelfmark
+        .inputs
+        .get(role)
+        .ok_or_else(|| format!("Matrix shelfmark lacks {role} input"))?;
+    if input.authority.adapter != "mer3ly.dataset/v1" {
+        return Err(format!(
+            "Matrix {role} authority uses unsupported adapter {}",
+            input.authority.adapter
+        ));
+    }
+    let authority: MatrixAuthorityRecord = serde_json::from_str(&input.authority.record)
+        .map_err(|error| format!("invalid Matrix {role} authority record: {error}"))?;
+    let dataset = datasets
+        .get(&authority.dataset)
+        .ok_or_else(|| format!("Matrix {role} dataset {} is unavailable", authority.dataset))?;
+    let (_, generation) = authority_identity(&dataset.current)?;
+    if generation.to_string() != input.expects_generation {
+        return Err(format!(
+            "Matrix {role} authority moved: expected {}, found {}",
+            input.expects_generation, generation
+        ));
+    }
+    let parameters = input
+        .reading_parameters
+        .as_deref()
+        .map(serde_json::from_str::<MatrixReadingParameters>)
+        .transpose()
+        .map_err(|error| format!("invalid Matrix {role} reading parameters: {error}"))?
+        .unwrap_or_default();
+    Ok(MatrixAxisRequest {
+        dataset: authority.dataset,
+        record: authority.record,
+        reading: input.reading.clone(),
+        current: dataset.current.clone(),
+        previous: dataset.previous.clone(),
+        focus: parameters.focus,
+    })
 }
 
 fn decorate_current(mut current: GraphInput, previous: Option<&GraphInput>) -> GraphInput {
@@ -1498,10 +2203,7 @@ fn arrangement_positions(
         }
         "graph_layout:kanban" => {
             for node in &input.nodes {
-                axis.insert(
-                    node.id.clone(),
-                    AxisValue::Categorical(node.status.clone()),
-                );
+                axis.insert(node.id.clone(), AxisValue::Categorical(node.status.clone()));
             }
             SceneArrangement::Kanban(sceno::Kanban::default())
         }
@@ -1995,7 +2697,10 @@ mod tests {
         assert_eq!(expected, artifact.score.generation.to_string());
         // And it moves when the authority moves, or it checks nothing.
         let altered = SAMPLE.replace("Turnstone", "Ternstone");
-        assert_ne!(authority_generation(&altered).expect("generation"), expected);
+        assert_ne!(
+            authority_generation(&altered).expect("generation"),
+            expected
+        );
     }
 
     #[test]
@@ -2012,7 +2717,12 @@ mod tests {
         // Spiral is the arrangement, and Spiral is exactly the family that used
         // to discard an authored coordinate without saying so.
         let instance = instance_for_source(&artifact.snapshot, "genet").expect("genet is placed");
-        let at = artifact.snapshot.active_item(instance).unwrap().transform.translate;
+        let at = artifact
+            .snapshot
+            .active_item(instance)
+            .unwrap()
+            .transform
+            .translate;
         assert_eq!((at.x, at.y), (-120.5, 64.25));
 
         let receipt = consume_portable_projection_json(&json).expect("receipt");
@@ -2032,7 +2742,10 @@ mod tests {
 
     #[test]
     fn an_unpinned_share_projects_exactly_as_the_plain_path() {
-        let no_pins = SHARED_SCENE.replace(r#""pins": [{"id":"genet","x":-120.5,"y":64.25}]"#, r#""pins": []"#);
+        let no_pins = SHARED_SCENE.replace(
+            r#""pins": [{"id":"genet","x":-120.5,"y":64.25}]"#,
+            r#""pins": []"#,
+        );
         let held = portable_projection_with_placement_json(SAMPLE, &no_pins).unwrap();
         let plain = portable_projection_json(SAMPLE).unwrap();
         assert_eq!(held, plain, "an empty delta must not perturb the receipt");
@@ -2199,5 +2912,141 @@ mod tests {
         assert_eq!(change_by_id["mere"], "updated");
         assert_eq!(change_by_id["genet"], "stable");
         assert_eq!(change_by_id["turnstone"], "added");
+    }
+
+    fn sample_matrix_request() -> MatrixProjectionRequest {
+        let authority: GraphInput = serde_json::from_str(SAMPLE).expect("sample graph");
+        MatrixProjectionRequest {
+            rows: MatrixAxisRequest {
+                dataset: "live".into(),
+                record: "rev:1".into(),
+                reading: "neighbors".into(),
+                current: authority.clone(),
+                previous: None,
+                focus: Some("mere".into()),
+            },
+            columns: MatrixAxisRequest {
+                dataset: "live".into(),
+                record: "rev:1".into(),
+                reading: "graph".into(),
+                current: authority,
+                previous: None,
+                focus: None,
+            },
+        }
+    }
+
+    #[test]
+    fn two_independent_readings_form_a_provenance_carrying_matrix_capture() {
+        let artifact = matrix_projection(&sample_matrix_request()).expect("Matrix projection");
+        let receipt = consume_matrix_projection(&artifact).expect("Matrix receipt");
+        assert_eq!(artifact.rows.reading, "neighbors");
+        assert_eq!(artifact.columns.reading, "graph");
+        assert_eq!(receipt.cells, receipt.row_sources * receipt.column_sources);
+        assert!(
+            receipt.relation_cells >= 2,
+            "cross-scope relations remain cells"
+        );
+        assert!(receipt.accessible_table);
+
+        let mere_source = artifact
+            .capture
+            .scene
+            .tables
+            .sources
+            .iter()
+            .position(|source| {
+                source.as_ref().is_some_and(|source| {
+                    source.adapter == PROJECTION_ADAPTER && source.id == "mere"
+                })
+            })
+            .expect("Mere source");
+        let appearances = artifact
+            .capture
+            .scene
+            .tables
+            .items
+            .iter()
+            .flatten()
+            .filter(|item| item.source.0 as usize == mere_source)
+            .count();
+        assert!(appearances >= 2, "one source backs both Matrix headings");
+
+        assert!(
+            artifact
+                .accessible_html
+                .contains("<table data-projection-family=\"matrix\"")
+        );
+        assert!(artifact.accessible_html.contains("scope=\"row\""));
+        assert!(artifact.accessible_html.contains("scope=\"col\""));
+    }
+
+    #[test]
+    fn composed_shelfmark_reconstitutes_two_authorities_and_instance_state() {
+        let mut matrix = sample_matrix_request();
+        let mut specimen: GraphInput = serde_json::from_str(SAMPLE).expect("specimen graph");
+        specimen.nodes[0].status = "reviewed".into();
+        matrix.columns.dataset = "specimen".into();
+        matrix.columns.record = "authored".into();
+        matrix.columns.current = specimen.clone();
+
+        let mut selection = CoordinatedSelection::new(SelectionResolution::Crossfilter);
+        selection.set(
+            chirograph::SelectionRole::Focus,
+            chirograph::Selection::one("spatial", "node", "mere"),
+        );
+        selection.set(
+            chirograph::SelectionRole::Brush,
+            chirograph::Selection::one("matrix", "node", "turnstone"),
+        );
+        let request = ComposedShelfmarkRequest {
+            matrix: matrix.clone(),
+            selection,
+            instances: vec![MatrixInstanceDelta {
+                instance: ProjectedInstanceAddress {
+                    view: "deck".into(),
+                    source: SourceRef::new(PROJECTION_ADAPTER, "mere"),
+                    facet: "summary".into(),
+                },
+                visible: false,
+            }],
+        };
+        let artifact = matrix_projection(&matrix).expect("composed Matrix");
+        let shelfmark = composed_matrix_shelfmark(&request, &artifact).expect("shelfmark");
+        assert_ne!(
+            shelfmark.inputs["rows"].expects_generation,
+            shelfmark.inputs["columns"].expects_generation
+        );
+
+        let resolution = MatrixShelfmarkResolutionRequest {
+            shelfmark: shelfmark.clone(),
+            datasets: BTreeMap::from([
+                (
+                    "live".into(),
+                    ResolvedMatrixDataset {
+                        current: matrix.rows.current,
+                        previous: None,
+                    },
+                ),
+                (
+                    "specimen".into(),
+                    ResolvedMatrixDataset {
+                        current: specimen,
+                        previous: None,
+                    },
+                ),
+            ]),
+        };
+        let receipt = resolve_matrix_shelfmark_value(&resolution).expect("resolve shelfmark");
+        assert_eq!(
+            receipt.selection_resolution,
+            SelectionResolution::Crossfilter
+        );
+        assert_eq!(receipt.honored_instance_deltas, 1);
+        assert_eq!(receipt.input_generations.len(), 2);
+
+        let wire = serde_json::to_string(&shelfmark).expect("stable shelfmark wire");
+        let far_side: ShelfmarkV1 = serde_json::from_str(&wire).expect("decode shelfmark");
+        assert_eq!(far_side, shelfmark);
     }
 }

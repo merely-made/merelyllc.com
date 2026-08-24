@@ -2,6 +2,7 @@ const runtimeVersion = new URL(import.meta.url).search;
 // The scene wire, converged on the shelfmark shape ruled in mere's
 // 2026-08-16 format note: authority / projection / expects / delta, with the
 // delta as named sections owned by their targets. v1 links keep decoding.
+const SHELFMARK_SCHEMA = "mere.shelfmark/1";
 const SCENE_STATE_SCHEMA = "mer3ly.graphshell-scene-state/v2";
 const SCENE_STATE_SCHEMA_V1 = "mer3ly.graphshell-scene-state/v1";
 const PROJECTION_ADAPTER = "mer3ly.repository-graph/v1";
@@ -38,6 +39,9 @@ const {
   reading_registry: readingRegistry,
   representation_registry: representationRegistry,
   portable_projection_with_placement: portableProjectionWithPlacement,
+  project_matrix: projectMatrix,
+  compose_matrix_shelfmark: composeMatrixShelfmark,
+  resolve_matrix_shelfmark: resolveMatrixShelfmark,
   authority_generation: authorityGeneration,
   GraphPhysics,
 } = await import(`./mer3ly_repo_graph.js${runtimeVersion}`);
@@ -92,7 +96,7 @@ async function startSandbox(sandboxRoot) {
   sandbox.start();
 
   sandboxRoot.dataset.sandboxState = "ready";
-  sandboxRoot.dataset.sandboxSceneSchema = SCENE_STATE_SCHEMA;
+  sandboxRoot.dataset.sandboxSceneSchema = SHELFMARK_SCHEMA;
   sandboxRoot.querySelector("[data-sandbox-fallback]").hidden = true;
   sandboxRoot.querySelector("[data-sandbox-interface]").hidden = false;
   announce(
@@ -216,6 +220,9 @@ class GraphSandbox {
     this.context = this.canvas.getContext("2d");
     this.nodeLayer = sandboxRoot.querySelector("[data-sandbox-nodes]");
     this.matrix = sandboxRoot.querySelector("[data-sandbox-matrix]");
+    this.scatter = sandboxRoot.querySelector("[data-sandbox-scatter]");
+    this.deck = sandboxRoot.querySelector("[data-sandbox-deck]");
+    this.clearMatrixControl = sandboxRoot.querySelector("[data-sandbox-clear-matrix]");
     this.caption = sandboxRoot.querySelector("[data-sandbox-caption]");
     this.controlActors = new Map(
       [...sandboxRoot.querySelectorAll("[data-sandbox-cycle]")].map((control) => [
@@ -239,6 +246,10 @@ class GraphSandbox {
     this.backdrop = "ambient";
     this.collidable = false;
     this.selectedId = null;
+    this.selection = { resolution: "crossfilter", clauses: {} };
+    this.instanceDeltas = [];
+    this.matrixArtifact = null;
+    this.sharedShelfmark = null;
     this.pinsByDataset = new Map();
     this.frame = null;
     this.frameById = new Map();
@@ -251,6 +262,7 @@ class GraphSandbox {
 
   start() {
     this.installControlActors();
+    this.clearMatrixControl?.addEventListener("click", () => this.clearMatrixFilter());
     this.unhonoredSections = {};
     this.expectedGeneration = null;
     this.applySharedState(this.sharedState);
@@ -279,7 +291,7 @@ class GraphSandbox {
   }
 
   isMatrix() {
-    return this.readingProfile().surface === "relation_matrix";
+    return false;
   }
 
   currentPins() {
@@ -295,11 +307,15 @@ class GraphSandbox {
       this.historyIndex = 0;
       return;
     }
-    if (!this.sharedState?.source) this.historyIndex = snapshots.length - 1;
+    if (!this.sharedState) this.historyIndex = snapshots.length - 1;
   }
 
   applySharedState(state) {
     if (!state) return;
+    if (state.schema === SHELFMARK_SCHEMA) {
+      this.applySharedShelfmark(state);
+      return;
+    }
     if (state.schema === SCENE_STATE_SCHEMA) {
       this.applySharedStateV2(state);
       return;
@@ -344,6 +360,44 @@ class GraphSandbox {
       }
     }
     this.pinsByDataset.set(this.datasetId, pins);
+  }
+
+  applySharedShelfmark(state) {
+    if (state.projection !== "matrix") return;
+    this.sharedShelfmark = state;
+    const rowInput = state.inputs?.rows;
+    try {
+      const authority = JSON.parse(rowInput?.authority?.record ?? "{}");
+      if (this.datasets.has(authority.dataset)) this.datasetId = authority.dataset;
+      const cursor = JSON.parse(authority.record ?? "null");
+      const snapshots = this.dataset()?.snapshots ?? [];
+      const sourceIndex = snapshots.findIndex(
+        (snapshot) =>
+          snapshot.cursor.source === cursor?.source &&
+          snapshot.cursor.commit === cursor?.commit,
+      );
+      this.historyIndex = sourceIndex >= 0 ? sourceIndex : Math.max(0, snapshots.length - 1);
+    } catch {
+      this.historyIndex = Math.max(0, (this.dataset()?.snapshots?.length ?? 1) - 1);
+    }
+    // Matrix axis readings belong to the composed projection, not to the
+    // neighboring spatial view. The shelfmark restores Matrix and coordinated
+    // clauses while the spatial surface keeps its own default reading.
+    if (this.readings.has("graph")) this.scene = "graph";
+    try {
+      this.selection = JSON.parse(state.delta?.selection ?? "{}");
+    } catch {
+      this.selection = { resolution: "crossfilter", clauses: {} };
+    }
+    try {
+      this.instanceDeltas = JSON.parse(state.delta?.["mer3ly.instances"] ?? "[]");
+    } catch {
+      this.instanceDeltas = [];
+    }
+    const spatial = this.selection.clauses?.spatial?.targets?.[0];
+    if (spatial?.kind === "node" && typeof spatial.id === "string") {
+      this.selectedId = spatial.id;
+    }
   }
 
   applySharedStateV2(state) {
@@ -411,6 +465,24 @@ class GraphSandbox {
   // expected. A mismatch is a report, not a failure — the graph may
   // legitimately have moved since the link was written.
   checkCitation() {
+    if (this.sharedShelfmark && this.shareStatus) {
+      try {
+        const receipt = JSON.parse(
+          resolveMatrixShelfmark(
+            JSON.stringify({
+              shelfmark: this.sharedShelfmark,
+              datasets: this.resolvedDatasets(),
+            }),
+          ),
+        );
+        const inputs = Object.keys(receipt.input_generations).length;
+        this.shareStatus.textContent = `${inputs} citation inputs verified; ${receipt.honored_instance_deltas} instance changes honored`;
+      } catch (error) {
+        this.shareStatus.textContent = `citation refused: ${error}`;
+      }
+      announce(this.root, this.shareStatus.textContent);
+      return;
+    }
     if (!this.expectedGeneration || !this.shareStatus) return;
     const actual = authorityGeneration(JSON.stringify(this.authority));
     this.shareStatus.textContent =
@@ -424,6 +496,17 @@ class GraphSandbox {
       } carried unhonored`;
     }
     announce(this.root, this.shareStatus.textContent);
+  }
+
+  resolvedDatasets() {
+    return Object.fromEntries(
+      [...this.datasets].map(([id, dataset]) => {
+        const index = id === this.datasetId ? this.historyIndex : dataset.snapshots.length - 1;
+        const current = dataset.snapshots[index]?.graph ?? dataset.graph;
+        const previous = index > 0 ? dataset.snapshots[index - 1].graph : null;
+        return [id, { current, previous }];
+      }),
+    );
   }
 
   authorityForState() {
@@ -466,13 +549,19 @@ class GraphSandbox {
 
     this.physics = new GraphPhysics(JSON.stringify(this.authority));
     this.physics.setBackdrop(this.backdrop, this.collidable);
-    this.installNodes();
-    this.buildMatrix();
-    this.applyArrangement();
     if (!this.authority.nodes.some(({ id }) => id === this.selectedId)) {
       this.selectedId = this.authority.focus ?? this.authority.nodes[0].id;
     }
-    this.select(this.selectedId, false);
+    this.installNodes();
+    this.buildMatrix();
+    this.buildRepeatedAppearances();
+    this.applyArrangement();
+    this.select(
+      this.selectedId,
+      false,
+      "spatial",
+      Boolean(this.selection.clauses?.spatial),
+    );
     this.syncControlActors();
     this.applySceneVisibility();
     this.updateHistoryControl();
@@ -626,13 +715,11 @@ class GraphSandbox {
 
   applySceneVisibility() {
     const reading = this.readingProfile();
-    const matrix = reading.surface === "relation_matrix";
-    this.canvas.hidden = matrix;
-    this.nodeLayer.hidden = matrix;
-    this.matrix.hidden = !matrix;
-    this.controlActors.get("arrangement").disabled = matrix || reading.arrangement_locked;
-    this.controlActors.get("mobility").disabled = matrix;
-    this.controlActors.get("environment").disabled = matrix;
+    this.canvas.hidden = false;
+    this.nodeLayer.hidden = false;
+    this.controlActors.get("arrangement").disabled = reading.arrangement_locked;
+    this.controlActors.get("mobility").disabled = false;
+    this.controlActors.get("environment").disabled = false;
     this.updateNodeScenes();
     this.updateMatrixSelection();
   }
@@ -693,10 +780,14 @@ class GraphSandbox {
         `change-${safeToken(node.change)}`,
       ].join(" ");
       button.dataset.sandboxNode = node.id;
+      button.dataset.sourceId = node.id;
+      button.dataset.projectedView = "spatial";
+      button.dataset.projectedFacet = "node";
       button.dataset.change = node.change;
       button.dataset.primitive = profile.primitive.id;
       button.dataset.face = READING_FACES.get(this.scene) ?? "identity";
       button.setAttribute("aria-label", `${node.name}, ${node.class}, ${node.status}`);
+      button.setAttribute("aria-describedby", "graph-source-description");
       button.append(...this.nodeFace(node, profile));
       button.addEventListener("click", () => {
         if (!button.dataset.dragged) this.select(node.id);
@@ -839,8 +930,14 @@ class GraphSandbox {
     }
   }
 
-  select(id, speak = true) {
-    if (!this.nodeButtons.has(id)) return;
+  select(id, speak = true, source = "spatial", record = true) {
+    if (record) this.setSelectionClause(source, source === "matrix" ? "brush" : "focus", id);
+    else this.selectedId = id;
+    if (!this.nodeButtons.has(id)) {
+      this.applyCoordinatedSelection();
+      if (speak) announce(this.root, `${id} selected in Matrix; the spatial reading has no matching source.`);
+      return;
+    }
     const node = this.node(id);
     if (
       this.readingProfile().actor_scope === "focus_and_neighbors" &&
@@ -853,16 +950,12 @@ class GraphSandbox {
       return;
     }
     this.selectedId = id;
-    for (const [nodeId, button] of this.nodeButtons) {
-      const selected = nodeId === id;
-      button.classList.toggle("is-selected", selected);
-      button.setAttribute("aria-pressed", String(selected));
-    }
+    this.applyCoordinatedSelection();
     if (this.currentArrangement === "graph_layout:radial") {
       this.recomputeNeighborhood(id);
     }
     this.updateSelectionFaces();
-    this.updateMatrixSelection();
+    this.applyCoordinatedSelection();
     if (speak) {
       announce(this.root, `${node.name} selected. ${node.summary}`);
     }
@@ -931,60 +1024,235 @@ class GraphSandbox {
 
   buildMatrix() {
     this.matrix.replaceChildren();
-    const nodes = this.authority.nodes;
-    this.matrix.style.setProperty("--matrix-size", String(nodes.length));
-    const corner = document.createElement("span");
-    corner.className = "graph-sandbox-matrix-corner";
-    corner.textContent = "from ↓ / to →";
-    this.matrix.append(corner);
-    for (const node of nodes) this.matrix.append(this.matrixHeader(node, "column"));
-    for (const source of nodes) {
-      this.matrix.append(this.matrixHeader(source, "row"));
-      for (const target of nodes) {
-        const edge = this.authority.edges.find(
-          (candidate) => candidate.source === source.id && candidate.target === target.id,
-        );
-        const cell = document.createElement("button");
-        cell.type = "button";
-        cell.className = "graph-sandbox-matrix-cell";
-        cell.dataset.matrixSource = source.id;
-        cell.dataset.matrixTarget = target.id;
-        cell.textContent = edge ? "→" : "·";
-        cell.title = edge
-          ? `${source.name} ${humanize(edge.kind)} ${target.name}`
-          : `${source.name} has no direct relation to ${target.name}`;
-        cell.setAttribute("aria-label", cell.title);
-        cell.addEventListener("click", () => this.select(edge ? target.id : source.id));
-        if (edge) cell.classList.add("has-relation");
-        this.matrix.append(cell);
-      }
+    try {
+      this.matrixArtifact = JSON.parse(projectMatrix(JSON.stringify(this.matrixRequest())));
+    } catch (error) {
+      this.matrixArtifact = null;
+      this.matrix.textContent = `Matrix refused: ${error}`;
+      return;
     }
+    const table = document.createElement("table");
+    table.dataset.projectionFamily = "matrix";
+    const caption = document.createElement("caption");
+    caption.textContent = `${humanize(this.matrixArtifact.rows.reading)} rows × ${humanize(this.matrixArtifact.columns.reading)} columns`;
+    table.append(caption);
+    const head = document.createElement("thead");
+    const headRow = document.createElement("tr");
+    const corner = document.createElement("th");
+    corner.scope = "col";
+    corner.textContent = "rows / columns";
+    headRow.append(corner);
+    this.matrixArtifact.columns.sources.forEach((source, index) => {
+      const heading = document.createElement("th");
+      heading.scope = "col";
+      heading.append(this.matrixHeader(source, "column", this.matrixArtifact.rows.sources.length + index));
+      headRow.append(heading);
+    });
+    head.append(headRow);
+    table.append(head);
+    const body = document.createElement("tbody");
+    this.matrixArtifact.rows.sources.forEach((row, rowIndex) => {
+      const tableRow = document.createElement("tr");
+      const heading = document.createElement("th");
+      heading.scope = "row";
+      heading.append(this.matrixHeader(row, "row", rowIndex));
+      tableRow.append(heading);
+      this.matrixArtifact.columns.sources.forEach((column, columnIndex) => {
+        const cellData = this.matrixArtifact.cells[
+          rowIndex * this.matrixArtifact.columns.sources.length + columnIndex
+        ];
+        const cell = document.createElement("td");
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "graph-sandbox-matrix-cell";
+        button.dataset.matrixSource = row.source.id;
+        button.dataset.matrixTarget = column.source.id;
+        button.dataset.sourceId = column.source.id;
+        button.dataset.projectedView = "matrix";
+        button.dataset.projectedFacet = "cell";
+        button.dataset.projectionInstance = String(cellData.instance);
+        button.textContent = cellData.kind === "relation" ? "→" : cellData.kind === "identity_match" ? "=" : "·";
+        button.title = cellData.description;
+        button.setAttribute("aria-label", cellData.description);
+        button.setAttribute("aria-describedby", "graph-source-description");
+        button.addEventListener("click", () => this.select(column.source.id, true, "matrix"));
+        if (cellData.kind === "relation") button.classList.add("has-relation");
+        cell.append(button);
+        tableRow.append(cell);
+      });
+      body.append(tableRow);
+    });
+    table.append(body);
+    this.matrix.append(table);
   }
 
-  matrixHeader(node, axis) {
+  matrixRequest() {
+    const axisAuthority = (datasetId, index) => {
+      const dataset = this.datasets.get(datasetId);
+      const current = dataset.snapshots[index]?.graph ?? dataset.graph;
+      const previous = index > 0 ? dataset.snapshots[index - 1].graph : null;
+      const cursor = dataset.snapshots[index]?.cursor ?? {
+        source: `mer3ly/${datasetId}`,
+        commit: "authored",
+        committed_at: "static",
+      };
+      return { dataset: datasetId, record: JSON.stringify(cursor), current, previous };
+    };
+    const rowAuthority = axisAuthority(this.datasetId, this.historyIndex);
+    const columnDatasetId = this.datasetId === "live" ? "specimen" : "live";
+    const columnDataset = this.datasets.get(columnDatasetId);
+    const columnAuthority = axisAuthority(columnDatasetId, columnDataset.snapshots.length - 1);
+    const matrixFocus = rowAuthority.current.nodes.some(({ id }) => id === "mere")
+      ? "mere"
+      : this.selectedId ?? rowAuthority.current.focus ?? rowAuthority.current.nodes[0]?.id;
+    return {
+      rows: {
+        ...rowAuthority,
+        reading: "neighbors",
+        focus: matrixFocus,
+      },
+      columns: { ...columnAuthority, reading: "changes", focus: null },
+    };
+  }
+
+  matrixHeader(node, axis, instance) {
     const button = document.createElement("button");
     button.type = "button";
     button.className = `graph-sandbox-matrix-header is-${axis}`;
-    button.dataset.matrixNode = node.id;
+    button.dataset.matrixNode = node.source.id;
+    button.dataset.sourceId = node.source.id;
+    button.dataset.projectedView = `matrix-${axis}`;
+    button.dataset.projectedFacet = "heading";
+    button.dataset.projectionInstance = String(instance);
     button.textContent = node.name;
-    button.addEventListener("click", () => this.select(node.id));
+    button.setAttribute("aria-describedby", "graph-source-description");
+    button.addEventListener("click", () => this.select(node.source.id, true, "matrix"));
     return button;
   }
 
-  updateMatrixSelection() {
-    for (const element of this.matrix.querySelectorAll(
-      "[data-matrix-node], [data-matrix-source], [data-matrix-target]",
-    )) {
-      element.classList.toggle(
-        "is-selected",
-        element.dataset.matrixNode === this.selectedId ||
-          element.dataset.matrixSource === this.selectedId ||
-          element.dataset.matrixTarget === this.selectedId,
-      );
+  buildRepeatedAppearances() {
+    this.scatter.replaceChildren();
+    this.deck.replaceChildren();
+    for (const node of this.authority.nodes) {
+      const scatter = document.createElement("button");
+      scatter.type = "button";
+      scatter.className = "graph-sandbox-scatter-point";
+      scatter.dataset.sourceId = node.id;
+      scatter.dataset.projectedView = "scatter";
+      scatter.dataset.projectedFacet = "status";
+      scatter.setAttribute("aria-label", `${node.name}, ${node.status} scatter appearance`);
+      scatter.setAttribute("aria-describedby", "graph-source-description");
+      scatter.style.setProperty("--scatter-x", `${20 + stablePercent(node.id, 0) * 0.6}%`);
+      scatter.style.setProperty("--scatter-y", `${18 + stablePercent(node.id, 1) * 0.64}%`);
+      scatter.addEventListener("click", () => this.select(node.id));
+      this.scatter.append(scatter);
+
+      const address = {
+        view: "deck",
+        source: { adapter: PROJECTION_ADAPTER, id: node.id },
+        facet: "summary",
+      };
+      const card = document.createElement("article");
+      card.className = "graph-sandbox-deck-card";
+      card.dataset.sourceId = node.id;
+      card.dataset.projectedView = "deck";
+      card.dataset.projectedFacet = "summary";
+      card.setAttribute("role", "listitem");
+      card.setAttribute("aria-describedby", "graph-source-description");
+      const title = document.createElement("button");
+      title.type = "button";
+      title.className = "graph-sandbox-deck-title";
+      title.textContent = node.name;
+      title.addEventListener("click", () => this.select(node.id));
+      const summary = document.createElement("p");
+      summary.textContent = node.summary;
+      const dismiss = document.createElement("button");
+      dismiss.type = "button";
+      dismiss.className = "graph-sandbox-deck-dismiss";
+      dismiss.textContent = "dismiss appearance";
+      dismiss.addEventListener("click", () => this.dismissInstance(address, card));
+      card.append(title, summary, dismiss);
+      if (this.instanceDeltas.some((delta) => sameInstance(delta.instance, address) && !delta.visible)) {
+        card.hidden = true;
+      }
+      this.deck.append(card);
     }
+    this.applyCoordinatedSelection();
+  }
+
+  dismissInstance(instance, element) {
+    this.instanceDeltas = this.instanceDeltas.filter((delta) => !sameInstance(delta.instance, instance));
+    this.instanceDeltas.push({ instance, visible: false });
+    element.hidden = true;
+    announce(this.root, `${instance.source.id} Deck appearance dismissed; its source remains.`);
+  }
+
+  setSelectionClause(source, role, id) {
+    this.selection.resolution = "crossfilter";
+    this.selection.clauses ??= {};
+    this.selection.clauses[source] = { role, targets: [{ kind: "node", id }] };
+    this.selectedId = id;
+  }
+
+  clearMatrixFilter() {
+    delete this.selection.clauses?.matrix;
+    this.applyCoordinatedSelection();
+    announce(this.root, "Matrix filter cleared; the full spatial reading is restored.");
+  }
+
+  targetsFor(consumer) {
+    const foreign = Object.entries(this.selection.clauses ?? {})
+      .filter(([source]) => source !== consumer)
+      .map(([, clause]) => new Set((clause.targets ?? []).map((target) => `${target.kind}:${target.id}`)));
+    if (!foreign.length) return null;
+    return new Set([...foreign[0]].filter((target) => foreign.every((set) => set.has(target))));
+  }
+
+  applyCoordinatedSelection() {
+    const spatialTargets = this.targetsFor("spatial");
+    const matrixTargets = this.targetsFor("matrix");
+    for (const element of this.root.querySelectorAll("[data-source-id]")) {
+      const id = element.dataset.sourceId;
+      const selected = id === this.selectedId;
+      element.classList.toggle("is-source-selected", selected);
+      element.classList.toggle("is-selected", selected);
+      if (element.matches("button")) element.setAttribute("aria-pressed", String(selected));
+      const targets = element.closest("[data-sandbox-matrix]") ? matrixTargets : spatialTargets;
+      element.classList.toggle("is-filtered-out", Boolean(targets) && !targets.has(`node:${id}`));
+    }
+    this.clearMatrixControl.disabled = !this.selection.clauses?.matrix;
+  }
+
+  updateMatrixSelection() {
+    this.applyCoordinatedSelection();
   }
 
   sceneState() {
+    const clauses = Object.fromEntries(
+      Object.entries(this.selection.clauses ?? {})
+        .sort(([left], [right]) => left.localeCompare(right))
+        .map(([source, clause]) => [
+          source,
+          {
+            role: clause.role,
+            targets: [...(clause.targets ?? [])].sort((left, right) =>
+              `${left.kind}:${left.id}`.localeCompare(`${right.kind}:${right.id}`),
+            ),
+          },
+        ]),
+    );
+    return JSON.parse(
+      composeMatrixShelfmark(
+        JSON.stringify({
+          matrix: this.matrixRequest(),
+          selection: { resolution: "crossfilter", clauses },
+          instances: this.instanceDeltas,
+        }),
+      ),
+    );
+  }
+
+  legacySceneState() {
     const cursor = this.dataset().snapshots[this.historyIndex]?.cursor ?? {
       source: "mer3ly/specimen",
       commit: "authored",
@@ -1050,7 +1318,7 @@ class GraphSandbox {
     try {
       artifact = portableProjectionWithPlacement(
         JSON.stringify(this.authority),
-        JSON.stringify(this.sceneState()),
+        JSON.stringify(this.legacySceneState()),
       );
     } catch (error) {
       this.exportStatus.textContent = `projection refused: ${error}`;
@@ -1311,6 +1579,24 @@ function humanize(value) {
 
 function clamp(value, minimum, maximum) {
   return Math.min(Math.max(value, minimum), maximum);
+}
+
+function stablePercent(value, salt) {
+  let hash = 2166136261 + salt;
+  for (const character of value) {
+    hash ^= character.charCodeAt(0);
+    hash = Math.imul(hash, 16777619);
+  }
+  return Math.abs(hash % 100);
+}
+
+function sameInstance(left, right) {
+  return (
+    left?.view === right?.view &&
+    left?.facet === right?.facet &&
+    left?.source?.adapter === right?.source?.adapter &&
+    left?.source?.id === right?.source?.id
+  );
 }
 
 function announce(sandboxRoot, message) {

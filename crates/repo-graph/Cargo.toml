@@ -15,12 +15,14 @@ license = "MIT OR Apache-2.0"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-cartography = { package = "mere-cartography", git = "https://github.com/merely-made/mere.git", rev = "330eee986538cd5760b48685e3f765d375227e93" }
+cartography = { package = "mere-cartography", git = "https://github.com/merely-made/mere.git", rev = "6cc014c4b85a2757dba1610e89884f318d00d933" }
+chirograph = { git = "https://github.com/merely-made/mere.git", rev = "6cc014c4b85a2757dba1610e89884f318d00d933" }
 euclid = { version = "0.22", features = ["serde"] }
-sceno = { git = "https://github.com/merely-made/mere.git", rev = "330eee986538cd5760b48685e3f765d375227e93" }
-scenomise = { git = "https://github.com/merely-made/mere.git", rev = "330eee986538cd5760b48685e3f765d375227e93" }
-scenotime = { git = "https://github.com/merely-made/mere.git", rev = "330eee986538cd5760b48685e3f765d375227e93" }
-seiche = { git = "https://github.com/merely-made/mere.git", rev = "330eee986538cd5760b48685e3f765d375227e93" }
+incipit = { git = "https://github.com/merely-made/mere.git", rev = "6cc014c4b85a2757dba1610e89884f318d00d933" }
+sceno = { git = "https://github.com/merely-made/mere.git", rev = "6cc014c4b85a2757dba1610e89884f318d00d933" }
+scenomise = { git = "https://github.com/merely-made/mere.git", rev = "6cc014c4b85a2757dba1610e89884f318d00d933" }
+scenotime = { git = "https://github.com/merely-made/mere.git", rev = "6cc014c4b85a2757dba1610e89884f318d00d933" }
+seiche = { git = "https://github.com/merely-made/mere.git", rev = "6cc014c4b85a2757dba1610e89884f318d00d933" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 sha2 = "0.10"

@@ -268,11 +268,8 @@ fn graphshell_sandbox_keeps_truth_face_arrangement_and_motion_distinct() {
         classes.len() >= 8,
         "the specimen graph is meaningfully heterogeneous"
     );
-    assert_eq!(sandbox["sandbox"]["schema"], "mer3ly.graphshell-sandbox/v4");
-    assert_eq!(
-        sandbox["sandbox"]["scene_state_schema"],
-        "mer3ly.graphshell-scene-state/v2"
-    );
+    assert_eq!(sandbox["sandbox"]["schema"], "mer3ly.graphshell-sandbox/v5");
+    assert_eq!(sandbox["sandbox"]["scene_state_schema"], "mere.shelfmark/1");
     assert_eq!(
         sandbox["sandbox"]["reading_registry_schema"],
         "mere.graph-reading-registry/v1"
@@ -287,6 +284,10 @@ fn graphshell_sandbox_keeps_truth_face_arrangement_and_motion_distinct() {
     assert!(document.contains("data-sandbox-cycle=\"reading\""));
     assert!(document.contains("data-sandbox-cycle=\"arrangement\""));
     assert!(document.contains("data-sandbox-cycle=\"mobility\""));
+    assert!(document.contains("data-sandbox-matrix"));
+    assert!(document.contains("data-sandbox-scatter"));
+    assert!(document.contains("data-sandbox-deck"));
+    assert!(document.contains("data-sandbox-clear-matrix"));
     assert!(!document.contains("data-sandbox-control="));
 
     for contract in [
@@ -299,6 +300,12 @@ fn graphshell_sandbox_keeps_truth_face_arrangement_and_motion_distinct() {
         "graph_layout:radial",
         "recomputeNeighborhood",
         "buildMatrix",
+        "projectMatrix",
+        "composeMatrixShelfmark",
+        "resolveMatrixShelfmark",
+        "buildRepeatedAppearances",
+        "applyCoordinatedSelection",
+        "clearMatrixFilter",
         "dataset.sandboxScene",
         "dataset.sandboxFace",
         "READING_FACES",
@@ -329,6 +336,10 @@ fn graphshell_sandbox_keeps_truth_face_arrangement_and_motion_distinct() {
         ".graph-sandbox-share",
         "[data-sandbox-scene=\"neighbors\"]",
         ".graph-sandbox-matrix-cell.has-relation",
+        ".graph-sandbox-receipts",
+        ".graph-sandbox-scatter-point",
+        ".graph-sandbox-deck-card",
+        "[data-source-id].is-filtered-out",
     ] {
         assert!(
             SITE_CSS.contains(contract),
@@ -336,7 +347,7 @@ fn graphshell_sandbox_keeps_truth_face_arrangement_and_motion_distinct() {
         );
     }
     assert!(
-        GRAPH_SANDBOX.len() < 52 * 1024,
+        GRAPH_SANDBOX.len() < 64 * 1024,
         "sandbox loader is too large"
     );
 }
@@ -356,15 +367,17 @@ fn graph_assets_and_responsive_styles_are_bounded() {
     // check, and 958,016 with them kept. No variant fit under the old 900 KiB
     // bound, so the choice was to pay for the useful version or drop the
     // feature. The ceilings below are the paid price, with roughly 65 KiB of
-    // headroom; they are still a bound, and a change that needs them raised
-    // again deserves the same measurement.
+    // headroom. Wave 1's Matrix capture, coordinated selection, and composed
+    // Shelfmark resolver measured 1,268,979 bytes together. The revised
+    // ceilings keep roughly 110 KiB of Wasm headroom and 80 KiB over the whole
+    // runtime. They remain a bound, and another increase needs measurement.
     assert!(
-        GRAPH_WASM.len() < 1_000 * 1024,
+        GRAPH_WASM.len() < 1_350 * 1024,
         "graph + physics + portable projection Wasm is {} bytes",
         GRAPH_WASM.len()
     );
     assert!(
-        GRAPH_SANDBOX.len() + GRAPH_GLUE.len() + GRAPH_WASM.len() < 1_100 * 1024,
+        GRAPH_SANDBOX.len() + GRAPH_GLUE.len() + GRAPH_WASM.len() < 1_400 * 1024,
         "graph + physics + portable projection runtime is {} bytes",
         GRAPH_SANDBOX.len() + GRAPH_GLUE.len() + GRAPH_WASM.len()
     );

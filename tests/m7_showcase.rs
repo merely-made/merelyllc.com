@@ -147,9 +147,10 @@ fn mere_profile_projects_one_authority_into_canvas_and_swatch_views() {
     assert_eq!(artifact["schema"], "mer3ly.portable-projection/v1");
     assert_eq!(artifact["adapter"], "mer3ly.repository-graph/v1");
     // The score wire version moves when the contract does (2 added holds,
-    // 3 renamed Board to Grid), and this assertion moving with it is the
-    // consumer noticing rather than silently accepting a shape it never knew.
-    assert_eq!(artifact["score"]["version"], 3);
+    // 3 renamed Board to Grid, 4 added the arrangement catalog and its item
+    // disclosures), and this assertion moving with it is the consumer noticing
+    // rather than silently accepting a shape it never knew.
+    assert_eq!(artifact["score"]["version"], 4);
     assert_eq!(
         artifact["score"]["items"]
             .as_array()
