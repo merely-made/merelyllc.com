@@ -1126,6 +1126,10 @@ class GraphSandbox {
         button.dataset.matrixSource = row.source.id;
         button.dataset.matrixTarget = column.source.id;
         button.dataset.sourceId = column.source.id;
+        button.dataset.projectionSourceAdapter = cellData.source.adapter;
+        button.dataset.projectionSourceId = cellData.source.id;
+        button.dataset.matrixRowAdapter = cellData.row.adapter;
+        button.dataset.matrixColumnAdapter = cellData.column.adapter;
         button.dataset.projectedView = "matrix";
         button.dataset.projectedFacet = "cell";
         button.dataset.projectionInstance = String(cellData.instance);
@@ -1182,6 +1186,8 @@ class GraphSandbox {
     button.className = `graph-sandbox-matrix-header is-${axis}`;
     button.dataset.matrixNode = node.source.id;
     button.dataset.sourceId = node.source.id;
+    button.dataset.projectionSourceAdapter = node.source.adapter;
+    button.dataset.projectionSourceId = node.source.id;
     button.dataset.projectedView = `matrix-${axis}`;
     button.dataset.projectedFacet = "heading";
     button.dataset.projectionInstance = String(instance);

@@ -15,19 +15,29 @@ license = "MIT OR Apache-2.0"
 crate-type = ["cdylib", "rlib"]
 
 [dependencies]
-cartography = { package = "mere-cartography", git = "https://github.com/merely-made/mere.git", rev = "6cc014c4b85a2757dba1610e89884f318d00d933" }
-chirograph = { git = "https://github.com/merely-made/mere.git", rev = "6cc014c4b85a2757dba1610e89884f318d00d933" }
+cartography = { package = "mere-cartography", git = "https://github.com/merely-made/mere.git", rev = "302bbe72d7597b7573e14199ce926bd3b03eea7f" }
+chirograph = { git = "https://github.com/merely-made/mere.git", rev = "302bbe72d7597b7573e14199ce926bd3b03eea7f" }
 euclid = { version = "0.22", features = ["serde"] }
-incipit = { git = "https://github.com/merely-made/mere.git", rev = "6cc014c4b85a2757dba1610e89884f318d00d933" }
-sceno = { git = "https://github.com/merely-made/mere.git", rev = "6cc014c4b85a2757dba1610e89884f318d00d933" }
-scenomise = { git = "https://github.com/merely-made/mere.git", rev = "6cc014c4b85a2757dba1610e89884f318d00d933" }
-scenotime = { git = "https://github.com/merely-made/mere.git", rev = "6cc014c4b85a2757dba1610e89884f318d00d933" }
-seiche = { git = "https://github.com/merely-made/mere.git", rev = "6cc014c4b85a2757dba1610e89884f318d00d933" }
+incipit = { git = "https://github.com/merely-made/mere.git", rev = "302bbe72d7597b7573e14199ce926bd3b03eea7f" }
+sceno = { git = "https://github.com/merely-made/mere.git", rev = "302bbe72d7597b7573e14199ce926bd3b03eea7f" }
+scenomise = { git = "https://github.com/merely-made/mere.git", rev = "302bbe72d7597b7573e14199ce926bd3b03eea7f" }
+scenotime = { git = "https://github.com/merely-made/mere.git", rev = "302bbe72d7597b7573e14199ce926bd3b03eea7f" }
+seiche = { git = "https://github.com/merely-made/mere.git", rev = "302bbe72d7597b7573e14199ce926bd3b03eea7f" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 sha2 = "0.10"
 uuid = { version = "1", features = ["js"] }
 wasm-bindgen = "=0.2.126"
+
+[dev-dependencies]
+graphshell = { git = "https://github.com/merely-made/mere.git", rev = "302bbe72d7597b7573e14199ce926bd3b03eea7f" }
+graphshell-client = { git = "https://github.com/merely-made/mere.git", rev = "302bbe72d7597b7573e14199ce926bd3b03eea7f" }
+graphshell-endpoint = { git = "https://github.com/merely-made/mere.git", rev = "302bbe72d7597b7573e14199ce926bd3b03eea7f" }
+graphshell-local = { git = "https://github.com/merely-made/mere.git", rev = "302bbe72d7597b7573e14199ce926bd3b03eea7f" }
+notochord = { git = "https://github.com/merely-made/mere.git", rev = "302bbe72d7597b7573e14199ce926bd3b03eea7f", features = ["tokio"] }
+personae = { git = "https://github.com/merely-made/mere.git", rev = "302bbe72d7597b7573e14199ce926bd3b03eea7f", features = ["agent"] }
+tokio = { version = "1", features = ["io-util", "macros", "rt-multi-thread", "sync", "time"] }
+transport = { package = "mere-transport", git = "https://github.com/merely-made/mere.git", rev = "302bbe72d7597b7573e14199ce926bd3b03eea7f", features = ["notochord"] }
 
 [lints.rust]
 unsafe_code = "forbid"

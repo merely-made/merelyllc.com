@@ -903,20 +903,44 @@ fn matrix_accessible_html(rows: &MatrixAxis, columns: &MatrixAxis, cells: &[Matr
     html.push_str(" by ");
     html.push_str(&escape_html(&columns.reading));
     html.push_str("</caption><thead><tr><th scope=\"col\">Rows / columns</th>");
-    for column in &columns.sources {
-        html.push_str("<th scope=\"col\">");
+    for (column_index, column) in columns.sources.iter().enumerate() {
+        html.push_str("<th scope=\"col\" data-projection-instance=\"");
+        html.push_str(&(rows.sources.len() + column_index).to_string());
+        html.push_str("\" data-source-adapter=\"");
+        html.push_str(&escape_html(&column.source.adapter));
+        html.push_str("\" data-source-id=\"");
+        html.push_str(&escape_html(&column.source.id));
+        html.push_str("\">");
         html.push_str(&escape_html(&column.name));
         html.push_str("</th>");
     }
     html.push_str("</tr></thead><tbody>");
     for (row_index, row) in rows.sources.iter().enumerate() {
-        html.push_str("<tr><th scope=\"row\">");
+        html.push_str("<tr><th scope=\"row\" data-projection-instance=\"");
+        html.push_str(&row_index.to_string());
+        html.push_str("\" data-source-adapter=\"");
+        html.push_str(&escape_html(&row.source.adapter));
+        html.push_str("\" data-source-id=\"");
+        html.push_str(&escape_html(&row.source.id));
+        html.push_str("\">");
         html.push_str(&escape_html(&row.name));
         html.push_str("</th>");
         for column_index in 0..columns.sources.len() {
             let cell = &cells[row_index * columns.sources.len() + column_index];
             html.push_str("<td data-projection-instance=\"");
             html.push_str(&cell.instance.0.to_string());
+            html.push_str("\" data-source-adapter=\"");
+            html.push_str(&escape_html(&cell.source.adapter));
+            html.push_str("\" data-source-id=\"");
+            html.push_str(&escape_html(&cell.source.id));
+            html.push_str("\" data-matrix-row-adapter=\"");
+            html.push_str(&escape_html(&cell.row.adapter));
+            html.push_str("\" data-matrix-row-id=\"");
+            html.push_str(&escape_html(&cell.row.id));
+            html.push_str("\" data-matrix-column-adapter=\"");
+            html.push_str(&escape_html(&cell.column.adapter));
+            html.push_str("\" data-matrix-column-id=\"");
+            html.push_str(&escape_html(&cell.column.id));
             html.push_str("\" aria-label=\"");
             html.push_str(&escape_html(&cell.description));
             html.push_str("\">");
@@ -3255,6 +3279,453 @@ mod tests {
         );
         assert!(artifact.accessible_html.contains("scope=\"row\""));
         assert!(artifact.accessible_html.contains("scope=\"col\""));
+    }
+
+    fn scene_source_mapping(snapshot: &scenotime::SceneSnapshot) -> Vec<(InstanceId, SourceRef)> {
+        snapshot
+            .tables
+            .items
+            .iter()
+            .enumerate()
+            .filter_map(|(index, item)| {
+                let item = item.as_ref()?;
+                if !item.visible {
+                    return None;
+                }
+                let source = snapshot
+                    .tables
+                    .sources
+                    .get(item.source.0 as usize)?
+                    .as_ref()?;
+                Some((InstanceId(index as u32), source.clone()))
+            })
+            .collect()
+    }
+
+    #[derive(Clone)]
+    struct MatrixSnapshotEndpoint {
+        snapshot: chirograph::ProjectionSnapshot,
+        resources: BTreeMap<chirograph::ContentHash, Vec<u8>>,
+    }
+
+    fn matrix_presentation(
+        artifact: &MatrixProjectionArtifact,
+    ) -> (
+        chirograph::PresentationManifest,
+        BTreeMap<chirograph::ContentHash, Vec<u8>>,
+    ) {
+        let labels = artifact
+            .rows
+            .sources
+            .iter()
+            .chain(&artifact.columns.sources)
+            .map(|source| source.name.clone())
+            .chain(artifact.cells.iter().map(|cell| cell.description.clone()))
+            .collect::<Vec<_>>();
+        assert_eq!(
+            labels.len(),
+            scene_source_mapping(&artifact.capture.scene).len(),
+            "Matrix construction and presentation keep the same row-column-cell order"
+        );
+        let mut presentation = chirograph::PresentationManifest::default();
+        let mut resources = BTreeMap::new();
+        for ((instance, _), label) in scene_source_mapping(&artifact.capture.scene)
+            .into_iter()
+            .zip(labels)
+        {
+            let glyph = chirograph::NativeGlyphV1 {
+                label: label.clone(),
+                icon: None,
+                color: None,
+            };
+            let bytes = serde_json::to_vec(&glyph).expect("encode Matrix glyph");
+            let resource = chirograph::ContentHash::of(&bytes);
+            let key = chirograph::PresentationKey(format!("matrix:{}", instance.0));
+            presentation.bindings.push(chirograph::PresentationBinding {
+                instance,
+                key: key.clone(),
+            });
+            presentation.offers.insert(
+                key,
+                vec![chirograph::PresentationOffer {
+                    codec: chirograph::PresentationCodec::NativeGlyphV1,
+                    resource,
+                    byte_size: bytes.len() as u64,
+                    requires: chirograph::PresentationCapability::NativeGlyph,
+                    semantics: chirograph::PresentationSemantics {
+                        label,
+                        role: chirograph::SemanticRole::Graphic,
+                        bounds: chirograph::BoundsRelationship::FillFootprint,
+                        actions: Vec::new(),
+                    },
+                }],
+            );
+            resources.insert(resource, bytes);
+        }
+        assert_eq!(
+            presentation.bindings.len(),
+            artifact.capture.scene.active_item_count(),
+            "every remote Matrix instance has presentation semantics"
+        );
+        (presentation, resources)
+    }
+
+    impl graphshell_endpoint::ProjectionCatalog for MatrixSnapshotEndpoint {
+        fn describe(&self) -> chirograph::EndpointDescriptor {
+            chirograph::EndpointDescriptor {
+                label: "Mer3ly Matrix receipt".into(),
+                projections: vec![chirograph::ProjectionOffer {
+                    label: "Two-reading Matrix".into(),
+                    request: chirograph::ProjectionRequest {
+                        version: chirograph::ProtocolVersion::V1,
+                        session: self.snapshot.session.clone(),
+                        score: Score::new(SceneArrangement::Grid(sceno::Grid::default())),
+                    },
+                }],
+            }
+        }
+    }
+
+    impl graphshell_endpoint::ProjectionSource for MatrixSnapshotEndpoint {
+        type Error = String;
+
+        fn snapshot(
+            &mut self,
+            request: chirograph::ProjectionRequest,
+        ) -> Result<chirograph::ProjectionSnapshot, Self::Error> {
+            if request.session != self.snapshot.session {
+                return Err("unknown Matrix projection".into());
+            }
+            Ok(self.snapshot.clone())
+        }
+    }
+
+    impl graphshell_endpoint::PresentationSource for MatrixSnapshotEndpoint {
+        type Error = String;
+
+        fn resource(
+            &mut self,
+            request: chirograph::ResourceRequest,
+        ) -> Result<chirograph::ResourceResponse, Self::Error> {
+            if request.session != self.snapshot.session {
+                return Err("unknown Matrix projection".into());
+            }
+            let bytes = self
+                .resources
+                .get(&request.resource)
+                .cloned()
+                .ok_or_else(|| "unknown Matrix presentation resource".to_owned())?;
+            Ok(chirograph::ResourceResponse::new(request.session, bytes))
+        }
+    }
+
+    impl graphshell_endpoint::IntentSink for MatrixSnapshotEndpoint {
+        type Error = String;
+
+        fn invoke(
+            &mut self,
+            _: chirograph::IntentInvocation,
+        ) -> Result<chirograph::IntentResult, Self::Error> {
+            Err("the Matrix receipt is read-only".into())
+        }
+    }
+
+    impl graphshell_endpoint::ProjectionNoticeSource for MatrixSnapshotEndpoint {
+        type Error = String;
+
+        fn poll_notice(&mut self) -> Result<Option<chirograph::CarrierNotice>, Self::Error> {
+            Ok(None)
+        }
+    }
+
+    const FT7_NETWORK: notochord::NetworkId = notochord::NetworkId([3; 32]);
+    const FT7_ROOT_AUTHORITY: [u8; 32] = [7; 32];
+    const FT7_NOW_MS: u64 = 50;
+
+    fn ft7_owner() -> personae::InMemoryProvider {
+        personae::InMemoryProvider::from_seed([1; 32])
+    }
+
+    fn ft7_viewer() -> personae::InMemoryProvider {
+        personae::InMemoryProvider::from_seed([4; 32])
+    }
+
+    fn ft7_profile_ref() -> notochord::ProfileRef {
+        notochord::ProfileRef {
+            id: "mere.base".into(),
+            revision: 1,
+        }
+    }
+
+    fn ft7_grant(subject: [u8; 32]) -> personae::delegation::SignedDelegationCertificate {
+        use personae::IdentityProvider as _;
+
+        let owner = ft7_owner();
+        personae::delegation::SignedDelegationCertificate::issue(
+            &owner,
+            personae::delegation::DelegationCertificate::new(
+                personae::delegation::DelegationParent::Root(FT7_ROOT_AUTHORITY),
+                owner.master_public_key().to_bytes(),
+                subject,
+                personae::delegation::CapabilityScope {
+                    domain: graphshell::admission::GRAPHSHELL_DOMAIN.into(),
+                    resource: FT7_NETWORK.0.to_vec(),
+                    path_prefix: graphshell::admission::PROJECTION_SERVICE.into(),
+                    actions: [graphshell::admission::CONNECT_ACTION.to_owned()]
+                        .into_iter()
+                        .collect(),
+                },
+                5,
+                10,
+                Some(FT7_NOW_MS + 3_600_000),
+                1,
+                [1; 32],
+            ),
+        )
+        .expect("issue Matrix viewer certificate")
+    }
+
+    fn ft7_policy() -> notochord::LocalNetworkPolicy {
+        use personae::IdentityProvider as _;
+
+        graphshell::carrier::projection_policy(
+            FT7_NETWORK,
+            vec![notochord::TrustedRoot {
+                authority: FT7_ROOT_AUTHORITY,
+                issuer: ft7_owner().master_public_key().to_bytes(),
+            }],
+            vec![ft7_profile_ref()],
+            None,
+        )
+    }
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn one_matrix_mapping_survives_local_remote_and_frozen_realizations() {
+        use chirograph::Carrier;
+        use graphshell::admission::open_session;
+        use graphshell::carrier::accept_projection_session;
+        use graphshell::lifecycle::SessionAuthority;
+        use graphshell::network_carrier::{
+            CarrierRuntime, NetworkCarrier, dial_projection_session, projection_binding,
+        };
+        use graphshell::session_notices::serve_admitted_session_notifying;
+        use graphshell_client::{RetainedEndpointSession, frozen::FrozenScene};
+        use notochord::{RevocationLedger, TrafficClass};
+        use personae::IdentityProvider as _;
+        use std::sync::RwLock;
+        use std::time::Duration;
+        use transport::{PeerID, memory::MemoryTransport};
+
+        let artifact = matrix_projection(&sample_matrix_request()).expect("Matrix projection");
+        let source_mapping = scene_source_mapping(&artifact.capture.scene);
+        assert!(
+            source_mapping
+                .iter()
+                .enumerate()
+                .any(|(left, (_, source))| source_mapping[left + 1..]
+                    .iter()
+                    .any(|(_, candidate)| candidate == source)),
+            "the receipt keeps a genuinely repeated source instance"
+        );
+
+        let (presentation, resources) = matrix_presentation(&artifact);
+        let snapshot = chirograph::ProjectionSnapshot {
+            version: chirograph::ProtocolVersion::V1,
+            session: chirograph::ProjectionSession("mer3ly.matrix.ft7".into()),
+            scene: artifact.capture.scene.clone(),
+            presentation,
+            cache_policy: chirograph::CachePolicy::default(),
+        };
+        let local_carrier = graphshell_local::LocalCarrier::new(
+            MatrixSnapshotEndpoint {
+                snapshot: snapshot.clone(),
+                resources: resources.clone(),
+            },
+            |_: &mut MatrixSnapshotEndpoint, _| Err("the frozen receipt does not resume".into()),
+        );
+        let mut local_viewer = RetainedEndpointSession::over(
+            Box::new(local_carrier),
+            chirograph::CapabilityProfile::default(),
+        )
+        .expect("local Graphshell host discovers the Matrix endpoint");
+        let local_session = local_viewer.mount(0).expect("local host mounts Matrix");
+        assert_eq!(
+            local_viewer
+                .resolve_all(&local_session)
+                .expect("local host realizes every Matrix item")
+                .len(),
+            source_mapping.len()
+        );
+        let local_mapping = scene_source_mapping(
+            &local_viewer
+                .client()
+                .mounted(&local_session)
+                .expect("local host owns the disclosed snapshot")
+                .scene,
+        );
+        assert_eq!(local_mapping, source_mapping);
+        // The in-process carrier has no session plane; dropping the handle is
+        // its complete lifecycle rather than pretending it can answer Close.
+        drop(local_viewer);
+
+        let viewer_identity = ft7_viewer();
+        let subject = viewer_identity.master_public_key().to_bytes();
+        let client_peer = PeerID::from_bytes(&subject).expect("Matrix viewer peer");
+        let server_peer = PeerID::from_bytes(&ft7_owner().master_public_key().to_bytes())
+            .expect("Matrix owner peer");
+        let (server_transport, client_transport) = MemoryTransport::pair(server_peer, client_peer);
+
+        let serving = tokio::spawn(async move {
+            let mut admitted = accept_projection_session(
+                &server_transport,
+                &ft7_policy(),
+                &RevocationLedger::default(),
+                FT7_NOW_MS,
+                0,
+            )
+            .await
+            .expect("Matrix accept path")
+            .expect("the Matrix viewer is admitted");
+            let authority = SessionAuthority::retain_admitted(&admitted);
+            let mut endpoint = MatrixSnapshotEndpoint {
+                snapshot,
+                resources,
+            };
+            let mut resume = |_: &mut MatrixSnapshotEndpoint, _: chirograph::ResumeRequest| {
+                Err("the fixed Matrix receipt does not resume".to_owned())
+            };
+            serve_admitted_session_notifying(
+                &mut admitted,
+                &authority,
+                &RwLock::new(RevocationLedger::default()),
+                &mut endpoint,
+                &mut resume,
+                || FT7_NOW_MS,
+                Duration::from_millis(10),
+            )
+            .await
+            .expect("serve admitted Matrix session")
+        });
+
+        let handle = tokio::runtime::Handle::current();
+        let accessible_html = artifact.accessible_html.clone();
+        tokio::task::spawn_blocking(move || {
+            let binding = projection_binding(client_peer);
+            let hello = open_session(
+                &viewer_identity,
+                FT7_NETWORK,
+                ft7_profile_ref(),
+                TrafficClass::Interactive,
+                [5; 32],
+                &binding,
+                vec![ft7_grant(subject)],
+            )
+            .expect("issue Matrix session hello");
+            let stream = handle
+                .block_on(dial_projection_session(
+                    &client_transport,
+                    server_peer,
+                    &hello,
+                    &ft7_policy().limits,
+                ))
+                .expect("dial Matrix projection service")
+                .expect("the owner admits the Matrix viewer");
+            let mut carrier =
+                NetworkCarrier::over(stream, CarrierRuntime::borrowed(handle.clone()));
+            let opened = carrier
+                .request(chirograph::CarrierRequestBody::Open(Box::new(
+                    chirograph::SessionOpen {
+                        version: chirograph::ProtocolVersion::V1,
+                        capabilities: chirograph::CapabilityProfile::default(),
+                    },
+                )))
+                .expect("viewer opens the admitted Graphshell session");
+            match opened {
+                chirograph::CarrierResponseBody::Opened(opened) => {
+                    assert_eq!(opened.status, chirograph::SessionStatus::Live);
+                    assert_eq!(opened.descriptor.projections.len(), 1);
+                    assert_eq!(opened.descriptor.projections[0].label, "Two-reading Matrix");
+                }
+                other => panic!("expected an opened Matrix session, got {other:?}"),
+            }
+
+            let mut viewer = RetainedEndpointSession::over(
+                Box::new(carrier),
+                chirograph::CapabilityProfile::default(),
+            )
+            .expect("source-free viewer discovers the Matrix endpoint");
+            let session = viewer.mount(0).expect("remote viewer mounts Matrix");
+            let resolved = viewer
+                .resolve_all(&session)
+                .expect("remote viewer realizes every Matrix item");
+            assert_eq!(
+                resolved
+                    .iter()
+                    .map(|(instance, _)| *instance)
+                    .collect::<Vec<_>>(),
+                local_mapping
+                    .iter()
+                    .map(|(instance, _)| *instance)
+                    .collect::<Vec<_>>(),
+                "the remote presentation covers the same instance table"
+            );
+
+            {
+                let mounted = viewer
+                    .client()
+                    .mounted(&session)
+                    .expect("viewer owns the disclosed snapshot");
+                let remote_mapping = scene_source_mapping(&mounted.scene);
+                assert_eq!(
+                    remote_mapping, local_mapping,
+                    "the admitted Graphshell session preserves every Matrix binding"
+                );
+
+                let names = resolved
+                    .iter()
+                    .map(|(instance, presentation)| {
+                        (*instance, presentation.semantics.label.clone())
+                    })
+                    .collect::<HashMap<_, _>>();
+                let frozen =
+                    FrozenScene::freeze_snapshot(&mounted.scene, "Two-reading Matrix", &names);
+                let frozen_mapping = frozen
+                    .instances
+                    .iter()
+                    .map(|instance| (instance.instance, instance.source.clone()))
+                    .collect::<Vec<_>>();
+                assert_eq!(
+                    frozen_mapping, local_mapping,
+                    "the frozen semantic document preserves the remote mapping"
+                );
+                let frozen_html = frozen.to_html("mer3ly-matrix");
+                for (instance, source) in &local_mapping {
+                    let carried = format!(
+                        "data-projection-instance=\"{}\" data-source-adapter=\"{}\" data-source-id=\"{}\"",
+                        instance.0, source.adapter, source.id
+                    );
+                    assert!(
+                        frozen_html.contains(&carried),
+                        "frozen navigation lost {carried}"
+                    );
+                    assert!(
+                        accessible_html.contains(&carried),
+                        "the Matrix table lost {carried}"
+                    );
+                }
+                assert!(frozen_html.contains("<table class=\"frozen-alternate\""));
+            }
+
+            viewer.close().expect("viewer closes the Graphshell session");
+        })
+        .await
+        .expect("Matrix viewer thread");
+
+        let summary = serving.await.expect("Matrix server task");
+        assert!(
+            summary.answered > 3,
+            "the admitted session served the Matrix"
+        );
     }
 
     #[test]
