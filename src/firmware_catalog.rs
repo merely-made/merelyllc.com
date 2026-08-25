@@ -18,7 +18,7 @@ pub const PACKAGE_INDEX_PATH: &str = "content/retinue-package-index.toml";
 pub const PACKAGE_INDEX_SOURCE_PATH: &str = "content/retinue-package-index-source.toml";
 pub const PACKAGE_INDEX_SCHEMA: &str = "retinue.package-index/v1";
 pub const PACKAGE_INDEX_SOURCE_SCHEMA: &str = "mer3ly.firmware-index-source/v1";
-pub const RETINUE_PACKAGE_INDEX_URL: &str = "https://github.com/merely-made/retinue/blob/05b37956e92b0e81714ae3de6c79a0995114641e/firmware/packages/index.toml";
+pub const RETINUE_PACKAGE_INDEX_URL: &str = "https://github.com/merely-made/retinue/blob/bd71ee1886a4dea397854aa3084341b44c76b55f/firmware/packages/index.toml";
 
 #[derive(Clone, Debug)]
 pub struct FirmwareCatalog {
