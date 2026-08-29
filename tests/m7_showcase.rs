@@ -36,6 +36,19 @@ fn showcase_authority_is_bounded_and_ordered() {
                 .starts_with("https://github.com/merely-made/")
         );
         assert!(root.join("assets").join(&showcase.image).is_file());
+        for (index, extra) in showcase.images.iter().enumerate() {
+            assert_eq!(
+                extra.image,
+                format!("showcase/{}-{}.png", showcase.repository, index + 2)
+            );
+            assert!(
+                extra
+                    .source_url
+                    .starts_with("https://github.com/merely-made/")
+            );
+            assert!(!extra.alt.is_empty());
+            assert!(root.join("assets").join(&extra.image).is_file());
+        }
     }
 }
 
@@ -229,5 +242,30 @@ fn showcase_styles_cover_responsive_images_and_profile_relations() {
             SITE_CSS.contains(contract),
             "site CSS is missing {contract}"
         );
+    }
+}
+
+#[test]
+fn multi_image_showcases_render_every_capture_in_a_rotation() {
+    let root = workspace_root();
+    let data = PublicSiteData::load(&root).expect("load validated public site data");
+
+    for showcase in data.showcases.ordered() {
+        let document = projects::document(&root, &showcase.repository)
+            .expect("render showcased project profile");
+        if showcase.images.is_empty() {
+            assert!(!document.contains("project-showcase-rotation"));
+            continue;
+        }
+        assert!(document.contains("class=\"project-showcase-rotation\""));
+        assert!(document.contains("class=\"project-showcase-dots\""));
+        assert!(document.contains(&format!("src=\"/{}\"", showcase.image)));
+        for extra in &showcase.images {
+            assert!(document.contains(&format!("src=\"/{}\"", extra.image)));
+            assert!(document.contains(&extra.alt));
+            assert!(document.contains(&extra.source_url));
+        }
+        let dots = document.matches("class=\"project-showcase-dot\"").count();
+        assert_eq!(dots, showcase.images.len() + 1);
     }
 }

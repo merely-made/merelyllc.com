@@ -137,6 +137,9 @@ pub fn validate_public_artifact(
     }
     for showcase in &showcases.showcase {
         expected_paths.insert(showcase.image.clone());
+        for extra in &showcase.images {
+            expected_paths.insert(extra.image.clone());
+        }
     }
     if actual_paths != expected_paths {
         errors.push("public artifact file set differs from the approved shape".to_owned());
@@ -367,15 +370,22 @@ pub fn validate_public_artifact(
                 repository.id
             ));
         }
-        if let Some(showcase) = showcases.for_repository(&repository.id)
-            && (!project.contains(&format!("src=\"/{}\"", showcase.image))
+        if let Some(showcase) = showcases.for_repository(&repository.id) {
+            let mut missing = !project.contains(&format!("src=\"/{}\"", showcase.image))
                 || !project.contains(&showcase.source_url)
-                || !project.contains(&showcase.alt))
-        {
-            errors.push(format!(
-                "project profile {} is missing approved showcase evidence",
-                repository.id
-            ));
+                || !project.contains(&showcase.alt);
+            for extra in &showcase.images {
+                missing = missing
+                    || !project.contains(&format!("src=\"/{}\"", extra.image))
+                    || !project.contains(&extra.source_url)
+                    || !project.contains(&extra.alt);
+            }
+            if missing {
+                errors.push(format!(
+                    "project profile {} is missing approved showcase evidence",
+                    repository.id
+                ));
+            }
         }
         if repository.id == "mere" {
             if !project.contains("data-projection-proof")
@@ -501,18 +511,22 @@ pub fn validate_public_artifact(
     }
 
     for showcase in &showcases.showcase {
-        let artifact_image = artifact_root.join(&showcase.image);
-        let source_image = source_root.join("assets").join(&showcase.image);
-        match (fs::read(&artifact_image), fs::read(&source_image)) {
-            (Ok(artifact_bytes), Ok(source_bytes)) if artifact_bytes == source_bytes => {}
-            (Ok(_), Ok(_)) => errors.push(format!(
-                "showcase {} artifact image differs from its approved source",
-                showcase.repository
-            )),
-            _ => errors.push(format!(
-                "showcase {} artifact or approved source image is missing",
-                showcase.repository
-            )),
+        let images = std::iter::once(showcase.image.as_str())
+            .chain(showcase.images.iter().map(|extra| extra.image.as_str()));
+        for image in images {
+            let artifact_image = artifact_root.join(image);
+            let source_image = source_root.join("assets").join(image);
+            match (fs::read(&artifact_image), fs::read(&source_image)) {
+                (Ok(artifact_bytes), Ok(source_bytes)) if artifact_bytes == source_bytes => {}
+                (Ok(_), Ok(_)) => errors.push(format!(
+                    "showcase {} artifact image differs from its approved source",
+                    showcase.repository
+                )),
+                _ => errors.push(format!(
+                    "showcase {} artifact or approved source image is missing",
+                    showcase.repository
+                )),
+            }
         }
     }
     let timestamp = format!(

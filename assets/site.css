@@ -2930,6 +2930,61 @@ tbody tr:last-child td {
   color: #f1c477;
 }
 
+/* Multi-image showcase rotation: a scroll-snap strip of the approved
+   captures with anchor dots. No script — the dots are plain fragment links,
+   and without CSS the figures simply read in order. */
+.project-showcase-rotation {
+  display: grid;
+  grid-template-rows: auto auto;
+  min-width: 0;
+}
+
+.project-showcase-strip {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+}
+
+.project-showcase-strip .project-showcase-figure {
+  scroll-snap-align: start;
+  min-width: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .project-showcase-strip {
+    scroll-behavior: smooth;
+  }
+}
+
+.project-showcase-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  padding: 10px 0 12px;
+  background: #17131d;
+}
+
+.project-showcase-dot {
+  display: grid;
+  place-items: center;
+  min-width: 26px;
+  min-height: 26px;
+  border: 1px solid #3c3346;
+  border-radius: 50%;
+  color: #c7bfcc;
+  font: 0.62rem/1 var(--font-mono);
+  text-decoration: none;
+}
+
+.project-showcase-dot:hover,
+.project-showcase-dot:focus-visible {
+  border-color: #f1c477;
+  color: #f1c477;
+}
+
 .projection-proof-heading {
   display: flex;
   align-items: flex-start;

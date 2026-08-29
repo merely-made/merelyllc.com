@@ -50,6 +50,23 @@ pub struct ShowcaseRecord {
     pub caption: String,
     pub source_url: String,
     pub source_license: String,
+    /// Additional approved captures after the primary `image`. The primary
+    /// stays the social/fallback image; extras join it in the project
+    /// profile's showcase rotation, in order.
+    #[serde(default)]
+    pub images: Vec<ShowcaseImageRecord>,
+}
+
+/// One additional approved capture in a showcase rotation. Carries the same
+/// editorial obligations as the primary image: an exact description of the
+/// visible state, a caption, and source attribution.
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ShowcaseImageRecord {
+    pub image: String,
+    pub alt: String,
+    pub caption: String,
+    pub source_url: String,
+    pub source_license: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -934,6 +951,57 @@ impl ShowcaseManifest {
                 &showcase.repository,
                 &mut errors,
             );
+
+            for (index, extra) in showcase.images.iter().enumerate() {
+                let position = index + 2;
+                check_nonempty(
+                    &format!("showcase {} image {position} alt", showcase.repository),
+                    &extra.alt,
+                    &mut errors,
+                );
+                check_nonempty(
+                    &format!("showcase {} image {position} caption", showcase.repository),
+                    &extra.caption,
+                    &mut errors,
+                );
+                if !seen_images.insert(extra.image.as_str()) {
+                    errors.push(format!(
+                        "showcase {} repeats an image path",
+                        showcase.repository
+                    ));
+                }
+                let expected_extra =
+                    format!("showcase/{}-{position}.png", showcase.repository);
+                if extra.image != expected_extra
+                    || extra.image.contains('\\')
+                    || extra
+                        .image
+                        .split('/')
+                        .any(|segment| segment.is_empty() || segment == "." || segment == "..")
+                {
+                    errors.push(format!(
+                        "showcase {} image {position} does not use its approved normalized path",
+                        showcase.repository
+                    ));
+                }
+                if extra.source_license != repository.license {
+                    errors.push(format!(
+                        "showcase {} image {position} source license disagrees with repository authority",
+                        showcase.repository
+                    ));
+                }
+                if !extra.source_url.starts_with(&expected_source_prefix) {
+                    errors.push(format!(
+                        "showcase {} image {position} source URL does not belong to its repository",
+                        showcase.repository
+                    ));
+                }
+                validate_showcase_png(
+                    &root.join("assets").join(&extra.image),
+                    &showcase.repository,
+                    &mut errors,
+                );
+            }
         }
 
         if errors.is_empty() {

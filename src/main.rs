@@ -76,12 +76,16 @@ fn build_site(output: &Path) -> std::io::Result<()> {
         fs::write(project_directory.join("index.html"), document)?;
     }
     for showcase in &data.showcases.showcase {
-        let source = root.join("assets").join(&showcase.image);
-        let destination = output.join(&showcase.image);
-        if let Some(parent) = destination.parent() {
-            fs::create_dir_all(parent)?;
+        let images = std::iter::once(showcase.image.as_str())
+            .chain(showcase.images.iter().map(|extra| extra.image.as_str()));
+        for image in images {
+            let source = root.join("assets").join(image);
+            let destination = output.join(image);
+            if let Some(parent) = destination.parent() {
+                fs::create_dir_all(parent)?;
+            }
+            fs::copy(source, destination)?;
         }
-        fs::copy(source, destination)?;
     }
     fs::write(output.join("site.css"), SITE_CSS)?;
     fs::write(output.join("graph-sandbox.js"), GRAPH_SANDBOX)?;
