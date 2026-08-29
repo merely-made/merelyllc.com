@@ -34,13 +34,6 @@ caption = "The scripted profile: a live DOM driven through script-runtime-api."
 source_url = "https://github.com/merely-made/genet/blob/main/assets/screenshots/pelt-scripted.png"
 source_license = "MPL-2.0"
 
-[[showcase.images]]
-image = "showcase/genet-4.png"
-alt = "Reader view of the Genet project page as a plain typographic article, the title bar reading Reader, fleece 0.4.0, 34 blocks."
-caption = "Reader: Fleece extracts the article while the tile keeps its held response."
-source_url = "https://github.com/merely-made/genet/blob/main/assets/screenshots/pelt-reader.png"
-source_license = "MPL-2.0"
-
 [[showcase]]
 repository = "turnstone"
 order = 3
