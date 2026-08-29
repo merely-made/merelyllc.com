@@ -40,6 +40,10 @@ struct PackageIndex {
 #[serde(deny_unknown_fields)]
 pub struct FirmwarePackage {
     pub package_id: String,
+    /// Ordinal of this package's release within the republished catalog.
+    /// Present in the catalog since retinue bd71ee1; unused by the site.
+    #[serde(default)]
+    pub release_sequence: u32,
     manifest: String,
     pub firmware_publisher: String,
     pub state: FirmwareRecipeState,
