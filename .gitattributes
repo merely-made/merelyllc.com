@@ -44,3 +44,7 @@
 *.kojo merge=weave
 *.mill merge=weave
 *.dart merge=weave
+
+# Digest-verified retained artifact: its bytes must match the recorded
+# hash, so line-ending conversion on Windows checkouts must never touch it.
+content/retinue-package-index.toml -text

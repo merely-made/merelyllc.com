@@ -1156,8 +1156,8 @@ impl PublicMetadataCache {
 
         let mut event_ids = BTreeSet::new();
         let mut previous_event_time: Option<&str> = None;
-        if self.event.len() > 40 {
-            errors.push("public metadata has more than 40 organization events".to_owned());
+        if self.event.len() > 12 {
+            errors.push("public metadata has more than 12 organization events".to_owned());
         }
         for event in &self.event {
             check_nonempty("public organization event id", &event.id, &mut errors);

@@ -123,7 +123,9 @@ $events = @(
             Expression = { [string]$_["created_at"] }
             Descending = $true
         } |
-        Select-Object -First 40
+        # Retain only the dozen events the repository page renders; anything
+        # more was dead weight in the cache and the embedded graph JSON.
+        Select-Object -First 12
 )
 
 $cache = [ordered]@{

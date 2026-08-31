@@ -314,7 +314,6 @@ checksum = "9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801"
 [[package]]
 name = "chartulary"
 version = "0.2.1"
-source = "git+https://github.com/merely-made/mere.git?rev=302bbe72d7597b7573e14199ce926bd3b03eea7f#302bbe72d7597b7573e14199ce926bd3b03eea7f"
 dependencies = [
  "codicil",
  "muniment",
@@ -328,7 +327,6 @@ dependencies = [
 [[package]]
 name = "chirograph"
 version = "0.0.2"
-source = "git+https://github.com/merely-made/mere.git?rev=302bbe72d7597b7573e14199ce926bd3b03eea7f#302bbe72d7597b7573e14199ce926bd3b03eea7f"
 dependencies = [
  "base64",
  "blake3",
@@ -351,7 +349,6 @@ dependencies = [
 [[package]]
 name = "codicil"
 version = "0.1.1"
-source = "git+https://github.com/merely-made/mere.git?rev=302bbe72d7597b7573e14199ce926bd3b03eea7f#302bbe72d7597b7573e14199ce926bd3b03eea7f"
 dependencies = [
  "muniment",
  "serde",
@@ -1415,7 +1412,6 @@ checksum = "edcd27d72f2f071c64249075f42e205ff93c9a4c5f6c6da53e79ed9f9832c285"
 [[package]]
 name = "incipit"
 version = "0.2.0"
-source = "git+https://github.com/merely-made/mere.git?rev=302bbe72d7597b7573e14199ce926bd3b03eea7f#302bbe72d7597b7573e14199ce926bd3b03eea7f"
 dependencies = [
  "serde",
  "uuid",
@@ -1696,7 +1692,6 @@ dependencies = [
 [[package]]
 name = "mere-cartography"
 version = "0.0.2"
-source = "git+https://github.com/merely-made/mere.git?rev=302bbe72d7597b7573e14199ce926bd3b03eea7f#302bbe72d7597b7573e14199ce926bd3b03eea7f"
 dependencies = [
  "mere-kernel",
  "sceno",
@@ -1707,7 +1702,6 @@ dependencies = [
 [[package]]
 name = "mere-forme"
 version = "0.1.0"
-source = "git+https://github.com/merely-made/mere.git?rev=302bbe72d7597b7573e14199ce926bd3b03eea7f#302bbe72d7597b7573e14199ce926bd3b03eea7f"
 dependencies = [
  "serde",
  "serde_json",
@@ -1718,7 +1712,6 @@ dependencies = [
 [[package]]
 name = "mere-kernel"
 version = "0.0.2"
-source = "git+https://github.com/merely-made/mere.git?rev=302bbe72d7597b7573e14199ce926bd3b03eea7f#302bbe72d7597b7573e14199ce926bd3b03eea7f"
 dependencies = [
  "accesskit",
  "chartulary",
@@ -1813,7 +1806,6 @@ dependencies = [
 [[package]]
 name = "muniment"
 version = "0.1.2"
-source = "git+https://github.com/merely-made/mere.git?rev=302bbe72d7597b7573e14199ce926bd3b03eea7f#302bbe72d7597b7573e14199ce926bd3b03eea7f"
 dependencies = [
  "async-trait",
  "blake3",
@@ -1946,7 +1938,6 @@ dependencies = [
 [[package]]
 name = "numen"
 version = "0.2.0"
-source = "git+https://github.com/merely-made/mere.git?rev=302bbe72d7597b7573e14199ce926bd3b03eea7f#302bbe72d7597b7573e14199ce926bd3b03eea7f"
 dependencies = [
  "serde",
  "strum",
@@ -2316,7 +2307,6 @@ checksum = "a993555f31e5a609f617c12db6250dedcac1b0a85076912c436e6fc9b2c8e6a3"
 [[package]]
 name = "quint"
 version = "0.0.4"
-source = "git+https://github.com/merely-made/mere.git?rev=302bbe72d7597b7573e14199ce926bd3b03eea7f#302bbe72d7597b7573e14199ce926bd3b03eea7f"
 dependencies = [
  "numen",
  "serde",
@@ -2646,7 +2636,6 @@ dependencies = [
 [[package]]
 name = "sceno"
 version = "0.0.4"
-source = "git+https://github.com/merely-made/mere.git?rev=302bbe72d7597b7573e14199ce926bd3b03eea7f#302bbe72d7597b7573e14199ce926bd3b03eea7f"
 dependencies = [
  "serde",
  "serde_json",
@@ -2655,7 +2644,6 @@ dependencies = [
 [[package]]
 name = "scenomise"
 version = "0.0.4"
-source = "git+https://github.com/merely-made/mere.git?rev=302bbe72d7597b7573e14199ce926bd3b03eea7f#302bbe72d7597b7573e14199ce926bd3b03eea7f"
 dependencies = [
  "sceno",
 ]
@@ -2663,7 +2651,6 @@ dependencies = [
 [[package]]
 name = "scenotime"
 version = "0.0.4"
-source = "git+https://github.com/merely-made/mere.git?rev=302bbe72d7597b7573e14199ce926bd3b03eea7f#302bbe72d7597b7573e14199ce926bd3b03eea7f"
 dependencies = [
  "sceno",
  "serde",
@@ -2678,7 +2665,6 @@ checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
 [[package]]
 name = "seiche"
 version = "0.0.5"
-source = "git+https://github.com/merely-made/mere.git?rev=302bbe72d7597b7573e14199ce926bd3b03eea7f#302bbe72d7597b7573e14199ce926bd3b03eea7f"
 dependencies = [
  "euclid",
  "numen",
@@ -3421,7 +3407,6 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 [[package]]
 name = "titulus"
 version = "0.0.2"
-source = "git+https://github.com/merely-made/mere.git?rev=302bbe72d7597b7573e14199ce926bd3b03eea7f#302bbe72d7597b7573e14199ce926bd3b03eea7f"
 dependencies = [
  "base64",
  "blake3",
@@ -4339,3 +4324,35 @@ checksum = "29ce2c8a9384ad323cf564b67da86e21d3cfdff87908bc1223ed5c99bc792713"
 dependencies = [
  "zune-core",
 ]
+
+[[patch.unused]]
+name = "graphshell"
+version = "0.0.2"
+
+[[patch.unused]]
+name = "graphshell-client"
+version = "0.0.2"
+
+[[patch.unused]]
+name = "graphshell-endpoint"
+version = "0.0.2"
+
+[[patch.unused]]
+name = "graphshell-local"
+version = "0.0.1"
+
+[[patch.unused]]
+name = "graphshell-network"
+version = "0.0.1"
+
+[[patch.unused]]
+name = "mere-transport"
+version = "0.0.2"
+
+[[patch.unused]]
+name = "notochord"
+version = "0.1.0"
+
+[[patch.unused]]
+name = "personae"
+version = "0.2.1"

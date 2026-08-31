@@ -2737,19 +2737,12 @@ fn timestamp_coordinate(value: &str) -> Result<f64, String> {
     Ok((days_since_epoch * 86_400 + hour * 3_600 + minute * 60 + second) as f64)
 }
 
-fn arrangement_description(id: &str, registry_description: Option<String>) -> String {
-    match id {
-        "graph_layout:radial" => "Neighborhood rings around the selected node.".to_owned(),
-        "graph_layout:stack" => {
-            "Directed relations arranged into readable topology layers.".to_owned()
-        }
-        "graph_layout:timeline" => {
-            "Repositories grouped by their last public push date.".to_owned()
-        }
-        "graph_layout:kanban" => "Repositories grouped by public project status.".to_owned(),
-        _ => registry_description.unwrap_or_else(|| "Mere positional arrangement.".to_owned()),
-    }
-}
+// `arrangement_description` lived here to override the layout registry's own
+// descriptions for a repository audience, falling back to whatever the registry
+// carried. The scenograph absorption retired that registry, and the overrides
+// moved into `arrangement::CATALOG` where the names live beside them, so there
+// is no second source to reconcile against. Removed rather than left dead: its
+// remaining callers were the ones the catalog replaced.
 
 fn validate(input: &GraphInput) -> Result<(), String> {
     if input.schema != "mer3ly.repo-graph/v1" {
