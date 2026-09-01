@@ -2396,7 +2396,12 @@ h1 {
     linear-gradient(90deg, rgba(41, 72, 107, 0.055) 1px, transparent 1px),
     var(--paper);
   background-size: 32px 32px;
-  touch-action: none;
+  /* The stage yields the vertical scroll so it never becomes a region a
+     phone cannot get past; its nodes carry touch-action: none, which only
+     narrows this, so one-finger node dragging is unchanged. Nothing here
+     scrolls or pans within the stage: node positions are clamped inside
+     it, so there is no off-stage content to reach. */
+  touch-action: pan-y;
 }
 
 .message-path-links {
@@ -3143,7 +3148,12 @@ tbody tr:last-child td {
     linear-gradient(90deg, rgba(41, 72, 107, 0.05) 1px, transparent 1px),
     var(--paper);
   background-size: 30px 30px;
-  touch-action: none;
+  /* The stage yields the vertical scroll so it never becomes a region a
+     phone cannot get past; its nodes carry touch-action: none, which only
+     narrows this, so one-finger node dragging is unchanged. Nothing here
+     scrolls or pans within the stage: node positions are clamped inside
+     it, so there is no off-stage content to reach. */
+  touch-action: pan-y;
 }
 
 [data-projection-view="swatch"] .projection-proof-stage {

@@ -405,6 +405,7 @@ try {
     Math.min(...mobileNodeBoxes.map(({ y }) => y));
   assert.ok(mobileXSpan > 140, "mobile topology collapsed into a vertical line");
   assert.ok(mobileYSpan > 160, "mobile topology collapsed into a horizontal line");
+  await assertStageScrollPolicy(messagePathMobile, ".message-path-stage", ".message-path-node", "message path");
   assert.equal(await horizontalOverflow(messagePathMobile), 0);
   assert.deepEqual(
     messagePathMobileDiagnostics,
@@ -863,6 +864,7 @@ try {
     swatch_controls_canvas: true,
     horizontal_overflow: 0,
   };
+  await assertStageScrollPolicy(projectionMobile, ".projection-proof-stage", ".projection-proof-node", "projection proof");
   await projectionMobile.close();
 
   const projectionReduced = await browser.newPage({
@@ -1253,6 +1255,7 @@ try {
       return { x, y, zoom, prevented };
     }, [moves]);
 
+  await assertStageScrollPolicy(sandboxMobile, ".graph-sandbox-stage", ".graph-sandbox-node", "graph sandbox");
   const restingCamera = await sandboxMobile
     .locator("[data-sandbox-stage]")
     .getAttribute("data-sandbox-camera-state");
@@ -1308,6 +1311,27 @@ try {
 } finally {
   await browser.close();
   await new Promise((resolve) => server.close(resolve));
+}
+
+
+// Every draggable stage follows one policy: the stage yields the vertical
+// scroll so a phone can always get past it, and its nodes narrow that back to
+// none so one-finger dragging still works. Asserted per stage rather than
+// once, because each canvas carries its own rule.
+async function assertStageScrollPolicy(page, stageSelector, nodeSelector, label) {
+  const policy = await page.evaluate(
+    ([stageSelector, nodeSelector]) => {
+      const stage = document.querySelector(stageSelector);
+      const node = document.querySelector(nodeSelector);
+      return {
+        stage: stage ? getComputedStyle(stage).touchAction : null,
+        node: node ? getComputedStyle(node).touchAction : null,
+      };
+    },
+    [stageSelector, nodeSelector],
+  );
+  assert.equal(policy.stage, "pan-y", `${label} stage must yield the page scroll`);
+  assert.equal(policy.node, "none", `${label} nodes must keep their own drag`);
 }
 
 function collectDiagnostics(page) {
