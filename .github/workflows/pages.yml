@@ -77,6 +77,8 @@ jobs:
       - name: Verify Rust source and behavior
         shell: pwsh
         run: |
+          $ErrorActionPreference = "Stop"
+          $PSNativeCommandUseErrorActionPreference = $true
           cargo fmt --all -- --check
           cargo fmt --manifest-path crates/repo-graph/Cargo.toml -- --check
           cargo test --locked

@@ -970,8 +970,7 @@ impl ShowcaseManifest {
                         showcase.repository
                     ));
                 }
-                let expected_extra =
-                    format!("showcase/{}-{position}.png", showcase.repository);
+                let expected_extra = format!("showcase/{}-{position}.png", showcase.repository);
                 if extra.image != expected_extra
                     || extra.image.contains('\\')
                     || extra

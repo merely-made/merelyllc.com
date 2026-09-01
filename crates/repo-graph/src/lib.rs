@@ -1134,12 +1134,10 @@ fn composed_matrix_shelfmark(
     );
     shelfmark.delta.insert(
         "mer3ly.backdrop".into(),
-        serde_json::to_string(
-            &request
-                .backdrop
-                .clone()
-                .unwrap_or(BackdropDelta { kind: "ambient".into(), collidable: false }),
-        )
+        serde_json::to_string(&request.backdrop.clone().unwrap_or(BackdropDelta {
+            kind: "ambient".into(),
+            collidable: false,
+        }))
         .map_err(|error| format!("could not cite backdrop state: {error}"))?,
     );
     shelfmark.delta.insert(
@@ -1149,14 +1147,18 @@ fn composed_matrix_shelfmark(
     );
     shelfmark.delta.insert(
         "mer3ly.camera".into(),
-        serde_json::to_string(
-            &request.camera.clone().unwrap_or(CameraDelta { x: 0.0, y: 0.0, zoom: 1.0 }),
-        )
+        serde_json::to_string(&request.camera.clone().unwrap_or(CameraDelta {
+            x: 0.0,
+            y: 0.0,
+            zoom: 1.0,
+        }))
         .map_err(|error| format!("could not cite camera state: {error}"))?,
     );
     for (section, value) in &request.carried_delta {
         if shelfmark.delta.contains_key(section) {
-            return Err(format!("carried section {section} shadows a target-owned delta"));
+            return Err(format!(
+                "carried section {section} shadows a target-owned delta"
+            ));
         }
         shelfmark.delta.insert(section.clone(), value.clone());
     }
@@ -1300,10 +1302,7 @@ fn resolve_matrix_shelfmark_value(
         input_generations: BTreeMap::from([
             ("columns".into(), artifact.columns.generation),
             ("rows".into(), artifact.rows.generation),
-            (
-                "spatial".into(),
-                resolved_spatial_generation.to_string(),
-            ),
+            ("spatial".into(), resolved_spatial_generation.to_string()),
         ]),
         selection_resolution: selection.resolution,
         honored_instance_deltas: instances.len(),
@@ -1342,10 +1341,13 @@ fn validate_view_delta(
     if !matches!(motion, None | Some("anchored" | "free")) {
         return Err("motion delta must be anchored or free".to_owned());
     }
-    if let Some(backdrop) = backdrop {
-        if !matches!(backdrop.kind.as_str(), "clear" | "ambient" | "props" | "field") {
-            return Err("backdrop delta names an unsupported field".to_owned());
-        }
+    if let Some(backdrop) = backdrop
+        && !matches!(
+            backdrop.kind.as_str(),
+            "clear" | "ambient" | "props" | "field"
+        )
+    {
+        return Err("backdrop delta names an unsupported field".to_owned());
     }
     if facets.iter().any(|facet| {
         facet.view.trim().is_empty()
@@ -1355,16 +1357,15 @@ fn validate_view_delta(
     }) {
         return Err("facet delta does not address a cited projection".to_owned());
     }
-    if let Some(camera) = camera {
-        if !camera.x.is_finite()
+    if let Some(camera) = camera
+        && (!camera.x.is_finite()
             || !camera.y.is_finite()
             || !camera.zoom.is_finite()
             || !(-4000.0..=4000.0).contains(&camera.x)
             || !(-4000.0..=4000.0).contains(&camera.y)
-            || !(0.25..=4.0).contains(&camera.zoom)
-        {
-            return Err("camera delta lies outside the portable view bounds".to_owned());
-        }
+            || !(0.25..=4.0).contains(&camera.zoom))
+    {
+        return Err("camera delta lies outside the portable view bounds".to_owned());
     }
     Ok(())
 }
@@ -3765,13 +3766,20 @@ mod tests {
                 hold: Hold::Pinned,
             }],
             motion: Some("free".into()),
-            backdrop: Some(BackdropDelta { kind: "props".into(), collidable: true }),
+            backdrop: Some(BackdropDelta {
+                kind: "props".into(),
+                collidable: true,
+            }),
             facets: vec![ProjectedInstanceAddress {
                 view: "deck".into(),
                 source: SourceRef::new(PROJECTION_ADAPTER, "mere"),
                 facet: "summary".into(),
             }],
-            camera: Some(CameraDelta { x: 40.0, y: -20.0, zoom: 1.25 }),
+            camera: Some(CameraDelta {
+                x: 40.0,
+                y: -20.0,
+                zoom: 1.25,
+            }),
             carried_delta: BTreeMap::from([("other.reader".into(), "opaque".into())]),
         };
         let artifact = matrix_projection(&matrix).expect("composed Matrix");
@@ -3781,8 +3789,7 @@ mod tests {
             shelfmark.inputs["columns"].expects_generation
         );
         assert_eq!(
-            shelfmark.inputs["rows"].authority.record,
-            shelfmark.inputs["spatial"].authority.record,
+            shelfmark.inputs["rows"].authority.record, shelfmark.inputs["spatial"].authority.record,
             "view state must not rewrite the cited authority bytes"
         );
         let mut altered_view = request.clone();

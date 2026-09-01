@@ -147,10 +147,7 @@ pub fn degree_weights(
 /// overflow layer past the deepest real one rather than being dropped or given
 /// an arbitrary break — a repository in a dependency cycle is still a
 /// repository the reader wants to see.
-pub fn stack_layers(
-    node_ids: &HashSet<&str>,
-    edges: &[(String, String)],
-) -> HashMap<String, i64> {
+pub fn stack_layers(node_ids: &HashSet<&str>, edges: &[(String, String)]) -> HashMap<String, i64> {
     let mut outgoing: HashMap<&str, Vec<&str>> =
         node_ids.iter().map(|id| (*id, Vec::new())).collect();
     let mut indegree: HashMap<&str, usize> = node_ids.iter().map(|id| (*id, 0usize)).collect();

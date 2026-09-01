@@ -666,11 +666,7 @@ fn showcase_carousel(showcase: &ShowcaseRecord) -> SiteView {
         "div",
         &[("class", "project-showcase-rotation")],
         vec![
-            element(
-                "div",
-                &[("class", "project-showcase-strip")],
-                slides,
-            ),
+            element("div", &[("class", "project-showcase-strip")], slides),
             element(
                 "nav",
                 &[
