@@ -643,13 +643,23 @@ fn scan_public_text(
     errors: &mut Vec<String>,
 ) {
     let lower = text.to_ascii_lowercase();
+    // The bare username marker must sit at a word start: product vocabulary
+    // like SHELFMARK_SCHEMA lowercases to shelfmark_schema, which contains
+    // "mark_" mid-identifier without leaking anything.
+    let username_leak = lower
+        .match_indices("mark_")
+        .any(|(index, _)| index == 0 || !lower.as_bytes()[index - 1].is_ascii_alphanumeric());
+    if username_leak {
+        errors.push(format!(
+            "{relative_path} contains a forbidden public-data marker"
+        ));
+    }
     for marker in [
         "c:\\users\\",
         "\\users\\",
         "/users/",
         "/home/",
         "file://",
-        "mark_",
         "viewerpermission",
         "\"viewer_permission\"",
         "\"ssh_url\"",
