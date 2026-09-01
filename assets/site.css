@@ -1199,7 +1199,11 @@ h1 {
     linear-gradient(90deg, rgba(86, 72, 53, 0.035) 1px, transparent 1px),
     var(--parchment);
   background-size: 32px 32px;
-  touch-action: none;
+  /* One finger belongs to the page, so a 620px stage never traps a
+     scroll; two fingers pan and pinch. Nodes carry their own
+     touch-action, which only narrows this, so one-finger node dragging
+     is unaffected. */
+  touch-action: pan-y;
 }
 
 .graph-sandbox-stage[data-sandbox-backdrop="clear"] {

@@ -279,6 +279,7 @@ class GraphSandbox {
     this.toolsToggle?.addEventListener("click", () => {
       this.setToolsOpen(this.sceneTools?.dataset.toolsOpen !== "true");
     });
+    this.installStageGestures();
     this.unhonoredSections = {};
     this.expectedGeneration = null;
     this.applySharedState(this.sharedState);
@@ -1311,6 +1312,99 @@ class GraphSandbox {
     this.toolsToggle.textContent = open ? "hide scene tools" : "scene tools";
   }
 
+  // Stage gestures, in the shape an embedded map uses: one finger is left to
+  // the page so the sandbox never traps a scroll, two fingers pan and pinch,
+  // and the wheel zooms only with a modifier held.
+  installStageGestures() {
+    const points = new Map();
+    let pinch = null;
+    const pair = () => [...points.values()];
+    const track = (event) => {
+      for (const touch of event.changedTouches) {
+        points.set(touch.identifier, { x: touch.clientX, y: touch.clientY });
+      }
+    };
+    const midpoint = ([a, b]) => ({
+      x: (a.x + b.x) / 2,
+      y: (a.y + b.y) / 2,
+      span: Math.hypot(a.x - b.x, a.y - b.y),
+    });
+    this.stage.addEventListener(
+      "touchstart",
+      (event) => {
+        track(event);
+        if (points.size !== 2) return;
+        event.preventDefault();
+        pinch = { ...midpoint(pair()), zoom: this.camera.zoom };
+      },
+      { passive: false },
+    );
+    this.stage.addEventListener(
+      "touchmove",
+      (event) => {
+        track(event);
+        if (points.size !== 2 || !pinch) return;
+        event.preventDefault();
+        const now = midpoint(pair());
+        this.panBy(now.x - pinch.x, now.y - pinch.y);
+        if (pinch.span > 0) this.zoomAround((pinch.zoom * now.span) / pinch.span, now.x, now.y);
+        pinch.x = now.x;
+        pinch.y = now.y;
+      },
+      { passive: false },
+    );
+    const release = (event) => {
+      for (const touch of event.changedTouches) points.delete(touch.identifier);
+      if (points.size < 2) pinch = null;
+    };
+    this.stage.addEventListener("touchend", release);
+    this.stage.addEventListener("touchcancel", release);
+    this.stage.addEventListener(
+      "wheel",
+      (event) => {
+        if (!event.ctrlKey && !event.metaKey) return;
+        event.preventDefault();
+        this.zoomAround(
+          this.camera.zoom * Math.exp(-event.deltaY / 300),
+          event.clientX,
+          event.clientY,
+        );
+      },
+      { passive: false },
+    );
+  }
+
+  setCamera(next) {
+    // Two decimals keeps a pinch smooth while an integer offset still prints
+    // as an integer, so shared links and receipts read as they always have.
+    const round = (value) => Math.round(clamp(value, -4000, 4000) * 100) / 100;
+    this.camera = { x: round(next.x), y: round(next.y), zoom: clamp(next.zoom, 0.25, 4) };
+    this.stage.dataset.sandboxCameraState = `${this.camera.x},${this.camera.y},${this.camera.zoom.toFixed(2)}`;
+    this.updateCaption();
+    this.schedule();
+  }
+
+  panBy(dx, dy) {
+    const scale = this.viewScale();
+    if (!scale) return;
+    this.setCamera({ ...this.camera, x: this.camera.x + dx / scale, y: this.camera.y + dy / scale });
+  }
+
+  // Zoom about a screen point, so whatever sits under the fingers stays put.
+  zoomAround(zoom, clientX, clientY) {
+    const before = this.viewScale();
+    const next = clamp(zoom, 0.25, 4);
+    const after = this.scale * next;
+    if (!before || !after) return;
+    const rect = this.stage.getBoundingClientRect();
+    const shift = 1 / after - 1 / before;
+    this.setCamera({
+      x: this.camera.x + (clientX - rect.left - rect.width * 0.5) * shift,
+      y: this.camera.y + (clientY - rect.top - rect.height * 0.5) * shift,
+      zoom: next,
+    });
+  }
+
   changeCamera(action) {
     const next = { ...this.camera };
     if (action === "pan-left") next.x -= 80;
@@ -1320,14 +1414,7 @@ class GraphSandbox {
     if (action === "zoom-in") next.zoom *= 1.2;
     if (action === "zoom-out") next.zoom /= 1.2;
     if (action === "reset") Object.assign(next, { x: 0, y: 0, zoom: 1 });
-    this.camera = {
-      x: clamp(next.x, -4000, 4000),
-      y: clamp(next.y, -4000, 4000),
-      zoom: clamp(next.zoom, 0.25, 4),
-    };
-    this.stage.dataset.sandboxCameraState = `${this.camera.x},${this.camera.y},${this.camera.zoom.toFixed(2)}`;
-    this.updateCaption();
-    this.schedule();
+    this.setCamera(next);
   }
 
   targetsFor(consumer) {

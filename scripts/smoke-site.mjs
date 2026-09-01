@@ -1222,6 +1222,63 @@ try {
     minimum_control_target: 44,
     horizontal_overflow: 0,
   };
+
+  // Stage gestures, in the shape an embedded map uses. The invariant that
+  // matters most is the negative one: a single finger must stay with the page,
+  // or the sandbox becomes a region a phone cannot scroll past.
+  const stageGesture = (page, moves) =>
+    page.evaluate(([moves]) => {
+      const stage = document.querySelector("[data-sandbox-stage]");
+      const rect = stage.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const touch = (id, x, y) =>
+        new Touch({ identifier: id, target: stage, clientX: cx + x, clientY: cy + y });
+      const fire = (type, points) => {
+        const touches = points.map(([x, y], index) => touch(index + 1, x, y));
+        const event = new TouchEvent(type, {
+          touches: type === "touchend" ? [] : touches,
+          targetTouches: type === "touchend" ? [] : touches,
+          changedTouches: touches,
+          bubbles: true,
+          cancelable: true,
+        });
+        stage.dispatchEvent(event);
+        return event.defaultPrevented;
+      };
+      const prevented = [fire("touchstart", moves[0]), fire("touchmove", moves[1])];
+      const state = stage.dataset.sandboxCameraState;
+      fire("touchend", moves[1]);
+      const [x, y, zoom] = state.split(",").map(Number);
+      return { x, y, zoom, prevented };
+    }, [moves]);
+
+  const restingCamera = await sandboxMobile
+    .locator("[data-sandbox-stage]")
+    .getAttribute("data-sandbox-camera-state");
+  const oneFinger = await stageGesture(sandboxMobile, [[[0, 0]], [[0, -120]]]);
+  assert.deepEqual(oneFinger.prevented, [false, false], "one finger must not capture the page scroll");
+  assert.equal(
+    await sandboxMobile.locator("[data-sandbox-stage]").getAttribute("data-sandbox-camera-state"),
+    restingCamera,
+    "one finger must leave the camera alone",
+  );
+  const panned = await stageGesture(sandboxMobile, [[[-50, 0], [50, 0]], [[50, 0], [150, 0]]]);
+  assert.deepEqual(panned.prevented, [true, true], "two fingers must claim the gesture");
+  assert.ok(panned.x > 50, `two-finger pan moved the camera to ${panned.x}`);
+  assert.equal(panned.zoom, 1, "a pan with no span change must not zoom");
+  const pinched = await stageGesture(sandboxMobile, [[[-50, 0], [50, 0]], [[-100, 0], [100, 0]]]);
+  assert.ok(pinched.zoom > 1.8 && pinched.zoom <= 2.1, `pinch reached ${pinched.zoom}x`);
+  assert.ok(
+    Math.abs(pinched.x - panned.x) < 2 && Math.abs(pinched.y - panned.y) < 2,
+    "pinch must hold its anchor rather than drifting the view",
+  );
+  receipt.gestures = {
+    one_finger: "page-scroll",
+    two_finger: "pan-and-pinch",
+    wheel: "modifier-only",
+    anchored_zoom: true,
+  };
   await sandboxMobile.close();
 
   const sandboxFallback = await browser.newPage({ viewport: { width: 375, height: 812 } });
