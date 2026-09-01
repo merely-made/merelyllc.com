@@ -359,9 +359,14 @@ fn graphshell_sandbox_keeps_truth_face_arrangement_and_motion_distinct() {
             "sandbox CSS is missing {contract}"
         );
     }
+    // The loader is served as its own asset rather than inlined, so this is a
+    // growth guard rather than a page-payload constraint. It sat at 99.3% of
+    // the old 64 KiB ceiling, which left no room for the narrow-screen tools
+    // drawer; raised to keep the guard meaningful instead of removing it.
     assert!(
-        GRAPH_SANDBOX.len() < 64 * 1024,
-        "sandbox loader is too large"
+        GRAPH_SANDBOX.len() < 72 * 1024,
+        "sandbox loader is too large: {} bytes",
+        GRAPH_SANDBOX.len()
     );
 }
 

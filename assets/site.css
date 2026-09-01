@@ -1295,6 +1295,20 @@ h1 {
   pointer-events: none;
 }
 
+/* The panel carries the row the scene-tools bar used to lay out directly, so
+   the wide-screen result is unchanged; the handle only exists for the narrow
+   drawer below. */
+.graph-sandbox-tools-panel {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+}
+
+.graph-sandbox-tools-toggle {
+  display: none;
+}
+
 .graph-sandbox-history {
   display: grid;
   min-width: min(390px, 60vw);
@@ -3602,6 +3616,50 @@ tbody tr:last-child td {
 
   .graph-sandbox-caption {
     bottom: 108px;
+  }
+
+  /* Collapse the tools behind a handle. Their contents are allowed to stack
+     for real tap targets, which is exactly why the bar cannot stay open by
+     default: expanded it is capped and scrolls, so the graph keeps the upper
+     half of the stage instead of being covered entirely. */
+  .graph-sandbox-scene-tools {
+    top: auto;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .graph-sandbox-tools-toggle {
+    display: block;
+    order: 2;
+    min-height: 44px;
+    padding: 0 14px;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    color: var(--muted);
+    background: color-mix(in srgb, var(--paper) 92%, transparent);
+    font: 600 0.62rem/1 var(--font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    pointer-events: auto;
+  }
+
+  .graph-sandbox-tools-panel {
+    display: none;
+    max-height: min(46vh, 300px);
+    flex-direction: column;
+    align-items: stretch;
+    padding: 10px;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--paper) 96%, transparent);
+    order: 1;
+    overflow-y: auto;
+    pointer-events: auto;
+  }
+
+  .graph-sandbox-scene-tools[data-tools-open="true"] .graph-sandbox-tools-panel {
+    display: flex;
   }
 
   .graph-sandbox-matrix {

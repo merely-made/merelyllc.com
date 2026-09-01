@@ -315,89 +315,119 @@ fn sandbox_control_actor(name: &str, label: &str, value: &str) -> SiteView {
 }
 
 fn sandbox_scene_tools() -> SiteView {
+    // The tools ride as an overlay pinned inside the stage. Narrow screens
+    // collapse them behind the handle so a bar that would otherwise reflow
+    // into a tall stack cannot bury the graph it belongs to; the handle and
+    // the open/closed state are inert on wide screens, where the panel is
+    // always the row it has always been.
     element(
         "div",
-        &[("class", "graph-sandbox-scene-tools")],
+        &[
+            ("class", "graph-sandbox-scene-tools"),
+            ("data-sandbox-scene-tools", ""),
+            ("data-tools-open", "false"),
+        ],
         vec![
             element(
-                "label",
+                "button",
                 &[
-                    ("class", "graph-sandbox-history"),
-                    ("data-sandbox-history-control", ""),
+                    ("type", "button"),
+                    ("class", "graph-sandbox-tools-toggle"),
+                    ("data-sandbox-tools-toggle", ""),
+                    ("aria-expanded", "false"),
+                    ("aria-controls", "graph-sandbox-tools-panel"),
                 ],
-                vec![
-                    element("span", &[], vec![txt("Source time")]),
-                    element(
-                        "input",
-                        &[
-                            ("type", "range"),
-                            ("min", "0"),
-                            ("max", "0"),
-                            ("value", "0"),
-                            ("data-sandbox-history", ""),
-                            ("aria-label", "Sandbox source time"),
-                        ],
-                        vec![],
-                    ),
-                    element(
-                        "output",
-                        &[("data-sandbox-history-status", "")],
-                        vec![txt("loading source")],
-                    ),
-                ],
+                vec![txt("scene tools")],
             ),
             element(
                 "div",
                 &[
-                    ("class", "graph-sandbox-camera-tools"),
-                    ("role", "group"),
-                    ("aria-label", "View camera"),
+                    ("class", "graph-sandbox-tools-panel"),
+                    ("id", "graph-sandbox-tools-panel"),
+                    ("data-sandbox-tools-panel", ""),
                 ],
                 vec![
-                    element("span", &[], vec![txt("Camera")]),
-                    camera_control("pan-left", "Pan left"),
-                    camera_control("pan-right", "Pan right"),
-                    camera_control("pan-up", "Pan up"),
-                    camera_control("pan-down", "Pan down"),
-                    camera_control("zoom-out", "Zoom out"),
-                    camera_control("zoom-in", "Zoom in"),
-                    camera_control("reset", "Reset camera"),
+                    element(
+                        "label",
+                        &[
+                            ("class", "graph-sandbox-history"),
+                            ("data-sandbox-history-control", ""),
+                        ],
+                        vec![
+                            element("span", &[], vec![txt("Source time")]),
+                            element(
+                                "input",
+                                &[
+                                    ("type", "range"),
+                                    ("min", "0"),
+                                    ("max", "0"),
+                                    ("value", "0"),
+                                    ("data-sandbox-history", ""),
+                                    ("aria-label", "Sandbox source time"),
+                                ],
+                                vec![],
+                            ),
+                            element(
+                                "output",
+                                &[("data-sandbox-history-status", "")],
+                                vec![txt("loading source")],
+                            ),
+                        ],
+                    ),
+                    element(
+                        "div",
+                        &[
+                            ("class", "graph-sandbox-camera-tools"),
+                            ("role", "group"),
+                            ("aria-label", "View camera"),
+                        ],
+                        vec![
+                            element("span", &[], vec![txt("Camera")]),
+                            camera_control("pan-left", "Pan left"),
+                            camera_control("pan-right", "Pan right"),
+                            camera_control("pan-up", "Pan up"),
+                            camera_control("pan-down", "Pan down"),
+                            camera_control("zoom-out", "Zoom out"),
+                            camera_control("zoom-in", "Zoom in"),
+                            camera_control("reset", "Reset camera"),
+                        ],
+                    ),
+                    element(
+                        "button",
+                        &[
+                            ("type", "button"),
+                            ("class", "graph-sandbox-share"),
+                            ("data-sandbox-share", ""),
+                        ],
+                        vec![txt("share scene")],
+                    ),
+                    element(
+                        "span",
+                        &[
+                            ("class", "graph-sandbox-share-status"),
+                            ("data-sandbox-share-status", ""),
+                        ],
+                        vec![txt("state stays in the link")],
+                    ),
+                    element(
+                        "button",
+                        &[
+                            ("type", "button"),
+                            ("class", "graph-sandbox-share"),
+                            ("data-sandbox-export", ""),
+                        ],
+                        vec![txt("export projection")],
+                    ),
+                    element(
+                        "span",
+                        &[
+                            ("class", "graph-sandbox-share-status"),
+                            ("data-sandbox-export-status", ""),
+                            ("aria-live", "polite"),
+                        ],
+                        vec![txt("the realized scene, not the link")],
+                    ),
                 ],
-            ),
-            element(
-                "button",
-                &[
-                    ("type", "button"),
-                    ("class", "graph-sandbox-share"),
-                    ("data-sandbox-share", ""),
-                ],
-                vec![txt("share scene")],
-            ),
-            element(
-                "span",
-                &[
-                    ("class", "graph-sandbox-share-status"),
-                    ("data-sandbox-share-status", ""),
-                ],
-                vec![txt("state stays in the link")],
-            ),
-            element(
-                "button",
-                &[
-                    ("type", "button"),
-                    ("class", "graph-sandbox-share"),
-                    ("data-sandbox-export", ""),
-                ],
-                vec![txt("export projection")],
-            ),
-            element(
-                "span",
-                &[
-                    ("class", "graph-sandbox-share-status"),
-                    ("data-sandbox-export-status", ""),
-                    ("aria-live", "polite"),
-                ],
-                vec![txt("the realized scene, not the link")],
             ),
         ],
     )

@@ -228,6 +228,8 @@ class GraphSandbox {
     this.clearMatrixControl = sandboxRoot.querySelector("[data-sandbox-clear-matrix]");
     this.clearFacetControl = sandboxRoot.querySelector("[data-sandbox-clear-facets]");
     this.cameraControls = [...sandboxRoot.querySelectorAll("[data-sandbox-camera]")];
+    this.sceneTools = sandboxRoot.querySelector("[data-sandbox-scene-tools]");
+    this.toolsToggle = sandboxRoot.querySelector("[data-sandbox-tools-toggle]");
     this.caption = sandboxRoot.querySelector("[data-sandbox-caption]");
     this.controlActors = new Map(
       [...sandboxRoot.querySelectorAll("[data-sandbox-cycle]")].map((control) => [
@@ -274,6 +276,9 @@ class GraphSandbox {
     for (const control of this.cameraControls) {
       control.addEventListener("click", () => this.changeCamera(control.dataset.sandboxCamera));
     }
+    this.toolsToggle?.addEventListener("click", () => {
+      this.setToolsOpen(this.sceneTools?.dataset.toolsOpen !== "true");
+    });
     this.unhonoredSections = {};
     this.expectedGeneration = null;
     this.applySharedState(this.sharedState);
@@ -649,8 +654,14 @@ class GraphSandbox {
       this.loadAuthority();
       this.schedule();
     });
-    this.shareControl.addEventListener("click", () => this.copySceneLink());
-    this.exportControl.addEventListener("click", () => this.copyPortableProjection());
+    this.shareControl.addEventListener("click", () => {
+      this.copySceneLink();
+      this.setToolsOpen(false);
+    });
+    this.exportControl.addEventListener("click", () => {
+      this.copyPortableProjection();
+      this.setToolsOpen(false);
+    });
   }
 
   controlOptions(name) {
@@ -1290,6 +1301,14 @@ class GraphSandbox {
     this.facets = [];
     this.applyCoordinatedSelection();
     announce(this.root, "Selected facets cleared.");
+  }
+
+  // Narrow-screen tools drawer; inert above the drawer breakpoint.
+  setToolsOpen(open) {
+    if (!this.sceneTools || !this.toolsToggle) return;
+    this.sceneTools.dataset.toolsOpen = open ? "true" : "false";
+    this.toolsToggle.setAttribute("aria-expanded", open ? "true" : "false");
+    this.toolsToggle.textContent = open ? "hide scene tools" : "scene tools";
   }
 
   changeCamera(action) {
