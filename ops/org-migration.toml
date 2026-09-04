@@ -284,6 +284,29 @@ local_locator = "repos/turnstone"
 source_aliases = ["mark-ik/turnstone"]
 
 [[migration]]
+id = "knot-editor"
+current_slug = "merely-made/knot-editor"
+target_slug = "merely-made/knot-editor"
+classification = "product"
+batch = "product"
+disposition = "already-in-org"
+visibility = "public"
+default_branch = "main"
+head = "08ff2de2218431df746fccdd50c617d1d0f32e50"
+license_status = "MPL-2.0"
+provenance_status = "reviewed-original-extracted-from-merely-made-mere"
+sensitive_information_status = "current-tree-sanitized-extracted-history-reviewed"
+public_scope = "Knot Editor document, editor, and desktop-application crates, tests, fixtures, and public extraction plans and receipts."
+publication_gate_status = "ready"
+history_remediation = "Retain the path-limited history exported from Mere's ports/knot and ports/knot-document; the repository was created directly in merely-made and has no prior owner."
+pages_status = "none"
+packages_status = "none-detected"
+actions_workflows = 1
+old_owner_files = 3
+old_owner_manifests = 2
+local_locator = "repos/knot-editor"
+
+[[migration]]
 id = "woodshed"
 current_slug = "merely-made/woodshed"
 target_slug = "merely-made/woodshed"

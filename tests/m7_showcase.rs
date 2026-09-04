@@ -149,11 +149,11 @@ fn mere_profile_projects_one_authority_into_canvas_and_swatch_views() {
     assert_eq!(&mere[start..end], artifact_json);
     let native_receipt = mer3ly_repo_graph::consume_portable_projection_json(&artifact_json)
         .expect("native Scenotime consumer accepts the exact page artifact");
-    assert_eq!(native_receipt.score_items, 8);
+    assert_eq!(native_receipt.score_items, 9);
     assert_eq!(native_receipt.initial_revision, 1);
     assert_eq!(native_receipt.final_revision, 5);
-    assert_eq!(native_receipt.active_items, 8);
-    assert_eq!(native_receipt.active_relations, 8);
+    assert_eq!(native_receipt.active_items, 9);
+    assert_eq!(native_receipt.active_relations, 10);
     assert_eq!(native_receipt.picked_source, "mere");
     let artifact: serde_json::Value =
         serde_json::from_str(&mere[start..end]).expect("valid portable projection JSON");
@@ -175,18 +175,18 @@ fn mere_profile_projects_one_authority_into_canvas_and_swatch_views() {
             .as_array()
             .expect("score items")
             .len(),
-        8
+        9
     );
     assert_eq!(
         artifact["snapshot"]["tables"]["items"]
             .as_array()
             .expect("scene items")
             .len(),
-        8
+        9
     );
     assert_eq!(
         artifact["relations"].as_array().expect("relations").len(),
-        9
+        11
     );
     assert_eq!(
         artifact["default_trace"]

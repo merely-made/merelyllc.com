@@ -31,8 +31,8 @@ source = "hocket"
 target = "genet"
 kind = "depends_on"
 provenance = "derived"
-evidence = "Hocket's root Cargo manifest uses Cambium and Genet packages from merely-made/genet."
-verified_on = "2026-07-29"
+evidence = "Hocket's root Cargo manifest uses Genet's layout, scripted-DOM, clipboard, and probe packages from merely-made/genet."
+verified_on = "2026-09-04"
 
 [[relation]]
 id = "hocket-depends-on-mere"
@@ -40,8 +40,8 @@ source = "hocket"
 target = "mere"
 kind = "depends_on"
 provenance = "derived"
-evidence = "Hocket's root Cargo manifest uses Armillary, Luggage, Muniment, and Personae from merely-made/mere."
-verified_on = "2026-07-29"
+evidence = "Hocket's root Cargo manifest uses Armillary, Luggage, Muniment, and Personae from merely-made/mere, and takes Cambium, Sprigging, Workbench, Tinct, and the surface API from there since they moved to Mere on 2026-09-03."
+verified_on = "2026-09-04"
 
 [[relation]]
 id = "hocket-depends-on-netrender"
@@ -76,8 +76,8 @@ source = "isometry"
 target = "genet"
 kind = "depends_on"
 provenance = "derived"
-evidence = "Isometry's root Cargo manifest uses Cambium and Genet packages from merely-made/genet."
-verified_on = "2026-07-29"
+evidence = "Isometry's root Cargo manifest uses Genet's layout, scripted-DOM, and probe packages from merely-made/genet."
+verified_on = "2026-09-04"
 
 [[relation]]
 id = "isometry-depends-on-mere"
@@ -85,8 +85,8 @@ source = "isometry"
 target = "mere"
 kind = "depends_on"
 provenance = "derived"
-evidence = "Isometry's root Cargo manifest uses Mere graph, replication, identity, and Scenograph packages."
-verified_on = "2026-07-29"
+evidence = "Isometry's root Cargo manifest uses Mere graph, replication, identity, and scene packages, and takes Cambium, its Genet winit host, and Sprigging from there since they moved to Mere on 2026-09-03."
+verified_on = "2026-09-04"
 
 [[relation]]
 id = "isometry-depends-on-netrender"
@@ -98,13 +98,40 @@ evidence = "Isometry's root Cargo manifest uses rendering packages from merely-m
 verified_on = "2026-07-29"
 
 [[relation]]
+id = "knot-editor-depends-on-genet"
+source = "knot-editor"
+target = "genet"
+kind = "depends_on"
+provenance = "derived"
+evidence = "Knot Editor's workspace manifest resolves Fleece, genet-host-api, genet-probe, genet-scripted-dom, and layout-dom-api from merely-made/genet at one revision."
+verified_on = "2026-09-04"
+
+[[relation]]
+id = "knot-editor-depends-on-mere"
+source = "knot-editor"
+target = "mere"
+kind = "depends_on"
+provenance = "derived"
+evidence = "Knot Editor's workspace manifest resolves its Mere graph, identity, transport, and host packages, and Cambium, Illume, Inker, and the Knot editor host, from merely-made/mere at one revision."
+verified_on = "2026-09-04"
+
+[[relation]]
+id = "mere-depends-on-knot-editor"
+source = "mere"
+target = "knot-editor"
+kind = "depends_on"
+provenance = "derived"
+evidence = "Mere's root Cargo manifest resolves knot-editor and knot-document from merely-made/knot-editor; Djinn consumes the editor through that workspace entry."
+verified_on = "2026-09-04"
+
+[[relation]]
 id = "mere-depends-on-genet"
 source = "mere"
 target = "genet"
 kind = "depends_on"
 provenance = "derived"
-evidence = "Mere Cargo manifests use Genet's host, document, layout, UI, and engine packages."
-verified_on = "2026-07-29"
+evidence = "Mere Cargo manifests use Genet's host, document, layout, render, and engine packages. The Cambium user-interface family is no longer among them; it moved into Mere on 2026-09-03."
+verified_on = "2026-09-04"
 
 [[relation]]
 id = "mere-depends-on-netrender"
@@ -130,8 +157,8 @@ source = "turnstone"
 target = "genet"
 kind = "depends_on"
 provenance = "derived"
-evidence = "Turnstone's root Cargo manifest uses Genet document, host, layout, UI, and scripting packages."
-verified_on = "2026-07-29"
+evidence = "Turnstone's root Cargo manifest uses Genet document, host, layout, render, and scripting packages."
+verified_on = "2026-09-04"
 
 [[relation]]
 id = "turnstone-depends-on-mere"
@@ -139,8 +166,8 @@ source = "turnstone"
 target = "mere"
 kind = "depends_on"
 provenance = "derived"
-evidence = "Turnstone's root Cargo manifest uses Mere graph, host, memory, identity, and Scenograph packages."
-verified_on = "2026-07-29"
+evidence = "Turnstone's root Cargo manifest uses Mere graph, host, memory, identity, and scene packages, and takes Cambium, Workbench, Sprigging, Inker, and the surface API from there since they moved to Mere on 2026-09-03."
+verified_on = "2026-09-04"
 
 [[relation]]
 id = "turnstone-depends-on-netrender"
@@ -150,6 +177,15 @@ kind = "depends_on"
 provenance = "derived"
 evidence = "Turnstone's root Cargo manifest uses rendering packages from merely-made/netrender."
 verified_on = "2026-07-29"
+
+[[relation]]
+id = "turnstone-depends-on-knot-editor"
+source = "turnstone"
+target = "knot-editor"
+kind = "depends_on"
+provenance = "derived"
+evidence = "Turnstone's root Cargo manifest resolves knot-editor and knot-document from merely-made/knot-editor."
+verified_on = "2026-09-04"
 
 [[relation]]
 id = "turnstone-hosts-mere"
@@ -166,8 +202,8 @@ source = "woodshed"
 target = "genet"
 kind = "depends_on"
 provenance = "derived"
-evidence = "Woodshed's root Cargo manifest uses Cambium and Genet packages from merely-made/genet."
-verified_on = "2026-07-29"
+evidence = "Woodshed's root Cargo manifest uses Genet's host-api, layout, scripted-DOM, and probe packages, and still resolves Cambium, Sprigging, and Tinct from a Genet revision that predates their 2026-09-03 move to Mere; its repoint is outstanding."
+verified_on = "2026-09-04"
 
 [[relation]]
 id = "woodshed-depends-on-mere"
@@ -175,8 +211,8 @@ source = "woodshed"
 target = "mere"
 kind = "depends_on"
 provenance = "derived"
-evidence = "Woodshed's root Cargo manifest uses Chartulary, Personae, and Scholia from merely-made/mere."
-verified_on = "2026-07-29"
+evidence = "Woodshed's root Cargo manifest uses Personae and the Mere persona picker from merely-made/mere."
+verified_on = "2026-09-04"
 
 [[relation]]
 id = "woodshed-depends-on-netrender"

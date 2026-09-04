@@ -2,7 +2,7 @@
 repository = "mere"
 order = 1
 headline = "One graph model, carried between applications."
-copy = "Mere gives Merely applications portable contracts for content, arrangement, memory, identity, and trusted exchange. Graphshell proves those projection contracts in a small reference host."
+copy = "Mere gives Merely applications portable contracts for content, arrangement, memory, identity, and trusted exchange. Graphshell proves those projection contracts in a small reference host, and Pelt, the thin reference browser, has been a Mere port over Genet since the Cambium user-interface family moved here on 2026-09-03."
 image = "showcase/mere.png"
 alt = "Graphshell displaying a local Mere graph arranged as a grid beside search, arrangement, and transfer controls."
 caption = "Graphshell, Mere's reference projection host, arranging a local graph."
@@ -13,24 +13,24 @@ source_license = "MIT OR Apache-2.0"
 repository = "genet"
 order = 2
 headline = "Web content as an embeddable engine."
-copy = "Genet separates documents, layout, scripting, and realization so a host can take the browser profile it needs. Pelt is the thin reference browser that keeps those engine boundaries visible."
+copy = "Genet separates documents, layout, scripting, and realization so a host can take the browser profile it needs. Its own reference host is ortet: one chrome-free binary that drives a session directly and proves the engine runs without the application framework above it. Pelt, the browser in these captures, moved to Mere on 2026-09-03."
 image = "showcase/genet.png"
 alt = "Pelt showing two tiled panes under a single-row chrome carrying its own window controls: the Merely home page in the left pane with a second tab behind it, and the Floodgap Gopher menu set in monospace on the right."
-caption = "Pelt tiling a live web page beside a Gopher menu, with a Gemini capsule in the second tab."
+caption = "Pelt, captured while it lived in Genet, tiling a live web page beside a Gopher menu, with a Gemini capsule in the second tab."
 source_url = "https://github.com/merely-made/genet/blob/main/assets/screenshots/pelt-tiles.png"
 source_license = "MPL-2.0"
 
 [[showcase.images]]
 image = "showcase/genet-2.png"
 alt = "A Gemini capsule rendered as a native serif document inside the Pelt workspace, its address gemini://geminiprotocol.net/ in the chrome row."
-caption = "The smolweb lane: a Gemini capsule as a native typographic document."
+caption = "The smolweb lane, in the same Genet-era Pelt: a Gemini capsule as a native typographic document."
 source_url = "https://github.com/merely-made/genet/blob/main/assets/screenshots/pelt-gemini.png"
 source_license = "MPL-2.0"
 
 [[showcase.images]]
 image = "showcase/genet-3.png"
 alt = "Pelt's scripted profile with its engine control reading Scripted, showing a page whose counter and list are rebuilt live by JavaScript at tick 21."
-caption = "The scripted profile: a live DOM driven through script-runtime-api."
+caption = "The scripted profile, in the same Genet-era Pelt: a live DOM driven through script-runtime-api."
 source_url = "https://github.com/merely-made/genet/blob/main/assets/screenshots/pelt-scripted.png"
 source_license = "MPL-2.0"
 

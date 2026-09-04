@@ -131,6 +131,17 @@ homepage = "https://github.com/merely-made/turnstone"
 public = true
 
 [[repository]]
+id = "knot-editor"
+github_slug = "merely-made/knot-editor"
+name = "Knot Editor"
+summary = "A files-in-place, local-first Djot editor that keeps document authority and contributes the same retained surface to hosts such as Turnstone."
+class = "product"
+status = "active"
+license = "MPL-2.0"
+homepage = "https://github.com/merely-made/knot-editor"
+public = true
+
+[[repository]]
 id = "woodshed"
 github_slug = "merely-made/woodshed"
 name = "Woodshed"
