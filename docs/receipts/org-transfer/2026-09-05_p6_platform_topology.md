@@ -49,6 +49,6 @@ headed hardware lanes remain non-required.
 ## Mer3ly delivery
 
 The public-site smoke cardinality was corrected from the obsolete 8-item,
-9-relation projection to the current 9-item, 10-relation projection. The
+9-relation projection to the current 9-item, 11-relation projection. The
 delivery commit, Pages workflow run, and post-deploy HTTP acceptance are added
 below once they are available.

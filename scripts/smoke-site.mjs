@@ -593,7 +593,7 @@ try {
   assert.equal(projectionArtifact.adapter, "mer3ly.repository-graph/v1");
   assert.equal(projectionArtifact.score.items.length, 9);
   assert.equal(projectionArtifact.snapshot.tables.items.length, 9);
-  assert.equal(projectionArtifact.snapshot.tables.relations.length, 10);
+  assert.equal(projectionArtifact.snapshot.tables.relations.length, 11);
   assert.equal(projectionArtifact.default_trace.length, 7);
 
   const projectionDesktop = await browser.newPage({
@@ -801,7 +801,7 @@ try {
   });
   receipt.projects.projection_proof = {
     nodes: 9,
-    edges: 10,
+    edges: 11,
     projections: 2,
     contract: "sceno-score-scene-scenotime-diff",
     initial_revision: projectionArtifact.snapshot.revision,
