@@ -1,7 +1,7 @@
 {
   "schema": "mer3ly.github-organization/v2",
   "organization": "merely-made",
-  "generated_at_utc": "2026-09-04T19:33:06Z",
+  "generated_at_utc": "2026-09-05T05:16:59Z",
   "repository": [
     {
       "id": "org-profile",
@@ -10,8 +10,8 @@
       "description": "",
       "homepage": null,
       "license": null,
-      "updated_at": "2026-08-16T16:45:27Z",
-      "pushed_at": "2026-08-16T16:45:19Z",
+      "updated_at": "2026-09-04T19:52:51Z",
+      "pushed_at": "2026-09-04T19:52:47Z",
       "primary_language": null,
       "stargazer_count": 0,
       "archived": false,
@@ -23,29 +23,29 @@
       ]
     },
     {
-      "id": "anise",
-      "github_slug": "merely-made/anise",
-      "name": "anise",
-      "description": "Retired 2026-09-04: an unmodified mirror of nyx-space/anise at its 0.10.6 release tag (71e973a); turquet now takes anise from crates.io.",
-      "homepage": "https://nyxspace.com/anise",
-      "license": "mpl-2.0",
-      "updated_at": "2026-09-04T19:14:34Z",
-      "pushed_at": "2026-08-12T04:05:04Z",
-      "primary_language": "Rust",
-      "stargazer_count": 0,
-      "archived": true,
-      "fork": true,
-      "topics": []
-    },
-    {
       "id": "cleromancy",
       "github_slug": "merely-made/cleromancy",
       "name": "cleromancy",
-      "description": "",
+      "description": "A local-first divination journal for replayable Tarot, dice, and astrology readings.",
       "homepage": null,
       "license": "apache-2.0",
-      "updated_at": "2026-09-04T04:24:21Z",
+      "updated_at": "2026-09-05T05:12:16Z",
       "pushed_at": "2026-09-04T04:24:15Z",
+      "primary_language": "Rust",
+      "stargazer_count": 0,
+      "archived": false,
+      "fork": false,
+      "topics": []
+    },
+    {
+      "id": "emblem",
+      "github_slug": "merely-made/emblem",
+      "name": "emblem",
+      "description": "A pure-Rust implementation of IconVG, a compact binary format for simple vector graphics: icons, logos, glyphs and emoji.",
+      "homepage": null,
+      "license": "other",
+      "updated_at": "2026-09-05T05:13:49Z",
+      "pushed_at": "2026-09-05T05:13:45Z",
       "primary_language": "Rust",
       "stargazer_count": 0,
       "archived": false,
@@ -59,8 +59,8 @@
       "description": "An embeddable Rust web engine with modular static, interactive, scripted, and full-web profiles.",
       "homepage": null,
       "license": "mpl-2.0",
-      "updated_at": "2026-09-04T11:44:04Z",
-      "pushed_at": "2026-09-04T11:43:29Z",
+      "updated_at": "2026-09-05T03:20:08Z",
+      "pushed_at": "2026-09-05T03:19:57Z",
       "primary_language": "Rust",
       "stargazer_count": 1,
       "archived": false,
@@ -82,8 +82,8 @@
       "description": "a turn-based, co-op, p2p audio looper. inspired by Menomena's DLR (\"Deeler\")",
       "homepage": null,
       "license": "other",
-      "updated_at": "2026-09-04T04:25:15Z",
-      "pushed_at": "2026-09-04T04:24:11Z",
+      "updated_at": "2026-09-05T03:22:01Z",
+      "pushed_at": "2026-09-05T03:21:57Z",
       "primary_language": "Rust",
       "stargazer_count": 0,
       "archived": false,
@@ -126,8 +126,8 @@
       "description": "Files-in-place local-first Djot editor and embeddable Mere port",
       "homepage": null,
       "license": "other",
-      "updated_at": "2026-09-04T10:45:44Z",
-      "pushed_at": "2026-09-04T10:44:16Z",
+      "updated_at": "2026-09-05T03:22:10Z",
+      "pushed_at": "2026-09-05T03:22:04Z",
       "primary_language": "Rust",
       "stargazer_count": 0,
       "archived": false,
@@ -147,8 +147,8 @@
       "description": "A graph-first knowledge workbench library: addressable content lives as nodes in a spatial graph.",
       "homepage": "https://github.com/merely-made/mere",
       "license": "other",
-      "updated_at": "2026-09-04T18:49:38Z",
-      "pushed_at": "2026-09-04T18:49:30Z",
+      "updated_at": "2026-09-05T03:19:40Z",
+      "pushed_at": "2026-09-05T03:19:36Z",
       "primary_language": "Rust",
       "stargazer_count": 0,
       "archived": false,
@@ -171,8 +171,8 @@
       "description": "Static Merely company site and public repository-family map.",
       "homepage": null,
       "license": "mpl-2.0",
-      "updated_at": "2026-09-04T11:46:11Z",
-      "pushed_at": "2026-09-04T11:41:57Z",
+      "updated_at": "2026-09-04T19:47:08Z",
+      "pushed_at": "2026-09-04T19:47:04Z",
       "primary_language": "Rust",
       "stargazer_count": 0,
       "archived": false,
@@ -193,8 +193,8 @@
       "description": "A first-person game of lineages: you are a critter in an enclosed mid-scale ecosystem, you grow only by incorporating other organisms, and you try to make your kind matter.",
       "homepage": null,
       "license": "mpl-2.0",
-      "updated_at": "2026-09-04T17:22:17Z",
-      "pushed_at": "2026-09-04T17:22:10Z",
+      "updated_at": "2026-09-05T03:22:18Z",
+      "pushed_at": "2026-09-05T03:22:14Z",
       "primary_language": "Rust",
       "stargazer_count": 0,
       "archived": false,
@@ -214,8 +214,8 @@
       "description": "A prosody engine built on the mora: syllabification, syllable weight, accentual and quantitative meter, and sound kinship.",
       "homepage": null,
       "license": "other",
-      "updated_at": "2026-09-03T05:24:54Z",
-      "pushed_at": "2026-09-03T05:24:41Z",
+      "updated_at": "2026-09-05T03:22:25Z",
+      "pushed_at": "2026-09-05T03:22:22Z",
       "primary_language": "Rust",
       "stargazer_count": 0,
       "archived": false,
@@ -229,8 +229,8 @@
       "description": "A fork of a GPU-based renderer for the web, rebuilt on Vello for wgpu.",
       "homepage": null,
       "license": "mpl-2.0",
-      "updated_at": "2026-09-04T18:17:09Z",
-      "pushed_at": "2026-09-04T18:17:01Z",
+      "updated_at": "2026-09-04T19:49:07Z",
+      "pushed_at": "2026-09-04T19:49:03Z",
       "primary_language": "Rust",
       "stargazer_count": 0,
       "archived": false,
@@ -251,8 +251,8 @@
       "description": "A second-person action RPG: you play one character among companions who are peers, who outlive you, and who take your place when you die.",
       "homepage": null,
       "license": "mpl-2.0",
-      "updated_at": "2026-09-04T11:42:56Z",
-      "pushed_at": "2026-09-04T11:41:53Z",
+      "updated_at": "2026-09-05T03:22:33Z",
+      "pushed_at": "2026-09-05T03:22:30Z",
       "primary_language": "Rust",
       "stargazer_count": 0,
       "archived": false,
@@ -272,8 +272,8 @@
       "description": "A small speech codec for voices that travel light: framed IMA ADPCM and a 2.4 kbps LPC vocoder, no_std and dependency-free.",
       "homepage": null,
       "license": "apache-2.0",
-      "updated_at": "2026-08-16T15:49:09Z",
-      "pushed_at": "2026-08-16T15:48:15Z",
+      "updated_at": "2026-09-05T03:22:41Z",
+      "pushed_at": "2026-09-05T03:22:38Z",
       "primary_language": "Rust",
       "stargazer_count": 0,
       "archived": false,
@@ -310,10 +310,10 @@
       "id": "ringdown",
       "github_slug": "merely-made/ringdown",
       "name": "ringdown",
-      "description": "",
+      "description": "A desktop client and clean-room Rust protocol implementation for HyVibe smart guitars.",
       "homepage": null,
       "license": "mpl-2.0",
-      "updated_at": "2026-09-02T02:49:35Z",
+      "updated_at": "2026-09-05T05:12:15Z",
       "pushed_at": "2026-09-02T02:49:31Z",
       "primary_language": "Rust",
       "stargazer_count": 0,
@@ -345,29 +345,14 @@
       ]
     },
     {
-      "id": "sonance",
-      "github_slug": "merely-made/sonance",
-      "name": "sonance",
-      "description": "Sound kinship between pronunciations: rhyme, assonance, consonance, alliteration. Name reservation; implemented today inside mora.",
-      "homepage": null,
-      "license": "apache-2.0",
-      "updated_at": "2026-09-04T19:14:31Z",
-      "pushed_at": "2026-09-02T23:54:21Z",
-      "primary_language": "Rust",
-      "stargazer_count": 0,
-      "archived": true,
-      "fork": false,
-      "topics": []
-    },
-    {
       "id": "turnstone",
       "github_slug": "merely-made/turnstone",
       "name": "turnstone",
       "description": "Relate, curate, and cooperatively browse the web with a graph GUI.",
       "homepage": null,
       "license": "other",
-      "updated_at": "2026-09-04T17:37:03Z",
-      "pushed_at": "2026-09-04T17:36:59Z",
+      "updated_at": "2026-09-05T03:19:48Z",
+      "pushed_at": "2026-09-05T03:19:45Z",
       "primary_language": "Rust",
       "stargazer_count": 0,
       "archived": false,
@@ -389,8 +374,8 @@
       "description": "Many views of one sky. A pure-Rust celestial fact engine.",
       "homepage": "https://saurvs.github.io/astro-rust/",
       "license": "mit",
-      "updated_at": "2026-09-04T19:17:24Z",
-      "pushed_at": "2026-09-04T19:17:13Z",
+      "updated_at": "2026-09-05T03:22:52Z",
+      "pushed_at": "2026-09-05T03:22:48Z",
       "primary_language": "Rust",
       "stargazer_count": 0,
       "archived": false,
@@ -453,8 +438,8 @@
       "description": "Library for embedding native GPU textures (GL FBO, Vulkan image, Metal IOSurface) into wgpu textures.",
       "homepage": null,
       "license": "other",
-      "updated_at": "2026-09-04T18:50:18Z",
-      "pushed_at": "2026-09-04T18:50:11Z",
+      "updated_at": "2026-09-05T03:53:39Z",
+      "pushed_at": "2026-09-05T03:53:35Z",
       "primary_language": "Rust",
       "stargazer_count": 20,
       "archived": false,
@@ -475,8 +460,8 @@
       "description": "Library for embedding system webviews into wgpu textures.",
       "homepage": null,
       "license": "other",
-      "updated_at": "2026-09-04T11:55:40Z",
-      "pushed_at": "2026-09-04T11:52:08Z",
+      "updated_at": "2026-09-04T19:53:50Z",
+      "pushed_at": "2026-09-04T20:17:02Z",
       "primary_language": "Rust",
       "stargazer_count": 4,
       "archived": false,
@@ -497,8 +482,8 @@
       "description": "Library for embedding CEF into wgpu textures.",
       "homepage": null,
       "license": "other",
-      "updated_at": "2026-09-04T17:46:45Z",
-      "pushed_at": "2026-09-04T17:46:09Z",
+      "updated_at": "2026-09-05T03:23:08Z",
+      "pushed_at": "2026-09-05T03:23:05Z",
       "primary_language": "Rust",
       "stargazer_count": 1,
       "archived": false,
@@ -539,76 +524,76 @@
   ],
   "event": [
     {
-      "id": "14425292087",
-      "kind": "IssueCommentEvent",
-      "repository": "merely-made/mere",
-      "created_at": "2026-09-04T10:44:20Z"
+      "id": "14472708836",
+      "kind": "MemberEvent",
+      "repository": "merely-made/emblem",
+      "created_at": "2026-09-05T05:11:51Z"
     },
     {
-      "id": "14425290626",
-      "kind": "IssueCommentEvent",
-      "repository": "merely-made/turnstone",
-      "created_at": "2026-09-04T10:44:18Z"
+      "id": "20092318736",
+      "kind": "PushEvent",
+      "repository": "merely-made/wgpu-weld",
+      "created_at": "2026-09-04T17:11:30Z"
+    },
+    {
+      "id": "20093332416",
+      "kind": "PushEvent",
+      "repository": "merely-made/mesocosm",
+      "created_at": "2026-09-04T16:13:13Z"
+    },
+    {
+      "id": "20064500733",
+      "kind": "PushEvent",
+      "repository": "merely-made/wgpu-graft",
+      "created_at": "2026-09-04T11:57:22Z"
+    },
+    {
+      "id": "20063261301",
+      "kind": "PushEvent",
+      "repository": "merely-made/mesocosm",
+      "created_at": "2026-09-04T11:41:49Z"
+    },
+    {
+      "id": "20061988426",
+      "kind": "PushEvent",
+      "repository": "merely-made/netrender",
+      "created_at": "2026-09-04T11:34:15Z"
+    },
+    {
+      "id": "20060132993",
+      "kind": "PushEvent",
+      "repository": "merely-made/wgpu-weld",
+      "created_at": "2026-09-04T11:11:49Z"
+    },
+    {
+      "id": "20060118312",
+      "kind": "PushEvent",
+      "repository": "merely-made/wgpu-scry",
+      "created_at": "2026-09-04T11:11:41Z"
+    },
+    {
+      "id": "20057955049",
+      "kind": "PushEvent",
+      "repository": "merely-made/netrender",
+      "created_at": "2026-09-04T10:54:29Z"
+    },
+    {
+      "id": "20056961378",
+      "kind": "PushEvent",
+      "repository": "merely-made/knot-editor",
+      "created_at": "2026-09-04T10:44:17Z"
+    },
+    {
+      "id": "20055584142",
+      "kind": "PushEvent",
+      "repository": "merely-made/wgpu-weld",
+      "created_at": "2026-09-04T10:00:39Z"
     },
     {
       "id": "20041185299",
       "kind": "PushEvent",
       "repository": "merely-made/mere",
       "created_at": "2026-09-04T08:23:37Z"
-    },
-    {
-      "id": "20039963170",
-      "kind": "PushEvent",
-      "repository": "merely-made/wgpu-scry",
-      "created_at": "2026-09-04T08:13:30Z"
-    },
-    {
-      "id": "20030302974",
-      "kind": "PushEvent",
-      "repository": "merely-made/wgpu-graft",
-      "created_at": "2026-09-04T06:45:24Z"
-    },
-    {
-      "id": "20024869652",
-      "kind": "PushEvent",
-      "repository": "merely-made/wgpu-scry",
-      "created_at": "2026-09-04T05:47:17Z"
-    },
-    {
-      "id": "20024072096",
-      "kind": "PushEvent",
-      "repository": "merely-made/wgpu-graft",
-      "created_at": "2026-09-04T05:28:35Z"
-    },
-    {
-      "id": "20016758806",
-      "kind": "PushEvent",
-      "repository": "merely-made/turnstone",
-      "created_at": "2026-09-04T04:02:37Z"
-    },
-    {
-      "id": "20015554091",
-      "kind": "PushEvent",
-      "repository": "merely-made/wgpu-graft",
-      "created_at": "2026-09-04T03:46:47Z"
-    },
-    {
-      "id": "20013754215",
-      "kind": "PushEvent",
-      "repository": "merely-made/wgpu-graft",
-      "created_at": "2026-09-04T03:25:31Z"
-    },
-    {
-      "id": "20009690764",
-      "kind": "PushEvent",
-      "repository": "merely-made/wgpu-scry",
-      "created_at": "2026-09-04T02:44:22Z"
-    },
-    {
-      "id": "20007926219",
-      "kind": "PushEvent",
-      "repository": "merely-made/mere",
-      "created_at": "2026-09-04T01:37:16Z"
     }
   ]
 }

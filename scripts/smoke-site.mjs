@@ -591,9 +591,9 @@ try {
   const projectionArtifact = await projectionArtifactResponse.json();
   assert.equal(projectionArtifact.schema, "mer3ly.portable-projection/v1");
   assert.equal(projectionArtifact.adapter, "mer3ly.repository-graph/v1");
-  assert.equal(projectionArtifact.score.items.length, 8);
-  assert.equal(projectionArtifact.snapshot.tables.items.length, 8);
-  assert.equal(projectionArtifact.snapshot.tables.relations.length, 9);
+  assert.equal(projectionArtifact.score.items.length, 9);
+  assert.equal(projectionArtifact.snapshot.tables.items.length, 9);
+  assert.equal(projectionArtifact.snapshot.tables.relations.length, 10);
   assert.equal(projectionArtifact.default_trace.length, 7);
 
   const projectionDesktop = await browser.newPage({
@@ -800,8 +800,8 @@ try {
     path: path.join(receiptRoot, "mere-projection-proof-desktop.png"),
   });
   receipt.projects.projection_proof = {
-    nodes: 8,
-    edges: 9,
+    nodes: 9,
+    edges: 10,
     projections: 2,
     contract: "sceno-score-scene-scenotime-diff",
     initial_revision: projectionArtifact.snapshot.revision,
