@@ -32,7 +32,7 @@ target = "genet"
 kind = "depends_on"
 provenance = "derived"
 evidence = "Hocket's root Cargo manifest uses Genet's layout, scripted-DOM, clipboard, and probe packages from merely-made/genet."
-verified_on = "2026-09-05"
+verified_on = "2026-09-04"
 
 [[relation]]
 id = "hocket-depends-on-mere"
@@ -41,7 +41,7 @@ target = "mere"
 kind = "depends_on"
 provenance = "derived"
 evidence = "Hocket's root Cargo manifest uses Armillary, Luggage, Muniment, and Personae from merely-made/mere, and takes Cambium, Sprigging, Workbench, Tinct, and the surface API from there since they moved to Mere on 2026-09-03."
-verified_on = "2026-09-05"
+verified_on = "2026-09-04"
 
 [[relation]]
 id = "hocket-depends-on-netrender"
@@ -203,7 +203,7 @@ target = "genet"
 kind = "depends_on"
 provenance = "derived"
 evidence = "Woodshed's root Cargo manifest resolves Genet's raw host, layout, scripted-DOM, probe, Taffy, Parley, and IPC packages from one immutable Genet revision; its moved UI and application packages come from Mere."
-verified_on = "2026-09-04"
+verified_on = "2026-09-05"
 
 [[relation]]
 id = "woodshed-depends-on-mere"
@@ -212,7 +212,7 @@ target = "mere"
 kind = "depends_on"
 provenance = "derived"
 evidence = "Woodshed resolves Cambium, Sprigging, Workbench, Tinct, the surface API, scenes, identity, and storage packages from one immutable merely-made/mere revision; its headed P4e receipt passed after the 2026-09-04 repoint."
-verified_on = "2026-09-04"
+verified_on = "2026-09-05"
 
 [[relation]]
 id = "woodshed-depends-on-netrender"
