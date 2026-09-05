@@ -625,10 +625,10 @@ try {
   const swatchProjection = projectionProof.locator(
     '[data-projection-view="swatch"]',
   );
-  assert.equal(await canvasProjection.locator("[data-projection-node]").count(), 8);
-  assert.equal(await swatchProjection.locator("[data-projection-node]").count(), 8);
-  assert.equal(await canvasProjection.locator("[data-projection-edge]").count(), 9);
-  assert.equal(await swatchProjection.locator("[data-projection-edge]").count(), 9);
+  assert.equal(await canvasProjection.locator("[data-projection-node]").count(), 9);
+  assert.equal(await swatchProjection.locator("[data-projection-node]").count(), 9);
+  assert.equal(await canvasProjection.locator("[data-projection-edge]").count(), 11);
+  assert.equal(await swatchProjection.locator("[data-projection-edge]").count(), 11);
   assert.equal(
     await canvasProjection
       .locator('[data-projection-node="mere"]')
