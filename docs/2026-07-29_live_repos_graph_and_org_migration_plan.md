@@ -6,6 +6,12 @@
 Mer3ly and for moving Merely-owned repositories into the `merely-made`
 organization.
 
+**Follow-on, 2026-09-02:** the completed M0-M6 work below remains the public
+graph and transfer receipt. The new semantic-boundary and topology review is
+owned by
+`mere/design_docs/mere_docs/implementation_strategy/2026-09-02_platform_boundary_and_repository_topology_plan.md`;
+future authorized GitHub mutations return here for execution receipts.
+
 ## Outcome
 
 Mer3ly gains a `/repos/` page with two projections of one repository model:

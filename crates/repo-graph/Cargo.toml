@@ -7,7 +7,7 @@ version = "0.1.0"
 edition = "2024"
 rust-version = "1.92"
 publish = false
-description = "Mer3ly repository authority adapters for Mere arrangements and portable Scenograph scenes."
+description = "Mer3ly repository authority adapters for Mere arrangements and portable sceno scenes."
 repository = "https://github.com/merely-made/mer3ly-net"
 license = "MIT OR Apache-2.0"
 
