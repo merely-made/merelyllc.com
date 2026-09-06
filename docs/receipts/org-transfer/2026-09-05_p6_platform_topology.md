@@ -50,5 +50,29 @@ headed hardware lanes remain non-required.
 
 The public-site smoke cardinality was corrected from the obsolete 8-item,
 9-relation projection to the current 9-item, 11-relation projection. The
-delivery commit, Pages workflow run, and post-deploy HTTP acceptance are added
-below once they are available.
+accepted relation follow-up is `d79382b6e6243dca0f15351bc4debbdc6bad7fab`.
+Pages workflow run `33948812138` passed exact-artifact validation, headed
+desktop/mobile/fallback smoke, artifact upload, and deployment. The deployed
+site returned HTTP 200 after that run.
+
+## DNS verification and HTTPS follow-up
+
+Completed later on 2026-09-05 through the authenticated Cloudflare and GitHub
+Pages settings:
+
+- added DNS-only TXT `_github-pages-challenge-merely-made.merelyllc.com` with
+  GitHub's issued verification value;
+- changed the existing apex and `www` CNAME records for
+  `merely-made.github.io` from Cloudflare-proxied to DNS-only;
+- preserved the existing MX, DKIM, DMARC, SPF, and Apple verification records;
+- GitHub organization Pages now reports `merelyllc.com` verified;
+- repository Pages reports `protected_domain_state=verified`, certificate
+  state `approved` for `merelyllc.com` and `www.merelyllc.com`, and
+  `https_enforced=true`.
+
+Authoritative Cloudflare DNS returned all four GitHub Pages IPv4 addresses and
+all four IPv6 addresses for the flattened apex, the GitHub-issued TXT value,
+and `www.merelyllc.com CNAME merely-made.github.io`, each at TTL 300. Live HTTP
+acceptance returned `301 Location: https://merelyllc.com/` for the apex HTTP
+URL, HTTP 200 for the apex HTTPS URL, and a 301 from the HTTPS `www` URL to the
+HTTPS apex. This closes the DNS/HTTPS follow-up without changing mail DNS.
