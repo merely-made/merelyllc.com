@@ -71,30 +71,30 @@ evidence = "Hocket's root Cargo manifest uses Woodshed's audio-primitives packag
 verified_on = "2026-07-29"
 
 [[relation]]
-id = "isometry-depends-on-genet"
-source = "isometry"
+id = "isocosm-depends-on-genet"
+source = "isocosm"
 target = "genet"
 kind = "depends_on"
 provenance = "derived"
-evidence = "Isometry's root Cargo manifest uses Genet's layout, scripted-DOM, and probe packages from merely-made/genet."
+evidence = "Isocosm's root Cargo manifest (the VTT, formerly Isometry) uses Genet's layout, scripted-DOM, and probe packages from merely-made/genet."
 verified_on = "2026-09-04"
 
 [[relation]]
-id = "isometry-depends-on-mere"
-source = "isometry"
+id = "isocosm-depends-on-mere"
+source = "isocosm"
 target = "mere"
 kind = "depends_on"
 provenance = "derived"
-evidence = "Isometry's root Cargo manifest uses Mere graph, replication, identity, and scene packages, and takes Cambium, its Genet winit host, and Sprigging from there since they moved to Mere on 2026-09-03."
+evidence = "Isocosm's root Cargo manifest (the VTT, formerly Isometry) uses Mere graph, replication, identity, and scene packages, and takes Cambium, its Genet winit host, and Sprigging from there since they moved to Mere on 2026-09-03."
 verified_on = "2026-09-04"
 
 [[relation]]
-id = "isometry-depends-on-netrender"
-source = "isometry"
+id = "isocosm-depends-on-netrender"
+source = "isocosm"
 target = "netrender"
 kind = "depends_on"
 provenance = "derived"
-evidence = "Isometry's root Cargo manifest uses rendering packages from merely-made/netrender."
+evidence = "Isocosm's root Cargo manifest (the VTT, formerly Isometry) uses rendering packages from merely-made/netrender."
 verified_on = "2026-07-29"
 
 [[relation]]

@@ -57,12 +57,12 @@ source_url = "https://github.com/merely-made/woodshed/blob/main/assets/screensho
 source_license = "MIT OR Apache-2.0"
 
 [[showcase]]
-repository = "isometry"
+repository = "isocosm"
 order = 5
-headline = "A tabletop that keeps the world around the board."
-copy = "Isometry combines a pixel-art battlemap with campaign records, turn order, adjudication, and peer-to-peer play. The battlemap remains one projection of a larger shared tactical and historical account."
-image = "showcase/isometry.png"
-alt = "Isometry displaying a painted isometric battlemap with terrain, four tokens, editing tools, and turn order."
-caption = "Isometry's battlemap without the overmap covering the tactical view."
-source_url = "https://github.com/merely-made/isometry/blob/main/assets/screenshots/battlemap-demo.png"
+headline = "One simulated world, played three ways."
+copy = "Isocosm is a simulator, a configurable world, history and entity generator that runs whether or not anyone is playing, and three games over it: Isocosm: VTT, a pixel-art battlemap with campaign records, turn order, adjudication and peer-to-peer play; Isocosm: Mesocosm, an ecological roguelike of lineages; and Isocosm: Eponym, a second-person action RPG. The battlemap shown is one projection of the shared world."
+image = "showcase/isocosm.png"
+alt = "Isocosm: VTT displaying a painted isometric battlemap with terrain, four tokens, editing tools, and turn order."
+caption = "The VTT's battlemap without the overmap covering the tactical view."
+source_url = "https://github.com/merely-made/isocosm/blob/main/assets/screenshots/battlemap-demo.png"
 source_license = "MIT OR Apache-2.0"

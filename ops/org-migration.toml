@@ -355,9 +355,9 @@ local_locator = "repos/hocket"
 source_aliases = ["mark-ik/hocket"]
 
 [[migration]]
-id = "isometry"
-current_slug = "merely-made/isometry"
-target_slug = "merely-made/isometry"
+id = "isocosm"
+current_slug = "merely-made/isocosm"
+target_slug = "merely-made/isocosm"
 classification = "product"
 batch = "product"
 disposition = "already-in-org"
@@ -376,7 +376,7 @@ actions_workflows = 0
 old_owner_files = 0
 old_owner_manifests = 0
 local_locator = "repos/isometry"
-source_aliases = ["mark-ik/isometry"]
+source_aliases = ["mark-ik/isometry", "merely-made/isometry"]
 
 [[migration]]
 id = "mesocosm"

@@ -164,36 +164,14 @@ homepage = "https://github.com/merely-made/hocket"
 public = true
 
 [[repository]]
-id = "isometry"
-github_slug = "merely-made/isometry"
-name = "Isometry"
-summary = "A pixel-art isometric virtual tabletop with peer-to-peer play."
+id = "isocosm"
+github_slug = "merely-made/isocosm"
+name = "Isocosm"
+summary = "One simulated world played three ways: the Isocosm simulator and the games over it, Isocosm: VTT (a pixel-art isometric virtual tabletop with peer-to-peer play), Isocosm: Mesocosm (an ecological roguelike of lineages) and Isocosm: Eponym (a second-person action RPG). The tabletop crates are MIT OR Apache-2.0; the simulator, Mesocosm, Eponym and the shared wing crates are MPL-2.0."
 class = "product"
 status = "prototype"
 license = "MIT OR Apache-2.0"
-homepage = "https://github.com/merely-made/isometry"
-public = true
-
-[[repository]]
-id = "mesocosm"
-github_slug = "merely-made/mesocosm"
-name = "Mesocosm"
-summary = "A first-person game of lineages set in an enclosed ecosystem shaped across generations."
-class = "product"
-status = "prototype"
-license = "MPL-2.0"
-homepage = "https://github.com/merely-made/mesocosm"
-public = true
-
-[[repository]]
-id = "paredros"
-github_slug = "merely-made/paredros"
-name = "Paredros"
-summary = "A second-person action RPG about companions who remain peers, outlive you, and can take your place."
-class = "product"
-status = "prototype"
-license = "MPL-2.0"
-homepage = "https://github.com/merely-made/paredros"
+homepage = "https://github.com/merely-made/isocosm"
 public = true
 
 [[repository]]
