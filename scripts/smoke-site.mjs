@@ -144,7 +144,7 @@ try {
     "/devices/v4-desktop-radio/",
     "/devices/t114-field-radio/",
     "/projects/mere/",
-    "/projects/mesocosm/",
+    "/projects/retinue/",
   ]) {
     const page = await browser.newPage({ viewport: { width: 900, height: 900 } });
     const diagnostics = collectDiagnostics(page);
@@ -591,9 +591,9 @@ try {
   const projectionArtifact = await projectionArtifactResponse.json();
   assert.equal(projectionArtifact.schema, "mer3ly.portable-projection/v1");
   assert.equal(projectionArtifact.adapter, "mer3ly.repository-graph/v1");
-  assert.equal(projectionArtifact.score.items.length, 9);
-  assert.equal(projectionArtifact.snapshot.tables.items.length, 9);
-  assert.equal(projectionArtifact.snapshot.tables.relations.length, 11);
+  assert.equal(projectionArtifact.score.items.length, 8);
+  assert.equal(projectionArtifact.snapshot.tables.items.length, 8);
+  assert.equal(projectionArtifact.snapshot.tables.relations.length, 10);
   assert.equal(projectionArtifact.default_trace.length, 7);
 
   const projectionDesktop = await browser.newPage({
@@ -926,14 +926,14 @@ try {
     viewport: { width: 375, height: 812 },
   });
   const textProjectDiagnostics = collectDiagnostics(textProject);
-  await textProject.goto(`${baseUrl}/projects/mesocosm/`, {
+  await textProject.goto(`${baseUrl}/projects/retinue/`, {
     waitUntil: "networkidle",
   });
   assert.equal(
     await textProject.locator("[data-project-id]").getAttribute(
       "data-project-id",
     ),
-    "mesocosm",
+    "retinue",
   );
   assert.equal(
     await textProject.locator(".project-showcase-figure").count(),
@@ -955,7 +955,7 @@ try {
   assert.equal(textMetadata.structured_type, "SoftwareSourceCode");
   assert.equal(
     textMetadata.code_repository,
-    "https://github.com/merely-made/mesocosm",
+    "https://github.com/merely-made/retinue",
   );
   assert.equal(await horizontalOverflow(textProject), 0);
   assert.deepEqual(
@@ -964,11 +964,11 @@ try {
     "text-only project profile emitted browser errors",
   );
   await textProject.screenshot({
-    path: path.join(receiptRoot, "project-mesocosm-mobile.png"),
+    path: path.join(receiptRoot, "project-retinue-mobile.png"),
     fullPage: true,
   });
   receipt.projects.text_only = {
-    repository: "mesocosm",
+    repository: "retinue",
     showcase_images: 0,
     social_image: textMetadata.social_image,
     structured_type: textMetadata.structured_type,
