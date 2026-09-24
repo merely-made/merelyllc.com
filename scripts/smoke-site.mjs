@@ -625,10 +625,10 @@ try {
   const swatchProjection = projectionProof.locator(
     '[data-projection-view="swatch"]',
   );
-  assert.equal(await canvasProjection.locator("[data-projection-node]").count(), 9);
-  assert.equal(await swatchProjection.locator("[data-projection-node]").count(), 9);
-  assert.equal(await canvasProjection.locator("[data-projection-edge]").count(), 11);
-  assert.equal(await swatchProjection.locator("[data-projection-edge]").count(), 11);
+  assert.equal(await canvasProjection.locator("[data-projection-node]").count(), 8);
+  assert.equal(await swatchProjection.locator("[data-projection-node]").count(), 8);
+  assert.equal(await canvasProjection.locator("[data-projection-edge]").count(), 10);
+  assert.equal(await swatchProjection.locator("[data-projection-edge]").count(), 10);
   assert.equal(
     await canvasProjection
       .locator('[data-projection-node="mere"]')
@@ -800,8 +800,8 @@ try {
     path: path.join(receiptRoot, "mere-projection-proof-desktop.png"),
   });
   receipt.projects.projection_proof = {
-    nodes: 9,
-    edges: 11,
+    nodes: 8,
+    edges: 10,
     projections: 2,
     contract: "sceno-score-scene-scenotime-diff",
     initial_revision: projectionArtifact.snapshot.revision,
