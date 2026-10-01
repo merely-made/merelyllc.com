@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment. Rulings 1-13 recorded; all stages inventoried 2026-10-01. Before Assemble,
+**Status:** assessment. Rulings 1-17 recorded; all stages inventoried 2026-10-01. Before Assemble,
 the forks in Open decisions need answers and the new capabilities need crate homes.
 No code has changed.
 
@@ -166,6 +166,40 @@ accept it and load lazily; set a hard budget now. Mark: "Attribute first,
 then budget (Recommended)". What follows: P0 grows a size attribution (twiggy
 or an equivalent) and a `wasm-opt` pass. The budget question comes back with
 what makes up the 12.7 MB.
+
+### Rulings 14-17 (2026-10-01): the fifth round, crate homes
+
+Each answer was the recommended option.
+
+**Ruling 14, the home of authority-revision history (H1).** Options: a
+cartography sibling; graphshell-client; chartulary revisions. Mark:
+"Cartography sibling (Recommended)". What follows: an evaluator for
+cartography's declared `AdjacentRevision`/`Change` reading lives in the
+sibling crate of Ruling 12, or one beside it. P1's dataset must carry a
+sequence of revisions.
+
+**Ruling 15, the home of scene-edit history (H2).** Options: a scenotime
+`SceneTrace`; chartulary stemma. Mark: "scenotime SceneTrace (Recommended)".
+What follows: scenotime gains a base snapshot, chained diffs, a cursor, and
+pure replay. Selection, preview, and the step bound stay as host policy.
+
+**Ruling 16, the home of radio-face's browser realization.** Options: a new
+retinue crate; a generic embedded-graphics crate; a feature in radio-face;
+beside Cambium in mere. Mark: "New retinue crate (Recommended)". What follows:
+a new retinue crate holds an RGBA framebuffer, wasm-bindgen exports, and
+input that drives the firmware's `Controller`. The framebuffer layer is built
+so it can split out later as a generic crate.
+
+**Ruling 17, the home of the route-trace harness.** Options: a new
+retinue-sim crate; a feature in `crates/retinue`; testing or validation.
+Mark: "New retinue-sim crate (Recommended)". What follows: a new retinue crate
+holds the shared-radio medium, the topology, link cuts, the simulated clock,
+and the trace schema. `Node` gains first-relay addressing and a read-only
+next-hop accessor.
+
+*Reading, not ruled:* the new crates' names (the matrix-derivation sibling,
+the radio-face realization, the harness) come from the naming ledger before
+Assemble.
 
 ## Findings (2026-09-30)
 
@@ -540,3 +574,5 @@ The radio simulator and the lab's trace were settled by Rulings 6-7.
   promoted with the native canvas as second consumer; the matrix types go in
   cartography and the derivation in a sibling; the payload is attributed
   before it is budgeted).
+- 2026-10-01: fifth round answered; Rulings 14-17 recorded the crate homes for
+  both histories, the radio-face browser realization, and the trace harness.
