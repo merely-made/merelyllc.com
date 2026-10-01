@@ -3,7 +3,7 @@
 **Date:** 2026-09-30
 **Status:** assessment. Rulings 1-5 recorded; all stages inventoried 2026-10-01. Before Assemble,
 the forks in Open decisions need answers and the new capabilities need crate homes.
-(Open decisions). No code has changed.
+No code has changed.
 
 ## Purpose
 
