@@ -584,6 +584,58 @@ and the trace is H2.
   push to any listed repository invalidates every proof link from the day
   before.
 
+**P0 attribution (2026-10-01, Rulings 13 and 25).** Tools: `twiggy` 0.8.0 and
+`wasm-opt` 116, installed through cargo.
+
+*`wasm-opt` does not shrink the transfer.* On the shipped wasm (12,727,911 B
+raw; 3,769,038 gzip; 2,563,335 brotli):
+
+| Pass | raw | gzip -9 | brotli -q 11 |
+| --- | --- | --- | --- |
+| `-Os` | 11,245,308 (−11.6%) | 3,932,203 (+4.3%) | 2,722,646 (+6.2%) |
+| `-Oz` | 11,029,540 (−13.3%) | 3,933,787 (+4.4%) | 2,731,675 (+6.6%) |
+
+Both passes leave the code less compressible, so the payload has to come
+down through what is compiled in.
+
+*Attribution.* Measured on a symbol-keeping relink of the same scratch repin
+(`strip="none"`, otherwise identical, 5 min 8 s). Of the 21.2 MB, 7.3 MB is
+function names, debug sections, and the wasm-bindgen custom section; none of
+it ships. The 13.94 MB left is what ships before compression. Generic
+instantiations are charged to the first non-std crate in their type
+parameters, then grouped:
+
+| Group | bytes | share |
+| --- | --- | --- |
+| Style and layout: `genet_livery`, `taffy`, `buckram`, `livery`, `cssparser` | 3,297,584 | 23.7% |
+| Other (petgraph 267K, genet_scripted_dom 235K, eidetic 123K, uuid 107K, unnamed 533K, …) | 2,040,821 | 14.6% |
+| Graph and store: `kernel`, `graphshell`, `chirograph`, `pictograph`, `pandect`, `muniment`, … | 1,887,930 | 13.5% |
+| `.rodata` and other data (GraphshellSans is 168,260 B of it, embedded once) | 1,813,747 | 13.0% |
+| Text and fonts: `read_fonts`, `skrifa`, `harfrust`, `parley` | 1,433,482 | 10.3% |
+| std and generics only | 731,810 | 5.2% |
+| Physics: `parry2d`, `rapier2d`, `seiche` | 532,348 | 3.8% |
+| UI host: Cambium, meristem, mesquite, rootstock | 456,223 | 3.3% |
+| Render: netrender, vello, wgpu, genet_render | 442,647 | 3.2% |
+| App glue: `graphshell_web` | 439,879 | 3.2% |
+| Scenes: sceno, scenotime, scenomise, cartography | 399,593 | 2.9% |
+| Image decoders: zune_jpeg, image_webp, image, png | 397,074 | 2.8% |
+| wasm-bindgen, web-sys, js-sys | 66,127 | 0.5% |
+
+The largest single function is `kernel::graph::capture::CapturedDelta`'s serde
+enum visitor, at 113,179 B. The second is
+`GraphSession<IndexedDbBackend>::open`, at 46,150 B.
+
+*Reading, not ruled:*
+- The site needs a read-only viewer of a disclosed dataset (Ruling 2). It does
+  not obviously need the local IndexedDB store (`muniment`, `pandect`), the
+  graph-delta persistence machinery, the image decoders, or the
+  `webrtc-browser` feature, which this build had on.
+- It does need style and layout plus text, which make up about 34%, because
+  the Cambium UI tree runs through Genet.
+- A viewer feature cone of `graphshell-web` is the stack-shaped lever: a
+  capability any static host could use, not a site exception. How much it
+  saves is unmeasured.
+
 **The payload build is broken on the committed tree.** The root of mere pins
 genet at `b1eb3af` in 28 places. `ports/graphshell/web/Cargo.toml` still pins
 `69a2383` in all 7 of its genet rows, so the build resolves two copies of
@@ -758,3 +810,6 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
 - 2026-10-01: sixth round answered in two parts; Rulings 19-25 recorded. Ruling 12
   was reopened on stale-premise evidence. The assessment is complete apart from
   the payload budget, which waits on P0.
+- 2026-10-01: P0 tools installed; attribution recorded. wasm-opt grows the
+  compressed payload, so the lever is what is compiled in. Style and layout
+  take 24%, the graph store 14%, and text 10%.
