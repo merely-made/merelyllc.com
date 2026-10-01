@@ -1,8 +1,8 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment. Rulings 1-5 recorded. Before Assemble, the two other
-stages still need an inventory and the new capabilities need crate homes
+**Status:** assessment. Rulings 1-5 recorded; all stages inventoried 2026-10-01. Before Assemble,
+the forks in Open decisions need answers and the new capabilities need crate homes.
 (Open decisions). No code has changed.
 
 ## Purpose
@@ -155,6 +155,61 @@ pass Ruling 1.
 - Artifacts are committed today. The browser delivery plan ruled that
   application builds ship as release assets once they are megabytes in size.
 
+### The two other stages (inventoried 2026-10-01)
+
+Sources: mer3ly at `d307132`, mere at `3fd2b147`, retinue's working tree.
+
+**`projection-proof`** (`assets/projection-proof.js`, 818 lines) is on the
+Mere project profile only. `artifact.rs:390` makes its presence there a
+validation error, and its presence on any other profile one too. It reads the
+build's `mer3ly.portable-projection/v1` artifact, inlined as
+`#mere-projection-artifact`. It drives two views of one scene, `canvas` and
+`swatch` (`projects.rs:263-272`), through a store with preview, commit, and a
+16-step history. Without JavaScript it falls back to the relationship lists
+already on the page. Smoke references it, together with the lab, 83 times;
+the Rust tests do so 7 times.
+
+| Surface | Stack home today | Verdict |
+| --- | --- | --- |
+| Diff application, snapshot and trace validation, in JavaScript (`:567-677`) | `scenotime::apply_diff` (`diff.rs:138`), `SceneSnapshot::validate` (`snapshot.rs:141`), including `UpdateRelation` and `TombstoneRelation` | consume. The JavaScript copy of scenotime goes |
+| Preview/commit store with a bounded history (`:60-149`) | Graphshell's practice workspace: save, reopen, and `HISTORY_LIMIT` (`web_practice.rs:39`) | consume, if Graphshell's history matches the revision-chained shape. Otherwise it is the history capability Ruling 4 already creates |
+| Two coordinated views of one scene | the coordinated spatial and Matrix views that closed A2's resolution half; the Relations and Compare views in Graphshell's practice proof | consume |
+| Move, fold, and remove-relation as scene diffs (`:508-556`) | scenotime operations; fold has **no typed field**, and still rides the untyped `"fold"` channel the 2026-08-16 survey flagged | consume the operations. **Create** a typed fold |
+| Trace replay with a timer, honouring reduced motion (`:455-478`) | `scenotime::transition` (C2) | consume |
+| `projection-scene=v2` share link, carrying the authority hash, the trace, and a cursor (`:480-497`) | shelfmark (`incipit::ShelfmarkV1`) | consume. The site wire goes. This is the site's third share wire, after the sandbox's and the lab's |
+| Bounds normalization and straight-line edge geometry (`:749-783`) | the renderer and camera in `graphshell-web` | consume |
+| The `mer3ly.portable-projection/v1` artifact it reads | already a Ruling 4 item | follows Ruling 4 |
+
+**`message-path-lab`** (`assets/message-path-lab.js`, 423 lines) is on the
+radio page (`radio.rs:113`). It is a hand-authored illustration, not a
+computation. It has five named radios at fixed percent positions, two
+six-step event scripts (a blocked route and a direct route), a step scrubber
+with playback, draggable nodes, a mock of the attached radio's screen, and a
+`message-path=v1` share link. The page renders its full markup without
+JavaScript.
+
+| Surface | Stack home today | Verdict |
+| --- | --- | --- |
+| Five-radio topology and its routes, as constants (`:4-22`) | a disclosed dataset with relations (Ruling 2) | consume, once P1 lands |
+| Event scripts, as constants (`:23-129`) | none. Retinue's `Node` carries real hop counts and transit policy (`node.rs:314`, `endpoint.rs:930`), and its tests build transit scenarios, but nothing runs a small mesh in-process and emits a route trace | **create** a generated trace, or keep the script as authored data (Open decisions) |
+| Step scrubber and playback, honouring reduced motion | `scenotime::transition`, as for the proof | consume |
+| Mock radio screen: header, state, hop, sequence (`:267-272`, the `message-path-oled` markup) | retinue's `radio-face`: `no_std`, `embedded-graphics` only, with a `Page` enum (`controller.rs:87`) and a renderer that already draws `TRAFFIC` (`render.rs:364`) | consume, through a browser realization of `radio-face`. That realization does not exist yet: **create** |
+| Draggable nodes with percent clamping and arrow keys | `graphshell-web` | consume |
+| `message-path=v1` share link | shelfmark | consume |
+
+**A fourth surface, outside Ruling 5's words.** `radio-simulator.js` (291
+lines, on the devices page, `devices.rs:385`) mocks Retinue firmware's screen
+pages in JavaScript: `STATUS`, `POWER`, `RADIO`, `TRAFFIC`, and with a host
+attached `IDENTITY`, `LINKS`, `PEERS`. It is not a draggable stage, so neither
+the 2026-09-01 plan nor Ruling 5 counted it. But it is the same kind of
+exception Ruling 1 forbids, and `radio-face` is its stack home just as it is
+the lab's.
+
+*Reading, not ruled:* across all four surfaces, Ruling 1 retires three
+site-local share wires and one JavaScript copy of scenotime. It also creates
+three capabilities beyond Ruling 4's: a typed fold, a browser realization of
+`radio-face`, and possibly a generated route trace.
+
 ## Plan (draft; the phases depend on the Open decisions)
 
 **P0: instruments.** Repin mer3ly to current mere. Measure
@@ -196,14 +251,16 @@ exporter.
 
 The first round's four questions were settled by Rulings 2-5. Still open:
 
-- **The two other stages, uninventoried.** Ruling 5 brought them into scope.
-  Each needs the same treatment the sandbox got in the inventory table, with a
-  stack home and a verdict per surface. The phases cannot be finalized until
-  that is done.
-- **Where the three new capabilities live.** The matrix, the history control,
-  and the neutral schema each need a crate home (`sceno`, `scenotime`,
-  `cartography`, `graphshell-client`, or Graphshell's port). Each has more than
-  one defensible answer, so each is a question for the next round, put with
+- **The radio simulator.** Does Ruling 1 reach `radio-simulator.js`, which is
+  not a stage?
+- **The lab's event scripts.** One answer generates the trace by running
+  Retinue nodes in-process, which is real routing and a new harness. The other
+  keeps the six-step scripts as authored data, played through stack
+  machinery.
+- **Crate homes for the new capabilities.** The matrix, the history control,
+  and the neutral schema (Ruling 4); the typed fold; the `radio-face` browser
+  realization, in retinue or beside the Cambium web host. Each has more than
+  one defensible home, so each is a question for the next round, put with
   evidence.
 - **The payload budget**, after P0 produces a number.
 
@@ -212,3 +269,6 @@ The first round's four questions were settled by Rulings 2-5. Still open:
 - 2026-09-30: assessment written; Ruling 1 recorded.
 - 2026-09-30: first round answered; Rulings 2-5 recorded. Scope widened to
   all three stages.
+- 2026-10-01: inventoried `projection-proof` and `message-path-lab`. Found
+  `radio-simulator.js` as a fourth surface, and `radio-face` as the stack home
+  for both screen mocks.
