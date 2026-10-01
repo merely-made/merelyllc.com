@@ -113,3 +113,8 @@ For the landed policy half:
 - Whether the sandbox is in scope for the Cambium browser host at all, or stays
   a JavaScript instrument because it explains the graph rather than being an
   application. The answer sets this plan's expiry.
+  *Answered 2026-09-01, recorded here 2026-09-30.* Mere's projection grammar
+  adoption plan ruled that Graphshell supersedes the sandbox and serves as the
+  site index. The work is assessed in
+  [Graphshell as the site canvas](2026-09-30_graphshell_site_canvas_plan.md).
+  This plan expires at that plan's P4.
