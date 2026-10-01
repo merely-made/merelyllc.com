@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment. Rulings 1-17 recorded; all stages inventoried 2026-10-01. Before Assemble,
+**Status:** assessment. Rulings 1-18 recorded; Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01. Before Assemble,
 the forks in Open decisions need answers and the new capabilities need crate homes.
 No code has changed.
 
@@ -200,6 +200,18 @@ next-hop accessor.
 *Reading, not ruled:* the new crates' names (the matrix-derivation sibling,
 the radio-face realization, the harness) come from the naming ledger before
 Assemble.
+
+### Ruling 18 (2026-10-01): the neutral schema
+
+Put as: Ruling 15 puts the trace in scenotime, so only the score and the
+authority hash lack a neutral home, and a pre-solved score may have no
+consumer left under Rulings 2 and 3. Options: compose, with no new type;
+chirograph `ProjectionCaptureV2`. Mark: "chirograph ProjectionCaptureV2".
+What follows: `ProjectionCaptureV2` adds an optional pre-solved score and the
+authority identity, so a static viewer that does not run the compiler can
+still render a portable scene. The `mer3ly.portable-projection/v1` schema
+retires onto V2, a `SceneTrace`, and a shelfmark authority. Ruling 4's
+"create" stands.
 
 ## Findings (2026-09-30)
 
@@ -501,60 +513,144 @@ nested-manifest repin trap. The manifest belongs to the session active in
 mere, so it is reported here, not fixed. P0's number is being taken from a
 scratch copy repinned to `b1eb3af`.
 
-## Plan (draft; the phases depend on the Open decisions)
+## Plan (rewritten 2026-10-01 against Rulings 1-18)
 
-**P0: instruments.** Repin mer3ly to current mere. Measure
-`graphshell-web`'s size-profile release build. The raw, gzip, and brotli
-figures were taken 2026-10-01 from a scratch repin (Findings). Ruling 13 adds
-two steps: attribute the size by crate, and measure after `wasm-opt -Os`.
+The first draft's P0-P4 assumed one surface and one gap. These phases replace
+it.
+- The stack phases (S) land in mere and retinue. Each is a capability another
+  consumer could use unchanged (Ruling 1), and each has its own done-condition.
+- The site phases (P) consume the stack phases.
+- The S phases do not depend on one another unless noted.
+
+**P0: instruments.** Repin mer3ly to current mere. Then attribute the size of
+`graphshell-web`'s release build by crate, and measure it after
+`wasm-opt -Os` (Ruling 13). The raw, gzip, and brotli figures are in Findings.
 Done when the attribution and the `wasm-opt` figure are recorded here with
 their commands, the payload budget is ruled from them, and the repinned site
 passes `cargo test --locked` and the smoke suite unchanged.
 Blocked in part on mere: `ports/graphshell/web/Cargo.toml` must be repinned to
 genet `b1eb3af` before the committed manifest builds.
 
-**P1: the dataset seam (stack, in mere).** A host page hands the mounted
-component a disclosed dataset with relations. This means data at mount time
-plus a fetchable URL, with the source, revision, and identity validation the
-practice proof already performs. The practice fixture moves onto that seam, and
-its `include_str!` goes.
+**S1: the dataset seam (mere, Graphshell; Rulings 2 and 14).**
+`ProjectionDataset` gains relations and a sequence of revisions. A host page
+supplies it at mount time or by URL, with the practice proof's source,
+revision, and identity validation. The practice fixture moves onto the seam,
+and its `include_str!` goes.
 Done when the practice proof runs from a host-supplied dataset with its
 receipts unchanged, a dataset with relations renders edges, and a stale
 revision or an unknown field fails explicitly.
 
-**P2: the site exporter (mer3ly).** The authority emits its repositories and
-relations as a disclosed dataset at build time, hashed into the artifact
-receipt.
-Done when `validate-artifact` covers the dataset, and its generation matches
-the authority's.
+**S2: the matrix (mere, cartography family; Rulings 4, 10, and 12).**
+- The contract types go in cartography beside `RelationMatrix`.
+- The derivation goes in a new sibling crate.
+- The frozen realization gains a two-axis table form (Ruling 3).
+- mer3ly's matrix and `ports/gazette/src/ledger.rs` both retire onto it.
 
-**P3: parity.** Each row of the inventory reaches its verdict: consumed,
-created in the stack, or dropped by ruling. The shelfmark links in circulation
-keep resolving, or their retirement is ruled.
-Done when the smoke suite's projection assertions (8 nodes, 10 edges, the
-selection, and the share link) pass against Graphshell, and the frozen
-realization serves the no-script reader.
+Done when gazette's ledger receipts and the site's matrix receipts reproduce
+through the shared derivation, with neither copy left, and the frozen form
+reads as a grid to a screen reader.
 
-**P4: retirement.** `graph-sandbox.js` and the site-local Rust it drove are
-removed. The canvas stage plan's expiry condition is met, and that plan is
-closed.
-Done when no page emits the sandbox, and `crates/repo-graph` holds only the
-exporter.
+**S3: authority-revision history (mere, the cartography sibling; Ruling 14).**
+An evaluator for the declared `AdjacentRevision`/`Change` reading over S1's
+revision sequence. Depends on S1.
+Done when the site's checkpoint classes (added, updated, stable, removed)
+reproduce from the evaluator, given the same two checkpoints.
+
+**S4: scene-edit history (mere, scenotime; Ruling 15).** `SceneTrace`: a base
+snapshot, chained diffs, a cursor, and pure replay, with truncate-on-commit.
+Selection, preview, and the step bound stay as host policy.
+Done when `projection-proof`'s default trace and a shared trace replay
+through `SceneTrace` to the same revisions and snapshots that the JavaScript
+store produced.
+
+**S5: the portable fold (mere, the native canvas and sceno 0.0.4; Ruling 11).**
+- Mere's canvas gets a product fold trigger over pictograph's existing
+  `FoldRecord` projection.
+- `MereHost` serves folds in its scenes.
+- A fold fact is promoted onto sceno's 0.0.4 line, with mer3ly as the forcing
+  consumer and the canvas as the second.
+- `FoldRecord` member identity generalizes beyond UUIDs.
+- The summary versus root-stand-in semantics are ruled before promotion (Open
+  decisions).
+
+Done when a fold made in Mere's canvas reaches a remote viewer and the frozen
+realization as a fold, both can reverse it, and the site's dependency fold
+does the same.
+
+**S6: the portable capture (mere, chirograph; Ruling 18).**
+`ProjectionCaptureV2` adds an optional pre-solved score and the authority
+identity to V1.
+Done when the site's portable artifact is expressible as a V2 capture plus a
+`SceneTrace` plus a shelfmark authority, with no `mer3ly.*` schema, and a
+static viewer can render it without running the compiler.
+
+**S7: the route-trace harness (retinue; Rulings 7, 9, and 17).**
+- `Node` gains first-relay addressing (after `endpoint.rs:2281`) and a
+  read-only next-hop accessor.
+- A new sim crate holds the shared-radio medium, the topology, link cuts, a
+  simulated clock, and the trace schema.
+- It emits two traces over the lab's topology: a cold start with fire–water
+  already cut, and a warm cut that advances to the next announce.
+
+Done when both traces are byte-identical across runs. The cold trace must
+route fire → church → water → garage. The warm trace must show the lost sends
+until the next announce, and then the reroute.
+
+**S8: radio-face in the browser (retinue; Rulings 6, 8, and 16).** A new
+crate holds an RGBA framebuffer over `radio-face::render`, wasm-bindgen
+exports, and input that drives the firmware's `Controller`. The framebuffer
+layer is kept separable. For the no-script case, PNGs are rendered at build
+time by the receipts code.
+Done when all seven of the devices page's pages render from firmware code in
+a browser, button input follows the firmware's page logic, and the TRAFFIC
+page and ticker render from a node's state in an S7 trace.
+
+**P1: the site exporter (mer3ly).** This consumes S1, S6, and S7. At build
+time the authority emits:
+- the disclosed dataset, with its relations and revisions;
+- the V2 capture;
+- the two S7 traces;
+- the frozen realization (Ruling 3);
+- the radio-face PNGs.
+
+All of these are hashed into the artifact receipt.
+Done when `validate-artifact` covers every emitted file and the dataset's
+generation matches the authority's.
+
+**P2: parity, per surface.**
+- The sandbox moves to Graphshell over the dataset, with S3's history and
+  S5's fold.
+- `projection-proof` moves to Graphshell views over the capture and an S4
+  trace.
+- The lab moves to Graphshell over the S7 traces, with S8 screens (Ruling 8).
+- The devices page's simulator moves to S8.
+- The three site share wires become shelfmark.
+
+Done when the smoke suite's assertions for each surface pass against the
+stack realizations, and the frozen realization serves the no-script reader.
+
+**P3: retirement.** These are removed:
+- `graph-sandbox.js`, `projection-proof.js`, `message-path-lab.js`, and
+  `radio-simulator.js`;
+- the site-local Rust in `crates/repo-graph`, apart from the exporter;
+- the authority-derived static index (Ruling 3).
+
+The canvas stage plan closes.
+Done when no page emits any of the four, and `crates/repo-graph` holds only
+the exporter.
 
 ## Open decisions
 
-The first round's four questions were settled by Rulings 2-5. Still open:
-
-The radio simulator and the lab's trace were settled by Rulings 6-7.
-
-- **Crate homes for the new capabilities.** These include the route-trace
-  harness (Ruling 7), which belongs in retinue, though the crate is not yet
-  chosen. The matrix, the history control,
-  and the neutral schema (Ruling 4); the typed fold; the `radio-face` browser
-  realization, in retinue or beside the Cambium web host. Each has more than
-  one defensible home, so each is a question for the next round, put with
-  evidence.
-- **The payload budget**, after P0 produces a number.
+- **The payload budget**, once P0 has attributed the size (Ruling 13).
+- **Fold semantics** (S5): pictograph replaces the root and its members with
+  a summary item, while the site keeps the root standing in for its members.
+  Rule this before promotion.
+- **Share links already in circulation**: whether `#graphshell-scene=`,
+  `projection-scene=v2`, and `message-path=v1` links keep resolving through a
+  shim, or retire.
+- **Names** for the new crates (the matrix-derivation sibling, the radio-face
+  realization, the sim harness), from the naming ledger.
+- **The order of the S phases, and how many run in parallel.**
 
 ## Progress
 
@@ -576,3 +672,5 @@ The radio simulator and the lab's trace were settled by Rulings 6-7.
   before it is budgeted).
 - 2026-10-01: fifth round answered; Rulings 14-17 recorded the crate homes for
   both histories, the radio-face browser realization, and the trace harness.
+- 2026-10-01: Ruling 18 recorded (chirograph `ProjectionCaptureV2`). Plan
+  rewritten against Rulings 1-18: eight stack phases and four site phases.
