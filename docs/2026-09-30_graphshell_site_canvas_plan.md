@@ -653,7 +653,7 @@ enum visitor, at 113,179 B. The second is
 genet at `b1eb3af` in 28 places. `ports/graphshell/web/Cargo.toml` still pins
 `69a2383` in all 7 of its genet rows, so the build resolves two copies of
 taproot and fails with 17 type errors (the first is `web_tree/lane.rs:73`).
-Its committed lock is also stale, so `--locked` refuses. This is the
+`--locked` also refused against the local lock. *Corrected 2026-10-01:* that lock is not committed. `ports/graphshell/web/Cargo.lock` is ignored by mere's root `.gitignore:8`, so each checkout resolves its own, and the stale one was local. This is the
 nested-manifest repin trap. The manifest belongs to the session active in
 mere, so it is reported here, not fixed. P0's number is being taken from a
 scratch copy repinned to `b1eb3af`.
@@ -676,8 +676,19 @@ delta machinery, no WebRTC, no image decoders), built and measured here.
 Done when the cone's size is recorded with its command, the payload budget is
 ruled against it, and the repinned site
 passes `cargo test --locked` and the smoke suite unchanged.
-Blocked in part on mere: `ports/graphshell/web/Cargo.toml` must be repinned to
-genet `b1eb3af` before the committed manifest builds.
+The genet repin landed upstream 2026-10-01 (mere `6279ca31`, merged as
+`8ff96d2b`, on origin/main `ea604bf4`), so the committed manifest now pins
+`b1eb3af` everywhere. The conatus session archived a single-genet lock at
+`Code/testing/mere/tree-physics/web-Cargo.lock` for seeding.
+**Sequencing (agreed with the conatus session, 2026-10-01):** the viewer cone
+gates features across files that its unmerged `tree-remote-session` lane is
+rewriting (`ports/graphshell/src/web*.rs`, `web_tree/**`, `web_rtc_link.rs`,
+`remote_board.rs`, `crates/graphshell-client`, pictograph's canvas, and the
+graphshell feature wiring). `webrtc-browser` now lives in `web_rtc_link.rs` and
+`graphshell-client`'s `remote` module. So the cone starts in a worktree off
+main only after that lane merges; the conatus session will send word. It is
+built as a Cargo feature split plus cfgs and handed back for a check before
+main. Those files are off limits until then.
 
 **S1: the dataset seam (mere, Graphshell; Rulings 2 and 14).**
 `ProjectionDataset` gains relations and a sequence of revisions. A host page
@@ -798,8 +809,8 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
 - **The stale comment in cartography's manifest** (`Cargo.toml:18`). It belongs
   to mere and is not this plan's to fix, but Ruling 19 rests on its being
   wrong. Raise it with whoever next works in cartography.
-- **The genet repin of the `graphshell-web` manifest**, owned by the session
-  active in mere. P0's committed-tree build waits on it.
+- ~~The genet repin of the `graphshell-web` manifest~~: landed upstream at
+  `8ff96d2b` (2026-10-01).
 
 ## Progress
 
@@ -837,3 +848,7 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   `graphshell-web` genet repin and the Ruling 26 viewer cone), coordination
   with the conatus session was requested, at Mark's suggestion, before any mere code
   changes.
+- 2026-10-01: the conatus session replied. The genet repin is already on
+  origin/main (`8ff96d2b`), and the web lock is gitignored, not committed. The
+  viewer cone waits for its `tree-remote-session` lane to merge, then runs as
+  a worktree lane handed back for a check.
