@@ -299,6 +299,48 @@ artifact already has a neutral home:
 Only the score, the authority hash, and the default trace are left without one,
 and the trace is H2.
 
+**`radio-face` in the browser (Ruling 6), at retinue `66bc578`.**
+- It passes `cargo check` for wasm32.
+- Its surface is one call:
+  `render(&mut DrawTarget, Surface, Theme, Screen, &LocalStatus, Option<&HostSnapshot>)`
+  (`render.rs:121`).
+- The firmware's own `Controller` decides which page is showing and what each
+  button does, so a browser realization runs real page logic rather than
+  imitating it.
+- `examples/render_receipts.rs` already rasterizes to an RGB buffer, so the
+  browser adapter is that buffer as `ImageData`.
+- It draws all seven of the simulator's pages (`render.rs:161-169`), but with
+  real rows. The JavaScript invents content: its STATUS page shows "RADIO
+  SX1262 READY", where the firmware shows board, firmware, host, and uptime.
+- **The lab's screen has no firmware counterpart.** radio-face has no ROUTE
+  or DELIVERED header and no TX QUEUED, RX FRAME, hop, or sequence fields. The
+  nearest real view is the TRAFFIC page plus ticker events (`status.rs:299`).
+  A device knows its next hop and hop count, never the whole route.
+- A pixel canvas is opaque to a screen reader. PNGs rendered at build time
+  serve the no-script case.
+- mere already depends on retinue (`mere/Cargo.toml:568`, with a cycle guard),
+  so retinue cannot depend back on mere or Cambium.
+
+**The route-trace harness (Ruling 7).**
+- `retinue::node::Node` is I/O-free, and the caller supplies every seed, so a
+  trace is byte-deterministic and can be serialized at site build time.
+- Nothing runs a topology. One unit test chains three nodes by hand
+  (`node.rs:3190-3240`). `Endpoint` is tokio-based and uses OS randomness.
+- Two small `Node` gaps:
+  - Initiating nodes don't address their first relay; the test sets it by
+    hand, and `Endpoint` does it at `endpoint.rs:2281`.
+  - Nothing exposes a node's next hop. `route_to` returns the interface and the
+    hop count only (`node.rs:952`).
+- **The lab's story is right on a cold start and wrong on a warm one.** With
+  fire–water cut, the graph forces fire → church → water → garage. But if
+  the cut happens after routes have settled, fire keeps its dead route until
+  the next announce (`DEFAULT_ANNOUNCE_INTERVAL`, 10 minutes, `node.rs:134`)
+  or until the route expires (`DEFAULT_ROUTE_TTL`, 30 minutes, `:249`), and
+  sends are lost in between. "Alternate route selected" is true only of a
+  fresh start, or after simulated time advances to the next announce.
+- **The lab's text is wrong.** "Message delivered by three relays"
+  (`message-path-lab.js:70`) describes two relays over three hops.
+
 **The payload build is broken on the committed tree.** The root of mere pins
 genet at `b1eb3af` in 28 places. `ports/graphshell/web/Cargo.toml` still pins
 `69a2383` in all 7 of its genet rows, so the build resolves two copies of
