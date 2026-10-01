@@ -831,3 +831,9 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   take 24%, the graph store 14%, and text 10%.
 - 2026-10-01: Ruling 26 recorded. The budget is set against a measured
   viewer feature cone of `graphshell-web`, a new P0 step.
+- 2026-10-01: Action began under Ruling 22. S7 (`retinue-sim`) and S8
+  (`radio-mirror`) opened as worktree lanes off retinue `66bc578`; each stops at
+  forks and merges only after verification. For the mere side (the
+  `graphshell-web` genet repin and the Ruling 26 viewer cone), coordination
+  with the conatus session was requested, at Mark's suggestion, before any mere code
+  changes.
