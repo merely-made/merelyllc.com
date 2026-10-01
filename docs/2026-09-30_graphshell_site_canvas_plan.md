@@ -1,7 +1,8 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment. Ruling 1 recorded; the first round of forks is open
+**Status:** assessment. Rulings 1-5 recorded. Before Assemble, the two other
+stages still need an inventory and the new capabilities need crate homes
 (Open decisions). No code has changed.
 
 ## Purpose
@@ -45,7 +46,36 @@ schema, or behaviour does not satisfy this plan.
 *Reading, not ruled:* the same test applies in reverse. Site-local code that
 duplicates a stack capability is retired as part of this work rather than kept
 beside it. Ruling 1 applies to the graph sandbox. Whether it also reaches
-`message-path-lab` and `projection-proof` is Open decision 4.
+`message-path-lab` and `projection-proof` was Ruling 5.
+
+### Rulings 2-5 (2026-09-30): the first round
+
+Put as four multiple-choice questions, with the evidence in Findings. Mark
+answered with an option label each time; the label is quoted as his answer.
+
+**Ruling 2, the data seam.** Options: grow `ProjectionDataset`; a static Mere
+graph snapshot; a live resident. Mark: "Grow ProjectionDataset". What follows:
+`ProjectionDataset` gains relations and a supply path at mount time or by URL.
+The site owns an exporter, as Woodshed does, and the practice fixture moves onto
+the same seam.
+
+**Ruling 3, the no-script reader.** Options: the frozen realization; keep the
+site index. Mark: "Frozen realization". What follows: `graphshell-client`'s
+frozen realization is rendered at site build time, and the site's own
+authority-derived static index retires.
+
+**Ruling 4, features with no stack home.** Options: create all three in the
+stack; rule each separately; drop them from the site. Mark: "Create all three
+in stack". What follows: the two-reading matrix, the source-time history
+control, and a neutral portable-projection schema become stack capabilities
+before the sandbox retires.
+
+**Ruling 5, Ruling 1's reach.** Options: the sandbox only, for now; all three
+stages; exempt them. Mark: "All three stages". What follows:
+`message-path-lab` (423 lines) and `projection-proof` (818 lines) are in scope.
+*Reading, not ruled:* this assessment has not inventoried those two the way it
+inventoried the sandbox. That inventory is owed before Assemble begins
+(Open decisions).
 
 ## Findings (2026-09-30)
 
@@ -72,9 +102,9 @@ both clean on `main`.
 | `mer3ly.graphshell-scene-state/v1` URL-hash wire | shelfmark. The 2026-08-16 ruling made the citation delta and the sidecar one record | consume. The site schema is retired |
 | Reading and representation registries | `cartography` | already consumed |
 | Portable projection plus receipts, `mer3ly.portable-projection/v1` (`lib.rs:1798-2344`) | `sceno`, `scenotime`, the receipts plan | the schema is site-named. **Create** a neutral one, or drop the site name |
-| Two-reading matrix, `mer3ly.two-reading-matrix/v1` (`lib.rs:539-1018`) | none. No stack crate carries a matrix view | **create**, or drop (Open decision 3) |
+| Two-reading matrix, `mer3ly.two-reading-matrix/v1` (`lib.rs:539-1018`) | none. No stack crate carries a matrix view | **create**, or drop (Ruling 4) |
 | Source-time history control, `diff_graphs` (`lib.rs:1441`) | `scenotime` diffs; no history view in Graphshell's browser build | **create** |
-| Accessible matrix HTML (`lib.rs:899`) and the authority-derived static index | `graphshell-client` frozen realization (`frozen.rs`), built for exactly this | consume (Open decision 2) |
+| Accessible matrix HTML (`lib.rs:899`) and the authority-derived static index | `graphshell-client` frozen realization (`frozen.rs`), built for exactly this | consume (Ruling 3) |
 | Rendering, camera, gestures, hit testing (`graph-sandbox.js`) | `graphshell-web` over `cambium-genet-web-host`, netrender, and Seiche | consume |
 
 ### What Graphshell's browser build offers
@@ -110,7 +140,7 @@ both clean on `main`.
    repository graph is mostly its relations: 10 edges across the 8 rendered
    nodes the current smoke asserts (`c1b8ab1`). The seam needs relations, or
    the site feeds Graphshell through something other than `ProjectionDataset`
-   (Open decision 1).
+   (Ruling 2).
 
 *Reading, not ruled:* both gaps are capabilities for any static host, not for
 mer3ly. A docs site, a published Woodshed set, and merelyllc.com's embeds all
@@ -164,22 +194,21 @@ exporter.
 
 ## Open decisions
 
-1. **The data seam's shape.** (a) `ProjectionDataset` grows relations, and
-   the site exports into it the way Woodshed does. (b) The site emits a
-   static, read-only Mere graph snapshot that Graphshell mounts the way it
-   mounts a store. (c) The site is served from a live resident. Pages cannot
-   host one, so (c) waits on C5 public rendezvous.
-2. **The no-script reader.** Does the site's own authority-derived static index
-   give way to the stack's frozen realization rendered at build time, or does
-   the index stay as the site's page and the frozen realization serve only the
-   canvas?
-3. **Features with no stack home.** These are the two-reading matrix, the
-   source-time history control, and the site-named projection schema. For each:
-   create it in the stack, or drop it from the site.
-4. **Ruling 1's reach.** Does "no special exceptions" also cover
-   `message-path-lab` and `projection-proof`? The 2026-09-01 canvas stage plan
-   called them site-native explanatory instruments.
+The first round's four questions were settled by Rulings 2-5. Still open:
+
+- **The two other stages, uninventoried.** Ruling 5 brought them into scope.
+  Each needs the same treatment the sandbox got in the inventory table, with a
+  stack home and a verdict per surface. The phases cannot be finalized until
+  that is done.
+- **Where the three new capabilities live.** The matrix, the history control,
+  and the neutral schema each need a crate home (`sceno`, `scenotime`,
+  `cartography`, `graphshell-client`, or Graphshell's port). Each has more than
+  one defensible answer, so each is a question for the next round, put with
+  evidence.
+- **The payload budget**, after P0 produces a number.
 
 ## Progress
 
 - 2026-09-30: assessment written; Ruling 1 recorded.
+- 2026-09-30: first round answered; Rulings 2-5 recorded. Scope widened to
+  all three stages.
