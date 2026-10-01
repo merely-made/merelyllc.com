@@ -1,8 +1,8 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete. Rulings 1-25 recorded; Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
-The payload budget waits on P0's attribution. Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
+**Status:** assessment complete. Rulings 1-26 recorded; Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+The payload budget waits on P0's viewer-cone measurement (Ruling 26). Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
 No code has changed.
 
 ## Purpose
@@ -271,6 +271,19 @@ twiggy only; twiggy plus a binaryen release. Mark: "twiggy + wasm-opt via
 cargo (Recommended)". What follows: `cargo install twiggy --locked` and
 `cargo install wasm-opt --locked`. If the C++ build of wasm-opt fails, P0
 records the failure and keeps twiggy's attribution.
+
+### Ruling 26 (2026-10-01): the payload budget's basis
+
+Put after the P0 attribution, with its figures. Options: a viewer cone, then
+the budget; accept about 2.6 MB brotli and load lazily; a hard 1 MB brotli
+cap; a cap at the viewer cone plus 10%. Mark: "Viewer cone, then budget
+(Recommended)". What follows:
+- `graphshell-web` gains a viewer feature cone: a read-only viewer of a
+  disclosed dataset, with no local IndexedDB store, no graph-delta persistence
+  machinery, no `webrtc-browser`, and no image decoders.
+- The cone is a stack capability any static host can use.
+- It is built and measured in P0, and the budget is then ruled against its
+  measured size. The budget's number and form both stay open until then.
 
 ## Findings (2026-09-30)
 
@@ -657,8 +670,11 @@ it.
 **P0: instruments.** Repin mer3ly to current mere. Then attribute the size of
 `graphshell-web`'s release build by crate, and measure it after
 `wasm-opt -Os` (Ruling 13), using twiggy and `wasm-opt` installed through cargo (Ruling 25). The raw, gzip, and brotli figures are in Findings.
-Done when the attribution and the `wasm-opt` figure are recorded here with
-their commands, the payload budget is ruled from them, and the repinned site
+The attribution and the `wasm-opt` figures were recorded 2026-10-01. Ruling 26 adds a
+viewer feature cone of `graphshell-web` (no local store, no persistence or
+delta machinery, no WebRTC, no image decoders), built and measured here.
+Done when the cone's size is recorded with its command, the payload budget is
+ruled against it, and the repinned site
 passes `cargo test --locked` and the smoke suite unchanged.
 Blocked in part on mere: `ports/graphshell/web/Cargo.toml` must be repinned to
 genet `b1eb3af` before the committed manifest builds.
@@ -778,7 +794,7 @@ the exporter.
 Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
 22), the names, and the P0 tools. Still open:
 
-- **The payload budget**, once P0 has attributed the size (Ruling 13).
+- **The payload budget**, ruled against the viewer cone's measured size (Ruling 26).
 - **The stale comment in cartography's manifest** (`Cargo.toml:18`). It belongs
   to mere and is not this plan's to fix, but Ruling 19 rests on its being
   wrong. Raise it with whoever next works in cartography.
@@ -813,3 +829,5 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
 - 2026-10-01: P0 tools installed; attribution recorded. wasm-opt grows the
   compressed payload, so the lever is what is compiled in. Style and layout
   take 24%, the graph store 14%, and text 10%.
+- 2026-10-01: Ruling 26 recorded. The budget is set against a measured
+  viewer feature cone of `graphshell-web`, a new P0 step.
