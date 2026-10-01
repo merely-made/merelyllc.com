@@ -504,6 +504,27 @@ and the trace is H2.
 - **The lab's text is wrong.** "Message delivered by three relays"
   (`message-path-lab.js:70`) describes two relays over three hops.
 
+**Found while preparing the sixth round (2026-10-01).**
+- **Ruling 12's precedent is gone.** The `graph-layout` sibling that
+  cartography's "stays contract-only" comment (`Cargo.toml:18`) points to was
+  retired: its layouts were recaptured into `orrery/arrangements` at mere
+  `739c87f4` (2026-06-07). Since then cartography has grown its own
+  `src/adapters/`, 1,354 lines of `LayoutStrategy` implementations, extended
+  as recently as `1ae79893` (2026-09-25). The comment is stale. The adapters'
+  own doc states the pattern the crate follows now: "Nothing here places
+  anything — the placement lives in `scenomise`". Ruling 12 rested on the
+  stale comment, so it goes back to Mark.
+- **The sandbox's share wire is already v2.** `graph-sandbox.js:6` writes
+  `mer3ly.graphshell-scene-state/v2` and still accepts v1 (`:7`). The
+  2026-08-16 survey and this plan's inventory said v1.
+- **Proof share links already go stale within about a day.**
+  `projection-scene=v2` links resolve only while `authority_sha256` matches
+  (`projection-proof.js:682`). That hash covers the whole `GraphInput`,
+  including each node's `pushed_at` (`lib.rs:56-75`), and the Pages workflow
+  refreshes public metadata on a daily schedule (`pages.yml:22-23,72`). So any
+  push to any listed repository invalidates every proof link from the day
+  before.
+
 **The payload build is broken on the committed tree.** The root of mere pins
 genet at `b1eb3af` in 28 places. `ports/graphshell/web/Cargo.toml` still pins
 `69a2383` in all 7 of its genet rows, so the build resolves two copies of
