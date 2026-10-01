@@ -2,7 +2,7 @@
 
 **Date:** 2026-09-30
 **Status:** assessment. Rulings 1-18 recorded; Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01. Before Assemble,
-the forks in Open decisions need answers and the new capabilities need crate homes.
+the remaining Open decisions (payload budget, fold semantics, links in circulation, crate names, phase order) need answers.
 No code has changed.
 
 ## Purpose
