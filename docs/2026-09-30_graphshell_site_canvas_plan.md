@@ -1,8 +1,8 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment. Rulings 1-18 recorded; Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01. Before Assemble,
-the remaining Open decisions (payload budget, fold semantics, links in circulation, crate names, phase order) need answers.
+**Status:** assessment complete. Rulings 1-25 recorded; Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+The payload budget waits on P0's attribution. Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
 No code has changed.
 
 ## Purpose
@@ -212,6 +212,65 @@ authority identity, so a static viewer that does not run the compiler can
 still render a portable scene. The `mer3ly.portable-projection/v1` schema
 retires onto V2, a `SceneTrace`, and a shelfmark authority. Ruling 4's
 "create" stands.
+
+### Rulings 19-25 (2026-10-01): the sixth round
+
+Two rounds, put with long context at Mark's request ("Ask 'em, giving
+context. Favor verbosity"). Each answer was the recommended option.
+
+**Ruling 19, Ruling 12 reopened** (amends Rulings 12 and 14). Reopened
+because the "contract-only" manifest comment it rested on is stale (see
+Findings, "Found while preparing the sixth round"). Options: follow the
+adapter pattern; everything in cartography; keep the sibling crate. Mark:
+"Follow the adapter pattern (Recommended)". What follows:
+- The matrix's types and a thin matrix adapter go in cartography, beside
+  `RelationMatrix` and `src/adapters/`.
+- The cell derivation goes in the scenes family, the way placement lives in
+  `scenomise`.
+- The authority-revision (H1) evaluator follows the same split.
+- No new mere crate is created.
+
+**Ruling 20, how a fold looks.** Options: the fact names its stand-in; always
+a synthetic summary; always a member stand-in. Mark: "Fact names its stand-in
+(Recommended)". What follows:
+- The sceno fold fact carries its members plus a stand-in. The stand-in is
+  either one of the members (the site's root with a "+N" badge) or a synthetic
+  summary (pictograph's body).
+- The host picks per fold, and every reader renders whichever the fact names.
+- Boundary accounting (internal relations, and boundary bundles by family and
+  direction) rides along as optional detail.
+
+**Ruling 21, share links already in circulation.** Options: retire with a
+notice; a shim for a window; retire silently. Mark: "Retire, with a notice
+(Recommended)". What follows: `#graphshell-scene=` (v1 and v2),
+`projection-scene=v2`, and `message-path=v1` stop restoring state. The page
+says the link's format was retired and shows the default scene. No
+translation layer survives.
+
+**Ruling 22, phase order.** Options: retinue now, with mere staged; the
+sandbox first; one lane at a time. Mark: "Retinue now, mere staged
+(Recommended)". What follows:
+- S7 and S8 start as parallel lanes in their own retinue worktrees.
+- In mere, S1, S4, and S6 go first, then S2 and S3 on top of S1. S5 goes last,
+  coordinated with the session active in mere.
+- The surfaces switch over one at a time as their dependencies land: the
+  devices simulator first, then the lab, then `projection-proof`, then the
+  sandbox.
+
+**Ruling 23, the radio-face browser crate's name.** Options: `radio-mirror`;
+`radio-web`; `radio-glass`. Mark: "radio-mirror (Recommended)". What follows:
+an unpublished retinue crate named `radio-mirror`, beside `radio-face` and
+`radio-hand`.
+
+**Ruling 24, the harness's name.** Options: `retinue-sim`; `mesh-sim`; a
+published family word. Mark: "retinue-sim (Recommended)". What follows: an
+unpublished retinue crate named `retinue-sim`.
+
+**Ruling 25, the P0 tools.** Options: twiggy and wasm-opt through cargo;
+twiggy only; twiggy plus a binaryen release. Mark: "twiggy + wasm-opt via
+cargo (Recommended)". What follows: `cargo install twiggy --locked` and
+`cargo install wasm-opt --locked`. If the C++ build of wasm-opt fails, P0
+records the failure and keeps twiggy's attribution.
 
 ## Findings (2026-09-30)
 
@@ -545,7 +604,7 @@ it.
 
 **P0: instruments.** Repin mer3ly to current mere. Then attribute the size of
 `graphshell-web`'s release build by crate, and measure it after
-`wasm-opt -Os` (Ruling 13). The raw, gzip, and brotli figures are in Findings.
+`wasm-opt -Os` (Ruling 13), using twiggy and `wasm-opt` installed through cargo (Ruling 25). The raw, gzip, and brotli figures are in Findings.
 Done when the attribution and the `wasm-opt` figure are recorded here with
 their commands, the payload budget is ruled from them, and the repinned site
 passes `cargo test --locked` and the smoke suite unchanged.
@@ -561,9 +620,10 @@ Done when the practice proof runs from a host-supplied dataset with its
 receipts unchanged, a dataset with relations renders edges, and a stale
 revision or an unknown field fails explicitly.
 
-**S2: the matrix (mere, cartography family; Rulings 4, 10, and 12).**
-- The contract types go in cartography beside `RelationMatrix`.
-- The derivation goes in a new sibling crate.
+**S2: the matrix (mere; Rulings 4, 10, and 19).**
+- The contract types and a thin adapter go in cartography beside
+  `RelationMatrix`.
+- The cell derivation goes in the scenes family.
 - The frozen realization gains a two-axis table form (Ruling 3).
 - mer3ly's matrix and `ports/gazette/src/ledger.rs` both retire onto it.
 
@@ -571,7 +631,7 @@ Done when gazette's ledger receipts and the site's matrix receipts reproduce
 through the shared derivation, with neither copy left, and the frozen form
 reads as a grid to a screen reader.
 
-**S3: authority-revision history (mere, the cartography sibling; Ruling 14).**
+**S3: authority-revision history (mere; Rulings 14 and 19).** A cartography adapter, with the computation in the scenes family:
 An evaluator for the declared `AdjacentRevision`/`Change` reading over S1's
 revision sequence. Depends on S1.
 Done when the site's checkpoint classes (added, updated, stable, removed)
@@ -591,8 +651,8 @@ store produced.
 - A fold fact is promoted onto sceno's 0.0.4 line, with mer3ly as the forcing
   consumer and the canvas as the second.
 - `FoldRecord` member identity generalizes beyond UUIDs.
-- The summary versus root-stand-in semantics are ruled before promotion (Open
-  decisions).
+- The fold fact names its stand-in, either a member or a synthetic summary
+  (Ruling 20).
 
 Done when a fold made in Mere's canvas reaches a remote viewer and the frozen
 realization as a fold, both can reverse it, and the site's dependency fold
@@ -605,7 +665,7 @@ Done when the site's portable artifact is expressible as a V2 capture plus a
 `SceneTrace` plus a shelfmark authority, with no `mer3ly.*` schema, and a
 static viewer can render it without running the compiler.
 
-**S7: the route-trace harness (retinue; Rulings 7, 9, and 17).**
+**S7: the route-trace harness (retinue, `retinue-sim`; Rulings 7, 9, 17, and 24).**
 - `Node` gains first-relay addressing (after `endpoint.rs:2281`) and a
   read-only next-hop accessor.
 - A new sim crate holds the shared-radio medium, the topology, link cuts, a
@@ -617,7 +677,7 @@ Done when both traces are byte-identical across runs. The cold trace must
 route fire → church → water → garage. The warm trace must show the lost sends
 until the next announce, and then the reroute.
 
-**S8: radio-face in the browser (retinue; Rulings 6, 8, and 16).** A new
+**S8: radio-face in the browser (retinue, `radio-mirror`; Rulings 6, 8, 16, and 23).** A new
 crate holds an RGBA framebuffer over `radio-face::render`, wasm-bindgen
 exports, and input that drives the firmware's `Controller`. The framebuffer
 layer is kept separable. For the no-script case, PNGs are rendered at build
@@ -645,7 +705,8 @@ generation matches the authority's.
   trace.
 - The lab moves to Graphshell over the S7 traces, with S8 screens (Ruling 8).
 - The devices page's simulator moves to S8.
-- The three site share wires become shelfmark.
+- The three site share wires become shelfmark. Old links show a retired-format
+  notice and the default scene (Ruling 21).
 
 Done when the smoke suite's assertions for each surface pass against the
 stack realizations, and the frozen realization serves the no-script reader.
@@ -662,16 +723,15 @@ the exporter.
 
 ## Open decisions
 
+Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
+22), the names, and the P0 tools. Still open:
+
 - **The payload budget**, once P0 has attributed the size (Ruling 13).
-- **Fold semantics** (S5): pictograph replaces the root and its members with
-  a summary item, while the site keeps the root standing in for its members.
-  Rule this before promotion.
-- **Share links already in circulation**: whether `#graphshell-scene=`,
-  `projection-scene=v2`, and `message-path=v1` links keep resolving through a
-  shim, or retire.
-- **Names** for the new crates (the matrix-derivation sibling, the radio-face
-  realization, the sim harness), from the naming ledger.
-- **The order of the S phases, and how many run in parallel.**
+- **The stale comment in cartography's manifest** (`Cargo.toml:18`). It belongs
+  to mere and is not this plan's to fix, but Ruling 19 rests on its being
+  wrong. Raise it with whoever next works in cartography.
+- **The genet repin of the `graphshell-web` manifest**, owned by the session
+  active in mere. P0's committed-tree build waits on it.
 
 ## Progress
 
@@ -695,3 +755,6 @@ the exporter.
   both histories, the radio-face browser realization, and the trace harness.
 - 2026-10-01: Ruling 18 recorded (chirograph `ProjectionCaptureV2`). Plan
   rewritten against Rulings 1-18: eight stack phases and four site phases.
+- 2026-10-01: sixth round answered in two parts; Rulings 19-25 recorded. Ruling 12
+  was reopened on stale-premise evidence. The assessment is complete apart from
+  the payload budget, which waits on P0.
