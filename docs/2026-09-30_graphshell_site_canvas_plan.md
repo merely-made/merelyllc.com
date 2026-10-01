@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment. Rulings 1-10 recorded; all stages inventoried 2026-10-01. Before Assemble,
+**Status:** assessment. Rulings 1-13 recorded; all stages inventoried 2026-10-01. Before Assemble,
 the forks in Open decisions need answers and the new capabilities need crate homes.
 No code has changed.
 
@@ -133,6 +133,39 @@ remote reader be able to see that a fold exists? Options: no, consume
 have mere's canvas adopt foldrecord. if so, then might as well do 2 and that,
 right? otherwise, i need to know more about 1's ramifications". The answer is
 in Findings (fold) and goes back to him.
+
+### Rulings 11-13 (2026-10-01): the fourth round
+
+**Ruling 11, the fold.** Put after the answer to Mark's question. Options:
+the canvas adopts plus a portable fold; consume only, for now. Mark: "Canvas
+adopts + portable (Recommended)". What follows:
+- Mere's native canvas gets a fold trigger, and folds go into the scenes it
+  serves through `MereHost`. That makes the canvas the second heterogeneous
+  consumer.
+- A fold fact then goes on sceno's 0.0.4 line, under the catalog's promotion
+  rules, with mer3ly as the forcing consumer.
+- Remote and no-script readers can see and reverse folds.
+- The pictograph-summary versus site-root-stand-in semantics are settled as
+  part of the work.
+
+This also amends Ruling 1's "consume" verdict for fold: it becomes consume
+plus promote.
+
+**Ruling 12, the matrix inside the cartography family** (amends Ruling 10).
+Options: types in cartography with the derivation in a sibling; everything in
+cartography; a sibling only, with no kernel. Mark: "Types in, derivation
+sibling (Recommended)". What follows:
+- The matrix's contract types go in cartography beside `RelationMatrix`.
+- The derivation goes in a sibling crate, after the `graph-layout` precedent,
+  so cartography stays contract-only.
+- Gazette gains the kernel dependency through cartography when its
+  `ledger.rs` copy retires.
+
+**Ruling 13, the payload posture.** Options: attribute first, then budget;
+accept it and load lazily; set a hard budget now. Mark: "Attribute first,
+then budget (Recommended)". What follows: P0 grows a size attribution (twiggy
+or an equivalent) and a `wasm-opt` pass. The budget question comes back with
+what makes up the 12.7 MB.
 
 ## Findings (2026-09-30)
 
@@ -437,11 +470,14 @@ scratch copy repinned to `b1eb3af`.
 ## Plan (draft; the phases depend on the Open decisions)
 
 **P0: instruments.** Repin mer3ly to current mere. Measure
-`graphshell-web`'s size-profile release build, raw and gzipped, with
-and without Livery. Then the payload question is answered with a number
-rather than the 2026-08-16 figure.
-Done when both numbers are recorded here with the build command, and the
-repinned site passes `cargo test --locked` and the smoke suite unchanged.
+`graphshell-web`'s size-profile release build. The raw, gzip, and brotli
+figures were taken 2026-10-01 from a scratch repin (Findings). Ruling 13 adds
+two steps: attribute the size by crate, and measure after `wasm-opt -Os`.
+Done when the attribution and the `wasm-opt` figure are recorded here with
+their commands, the payload budget is ruled from them, and the repinned site
+passes `cargo test --locked` and the smoke suite unchanged.
+Blocked in part on mere: `ports/graphshell/web/Cargo.toml` must be repinned to
+genet `b1eb3af` before the committed manifest builds.
 
 **P1: the dataset seam (stack, in mere).** A host page hands the mounted
 component a disclosed dataset with relations. This means data at mount time
@@ -500,3 +536,7 @@ The radio simulator and the lab's trace were settled by Rulings 6-7.
   fold, radio-face and trace, payload). Third round answered; Rulings 8-10
   recorded. The fold question came back with a question, now answered in
   Findings. P0's payload was measured from a scratch repin.
+- 2026-10-01: fourth round answered; Rulings 11-13 recorded (the fold is
+  promoted with the native canvas as second consumer; the matrix types go in
+  cartography and the derivation in a sibling; the payload is attributed
+  before it is budgeted).
