@@ -227,6 +227,87 @@ site-local share wires and one JavaScript copy of scenotime. It also creates
 three capabilities beyond Ruling 4's: a typed fold, a browser realization of
 `radio-face`, and possibly a generated route trace.
 
+### Corrections from the crate-home lanes (2026-10-01)
+
+Three read-only research lanes searched for crate homes, at mere `316e8217`.
+I re-checked each claim below against the code before recording it. Several
+correct the inventory above, whose rows keep their original wording.
+
+**The matrix (Ruling 4).**
+- The stack already declares the reading:
+  `cartography::ReadingSurface::RelationMatrix`
+  (`crates/canvas/cartography/src/reading.rs:36`) and a `"matrix"` reading
+  profile (`:127`). Only the derivation is missing, so "no stack crate carries
+  a matrix" was too strong.
+- A second implementation already exists. `ports/gazette/src/ledger.rs` (460
+  lines, `gazette.ledger/v1`) mirrors the site's axis, cell, contributor,
+  instance-address, and instance-delta types, and repeats its accessible-table
+  code, `escape_html` included.
+- The catalog's promotion rule is therefore met (a forcing consumer, plus a
+  second heterogeneous one). By the same rule, "the old duplicated
+  implementation is removed when a portable primitive is promoted". A stack
+  matrix would retire gazette's copy as well, which widens the work into
+  `ports/gazette`.
+- `cambium::grid` is a virtualized grid with ARIA grid roles, so an interactive
+  matrix has a substrate.
+
+**The no-script matrix (Ruling 3).** `FrozenScene` emits flat
+`(kind, name, detail)` rows (`frozen.rs:250`), with no row-by-column grid. The
+inventory row "accessible matrix HTML → consume `frozen.rs`" does not hold as
+written. Either the frozen realization grows a two-axis form, or the matrix
+capability supplies a table for it to render.
+
+**History is two capabilities, and neither has a home.**
+- **H1, authority-revision history.** The sandbox's checkpoint slider, through
+  `diff_graphs`, classifies each node as added, updated, stable, or removed
+  between published checkpoints. That is a reading, not a scene diff.
+  Cartography already declares it: `ActorScope::AdjacentRevision` and
+  `ReadingEmphasis::Change` (`reading.rs:25,45,103`). Nothing in mere evaluates
+  it.
+- **H2, scene-edit history.** `projection-proof`'s store keeps a base
+  snapshot, chained diffs, a cursor, a preview, and truncate-on-commit. It
+  replays from the base, because `apply_diff` is forward-only.
+- Graphshell's practice history fits neither. It is navigation history:
+  `HistoryEntry` and `ReturnTo` (`practice_workspace.rs:214,263`). The
+  inventory's "consume, if it matches" fails.
+- The adoption plan's A4 text runs H1 and H2 together.
+
+**A typed fold already exists.** `forme::FoldRecord` (`crates/forme/forme/src/fold.rs:65`,
+`FOLD_RECORD_VERSION = 1`) is a view-local curation record. `pictograph`'s
+`collapse_descendants`, `undo_fold`, and `redo_fold`
+(`fold_projection.rs:139,194,207`) do exactly what the site's "fold
+dependencies" does, and nothing outside tests calls them. `graphshell-web`
+already links forme through `mere`'s `graph` feature. So "create a typed fold"
+is really "consume `FoldRecord` and lower it into the scene", with two
+differences:
+- `FoldRecord` members are UUIDs, while the site's sources are strings.
+- pictograph swaps in a summary item, while the site keeps the root standing in
+  for its members.
+
+A *portable* fold, one a frozen or remote reader can see, would be a sceno
+contract addition, and the catalog's second-consumer rule blocks it today.
+
+**The neutral schema may not need a new type.** Each field of the site's
+artifact already has a neutral home:
+- names in `chirograph::ProjectionCaptureV1`
+  (`crates/chirograph/src/lib.rs:448`);
+- selection in `SelectionTarget`;
+- diffs in `SceneDiff`;
+- authority and generation in incipit's shelfmark types;
+- relations in Ruling 2's dataset.
+
+Only the score, the authority hash, and the default trace are left without one,
+and the trace is H2.
+
+**The payload build is broken on the committed tree.** The root of mere pins
+genet at `b1eb3af` in 28 places. `ports/graphshell/web/Cargo.toml` still pins
+`69a2383` in all 7 of its genet rows, so the build resolves two copies of
+taproot and fails with 17 type errors (the first is `web_tree/lane.rs:73`).
+Its committed lock is also stale, so `--locked` refuses. This is the
+nested-manifest repin trap. The manifest belongs to the session active in
+mere, so it is reported here, not fixed. P0's number is being taken from a
+scratch copy repinned to `b1eb3af`.
+
 ## Plan (draft; the phases depend on the Open decisions)
 
 **P0: instruments.** Repin mer3ly to current mere. Measure
