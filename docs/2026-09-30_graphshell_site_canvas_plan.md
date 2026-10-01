@@ -852,3 +852,18 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   origin/main (`8ff96d2b`), and the web lock is gitignored, not committed. The
   viewer cone waits for its `tree-remote-session` lane to merge, then runs as
   a worktree lane handed back for a check.
+- 2026-10-01: S7 (`retinue-sim`) reported on retinue branch
+  `worktree-agent-aa22f86b16a02ee3e` (`51b4b5f`, `28edc4b`; 15 files,
+  +1,596/−5; no attribution trailers). Verified in its worktree:
+  - `retinue-sim` passes 4/4, and clippy with CI's flags is clean.
+  - `retinue` passed 355/0 on six full runs. One earlier run, made while the S8
+    lane was compiling in parallel and without `--no-fail-fast`, stopped at 261
+    passed and 1 failed. That failure was never identified and has not
+    reproduced. It is recorded, not explained.
+  - The cold trace routes fire → church → water → garage, with 2 relays.
+  - The warm trace first routes via water. After the cut, three sends are lost.
+    Fire's route switches to church at 600.3 s, on the next announce rather
+    than the route TTL, and the 720 s send is delivered via church.
+  - MSRV 1.88 is unverified (the toolchain isn't installed); 1.90 is clean.
+
+  Nine forks, plus the protocol findings, go to Mark.
