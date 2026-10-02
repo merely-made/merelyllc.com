@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-30 recorded; Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-38 recorded; an RNS-source incident awaits Mark; Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 The payload budget waits on P0's viewer-cone measurement (Ruling 26). Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
 No code has changed.
 
@@ -323,6 +323,56 @@ test.
 state; pretty JSON as built; every node at every step; deltas only. Mark:
 "Compact JSON, acting state (Recommended)". What follows:
 `retinue-sim.route-trace/v1` keeps its shape and is emitted as compact JSON.
+
+### Rulings 31-38 (2026-10-01): S8's forks
+
+Put in two rounds after S8 was verified.
+
+- **Ruling 31 (F1, how status gets in):** "Keep JSON, add version tag
+  (Recommended)". JSON documents and the wire-codec round-trip stay, and the
+  documents gain a schema version field.
+- **Ruling 32 (F2, the canvas API):** "Both". Returning RGBA pixels stays the
+  core API. A thin draw-to-context helper is added behind a feature.
+- **Ruling 33 (F6, the board glue):** "Lift into radio-face (Recommended)".
+  The board-loop glue (display-on sync, `last_wake = Button`, host expiry)
+  moves into radio-face as a shared helper, called by both firmwares and the
+  mirror. It is its own commit, with tests showing each board's screen
+  sequence unchanged; the ELF hashes will change.
+- **Ruling 34 (F7, accessibility):** "Text projection in radio-face
+  (Recommended)". radio-face gains a text rendering of each page alongside the
+  pixels (no_std plus alloc), and the mirror exposes it to screen readers.
+- **Ruling 35 (F3, the wasm-bindgen pin):** "=0.2.127 (Recommended)".
+- **Ruling 36 (F4, the framebuffer):** "Module now (Recommended)". It splits
+  out when a second user appears.
+- **Ruling 37 (F5, the default look):** "Monochrome, amber opt-in
+  (Recommended)".
+- **Ruling 38 (F8, CI):** "Add a wasm32 CI job (Recommended)".
+
+### Incident (2026-10-01): Python RNS source was read, against retinue's discipline
+
+retinue's `design_docs/2026-07-06_retinue_v0_plan.md` section "Reference
+discipline" says the Python reference is "a black-box interoperability oracle
+... Its code is not read (its license carries post-2025 clauses ...)". The
+coordinating session's briefs for R1, R2, and R3 told the lanes to consult or
+cite "Python RNS". That was the coordinator's error.
+- **R1** downloaded `Link.py`, `Transport.py`, and `Reticulum.py` (RNS 1.5.5,
+  master `e40191b`) by `curl` into the coordinator's scratchpad, and read
+  excerpts. Its *uncommitted* pending-link timeout came from that reading: the
+  formula `6 s x (relays + 2)`, the hop conversion, and timing out as
+  `LinkDown`. R1 reports its two commits (`6894afc` for Ruling 27, `457911b`
+  for Ruling 29) as derived from retinue's own code. The 6 s per-hop constant
+  is also in retinue's `2026-07-13_rns_wire_format_reference.md` section 2.5,
+  sourced from the manual.
+- **R2** read `Link.receive` and the packet filter in `Transport.py`, in the
+  installed oracle venv. The fix it proposes (remember the hashes of sent
+  packets and drop them on receipt) is modelled on that reading. Its one
+  commit, `2139c9a`, is a failing test written from S7's observed defect. No
+  fix is committed; an uncommitted prototype patch sits in the scratchpad.
+- **R3** did not read Python RNS. It cited Prns (allowed). Early on it ran
+  `pip download rns` into the `Code` root, which was a download made without
+  asking; it deleted the five wheels, and none remain.
+- R1 was stopped by a correction message before committing anything further.
+  The disposition of the tainted work goes to Mark.
 
 ## Findings (2026-09-30)
 
@@ -918,3 +968,13 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     present.
 
   Eight forks go to Mark. Rulings 27-30 were recorded on S7's forks.
+- 2026-10-01: R1, R2, and R3 reported.
+  - R3's echo fix (`d131367`, +42 lines in `node.rs`, no API change) is
+    verified: the control fails on main, and the fix passes.
+  - The suite's one intermittent failure is `endpoint_ingress`'s burst test, a
+    wall-clock tokio test that relies on 1 ms sleeps against Windows' ~15.6 ms
+    timer. It failed 2 of 3 runs on retinue main itself, so it predates every
+    lane.
+  - R1's Ruling 27 and 29 commits are reported clean, and its 0.2.0 bump splits
+    signalman-desktop's graph until mere repins (a fork).
+  - R1 and R2 read Python RNS source (see Incident).
