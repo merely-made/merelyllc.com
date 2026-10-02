@@ -1212,3 +1212,39 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   - **Side finding.** On TCP-type interfaces, RNS 1.5.4 with a configured
     bitrate below 62,500 sets `HW_MTU = None` (`Interface.py` 262), and every
     inbound frame then raises (`Transport.py` 1790).
+- 2026-10-02: **retinue integration branch `site-canvas-integration`**, in the
+  worktree `Code/worktrees/retinue-site-canvas` off main `66bc578`. It merges
+  these branches, in this order:
+  - C1, which carries S7, R1's `6894afc` and `457911b`, and C1's work;
+  - C2;
+  - R3;
+  - C3;
+  - C4, which carries S8;
+  - V1's receipts.
+
+  Findings while merging:
+  - **One expected conflict:** the workspace `members` list, where weave
+    framed the whole section. It was resolved to keep both `retinue-sim` and
+    `radio-mirror`.
+  - **Weave dropped lines silently.** Its merge of R3 (`835e679`) dropped the
+    five `use` lines at the head of `node.rs`'s test module, which left 315
+    unresolved-name errors. They were restored in `d13e7a0`. A line-level
+    check found every line the C1, C2, and R3 branches added still present.
+  - **One semantic conflict:** C2's test called the old `open_link`
+    signature. It was fixed in `00e4255` with `now = 1`.
+  - **Lock (Ruling 61).** Resolved once. The only additions are
+    `radio-mirror`, `retinue-sim`, `wasm-bindgen` (with `-macro`,
+    `-macro-support`, and `-shared`), `js-sys`, `web-sys`, and `bumpalo`.
+    The only removal is retinue's 0.1.1 version line. C4's cache drift did not
+    land.
+
+  Gate, with `--locked` throughout:
+  - Tests, run twice: retinue, retinue-sim, radio-face, and radio-mirror with
+    all features passed 412/0; radio-hand with default features passed 235/0.
+  - `cargo clippy --all-targets --all-features -D warnings` and
+    `cargo fmt --check` are clean.
+  - Both firmwares build in release: T114 for thumbv7em, and V4 through
+    `+esp`.
+  - radio-hand with `--all-features` fails to link on the host (defmt and
+    embassy symbols). It fails identically on retinue main, so it predates
+    this work.
