@@ -598,6 +598,29 @@ Each answer was the recommended option.
 
 Lane L-C carries out Rulings 65-67 on the retinue integration tip.
 
+### Rulings 68-71 (2026-10-02): L-A's forks, first round
+
+Each answer was the recommended option.
+
+- **Ruling 68, the airtime API.** Options: a per-interface setter; a parameter
+  on `open_link`; a closure at construction. Mark: "Per-interface setter
+  (Recommended)". What follows: `Node::set_first_hop_airtime(interface, ms)`
+  stays as built.
+- **Ruling 69, the airtime basis.** Options: the RNS 500-byte basis; retinue's
+  255-byte MTU; true time-on-air. Mark: "RNS 500-byte basis (Recommended)".
+  What follows: the allowance is 500 bytes at the nominal LoRa bitrate, which
+  is 3,724 ms at LongFast and matches RNS on every medium.
+- **Ruling 70, where each firmware gets its allowance.** Options: V4 as built
+  with T114 single-sourced; both as built; set it in board code. Mark: "V4 as
+  built; T114 single source (Recommended)". What follows: V4's `Runtime` sets
+  it from the `PhyProfile`. T114's radio is now configured from the same
+  `board::DEFAULT_*` constants as its allowance (retinue integration, after
+  L-C's merge), with values unchanged.
+- **Ruling 71, the replay tag.** Options: tag 0x07 with no version bump; bump
+  `VERSION` to 2. Mark: "Tag 0x07, no bump (Recommended)". What follows: 0x07
+  is reserved for `LinkRequestTimedOut`, and the version bumps when replay
+  first opens links.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
@@ -1309,3 +1332,11 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   - L-A also turned up a pre-existing CI break: `cargo test -p retinue
     --no-default-features` fails on `main` at `request_string_map`.
   - Seven forks go to Mark.
+- 2026-10-02: L-C (Rulings 65-67) was verified, with its IDENTIFY control
+  failing at `de9e244` as the coordinator re-ran it. It is merged into
+  `site-canvas-integration`, and no merge loss was found. On the integrated
+  tree, run twice: host 429/0, radio-hand 236/0, and 264/0 with
+  `replay,instances`. Clippy and fmt are clean, and T114, V4, and V4
+  `resident-protocols` all build. T114 was single-sourced under Ruling 70.
+  Every phase N1-N11 and N13-N15 is merged; N12 (publish and the mere repin)
+  remains.
