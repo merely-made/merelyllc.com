@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete. Rulings 1-26 recorded; Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-30 recorded; Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 The payload budget waits on P0's viewer-cone measurement (Ruling 26). Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
 No code has changed.
 
@@ -284,6 +284,45 @@ cap; a cap at the viewer cone plus 10%. Mark: "Viewer cone, then budget
 - The cone is a stack capability any static host can use.
 - It is built and measured in P0, and the budget is then ruled against its
   measured size. The budget's number and form both stay open until then.
+
+### Rulings 27-30 (2026-10-01): S7's forks
+
+Put after S7 was verified, with long context.
+
+**Ruling 27, route learning.** `Node` learned routes only when relaying
+(`node.rs:1569`), so a leaf sender could never address a first relay, and
+`Node` disagreed with `Endpoint`. Options: every node learns routes; keep the
+gate with an all-transit sim; an opt-in flag. Mark: "Every node learns routes
+(Recommended)". What follows: learning is decoupled from relaying, and only
+transit nodes forward. This changes the published `retinue` crate's behaviour,
+so it lands as its own commit with a changelog line.
+
+**Ruling 28, the protocol findings** (multi-select). Options: a pending-link
+timeout; ignore own echoed data; exclude self from peers; record only. Mark
+chose all three fixes, and added: "Feel free to parallelize the workload with
+sonnet/opus subagents". What follows: each becomes retinue work with its own
+test.
+- Unanswered link requests expire, so a lossy stretch can no longer wedge the
+  pending-link table.
+- A node no longer surfaces its own payload, overheard from a relay's
+  retransmission, as received data.
+- A node no longer lists itself as a peer when its own announce echoes back.
+
+**Ruling 29, the `Node` API.** Options: keep `next_hop` and add
+`open_link_at`; keep `next_hop` and break `open_link`; `next_hop` without
+`now`. Mark: "Keep next_hop; break open_link". What follows:
+- `next_hop(&self, dest, now)` stays as built.
+- `open_link` gains a `now` parameter and checks the route's TTL before
+  addressing.
+- This is a semver-breaking change to published `retinue` 0.1.1, so the
+  workspace moves to 0.2.0 and the in-workspace dependents follow.
+- *Reading, not ruled:* publishing 0.2.0 to crates.io is irreversible and is
+  Mark's separate call.
+
+**Ruling 30, the trace format.** Options: compact JSON with the acting node's
+state; pretty JSON as built; every node at every step; deltas only. Mark:
+"Compact JSON, acting state (Recommended)". What follows:
+`retinue-sim.route-trace/v1` keeps its shape and is emitted as compact JSON.
 
 ## Findings (2026-09-30)
 
@@ -867,3 +906,15 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   - MSRV 1.88 is unverified (the toolchain isn't installed); 1.90 is clean.
 
   Nine forks, plus the protocol findings, go to Mark.
+- 2026-10-01: S8 (`radio-mirror`) reported on retinue branch
+  `worktree-agent-a6505a42ddfbdb0dc` (`30d4cd7`, `5af9b44`; +2,037 lines; no
+  attribution trailers). Verified in its worktree:
+  - `radio-mirror` passes 17/0, and `radio-face` 17/0. Clippy is clean.
+  - The diff against `66bc578` leaves `crates/radio-face` and `firmware/`
+    untouched.
+  - The wasm rebuilds to 340,881 B raw, byte-identical to the lane's figure,
+    and 91,606 B gzipped.
+  - The golden test's controls (a palette swap, a one-count change) are
+    present.
+
+  Eight forks go to Mark. Rulings 27-30 were recorded on S7's forks.
