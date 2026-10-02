@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-44 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-46 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 The payload budget waits on P0's viewer-cone measurement (Ruling 26). Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
 No code has changed.
 
@@ -420,6 +420,31 @@ no-downloads rule.
   line; don't save. Mark: "Save it (Recommended)". Written as
   `feedback_lane_briefs_carry_source_discipline.md`, with a pointer line in
   `MEMORY.md`.
+
+### Rulings 45-46 and two open questions (2026-10-02)
+
+- **Ruling 45, `Node::send`'s receiver** (C2's fork). Options: `send(&mut
+  self)`; a `RefCell` keeping `&self`; a separate `note_sent()`. Mark:
+  "send(&mut self) (Recommended)". What follows: C2's `e2f82d3` lands as
+  built, inside the 0.2.0 break.
+- **Ruling 46, how a timed-out link request is reported** (C1's fork 2).
+  Options: a new distinct action; keep `LinkDown`; `LinkDown` with a reason.
+  Mark: "New distinct action (Recommended)". What follows: a new `Action`
+  variant for an unanswered link request that expired. radio-hand's channel
+  node, its replay encoding, and the firmware handle it, so a face can say the
+  request got no answer rather than "link down".
+- **The deadline formula is not ruled** (C1's fork 1). Mark: "I feel like
+  another referent is necessary to corroborate prns." What follows: the
+  formula is held until a second allowed source corroborates it.
+- **The Incident record is not redacted.** Asked whether to redact the
+  mechanism details. Mark: "Just look for alternative proofs." What follows:
+  instead of redacting, both re-derived designs (the timeout and the own-echo
+  filter) get grounded in allowed sources other than Prns. The candidates are
+  the public-domain manual (`[M]`) and black-box wire observation against
+  `rnsd` (`[O]`), which the wire reference ranks above every other source. The
+  wire reference records that Beechat consults no packet-hash dedup on
+  receive (`transport.rs:397-399`), so it is weak corroboration for the echo
+  filter.
 
 ## Findings (2026-09-30)
 
