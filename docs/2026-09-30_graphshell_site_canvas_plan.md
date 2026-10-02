@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-46 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-49 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 The payload budget waits on P0's viewer-cone measurement (Ruling 26). Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
 No code has changed.
 
@@ -350,6 +350,12 @@ Put in two rounds after S8 was verified.
 
 ### Incident (2026-10-01): Python RNS source was read, against retinue's discipline
 
+*Corrected 2026-10-02 (Ruling 47):* the "discipline" quoted below was
+superseded on 2026-09-26. Comparative review of RNS was permitted, so R1's and
+R2's reading was within policy. What went wrong was that designs were taken
+from the reading (adaptation territory) without a decision, plus R1's
+unrequested `curl` download. The text below is kept as written.
+
 retinue's `design_docs/2026-07-06_retinue_v0_plan.md` section "Reference
 discipline" says the Python reference is "a black-box interoperability oracle
 ... Its code is not read (its license carries post-2025 clauses ...)". The
@@ -445,6 +451,47 @@ no-downloads rule.
   wire reference records that Beechat consults no packet-hash dedup on
   receive (`transport.rs:397-399`), so it is weak corroboration for the echo
   filter.
+
+### Rulings 47-49 (2026-10-02): Ruling 39 reopened on retinue's current policy
+
+Evidence found 2026-10-02, after Rulings 45-46:
+- retinue's source policy changed on 2026-09-26 (compatibility survey,
+  section "Source-review policy update (2026-09-26)"; oracle README).
+  *Comparative review* of RNS source is permitted, with the revision, files,
+  and findings recorded. *Adaptation* (copying or translating) needs "a
+  separate decision and provenance record". The v0 plan's "Its code is not
+  read", quoted in the Incident section, is superseded.
+- Prns was withdrawn as an approved donor or trusted reference the same day
+  (donor ledger header), over unresolved provenance concerns. The coordinator's
+  briefs had called it "endorsed", and C1's formula was derived from it.
+
+- **Ruling 47 (amends Ruling 39).** Options: keep C1 and C2 and record the
+  reads; treat it as adaptation; stand as ruled. Mark: "Keep C1/C2, record
+  reads (Recommended)". What follows:
+  - C1's and C2's commits are kept.
+  - R1's and R2's reading is recorded in retinue's provenance record as
+    comparative review under the 2026-09-26 policy: RNS 1.5.5 master
+    `e40191b` (R1, fetched by `curl`, files deleted under Ruling 40) and the
+    oracle's installed 1.5.4 (R2), with the files and line ranges each lane
+    reported.
+  - No adaptation is claimed, because the landed code copies or translates
+    nothing. The designs R1 and R2 took from their reading stay discarded.
+- **Ruling 48, the second source.** Options: comparative review plus wire
+  observation; wire observation only; comparative review only. Mark:
+  "Comparative review + wire obs (Recommended)". What follows: lane V1 makes a
+  recorded comparative review of the pinned RNS 1.5.4, with no download, and
+  confirms each finding by black-box observation against `rnsd`, with
+  positive controls. It covers three things: the link-request timeout against
+  hop count (and the first-hop term, retry, and what is reported), own-echoed
+  link data, and own-echoed announces. It returns a matches, differs, or
+  unmeasured verdict for C1, C2, and R3. The deadline formula (C1's fork 1)
+  is ruled after V1 reports.
+- **Ruling 49, the memories.** Options: correct both plus their index lines;
+  correct the files only. Mark: "Correct both + index lines (Recommended)".
+  Done 2026-10-02: `feedback_lane_briefs_carry_source_discipline` now states
+  retinue's current policy and says to read the newest policy doc, and
+  `reference_prns_rust_reticulum` records the 2026-09-26 withdrawal. Both
+  `MEMORY.md` lines are updated.
 
 ## Findings (2026-09-30)
 
