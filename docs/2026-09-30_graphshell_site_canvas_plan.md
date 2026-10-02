@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-38 recorded; an RNS-source incident awaits Mark; Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-42 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 The payload budget waits on P0's viewer-cone measurement (Ruling 26). Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
 No code has changed.
 
@@ -373,6 +373,40 @@ cite "Python RNS". That was the coordinator's error.
   asking; it deleted the five wheels, and none remain.
 - R1 was stopped by a correction message before committing anything further.
   The disposition of the tainted work goes to Mark.
+
+### Rulings 39-42 (2026-10-01): after the RNS-source incident
+
+- **Ruling 39, the tainted work.** Options: discard and re-derive clean;
+  re-derive by wire observation; keep it and record its provenance. Mark:
+  "Discard and re-derive clean (Recommended)". Done the same day:
+  - R1's uncommitted timeout diff was discarded (`git restore`; all six of its
+    RNS references were in that diff, none in R1's commits).
+  - R2's design was dropped. Its test commit `2139c9a` stays.
+  - Fresh lanes, C1 for the timeout and C2 for the own-echo fix, re-derive the
+    work from allowed sources only. Their briefs carry the defect and the
+    tests, never the mechanism R1 or R2 read.
+- **Ruling 40, the downloaded files.** Options: delete now; keep for the
+  record. Mark: "Delete them now (Recommended)". `Link.py`, `Transport.py`,
+  `Reticulum.py`, and R2's prototype patch were deleted from the scratchpad
+  the same day.
+- **Ruling 41, the 0.2.0 split.** Options: land 0.2.0 and have mere repin;
+  bump only at publish. Mark: "Land 0.2.0, mere repins (Recommended)". Retinue
+  lands 0.2.0 first. signalman-desktop stays split, briefly red, until mere
+  repins its retinue git dependency, coordinated with mere's active session
+  (the mere/knot lockstep pattern).
+- **Ruling 42, the flaky test.** Options: fix it in a lane; record only;
+  ignore it on Windows. Mark: "Fix it in a lane (Recommended)". C3 rewrites
+  `endpoint_ingress`'s burst test onto a paused or simulated clock, with a
+  negative control.
+
+Lanes opened the same day:
+- C1 (Opus) builds on R1's clean commits: the timeout from allowed sources, Ruling 30's compact JSON, and a leaf-sender check.
+- C2 (Opus) builds on `2139c9a`: the own-echo fix.
+- C3 (Sonnet) builds on main: the deflake.
+- C4 (Opus) builds on S8: Rulings 31-34 and 38.
+
+Every brief carries retinue's reference discipline verbatim and a
+no-downloads rule.
 
 ## Findings (2026-09-30)
 
