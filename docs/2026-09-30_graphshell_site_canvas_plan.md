@@ -524,6 +524,40 @@ Evidence found 2026-10-02, after Rulings 45-46:
   in V1's receipt and this plan, and get re-checked against the newer RNS when
   retinue next repins its oracle.
 
+### Rulings 54-61 (2026-10-02): C1's and C4's remaining forks
+
+Each answer was the recommended option.
+
+- **Ruling 54, what else expiry does** (multi-select). Options: expire inside
+  `open_link` too; mark the route unresponsive; retry the request. Mark: only
+  "Expire inside open_link too (Recommended)". What follows: `open_link(now)`
+  drops expired pending requests first. Routes are not marked unresponsive,
+  and there is no retry, matching RNS 1.5.4 on the air.
+- **Ruling 55, expiry in the trace.** Options: add an expiry event to v1; bump
+  to v2 for it; leave it out. Mark: "Add an expiry event to v1 (Recommended)".
+  What follows: `retinue-sim.route-trace/v1` gains a link-request-expired
+  event carrying the node's state, before any consumer exists.
+- **Ruling 56, the lab's relays.** Options: ridge relays and garage is a leaf;
+  all three leaves stop relaying; keep as built. Mark: "Ridge relays, garage
+  leaf (Recommended)". What follows: fire and garage run non-transit, while
+  ridge, church, and water relay.
+- **Ruling 57, the radio-mirror schema field.** Options: required; missing
+  means v1. Mark: "Required (Recommended)".
+- **Ruling 58, `BoardState`.** Options: a generic timestamp; a fixed ms clock.
+  Mark: "Generic timestamp (Recommended)". What follows: C4's `BoardState<T>`
+  with an age closure stays.
+- **Ruling 59, the text projection's shape.** Options: both, as built; rows
+  only; full values, not clipped. Mark: "Both, as built (Recommended)". What
+  follows: labelled `TextRow`s plus readable lines, both carrying the clipped
+  text the panel shows.
+- **Ruling 60, the mirror's text feature.** Options: always on; a mirror
+  feature that defaults on. Mark: "Always on (Recommended)". What follows:
+  radio-mirror always enables radio-face `text`, and firmware keeps it off.
+- **Ruling 61, the lockfile.** Options: regenerate at merge; keep the hand
+  trim. Mark: "Regenerate at merge (Recommended)". What follows: the combined
+  tree resolves its lock once, online. The only additions allowed are the
+  expected ones, and `--locked` must pass.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
