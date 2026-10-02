@@ -574,6 +574,30 @@ Each answer was the recommended option.
   discarded, and how each landed change was derived. The compatibility
   survey's policy section gained a one-line pointer to it.
 
+### Rulings 64-67 (2026-10-02): L-B's forks
+
+- **Ruling 64, what the windows cover.** Options: as built; leave Channel out
+  of the received window; plain data only. Mark: "As built (Recommended)".
+  What follows: the shared rule stays. It covers data, Channel, request,
+  response, IDENTIFY, close, and RTT, and excludes resource contexts 0x01-0x07
+  and keepalive 0xfa.
+- **Ruling 65, `reliable.rs` IDENTIFY.** Options: a control plus a guard in
+  `reliable.rs`; a control only; record only. Mark: "Control + guard in
+  reliable.rs (Recommended)". What follows: a failing control for an echoed
+  own IDENTIFY with the router filter bypassed. `on_identify` then refuses to
+  replace an already-set peer, or to adopt the node's own identity.
+- **Ruling 66, window sizes.** Options: as built; dedicated constants;
+  per-link windows. Mark: "Dedicated constants". What follows: the sent and
+  received windows get their own named capacity constants per profile,
+  instead of reusing `ROUTES` or the reliable channel's table size, so they
+  can be tuned independently.
+- **Ruling 67, counters.** Options: add counters; no counters. Mark: "Add
+  counters (Recommended)". What follows: own-echo drops and received-duplicate
+  drops are counted separately, in both `Node` and `Endpoint`, beside the
+  existing transport counters. This is inside the unpublished 0.2.0.
+
+Lane L-C carries out Rulings 65-67 on the retinue integration tip.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
@@ -1264,3 +1288,12 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   - radio-hand with `--all-features` fails to link on the host (defmt and
     embassy symbols). It fails identically on retinue main, so it predates
     this work.
+- 2026-10-02: L-B reported and was verified. Its controls failed at
+  `3771f6a`, as re-run by the coordinator: `Endpoint` surfaced its own link
+  data and its own Channel echo, the same Channel defect as RNS, and both
+  `Node` and `Endpoint` delivered duplicates twice. Everything passes at
+  `9b63d99`: 418/0 host and 235/0 radio-hand. It is merged into
+  `site-canvas-integration` with a line-integrity check. The coordinator's
+  `git worktree prune` also removed two stale registrations from another
+  context (`retinue-origin-main`, `retinue-rtt` under `C:/t/`) whose
+  directories no longer existed.
