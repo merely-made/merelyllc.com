@@ -1297,3 +1297,15 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   `git worktree prune` also removed two stale registrations from another
   context (`retinue-origin-main`, `retinue-rtt` under `C:/t/`) whose
   directories no longer existed.
+- 2026-10-02: L-A (Rulings 46, 50, and 54-56) was verified and merged into
+  `site-canvas-integration`. The full gate passed twice there: host 425/0 and
+  radio-hand 236/0, with clippy and fmt clean. T114, V4, and V4
+  `resident-protocols` all build. A line-integrity check against every lane
+  found no merge loss; lines from earlier lanes that are absent are deliberate
+  rewrites by later lanes.
+  - The warm trace now shows the three lost sends expiring at 200, 380, and
+    560 s.
+  - The airtime allowance reproduces RNS's 12,064 ms at 62,500 bps.
+  - L-A also turned up a pre-existing CI break: `cargo test -p retinue
+    --no-default-features` fails on `main` at `request_string_map`.
+  - Seven forks go to Mark.
