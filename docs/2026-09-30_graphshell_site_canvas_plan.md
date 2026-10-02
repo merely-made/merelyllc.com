@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-42 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-44 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 The payload budget waits on P0's viewer-cone measurement (Ruling 26). Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
 No code has changed.
 
@@ -407,6 +407,19 @@ Lanes opened the same day:
 
 Every brief carries retinue's reference discipline verbatim and a
 no-downloads rule.
+
+### Rulings 43-44 (2026-10-02)
+
+- **Ruling 43, the deflake** (C3's fork). Options: approve the clock change;
+  test-only with wider margins. Mark: "Approve the clock change
+  (Recommended)". What follows: retinue commit `0093694` lands as is.
+  `Endpoint`'s two admission clocks become `tokio::time::Instant`, `tokio`'s
+  `test-util` is added to the dev-dependencies, and the burst test runs on a
+  paused clock.
+- **Ruling 44, the memory.** Options: save it; the file only, without an index
+  line; don't save. Mark: "Save it (Recommended)". Written as
+  `feedback_lane_briefs_carry_source_discipline.md`, with a pointer line in
+  `MEMORY.md`.
 
 ## Findings (2026-09-30)
 
@@ -1012,3 +1025,19 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   - R1's Ruling 27 and 29 commits are reported clean, and its 0.2.0 bump splits
     signalman-desktop's graph until mere repins (a fork).
   - R1 and R2 read Python RNS source (see Incident).
+- 2026-10-02: C1-C4 reported, and each was verified in its worktree.
+  - **C3** (`0093694`) was 0/10 failures on re-run, against 5 of 28 before.
+  - **C1** (`0f064ac`; timeout, compact JSON, fire as a leaf) passes 601/0.
+    Its traces are now 37,664 B cold and 81,496 B warm.
+  - **C2** (`e2f82d3`; own-echo fix) passes 355/0.
+  - **C4** (`5a78706`; Rulings 31-34 and 38) passes 40/0 for radio-face and
+    radio-mirror, and clippy is clean. The firmware builds, and the `text`
+    feature is off in both firmwares.
+  - **A second provenance slip:** C1's brief told it to read this plan's
+    Incident section, which described R1's discarded timeout. C1's formula
+    matches it, `6000 x (relays + 2)`. That formula is independently in Prns
+    `prns-core/src/routing/timing.rs` (`first_hop_timeout_ms` plus
+    `DEFAULT_PER_HOP_TIMEOUT_MS x max(1, hops)`, last changed 2026-08-29), an
+    allowed source that predates the incident, so the formula is grounded.
+    C1's reuse of `LinkDown` is not in Prns, which reports a distinct
+    `Timeout`; it goes to Mark as a fork.
