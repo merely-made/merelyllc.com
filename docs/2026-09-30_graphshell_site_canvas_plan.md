@@ -558,6 +558,22 @@ Each answer was the recommended option.
   tree resolves its lock once, online. The only additions allowed are the
   expected ones, and `--locked` must pass.
 
+### Rulings 62-63 (2026-10-02): where retinue records this batch
+
+- **Ruling 62, the plan's home.** Options: a new 0.2.0 link-lifecycle plan;
+  fold it into retinue-sim's plan; put it into the wire compatibility plan.
+  Mark: "New 0.2.0 link-lifecycle plan (Recommended)". Written as retinue's
+  `design_docs/2026-10-02_node_link_lifecycle_plan.md` on
+  `site-canvas-integration` (`1bb8088`): phases N1-N12, with findings and
+  progress, indexed in `DOC_README.md`.
+- **Ruling 63, the provenance record.** Options: in the new 0.2.0 plan; a
+  standing review log; in the survey's policy section. Mark: "In the new 0.2.0
+  plan (Recommended)". Written as that plan's "Source review and provenance"
+  section. It describes the batch as source-informed, not clean-room, and
+  records the RNS revisions, files, and lines R1, R2, and V1 read, what was
+  discarded, and how each landed change was derived. The compatibility
+  survey's policy section gained a one-line pointer to it.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
