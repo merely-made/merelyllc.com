@@ -493,6 +493,37 @@ Evidence found 2026-10-02, after Rulings 45-46:
   `reference_prns_rust_reticulum` records the 2026-09-26 withdrawal. Both
   `MEMORY.md` lines are updated.
 
+### Rulings 50-53 (2026-10-02): after V1's corroboration
+
+- **Ruling 50, the deadline formula** (C1's fork 1). Options: the formula plus
+  a caller-supplied airtime allowance; the formula as built; the formula plus
+  a fixed margin. Mark: "Formula + caller airtime (Recommended)". What follows:
+  the base stays `6000 x (relays + 2)` ms, which matches RNS 1.5.4 at 0-3
+  relays. The caller can supply a first-hop airtime allowance per interface:
+  the firmware computes it from its LoRa profile, and TCP passes zero. That
+  matches RNS's first-hop term on every medium.
+- **Ruling 51, Endpoint's own-echo exposure.** Options: test, and fix if
+  affected; record only. Mark: "Test, fix if affected (Recommended)". What
+  follows:
+  - A lane writes failing controls for retinue's std `Endpoint` first: its own
+    link data, and its own Channel message, echoed back by a relay.
+  - If `Endpoint` surfaces either, it gets a send-side memory that covers
+    Channel too, which RNS 1.5.4 skips.
+  - Positive controls show that genuine far-end data and Channel messages
+    still arrive.
+- **Ruling 52, received duplicates.** Options: test, then match RNS; test only
+  and decide after; leave it to the app. Mark: "Test, then match RNS
+  (Recommended)". What follows: a failing control for the same far-end link
+  data packet arriving twice, directly and through a relay. If retinue
+  delivers it twice, a bounded received-duplicate window goes in alongside
+  C2's sent window, in both `Node` and `Endpoint`.
+- **Ruling 53, the two RNS 1.5.4 bugs** (the Channel echo, and `HW_MTU = None`
+  below 62,500 bps on TCP-type interfaces). Options: draft reports; record in
+  retinue only; not now. Mark: "Upstream's already on 1.5.5. We can hold onto
+  it and see." What follows: no report is drafted or filed. Both stay recorded
+  in V1's receipt and this plan, and get re-checked against the newer RNS when
+  retinue next repins its oracle.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
