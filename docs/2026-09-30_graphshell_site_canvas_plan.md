@@ -1113,3 +1113,37 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     allowed source that predates the incident, so the formula is grounded.
     C1's reuse of `LinkDown` is not in Prns, which reports a distinct
     `Timeout`; it goes to Mark as a fork.
+- 2026-10-02: V1 (corroboration, Ruling 48) reported. It is on retinue branch
+  `worktree-agent-a4ae0abdf47210736`, commit `99ba9a9`, with receipts in
+  `testing/receipts/rns-1.5.4-link-echo-corroboration/` (34 files). It ran
+  against RNS 1.5.4 from the oracle venv, with no download and nothing copied.
+  The source review and the black-box observation agree on all three
+  questions.
+  - **Timeout.**
+    - An unanswered request waits a first-hop term (6 s plus 500x8/bitrate)
+      plus 6 s x max(1, hops), is sent once, and is never retried. Observed:
+      12.001 s at 0 relays, 18.001 and 18.002 s at 1, 24.001 s at 2, and
+      30.001 and 30.024 s at 3. At 62,500 bps: 12.079 s and 24.071 s.
+    - On expiry RNS reports the reason TIMEOUT, which is the same reason as an
+      established link that is later lost. Only `activated_at` tells them
+      apart.
+    - **C1 matches** on the formula and on no retry. It **differs** only by
+      lacking the first-hop airtime term.
+  - **Own echo.**
+    - RNS stores the hash of each packet it sends and filters received packets
+      by it. It also drops received duplicates.
+    - **C2 matches** for plain link data.
+    - RNS's filter skips Channel, keepalive, resource, and cache-request
+      packets. Observed: a relay's echo of A's own Channel sequence-0 message
+      was delivered to A's app as if it came from B, and B's genuine
+      sequence 0 was then lost. That is an RNS defect, and retinue should not
+      match it.
+  - **Own announce.**
+    - **R3 matches** on: no peer or path entry, no handler event, and no
+      re-relay.
+    - RNS **differs** by writing its own identity and app_data into
+      `known_destinations`, which looks like a side effect of the validation
+      order. Retinue touching no state is cleaner.
+  - **Side finding.** On TCP-type interfaces, RNS 1.5.4 with a configured
+    bitrate below 62,500 sets `HW_MTU = None` (`Interface.py` 262), and every
+    inbound frame then raises (`Transport.py` 1790).
