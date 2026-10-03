@@ -833,6 +833,40 @@ marshal, and harbinger are taken.
   that need retinue's signed command envelope, must not pull in
   `retinue/alloc`, and is forwarded to by radio-hand's `control-retinue`.
 
+### Rulings 98-101 (2026-10-03): the seneschal extraction's forks
+
+The SEN lane extracted seneschal (retinue `4609b08`), and the coordinator
+verified it:
+- seneschal's tests pass 102/0, including a wire-anchor test that fails if the
+  semantic domain or `RHS0` changes;
+- postilion's dependency tree contains no radio-hand;
+- the publish dry-run is clean, and clippy is clean on 1.99;
+- the registry and the unsafe audit pass, with 21 crate roots;
+- the flash audit scans the moved store.
+
+- **Ruling 98, `PreparedCommit`.** Options: keep the test rewrite; move
+  `Prepared*` into seneschal. Mark: "Keep the test rewrite (Recommended)".
+  `Prepared*` stays in radio-hand's runtime.
+- **Ruling 99, test authority.** Options: the signed-and-verified helper; gate
+  the tests on `control-retinue`; a hidden test feature. Mark:
+  "Signed-and-verified helper (Recommended)". radio-hand's tests derive a
+  `VerifiedController` from a real signed command through retinue's verifier,
+  using `VerifiedController::from_verified_command`. The published crate has
+  no way around authority. Ruling 94's accessor is
+  `VerifiedController::controller_id()`.
+- **Ruling 100, the metadata.** Options: approve as written; edit, then
+  publish. Mark: "I think specifying "wall node" is unnecessary. Just say what
+  it does and why?" Reworded (`66eb264`); the WN0 and WN1 plan labels were
+  dropped from the crate doc in the same spirit. The new description: "Lets a
+  controller manage a remote radio board safely: the signed control requests
+  and replies they exchange, the owner and configuration journal that decides
+  who may change what, and the A/B record store that keeps it across power
+  loss." *Reading, not ruled:* the publish waits for Mark to see this wording.
+- **Ruling 101, the flash audit.** Options: make it an error; a separate task;
+  leave it. Mark: "Make it an error (Recommended)". `02c9f99`: a scan path
+  that matches nothing is now a `PolicyError`, and the audit exits 2 on a stale
+  path and 0 on the real policy, with a self-test.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
