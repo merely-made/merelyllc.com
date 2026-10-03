@@ -656,6 +656,36 @@ Each answer was the recommended option.
 
 Lane L-D carries Rulings 72, 74, and 76-78.
 
+### Rulings 79-82 (2026-10-03): N12, landing retinue 0.2.0
+
+Each answer was the recommended option where one was offered.
+
+- **Ruling 79, landing.** Options: merge into main now; hold on the branch.
+  Mark: "Merge into main now (Recommended)". Done: retinue `fa4f925` merges
+  `site-canvas-integration` with `--no-ff`, and its tree is identical to the
+  integration tip. The gate re-ran twice on `main`: 522/0 for the host crates
+  plus outrider and postilion; radio-hand 236/0, and 265/0 with
+  `replay,instances`; 23/0 with no default features; 273/0 with `alloc` only.
+  Clippy and fmt are clean, and all three firmware images build.
+- **Ruling 80, pushing.** Options: push after landing; hold the push. Mark:
+  "Push after landing (Recommended)". Done: `66bc578..fa4f925` was pushed to
+  `merely-made/retinue` (62 commits). CI run 37087337250 was queued. Before
+  the push, `main`'s CI had been red only on the `check` job, at
+  `request_string_map`'s unresolved import, which N19 fixes; `msrv`,
+  `firmware`, `fuzz`, `licenses`, and `validation-registry` were green.
+- **Ruling 81, publishing.** Options: bump now and publish after CI; bump now
+  and don't publish; publish all three now. Mark: "Bump now, publish after CI
+  (Recommended)". Done: `outrider` and `postilion` moved to 0.2.0 (retinue
+  `6966333`), with signalman's and postilion's requirements following. The
+  publish of retinue, outrider, and postilion 0.2.0 waits for the pushed CI,
+  MSRV included, and then for Mark's explicit go.
+- **Ruling 82, repins** (multi-select). Options: mere through conatus;
+  turnstone; knot-site. Mark chose all three. What follows: mere's root pin
+  and signalman port are repinned in coordination with the conatus session.
+  turnstone and knot-editor's knot-site are assessed for 0.2.0 call sites,
+  then repinned. knot goes through the mere/knot lockstep.
+  `repos/mere-verify` is left alone.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
