@@ -774,6 +774,49 @@ a new publishable crate, which radio-hand re-exports and postilion depends on.
 It is assessed first, needs a family name (the tier rule, with a crates.io
 check), and then publishes before postilion 0.2.0.
 
+### Rulings 92-95 (2026-10-03): Ruling 91 reopened, and the 1.5.6 pin
+
+Ruling 91 was reopened on a read-only assessment (the vocabulary probe),
+verified by the coordinator.
+- The coordinator's framing had been wrong. radio-hand's `control` also needs
+  radio-hand's `store` and the published `selvage`, not only retinue. It is
+  11,334 lines, not about 4,100.
+- retinue's `2026-08-30_wall_node_management_plan.md:251-254` says: "Extract a
+  neutral crate only if a real non-Retinue consumer proves the current
+  dependency boundary wrong."
+- A scratch crate holding `control` minus `runtime`, plus `store` and
+  `region`, builds as no_std with `forbid(unsafe_code)` against the published
+  retinue 0.2.0, including for thumbv7em, and its 112 moved tests pass.
+
+- **Ruling 92.** Options: keep the plan's rule with no extraction; extract
+  anyway and amend the plan; extract later, when needed. Mark: "Extract
+  anyway, amend the plan". What follows: the wall-node plan gains a dated
+  amendment making postilion's publishability a sufficient trigger.
+- **Ruling 93, the shape.** Options: B, `control` minus `runtime`; A,
+  everything; C, wire-only. Mark: "B: control minus runtime (Recommended)".
+  What follows:
+  - About 10,450 lines move. `runtime` (3,754 lines) stays in radio-hand.
+  - Three severances: `permits_provisional_revert` becomes `pub`. A VOCAB
+    function derives a `VerifiedController` only from retinue's
+    `VerifiedCommand`, keeping the rule that "carrier adapters cannot
+    manufacture authorization". `PreparedCommit` moves or one postilion test is
+    rewritten.
+  - The wire anchors stay byte-identical: `radio-hand-semantic-tag-v2` and the
+    `RHC0`, `RHD1`, and `RHS0` magics.
+  - The flash policy is updated in the same change, so `store` stays inside
+    the FS5 seizure scan.
+- **Ruling 94.** Options: leave them in radio-hand; move them with `control`.
+  Mark: "Leave them in radio-hand (Recommended)". What follows: `admission` and
+  `position_disclosure` (about 900 lines, used only inside `control`) stay in
+  radio-hand, and `admission` gains one public accessor.
+- **Ruling 95, the 1.5.6 pin.** Options: measure 1.5.4 first, then decide; move
+  the pin now; hold at 1.5.4. Mark: "Measure 1.5.4 first, then decide
+  (Recommended)". What follows:
+  - RNS 1.5.4 goes into a separate scratch venv, hash-checked against the 1.5.4
+    receipt, and the IFAC gate runs 12 times there.
+  - If 1.5.4 also fails, the race is not new and the pin moves. If it does not
+    fail, the race is a 1.5.6 regression and goes back to Mark. Then push.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
