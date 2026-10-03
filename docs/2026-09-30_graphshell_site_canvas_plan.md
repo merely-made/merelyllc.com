@@ -867,6 +867,22 @@ verified it:
   that matches nothing is now a `PolicyError`, and the audit exits 2 on a stale
   path and 0 on the real policy, with a self-test.
 
+### Ruling 102 (2026-10-03): seneschal's wording and the publish
+
+Put with the exact description and crate-doc text, after retinue `d940cfd`
+(the seneschal merge) was pushed and gated locally:
+- the test gate passed twice: 624/0 for the family, radio-hand 143/0 and 172/0,
+  and 23/0 with no default features;
+- clippy is clean on stable and on 1.99 (including wasm);
+- fmt, docs, the registry, the unsafe audit, and the flash audit pass;
+- T114, outrider `no_std`, and V4 build.
+
+Options: approve and publish after green CI; change the wording; hold the
+publish. Mark: "Approve, publish after green CI (Recommended)". What follows:
+once CI run 37142423826 is green, including `msrv` for seneschal, seneschal
+0.1.0 publishes and is confirmed listed, then postilion 0.2.0 is dry-run and
+published.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
