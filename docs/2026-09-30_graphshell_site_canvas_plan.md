@@ -621,6 +621,41 @@ Each answer was the recommended option.
   is reserved for `LinkRequestTimedOut`, and the version bumps when replay
   first opens links.
 
+### Rulings 72-78 (2026-10-02): the last lane forks
+
+Each answer was the recommended option.
+
+- **Ruling 72, IDENTIFY re-sends** (L-C fork 2). Options: a fresh IV per
+  re-send; exclude them from the counter; count them as built. Mark: "Fresh IV
+  per re-send (Recommended)". What follows: each IDENTIFY re-send is a new
+  packet, so `duplicate_dropped` stays a clean signal.
+- **Ruling 73, Node's window size** (L-C fork 1). Options: a fixed 16 for all;
+  a defaulted const generic; a third constant set. Mark: "Fixed 16 for all
+  (Recommended)". What follows: it stays as built, including the +384 bytes
+  on the minimal profile.
+- **Ruling 74, how the resident `Runtime` reports expiry** (L-A fork 6).
+  Options: emit the action; keep the report as built. Mark: "Emit the action
+  (Recommended)". What follows: `Runtime` emits
+  `Event::Retinue(LinkRequestTimedOut)`, the same event the channel node
+  surfaces.
+- **Ruling 75, the face line** (L-A fork 4). Options: Failed with "link
+  unanswered"; the Info kind; a new event kind. Mark: "Failed, "link
+  unanswered" (Recommended)". What follows: it stays as built.
+- **Ruling 76, trace state** (L-A fork 7). Options: the state at expiry; the
+  state after the call, as built. Mark: "State at expiry (Recommended)". What
+  follows: an expiry event that `open_link` finds carries the node's state
+  after the expiry and before the new request.
+- **Ruling 77, the pre-existing CI break.** Options: fix it in this batch; a
+  separate task; leave it. Mark: "Fix it in this batch (Recommended)". What
+  follows: `request_string_map` gets a required-features gate, so `cargo test
+  -p retinue --no-default-features` is green.
+- **Ruling 78, the capacity receipt.** Options: regenerate it; leave it
+  stale. Mark: "Regenerate it (Recommended)". What follows: the
+  protocol-capacity probe is re-run on the integrated tree, and its receipt is
+  committed with a note on what changed since 2026-09-13.
+
+Lane L-D carries Rulings 72, 74, and 76-78.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
