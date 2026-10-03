@@ -1375,3 +1375,19 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   `resident-protocols` all build. T114 was single-sourced under Ruling 70.
   Every phase N1-N11 and N13-N15 is merged; N12 (publish and the mere repin)
   remains.
+- 2026-10-03: L-D (Rulings 72, 74, and 76-78) was resumed after a session
+  restart, then verified (its N16 control fails at `85e67c9`, as re-run by the
+  coordinator) and merged.
+  - The retinue integration branch `site-canvas-integration` is at `76d4e80`,
+    with every phase except N12 done.
+  - Gate, run twice: host 430/0; radio-hand 236/0, and 265/0 with
+    `replay,instances`; retinue with no default features 23/0, green for the
+    first time; retinue with `alloc` only 273/0. Clippy and fmt are clean, and
+    all three firmware images build.
+  - N12 facts are recorded in the retinue plan:
+    - `outrider` (21 public items) and `postilion` (16) expose retinue types,
+      so they inherit the 0.2.0 break and need minor bumps before any publish.
+    - Downstream pins: mere's root (`85e716c7`) and signalman port (exact
+      `=0.1.1` at `6af5c0ff`), turnstone (`5db362ee`), and knot-editor's
+      knot-site (`2563202b`). `repos/mere-verify` is a second mere worktree
+      with the same pins.
