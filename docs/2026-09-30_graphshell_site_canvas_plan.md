@@ -929,6 +929,19 @@ drop the motion check, and the test at `lib.rs:3034` asserts `Pinned`.
 *Reading, not ruled:* `Hold::Pinned` exists today, so the change could land
 before mer3ly's mere repin. It is held for the move as put.
 
+*2026-10-03, later:* Mark: "Push, make the move, merge, push". The move landed
+ahead of the repin, on branch `ruling-103-pins`:
+- `PlacementDelta::holds` and the sandbox's `shelfmarkPlacement` record every
+  manual pin as `Pinned`, whatever the motion.
+- The test became `a_pin_is_pinned_in_either_motion`. It switches the fixture
+  to anchored motion and asserts `Pinned` and one honoured hold through the
+  wire path. The old test asserted `Anchored` on the same fixture, so the new
+  assertion fails on the old code.
+- `Hold` is now imported only by the tests.
+- The committed Wasm is not rebuilt. It has lagged `lib.rs` since `c8a3589`,
+  and Pages CI rebuilds it before every deploy. A local rebuild would also need
+  wasm-bindgen 0.2.126, and this machine has 0.2.127.
+
 A related finding went to the conatus session: as F25 is written, a serde alias
 `"Anchored"` on `Seeded` makes the new `Anchored` variant unreachable on read.
 A scratch probe confirmed it: `Hold::Anchored` serializes as `"Anchored"` and
@@ -1694,3 +1707,11 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   mere's projection grammar catalog and adoption plan. The conatus session
   merged them as mere `ce79a82f`, not yet pushed. Ruling 103 recorded:
   mer3ly's manual pins will record as pinned in both motions.
+- 2026-10-03: pushed mer3ly (`1261ce1`), retinue (`193b82b`) and mere
+  (`ce79a82f`). Then Ruling 103's move landed:
+  - fmt, clippy (`-D warnings`) and the root suite pass, and repo-graph tests
+    pass 29/0;
+  - a locally built site, served in the browser pane, recorded a Genet pin made
+    under anchored motion as `"hold": "Pinned"` in the shared link, with no
+    console errors. The pin and share were triggered by page script, because
+    the pane was not drawing.

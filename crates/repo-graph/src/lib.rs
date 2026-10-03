@@ -13,9 +13,9 @@ use chirograph::{
 use euclid::default::Point2D;
 use incipit::{ShelfmarkAuthorityV1, ShelfmarkInputV1, ShelfmarkV1};
 use sceno::{
-    Arrangement as SceneArrangement, AxisValue, Footprint, HeldPlacement, Hold, InstanceId,
-    Placement, ProjectedItem, Rect, Representation, RoutedRelation, Score, ScoreItem, Size2,
-    SourceRef, Spiral, Transform2, Vec2,
+    Arrangement as SceneArrangement, AxisValue, Footprint, HeldPlacement, InstanceId, Placement,
+    ProjectedItem, Rect, Representation, RoutedRelation, Score, ScoreItem, Size2, SourceRef,
+    Spiral, Transform2, Vec2,
 };
 use scenotime::{RelationId, Revision, SceneDiff, SceneEpoch, SceneOp, SceneSnapshot};
 use seiche::{
@@ -1850,7 +1850,7 @@ pub struct PlacementPin {
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]
 pub struct PlacementDelta {
     /// `anchored` or `free`, the live path's two motion classes. Absent means
-    /// free, so an unlabelled share still records its pins as ensure-class.
+    /// free. It does not decide a pin's class: pins record as pinned in either.
     #[serde(default)]
     pub motion: Option<String>,
     #[serde(default)]
@@ -1860,30 +1860,20 @@ pub struct PlacementDelta {
 impl PlacementDelta {
     /// Translate the live path's placement into score holds.
     ///
-    /// A manual pin is hard in the sandbox: it survives until it is removed,
-    /// so it becomes [`Hold::Pinned`]. Under `anchored` the arrangement is a
-    /// suggestion for everything, so a pin placed in that mode is recorded as
-    /// [`Hold::Anchored`]: best effort by the visitor's own choice.
-    ///
-    /// The live path carries two motion classes, `anchored` and `free`; the
-    /// former `frozen` class became a non-interactive renderer's concern
-    /// rather than this simulation's. Score holds keep both classes anyway,
-    /// because a frozen realization still needs to say which placements were
-    /// ensure-class when it records one.
+    /// A manual pin is hard in the sandbox in either motion: it survives until
+    /// it is removed, so it records as [`sceno::Hold::Pinned`] whatever the motion
+    /// (Ruling 103). The motion is the item's default role; a pin overrides it.
     ///
     /// The class is *recorded* here rather than left to be re-inferred from a
     /// spring stiffness, which is the whole point of the seam.
     fn holds(&self) -> Vec<HeldPlacement> {
-        let hold = match self.motion.as_deref() {
-            Some("anchored") => Hold::Anchored,
-            _ => Hold::Pinned,
-        };
         self.pins
             .iter()
-            .map(|pin| HeldPlacement {
-                source: SourceRef::new(PROJECTION_ADAPTER, &pin.id),
-                at: Vec2::new(pin.x, pin.y),
-                hold,
+            .map(|pin| {
+                HeldPlacement::pinned(
+                    SourceRef::new(PROJECTION_ADAPTER, &pin.id),
+                    Vec2::new(pin.x, pin.y),
+                )
             })
             .collect()
     }
@@ -2803,6 +2793,7 @@ fn validate(input: &GraphInput) -> Result<(), String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use sceno::Hold;
 
     const SAMPLE: &str = r#"{
       "schema": "mer3ly.repo-graph/v1",
@@ -3024,14 +3015,16 @@ mod tests {
     }
 
     #[test]
-    fn anchored_motion_records_a_softer_hold() {
+    fn a_pin_is_pinned_in_either_motion() {
         let anchored = SHARED_SCENE.replace(r#""motion": "free""#, r#""motion": "anchored""#);
-        let artifact = portable_projection_holding(
-            SAMPLE,
-            &serde_json::from_str::<PlacementDelta>(&anchored).unwrap(),
-        )
-        .expect("anchored projection");
-        assert_eq!(artifact.score.holds[0].hold, Hold::Anchored);
+        assert_ne!(anchored, SHARED_SCENE, "the fixture must change motion");
+        let json = portable_projection_with_placement_json(SAMPLE, &anchored)
+            .expect("anchored projection");
+        let artifact: PortableProjectionArtifact = serde_json::from_str(&json).unwrap();
+        assert_eq!(artifact.score.holds[0].hold, Hold::Pinned);
+
+        let receipt = consume_portable_projection_json(&json).expect("receipt");
+        assert_eq!(receipt.honored_holds, 1);
     }
 
     #[test]

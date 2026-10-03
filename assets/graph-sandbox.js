@@ -1518,11 +1518,11 @@ class GraphSandbox {
   }
 
   shelfmarkPlacement() {
-    const hold = this.mobility === "anchored" ? "Anchored" : "Pinned";
+    // A manual pin is hard in either motion, so it records as Pinned (Ruling 103).
     return [...this.currentPins()].map(([id, point]) => ({
       source: { adapter: PROJECTION_ADAPTER, id },
       at: { x: point.x, y: point.y },
-      hold,
+      hold: "Pinned",
     }));
   }
 
@@ -1533,8 +1533,7 @@ class GraphSandbox {
       committed_at: "static",
     };
     // Pins travel as HeldPlacement, the score's own record, one serialization
-    // of a pin rather than a site-local second one. Under anchored motion the
-    // visitor has already said best-effort, so the class is recorded here
+    // of a pin rather than a site-local second one. The class is recorded here
     // rather than re-inferred from a spring on the far side.
     const placement = this.shelfmarkPlacement();
     return {
