@@ -686,6 +686,46 @@ Each answer was the recommended option where one was offered.
   then repinned. knot goes through the mere/knot lockstep.
   `repos/mere-verify` is left alone.
 
+### Rulings 83-86 (2026-10-03): red CI after the push, and the repins
+
+Context: the CI run for the pushed retinue `fa4f925` came back red. Clippy had
+never actually run on `main` before (the `check` job died first at
+`request_string_map`, which N19 fixed), and CI's `stable` was now Rust 1.99.0,
+released 2026-09-28. The coordinator's local gate had run on 1.97.1, so the
+"green" reported before the push did not cover 1.99.
+
+- **Ruling 83, vendored lints.** Options: exclude vendor from the workspace;
+  patch the 8 sites; pin CI's toolchain. Mark: "Exclude vendor from workspace
+  (Recommended)". Done:
+  - Retinue `f466bc7` makes embedded-graphics, embedded-graphics-core, and
+    lora-phy non-member path dependencies.
+  - The work was verified on a locally installed Rust 1.99.0, which first
+    reproduced CI's 8 deprecation errors.
+  - Clippy 1.99 then found four more sites of a new lint in first-party code,
+    fixed in `2363417`. The unsafe audit required `#![forbid(unsafe_code)]` in
+    retinue-sim, added in `25983ed`.
+- **Ruling 84, registering V1's receipt.** Options: a new local-tier suite;
+  add it to the existing oracle suite. Mark: "1.5.5 is out, so 1, but we need
+  to move to 1.5.5". What follows:
+  - Done (`171d25a`): three local-tier suites, one per question script,
+    because the runner allows one command per suite. The scripts now write
+    summaries under their own `results/`.
+  - *New objective, not yet assessed:* move retinue's RNS oracle from 1.5.4 to
+    1.5.5. This includes re-checking the two RNS bugs held under Ruling 53.
+- **Ruling 85, djinn's knot-site pin.** Options: move to the knot tip; leave
+  djinn with two retinues; a side branch at `4d880910`. Mark: "Move to knot
+  tip (Recommended)". Done on mere's `retinue-0.2.0` branch: djinn's
+  knot-site points at knot-editor `ea3e99e` with `features = ["retinue"]`,
+  because retinue became optional in knot-site after `4d880910`. mere's lock
+  now holds one Retinue.
+- **Ruling 86, landing and pushing** (multi-select). Mark chose all three:
+  - knot-editor: `599e71e..ea3e99e`, pushed;
+  - turnstone: `b2ead70..74a4689`, pushed;
+  - retinue's CI fixes: `fa4f925..f149dea`, pushed, with CI run 37097455921
+    queued.
+
+  mere goes to the conatus session for its check before its `main`.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
