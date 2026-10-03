@@ -752,6 +752,28 @@ ruled 1.5.5 (2026-09-29, `ff9a4465...0bf0`), and LXMF 1.2.0 (2026-09-30,
   receipt goes in `testing/receipts/rns-1.5.6-repin/`, and `requirements.txt`
   moves last.
 
+### Ruling 91 (2026-10-03): postilion's unpublishable dependency
+
+**Publish status.** retinue 0.2.0 and outrider 0.2.0 were published on
+2026-10-03 and are listed by `cargo search`. postilion 0.2.0's dry-run fails:
+it depends on `radio-hand` (`publish = false`), a dependency added 2026-09-02
+by `111d8ab`, the wall-node lane, after postilion 0.1.0 went out on 2026-08-14.
+radio-face and radio-hand depend on vendored forks (`embedded-graphics`,
+`lora-phy`), so they cannot publish. postilion needs only radio-hand's
+`control` and `region` modules, which depend on nothing but retinue.
+
+Asked first whether to leave postilion at 0.1.0, split its control plane out,
+or publish radio-face and radio-hand. Mark replied with a question: "Why do
+those two radio components need to be crates?" Answered: no_std firmware and
+std/wasm hosts share them, and their vendored forks are what block publishing.
+
+The question was then put again. Options: leave postilion at 0.1.0; extract
+the vocabulary crate; fold the vocabulary into retinue. Mark: "Extract the
+vocabulary crate". What follows: `radio_hand::control` and `region` move into
+a new publishable crate, which radio-hand re-exports and postilion depends on.
+It is assessed first, needs a family name (the tier rule, with a crates.io
+check), and then publishes before postilion 0.2.0.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
@@ -1490,6 +1512,5 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
 - 2026-10-03: the conatus session verified mere's retinue repin on a cold
   target and merged it into mere's local `main` as `f62581c7`. The gates:
   djinn's tests (85 unit tests plus its integration targets) and
-  `mere-transport --features reticulum` at 55/0. It is not pushed, because
-  pairing-plan ruling 40 (`065e3411`) holds mere and knot pushes; that session
-  asked Mark whether the hold covers this push.
+  `mere-transport --features reticulum` at 55/0. Mark then approved
+  the push, and mere's `origin/main` carries it.
