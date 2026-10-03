@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-49 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-103 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 The payload budget waits on P0's viewer-cone measurement (Ruling 26). Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
 No code has changed.
 
@@ -883,6 +883,58 @@ once CI run 37142423826 is green, including `msrv` for seneschal, seneschal
 0.1.0 publishes and is confirmed listed, then postilion 0.2.0 is dry-run and
 published.
 
+### Ruling 103 (2026-10-03): how the arrangement roles record mer3ly's pins
+
+Background: mere's dynamics grammar plan ruled three arrangement roles (F18–F30):
+- seeded: the arrangement is a starting position;
+- anchored: the item returns to the arrangement;
+- pinned: the item stays.
+
+F25 gives `sceno::Hold` all three, and G7 builds them. The coordinator carried
+these rulings into mere's projection grammar catalog and adoption plan (mere
+`ce79a82f`). Doing so turned up this mismatch:
+- In the live sandbox a manual pin always hard-pins, in either motion
+  (`pinNode` calls `simulation.pin`, `crates/repo-graph/src/lib.rs:399`).
+- The shared record says otherwise. `PlacementDelta::holds` (`lib.rs:1878`)
+  and the sandbox's `shelfmarkPlacement` (`assets/graph-sandbox.js:1521`)
+  write `Hold::Anchored` under `anchored` motion and `Hold::Pinned` under
+  `free`. A test at `lib.rs:3034` asserts the first.
+- After F25, the Rust line still compiles but means "returns". Links already
+  shared read back as seeded, through F25's alias.
+
+First round. Options:
+- Pinned in both modes.
+- Anchored under anchored motion, with the drop as the item's home.
+- Seeded under anchored motion.
+- Decide when mer3ly adopts the roles.
+
+Mark: "Pinned in both modes (Recommended)", then "Ehh. Run that question back
+one more time."
+
+Second round. The question was put again, saying what the visitor sees and what
+the person opening the shared link sees. Today a link made in the default
+anchored mode only seeds the pinned node: relaxation may move it, and nothing
+reports it. So the recipient may not see the layout the visitor saw. Options:
+- A pin is a pin: it nails the node in either mode and records as Pinned.
+- The visitor picks pin or anchor per node: F22's per-item role, offered as two
+  gestures, which needs new sandbox UI.
+- The mode decides: in anchored mode a pin sets the node's home, and it springs
+  back.
+- Decide at mer3ly's move. Seeded under anchored was offered through Other.
+
+Mark: "A pin is a pin (Recommended)". What follows: when mer3ly picks up
+the roles, a manual pin records as `Hold::Pinned` whatever the motion, because
+it is a per-item pinned role over the mode's default (F22). Both mapping sites
+drop the motion check, and the test at `lib.rs:3034` asserts `Pinned`.
+*Reading, not ruled:* `Hold::Pinned` exists today, so the change could land
+before mer3ly's mere repin. It is held for the move as put.
+
+A related finding went to the conatus session: as F25 is written, a serde alias
+`"Anchored"` on `Seeded` makes the new `Anchored` variant unreachable on read.
+A scratch probe confirmed it: `Hold::Anchored` serializes as `"Anchored"` and
+reads back as `Seeded`. How old saves are read is G7's question, for Mark and
+that session.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
@@ -1638,3 +1690,7 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   approved description, then postilion 0.2.0 after a clean dry-run against it.
   Rulings 87 and 102 are complete: retinue 0.2.0, outrider 0.2.0, seneschal
   0.1.0, and postilion 0.2.0 are all listed.
+- 2026-10-03: carried the dynamics grammar's arrangement roles (F18–F30) into
+  mere's projection grammar catalog and adoption plan. The conatus session
+  merged them as mere `ce79a82f`, not yet pushed. Ruling 103 recorded:
+  mer3ly's manual pins will record as pinned in both motions.
