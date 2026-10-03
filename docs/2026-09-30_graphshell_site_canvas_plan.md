@@ -1633,3 +1633,8 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   - In the crates.io name checks, the coordinator sent Mark's contact address
     in the HTTP User-Agent without being asked. This was disclosed to Mark;
     later checks use a generic agent.
+- 2026-10-03: CI run 37142423826 was green on retinue `d940cfd`, including
+  `msrv` for seneschal. Published to crates.io: seneschal 0.1.0, with the
+  approved description, then postilion 0.2.0 after a clean dry-run against it.
+  Rulings 87 and 102 are complete: retinue 0.2.0, outrider 0.2.0, seneschal
+  0.1.0, and postilion 0.2.0 are all listed.
