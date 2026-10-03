@@ -726,6 +726,32 @@ released 2026-09-28. The coordinator's local gate had run on 1.97.1, so the
 
   mere goes to the conatus session for its check before its `main`.
 
+### Rulings 87-90 (2026-10-03): publish, and the oracle target
+
+Context: retinue CI run 37097455921 was fully green on `f149dea`, including
+`msrv` (1.88) and `fuzz`. `cargo publish --dry-run --locked -p retinue`
+packaged 189 files (1.9 MiB, 457.7 KiB compressed) cleanly. PyPI then showed
+RNS 1.5.6 (2026-10-02, wheel sha256 `975a6468...3626`) superseding the
+ruled 1.5.5 (2026-09-29, `ff9a4465...0bf0`), and LXMF 1.2.0 (2026-09-30,
+`805f053e...5b85`, requires `rns>=1.5.5`).
+
+- **Ruling 87, publishing.** Options: publish all three in order; retinue
+  only; hold until mere lands. Mark: "Publish all three, in order
+  (Recommended)". What follows: retinue, then outrider, then postilion 0.2.0.
+  Each is dry-run first and confirmed listed before the next.
+- **Ruling 88, the RNS target** (amends Ruling 84's "1.5.5"). Options: 1.5.6;
+  1.5.5 as ruled; 1.5.5 then 1.5.6. Mark: "1.5.6, the latest (Recommended)".
+- **Ruling 89, LXMF.** Options: move to 1.2.0 too; keep 1.1.1; a separate step.
+  Mark: "Move LXMF to 1.2.0 too (Recommended)". What follows: one receipt
+  re-qualifies outrider's lane against LXMF 1.2.0.
+- **Ruling 90, the download.** Options: yes, in the existing venv; yes, in a
+  separate venv; not yet. Mark: "Yes, in the existing venv (Recommended)".
+  What follows: the pinned wheels are installed into
+  `crates/retinue/oracle/.venv` after their SHA-256 is checked against PyPI.
+  Then the four live lanes, V1's three suites, and the Rust checks run, the
+  receipt goes in `testing/receipts/rns-1.5.6-repin/`, and `requirements.txt`
+  moves last.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
@@ -1461,3 +1487,9 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
       `=0.1.1` at `6af5c0ff`), turnstone (`5db362ee`), and knot-editor's
       knot-site (`2563202b`). `repos/mere-verify` is a second mere worktree
       with the same pins.
+- 2026-10-03: the conatus session verified mere's retinue repin on a cold
+  target and merged it into mere's local `main` as `f62581c7`. The gates:
+  djinn's tests (85 unit tests plus its integration targets) and
+  `mere-transport --features reticulum` at 55/0. It is not pushed, because
+  pairing-plan ruling 40 (`065e3411`) holds mere and knot pushes; that session
+  asked Mark whether the hold covers this push.
