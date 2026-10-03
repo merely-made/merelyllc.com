@@ -817,6 +817,22 @@ verified by the coordinator.
   - If 1.5.4 also fails, the race is not new and the pin moves. If it does not
     fail, the race is a 1.5.6 regression and goes back to Mark. Then push.
 
+### Rulings 96-97 (2026-10-03): the vocabulary crate's name and feature
+
+All four candidates were checked as 404 (free) on the crates.io API and the
+sparse index the same day. steward, warrant, charter, herald, reeve, bailiff,
+marshal, and harbinger are taken.
+
+- **Ruling 96, the crate's name.** Options: seneschal; custumal; chamberlain;
+  majordomo. Mark: "seneschal (Recommended)". It is the steward who ran a
+  lord's household in his name, matching the crate's content: owner claims,
+  signed configuration, and recovery policy. It is claimed by a real publish
+  of the extracted code.
+- **Ruling 97, the feature's name.** Options: retinue; signed;
+  control-retinue. Mark: "retinue (Recommended)". The feature gates the parts
+  that need retinue's signed command envelope, must not pull in
+  `retinue/alloc`, and is forwarded to by radio-hand's `control-retinue`.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
@@ -1557,3 +1573,13 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   djinn's tests (85 unit tests plus its integration targets) and
   `mere-transport --features reticulum` at 55/0. Mark then approved
   the push, and mere's `origin/main` carries it.
+- 2026-10-03: Ruling 95 was carried out. RNS 1.5.4, installed in a scratch
+  venv with its wheel hash matching the 1.5.4 receipt, failed the IFAC gate 1
+  in 12 with the same RNS-side `ifac_size` error. The race predates 1.5.6, so
+  the oracle pin moved to `rns==1.5.6` and `lxmf==1.2.0` (retinue `3e1d6a9`,
+  pushed).
+  - A coordinator overstatement was corrected: no single 1.5.6 live run had
+    all 13 gates green. A git note on `f5a56d3` records it.
+  - In the crates.io name checks, the coordinator sent Mark's contact address
+    in the HTTP User-Agent without being asked. This was disclosed to Mark;
+    later checks use a generic agent.
