@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-103 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-104 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 The payload budget waits on P0's viewer-cone measurement (Ruling 26). Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
 No code has changed.
 
@@ -948,6 +948,33 @@ A scratch probe confirmed it: `Hold::Anchored` serializes as `"Anchored"` and
 reads back as `Seeded`. How old saves are read is G7's question, for Mark and
 that session.
 
+### Ruling 104 (2026-10-04): how mer3ly reads its old links' holds
+
+mere's G7 landed at `bd119a69` (dynamics grammar F44, "Bump the version").
+sceno's Score is now version 5:
+- `Score::read` turns an older score's "Anchored" into `Seeded`;
+- "Anchored" now means the returning role.
+
+mer3ly's resolver doesn't read a Score. It parses the shared link's
+`placement` section as a bare `Vec<HeldPlacement>`
+(`crates/repo-graph/src/lib.rs:1234`), which skips that version check. Once
+mer3ly updates its mere pin, links shared before Ruling 103, which say
+"Anchored", would parse as the returning role. Today nothing in mer3ly acts on
+the class when reading a link:
+- the resolver checks only each pin's source and bounds and counts the pins
+  (`validate_view_delta`);
+- the JS sandbox pins every shared pin;
+- the portable scene path builds its holds from the pins themselves.
+
+Options: map a legacy "Anchored" to Pinned; leave it and write no code; read it
+as Seeded, as sceno does. Mark: "Map to Pinned (Recommended)".
+
+What follows: when mer3ly updates its mere pin, the resolver rewrites a legacy
+"Anchored" to `Pinned`, matching what those links always did live (Ruling
+103). A fixture test covers an old link. *Reading, not ruled:* mer3ly writes
+only `Pinned` since `f0fc678`. So mapping every "Anchored" it reads to `Pinned`
+is correct before and after the update, and the mapping could land now.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
@@ -1715,3 +1742,5 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     under anchored motion as `"hold": "Pinned"` in the shared link, with no
     console errors. The pin and share were triggered by page script, because
     the pane was not drawing.
+- 2026-10-04: mere's G7 landed (`bd119a69`, Score v5). Ruling 104 recorded:
+  mer3ly's resolver will read its legacy "Anchored" links as Pinned.
