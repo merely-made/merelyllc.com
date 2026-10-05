@@ -1992,3 +1992,12 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     under `C:/t/cargo-targets/mere` were swept at about 17:22 on 2026-10-05, so
     the first build starts cold.
 - 2026-10-06: the cone's feature table is prepped on `viewer-cone` (unbuilt); Ruling 111 recorded.
+- 2026-10-06: one more step before the genet chain. Stack seams P1 (on origin
+  since `19e6dc9f`) changed scenomise's compile API, and Knot `54bb8cd` calls
+  the old free function. Mark ruled that the conatus session's Knot lane adapts
+  Knot: it repins onto mere `19e6dc9f` and moves three call sites to
+  `ProjectionCompiler`. The order is now:
+  1. seiche-speed;
+  2. Knot's P1 adaptation, pushed;
+  3. djinn's repin onto that Knot head;
+  4. this session's genet window, whose Knot step builds on that head.
