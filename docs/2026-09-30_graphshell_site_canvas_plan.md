@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-111 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-112 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 The payload budget waits on P0's viewer-cone measurement (Ruling 26). Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
 No code has changed.
 
@@ -1122,6 +1122,22 @@ coordination with the conatus session:
 - mere's gate runs, and Knot follows.
 
 The cone then turns `image-decode` off in the viewer.
+
+**Ruling 112 (2026-10-06), the repin's window and its last step.** The
+conatus session set the order:
+1. seiche-speed lands, merging both locks.
+2. djinn's Knot repin (`djinn-knot-pre4`, in flight) lands. It moves the root
+   Knot rows and djinn's knot-site to Knot `54bb8cd`, adds `scenograph` and
+   `scenomise` to the `mere.git` patch table, and changes the root lock.
+3. The genet repin runs, with one owner of the lock at a time.
+
+G2 and the estimator branch rebase onto it afterwards. Once Knot repins genet
+and pushes, djinn's Knot pin in mere must move to that Knot head, or djinn
+drags a second genet back in. Options: fold it into my Knot step; hand it to
+the conatus session. Mark: "Fold it into my Knot step (Recommended)". This
+session owns the whole chain: mere's genet repin, Knot's genet repin, then
+djinn's Knot pin. It is done when mere's graph has one copy of each genet
+crate (`cargo tree -d`).
 
 The cone's feature-table prep is committed on mere branch `viewer-cone`
 (`698c1c20`, rebased onto origin `19e6dc9f`, unbuilt):
