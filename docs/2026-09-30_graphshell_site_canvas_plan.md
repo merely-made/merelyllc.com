@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-104 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-108 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 The payload budget waits on P0's viewer-cone measurement (Ruling 26). Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
 No code has changed.
 
@@ -982,6 +982,55 @@ directly and checks that it really carries the legacy class, then checks that
 `read_placement` returns `Pinned` for both pins. repo-graph tests pass 30/0,
 and fmt and clippy (`-D warnings`) are clean.
 
+### Rulings 105-108 (2026-10-04): P0's viewer cone, assessed
+
+Mark: "Start P0, coordinate first (Recommended)". The conatus session's
+`tree-remote-session` lane, which the cone was waiting on (P0's sequencing),
+merged as mere `0c7e7ac8`. The conatus session agreed to a read-only
+assessment, and asked that the build wait for its word, once `seiche-speed` and
+the pre.4 repin are on main. Four of its lanes are in the cone's files:
+`seiche-speed`, `burn-pre4-repin`, `grammar-g2` and `grammar-g9`.
+
+It asked the cone, in the viewer feature too where they apply, to keep:
+- the page-error gate in `loader.js` and the constructor-helper call in start;
+- the receipt verbs and snapshot fields: `set-zoom`, `measure-faces`,
+  `move-by-world`, `log-pace`, `log-layout`, `layout-outside`/`view-extent`,
+  `view-follow`, and the speed and pace fields;
+- view-follow and G7's role selects, if the viewer shows a canvas;
+- `MeaningJob`'s lexical fallback, if the viewer keeps Meaning.
+
+The full feature keeps `SavedSceneV2`, the scene save and reopen receipts, and
+the practice workspace store.
+
+Assessment facts:
+- `graphshell-web` serves two pages. `web.rs` is the H5 reference host on
+  `GraphshellApp<IndexedDbBackend>`. `web_tree.rs` is the one-tree page,
+  already on muniment's `MemoryBackend`, except for its product mode
+  (`web_tree/product.rs`).
+- `GraphSession<IndexedDbBackend>::open` is 46,150 B, the second-largest
+  function in the 2026-10-01 attribution.
+- The image decoders (397,074 B, 2.8%) reach the build through `genet-livery`
+  and `genet-render`, not through any `graphshell-web` feature.
+- `canvas-gpu` (CubeCL, ruled 2026-10-02) postdates the baseline, so its size is
+  unmeasured.
+
+- **Ruling 105, the viewer page.** Options: the tree page; a new viewer entry;
+  gate `web.rs`. Mark: "The tree page (Recommended)". The cone starts from
+  `web_tree.rs`. It gates out product mode, the reference host, IndexedDB and
+  the WebRTC door.
+- **Ruling 106, the image decoders.** Options: ask genet for a feature; accept
+  them in the viewer; decide after measuring. Mark: "Ask genet for a feature
+  (Recommended)". The genet session is asked for decoders behind a default-on
+  feature in `genet-livery` and `genet-render`. The cone ships without it and
+  takes it up at the next genet pin.
+- **Ruling 107, GPU physics in the viewer.** Options: measure both, then rule;
+  keep it; a CPU-only viewer. Mark: "Measure both, then rule (Recommended)".
+  The viewer is built with and without `canvas-gpu`, with sizes and frame
+  timings at the site's graph size.
+- **Ruling 108, the baseline.** Options: after pre.4 lands; now, read-only.
+  Mark: "After pre.4 lands (Recommended)". The full build and the cone are
+  measured on the same tree, once the conatus session sends word.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
@@ -1753,3 +1802,5 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   mer3ly's resolver will read its legacy "Anchored" links as Pinned.
 - 2026-10-04: Ruling 104's mapping landed ahead of the mere update, in mer3ly's
   resolver (`read_placement`), with a legacy-link fixture test.
+- 2026-10-04: P0 assessed read-only; Rulings 105-108 recorded. The cone waits
+  for the conatus session's word (seiche-speed and pre.4 on main).
