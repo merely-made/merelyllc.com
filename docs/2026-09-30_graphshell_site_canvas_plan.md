@@ -1888,3 +1888,19 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
 - 2026-10-05: Mark's local `config.local.toml` for the web build no longer
   repeats the getrandom cfg (it is gitignored, so there was nothing to
   commit). The cone was designed read-only; Rulings 109-110 recorded.
+- 2026-10-05: the conatus session checked the cone plan against its lanes; the
+  split matches.
+  - `web_practice` goes under `product`. It persists to localStorage
+    (`graphshellPracticeWorkspaceV1`; checked: `web_practice.rs:41`, `:383`,
+    `:398`). G9's drag and pin live in pictograph, not there.
+  - From seiche-speed, two pieces go under `remote`: the
+    `remote-physics-speed` field in `web_tree/lane.rs`, and `web_view.rs`'s
+    `remote_speed` field and its hint.
+  - `speed::fields` and the `log-pace` and `log-intervals` verbs stay
+    always-on, on the keep-list.
+  - To recheck these line references once seiche-speed lands.
+  - If the viewer keeps the local canvas, it keeps G9's producer semantics:
+    up to 200 on-screen items, child action buttons and the keyboard move
+    (F62, F67).
+  - `AccessibleItem.local_actions` (F64) stays always-on if graphshell-client's
+    `remote` module is gated. G9's file list follows when it reports.
