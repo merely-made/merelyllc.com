@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-108 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-110 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 The payload budget waits on P0's viewer-cone measurement (Ruling 26). Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
 No code has changed.
 
@@ -1051,6 +1051,53 @@ Assessment facts:
   Mark: "After pre.4 lands (Recommended)". The full build and the cone are
   measured on the same tree, once the conatus session sends word.
 
+### Rulings 109-110 (2026-10-05): the cone's shape
+
+Mark: "Drop that line and proceed". The cone's build and baseline still wait
+for seiche-speed (Ruling 108), so the design was read first (mere `62219dd1`).
+- `web.rs` is `graphshell-web`'s crate root. It holds `start`, the reference
+  host (about 1,900 lines) and the `mount` export. Because `mount` is a
+  `#[wasm_bindgen]` export, dead-code elimination keeps the reference host and
+  its IndexedDB session in any build that compiles them. The cone has to cut at
+  the export.
+- The tree page (`mount_tree`, `web_tree.rs`) loads its graph from the product
+  store, the `?nodes=` generator, or a fixture. A host-supplied dataset is S1's
+  dataset seam; P0 measures size and does not need it.
+
+- **Ruling 109, the split.** Options: move the main page out; cfg attributes in
+  place. Mark: "Move the main page out (Recommended)". `web.rs` keeps `start`,
+  the module declarations and the shared helpers. The reference host and
+  `mount` move verbatim into `web_main.rs`, compiled under a `main-page`
+  feature. This lands after seiche-speed merges, because seiche-speed edits
+  `web.rs`.
+- **Ruling 110, the features.** Options: additive, with the viewer as the
+  no-defaults build; a named viewer feature. Mark: "Additive, viewer is
+  no-defaults (Recommended)". `graphshell-web` gains three default-on features:
+  - `main-page`;
+  - `product`: IndexedDB, saved scenes, the tree's product mode, `web_product`
+    and `web_practice`;
+  - `remote`: WebRTC, `web_remote`, `web_rtc_link` and the tree's remote board.
+
+  The existing GPU toggle stays. The viewer is `--no-default-features`, with or
+  without `canvas-gpu` (Ruling 107). The default build and its receipts are
+  unchanged.
+
+The cone is done when:
+- the default build's receipts pass unchanged;
+- the viewer builds both ways (`canvas-gpu` on and off), and `cargo tree -e
+  normal` on it shows no muniment `indexeddb`, no `webrtc-carrier`, and no
+  `image` once the genet repin with `image-decode` off lands (Ruling 106);
+- the viewer keeps the conatus session's keep-list:
+  - the page-error gate and the constructor-helper call in `start`;
+  - the receipt verbs and snapshot fields;
+  - view-follow and G7's role selects;
+  - `local_actions` if graphshell-client's `remote` module is gated;
+  - `MeaningJob`'s lexical fallback if Meaning stays;
+- the full build and both viewer builds are measured on one tree, with commands
+  (raw, gzip -9, brotli -q 11, plus twiggy attribution), and frame timings are
+  recorded at the site's graph size for Ruling 107;
+- the branch goes to the conatus session for a check before main.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
@@ -1838,3 +1885,6 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   Mark's own `ports/graphshell/web/.cargo/config.local.toml` repeats the cfg
   line, which doubles the flag under `cargo_mode local`. It's his file and is
   left alone.
+- 2026-10-05: Mark's local `config.local.toml` for the web build no longer
+  repeats the getrandom cfg (it is gitignored, so there was nothing to
+  commit). The cone was designed read-only; Rulings 109-110 recorded.
