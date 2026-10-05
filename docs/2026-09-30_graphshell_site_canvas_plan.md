@@ -1912,3 +1912,33 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   - The estimator branch will later touch `frame_budget.rs`, `web_speed.rs`
     and maybe a verb beside `log-intervals`; all of these stay always-on.
   - G9's graphshell-web file list comes with its merge word.
+- 2026-10-06: G9's file list for the cone (`grammar-g9` `25eee99b`, verified on
+  pre.4, not yet merged; line numbers are from that commit).
+  - **Viewer (always-on).** `web_tree.rs`:
+    - `Shared.plant`;
+    - `CanvasProducer::semantics` and `::act`;
+    - `keys()`.
+
+    `web_tree/controls.rs`: `reader_plant()`.
+
+    `web_tree/lane.rs`:
+    - `semantic_tree`, `HeardItem`, `heard_canvas`, `css_string`;
+    - the `reader-*`, `key-moving`, `key-move-offset` and `pinned` fields;
+    - the `reader-click` verb.
+
+    graphshell's `canvas_reader` canvas half (`#[cfg(feature = "web")]`).
+    graphshell-client's `AccessibleItem.local_actions`, `LocalActions`,
+    `accessibility_tree_with`, `invoke_local` and `source_of`. The shared
+    crates' producer actions: cambium-rootstock, cambium-genet-web-host's
+    mirror, a11y and mount, cambium-winit-a11y, and pictograph's `canvas`
+    feature (`actions.rs`, `reader.rs`, `input.rs`, `roles.rs`, `at_rest.rs`).
+    Scenarios: `p4_tree_canvas_reader.scn` and `p4_tree_canvas_reader_cdp.scn`.
+  - **Under `remote`.** `web_tree/remote.rs`'s `board_semantics` `key`/`actions`;
+    `canvas_reader`'s `BoardLocalActions`, if the module splits;
+    `RemoteBoard::board_mut`; graphshell-client's
+    `RemoteSession::accessibility_tree_with`/`invoke_local`.
+  - **Under `product`.** `web_tree/product.rs`'s refused pin; `web_product.rs`'s
+    refused pin; `web_practice.rs`'s `sync_permitted()`.
+  - **Build.** `web` gains `dep:cambium-rootstock`. The lane build directories
+    under `C:/t/cargo-targets/mere` were swept at about 17:22 on 2026-10-05, so
+    the first build starts cold.
