@@ -975,6 +975,13 @@ What follows: when mer3ly updates its mere pin, the resolver rewrites a legacy
 only `Pinned` since `f0fc678`. So mapping every "Anchored" it reads to `Pinned`
 is correct before and after the update, and the mapping could land now.
 
+*2026-10-04, later:* Mark: "Push, land, proceed". The mapping landed now, ahead of
+the update. `read_placement` parses the section and rewrites "Anchored" to
+`Pinned`. The test `a_legacy_anchored_link_reads_as_pinned` parses a fixture
+directly and checks that it really carries the legacy class, then checks that
+`read_placement` returns `Pinned` for both pins. repo-graph tests pass 30/0,
+and fmt and clippy (`-D warnings`) are clean.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
@@ -1744,3 +1751,5 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     the pane was not drawing.
 - 2026-10-04: mere's G7 landed (`bd119a69`, Score v5). Ruling 104 recorded:
   mer3ly's resolver will read its legacy "Anchored" links as Pinned.
+- 2026-10-04: Ruling 104's mapping landed ahead of the mere update, in mer3ly's
+  resolver (`read_placement`), with a legacy-link fixture test.

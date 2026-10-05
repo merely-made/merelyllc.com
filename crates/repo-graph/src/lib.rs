@@ -1231,14 +1231,13 @@ fn resolve_matrix_shelfmark_value(
             .ok_or_else(|| "Matrix shelfmark lacks instance state".to_owned())?,
     )
     .map_err(|error| format!("invalid Matrix instance section: {error}"))?;
-    let placement: Vec<HeldPlacement> = serde_json::from_str(
+    let placement = read_placement(
         request
             .shelfmark
             .delta
             .get("placement")
             .ok_or_else(|| "Matrix shelfmark lacks placement state".to_owned())?,
-    )
-    .map_err(|error| format!("invalid placement section: {error}"))?;
+    )?;
     let motion: String = serde_json::from_str(
         request
             .shelfmark
@@ -1310,6 +1309,22 @@ fn resolve_matrix_shelfmark_value(
         honored_facets: facets.len(),
         camera,
     })
+}
+
+/// Parse a shared link's placement section.
+///
+/// mer3ly has written only `Pinned` since Ruling 103. An older link's
+/// "Anchored" was a hard pin in the live path, so it reads as pinned (Ruling
+/// 104); this bare read never passes through `Score::read`'s version gate.
+fn read_placement(section: &str) -> Result<Vec<HeldPlacement>, String> {
+    let mut placement: Vec<HeldPlacement> = serde_json::from_str(section)
+        .map_err(|error| format!("invalid placement section: {error}"))?;
+    for held in &mut placement {
+        if held.hold == sceno::Hold::Anchored {
+            held.hold = sceno::Hold::Pinned;
+        }
+    }
+    Ok(placement)
 }
 
 fn validate_view_delta(
@@ -3025,6 +3040,24 @@ mod tests {
 
         let receipt = consume_portable_projection_json(&json).expect("receipt");
         assert_eq!(receipt.honored_holds, 1);
+    }
+
+    #[test]
+    fn a_legacy_anchored_link_reads_as_pinned() {
+        let section = r#"[
+          {"source":{"adapter":"mer3ly.repository-graph/v1","id":"genet"},"at":{"x":1.0,"y":2.0},"hold":"Anchored"},
+          {"source":{"adapter":"mer3ly.repository-graph/v1","id":"mere"},"at":{"x":3.0,"y":4.0},"hold":"Pinned"}
+        ]"#;
+        let raw: Vec<HeldPlacement> = serde_json::from_str(section).unwrap();
+        assert_eq!(
+            raw[0].hold,
+            Hold::Anchored,
+            "the fixture carries the legacy class"
+        );
+
+        let placement = read_placement(section).expect("legacy placement");
+        assert!(placement.iter().all(|held| held.hold == Hold::Pinned));
+        assert_eq!((placement[0].at.x, placement[0].at.y), (1.0, 2.0));
     }
 
     #[test]
