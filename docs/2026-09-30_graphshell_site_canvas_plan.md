@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-110 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-111 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 The payload budget waits on P0's viewer-cone measurement (Ruling 26). Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
 No code has changed.
 
@@ -1098,6 +1098,39 @@ The cone is done when:
   recorded at the site's graph size for Ruling 107;
 - the branch goes to the conatus session for a check before main.
 
+### Ruling 111 (2026-10-06): the genet repin for `image-decode`
+
+The cone needs genet's `image-decode` feature (Ruling 106), and the web build
+cannot take it alone. graphshell-web is its own workspace, but the Cambium
+crates it pulls in take genet-livery's revision from mere's root workspace, so
+moving only the web manifest would put two genet revisions in one graph. A
+mere-wide repin moves:
+- 38 pins across three manifests (root 28, graphshell-web 7, distillery's probe
+  3);
+- 20 genet commits, from `bd3e8861` to origin `bf723d5d532`, including genet's
+  Vano repin.
+
+Seven mere manifests reach genet-livery, and Knot follows mere.
+
+Options: its own repin, before the cone; fold it into the cone; defer the
+decoders and measure first. Mark: "Its own repin, before the cone
+(Recommended)". It goes on its own branch, after seiche-speed lands and in
+coordination with the conatus session:
+- all 38 pins move to genet origin, with the lock;
+- every mere crate that reaches genet-livery gets a default-on `image-decode`
+  forward, so desktop decoding is unchanged;
+- mere's gate runs, and Knot follows.
+
+The cone then turns `image-decode` off in the viewer.
+
+The cone's feature-table prep is committed on mere branch `viewer-cone`
+(`698c1c20`, rebased onto origin `19e6dc9f`, unbuilt):
+- features `main-page` (which needs `product` and `remote`), `product`,
+  `remote` and `canvas-gpu`, all on by default;
+- `sha2`, `futures-channel` and `futures-util` are optional;
+- muniment's `indexeddb`, graphshell's `webrtc-browser` and `canvas-gpu` move
+  behind features.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
@@ -1942,3 +1975,4 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   - **Build.** `web` gains `dep:cambium-rootstock`. The lane build directories
     under `C:/t/cargo-targets/mere` were swept at about 17:22 on 2026-10-05, so
     the first build starts cold.
+- 2026-10-06: the cone's feature table is prepped on `viewer-cone` (unbuilt); Ruling 111 recorded.
