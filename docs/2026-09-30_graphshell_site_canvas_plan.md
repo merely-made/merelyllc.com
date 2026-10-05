@@ -1825,3 +1825,16 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
 - 2026-10-04: P0 assessed read-only; Rulings 105-108 recorded. The cone waits
   for the conatus session's word (seiche-speed and pre.4 on main).
 - 2026-10-05: Ruling 106's genet feature landed (genet `37cf5d82db8`, local).
+- 2026-10-05: pre.4 landed on mere main (merge `cec0b3a4`, origin `07db35e2`).
+  The cone waits only on seiche-speed. Points for the build:
+  - the getrandom cfg is committed in `ports/graphshell/web/.cargo/config.toml`
+    alone (the conatus session's ruling 558);
+  - runners read the pinned toolchain through `scripts/repo-toolchain.ps1`
+    (ruling 567);
+  - the keep-list grows by one: if the cone gates graphshell-client's `remote`
+    module, the viewer keeps `local_actions`, because drag and pin on the
+    board's cards list go through it (G9).
+
+  Mark's own `ports/graphshell/web/.cargo/config.local.toml` repeats the cfg
+  line, which doubles the flag under `cargo_mode local`. It's his file and is
+  left alone.
