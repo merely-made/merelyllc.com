@@ -1023,6 +1023,26 @@ Assessment facts:
   (Recommended)". The genet session is asked for decoders behind a default-on
   feature in `genet-livery` and `genet-render`. The cone ships without it and
   takes it up at the next genet pin.
+  *2026-10-05:* landed in genet as `37cf5d82db8` (local; genet's push waits on
+  Mark), under genet's own rulings 1-3
+  (`genet/design_docs/2026-10-05_image_decode_feature_plan.md`):
+  - genet-livery decodes in one private place (`image_decode.rs`), behind a
+    default-on `image-decode` feature;
+  - all five genet crates that depend on genet-livery forward it.
+
+  The genet session corrected the request: taproot also reached
+  `genet-livery` with its defaults on, so forwarding from genet-render alone
+  was not enough. For the cone, every mere row that reaches genet-livery drops
+  its defaults and keeps its other features:
+  - the root manifest's `genet-livery`;
+  - `genet-render` (keep `livery`, plus `accesskit` where the native bridge
+    needs it);
+  - `taproot`;
+  - their rows in `ports/graphshell/web/Cargo.toml`.
+
+  `cargo tree -e normal -i image` on the cone and on desktop confirms both. The
+  pin also carries genet's Vano repin (`d7f08fecdc7`, nova_vm `8ad08412` to
+  `47f8d4f9`).
 - **Ruling 107, GPU physics in the viewer.** Options: measure both, then rule;
   keep it; a CPU-only viewer. Mark: "Measure both, then rule (Recommended)".
   The viewer is built with and without `canvas-gpu`, with sizes and frame
@@ -1804,3 +1824,4 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   resolver (`read_placement`), with a legacy-link fixture test.
 - 2026-10-04: P0 assessed read-only; Rulings 105-108 recorded. The cone waits
   for the conatus session's word (seiche-speed and pre.4 on main).
+- 2026-10-05: Ruling 106's genet feature landed (genet `37cf5d82db8`, local).
