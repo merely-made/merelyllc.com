@@ -1904,3 +1904,11 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     (F62, F67).
   - `AccessibleItem.local_actions` (F64) stays always-on if graphshell-client's
     `remote` module is gated. G9's file list follows when it reports.
+- 2026-10-05: Mark ruled that seiche-speed merges at its floor checkpoint,
+  ahead of the period estimator, which follows on its own branch.
+  - Left before main: one full headed round on a calm machine (the last one
+    failed only on timing rows, at 76-82% CPU).
+  - The cone starts no heavy build until seiche-speed is on main.
+  - The estimator branch will later touch `frame_budget.rs`, `web_speed.rs`
+    and maybe a verb beside `log-intervals`; all of these stay always-on.
+  - G9's graphshell-web file list comes with its merge word.
