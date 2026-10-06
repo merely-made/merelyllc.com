@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-112 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-114 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 The payload budget waits on P0's viewer-cone measurement (Ruling 26). Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
 No code has changed.
 
@@ -1138,6 +1138,29 @@ the conatus session. Mark: "Fold it into my Knot step (Recommended)". This
 session owns the whole chain: mere's genet repin, Knot's genet repin, then
 djinn's Knot pin. It is done when mere's graph has one copy of each genet
 crate (`cargo tree -d`).
+
+**Rulings 113-114 (2026-10-06), the genet target and its follow-ups.** The
+genet session's `d851a9db0cd` (local, push pending with Mark) hides what a
+person cannot perceive from taproot:
+- role selectors skip aria-hidden subtrees;
+- `resolve` needs a rendered box;
+- additive styled projection entry points (`*_with_style`).
+
+Four taproot fixtures fail on `bf723d5d532` and pass there. Opt-in mere
+follow-ups (checked on origin):
+- the winit-host harness's `taproot::matching` (`harness.rs:411`, `:426`);
+- `*_with_generated_text` callers in `cambium-rootstock/src/lib.rs:316` and
+  `cambium-winit-a11y/src/lib.rs:238`;
+- pelt's `frisket_surface.rs:798` (`accesskit_tree`).
+
+- **Ruling 113, the target.** Options: `d851a9db0cd` once pushed;
+  `bf723d5d532` as planned. Mark: "d851a9db0cd, once pushed (Recommended)".
+  If it isn't pushed by the window, the repin falls back to `bf723d5d532`.
+- **Ruling 114, the follow-ups.** Options: their own step after the repin; fold
+  them in; hand them to the files' owners. Mark: "Own step, after the update
+  (Recommended)". The repin stays pins plus `image-decode` forwards. The four
+  call-site moves follow as a small branch, coordinated with stack seams P2,
+  which is working in rootstock and the winit host.
 
 The cone's feature-table prep is committed on mere branch `viewer-cone`
 (`698c1c20`, rebased onto origin `19e6dc9f`, unbuilt):
