@@ -2078,3 +2078,24 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   - C: had 429 GB free, under the 500 GB floor; the Knot worktree and its
     target were removed.
   - Next: Ruling 114's taproot opt-ins with stack seams P2, then the cone.
+- 2026-10-06: Ruling 114's opt-ins landed on mere origin (`50b1a87c`), reviewed
+  and approved by the stack seams session. Each site now leaves out what a
+  person cannot perceive:
+  - rootstock's `document_projection` and winit-a11y's AccessKit tree take
+    genet's styled projection, through a new
+    `OwnedLayout::rendered_visible`, keeping P2's per-window `WindowDom`
+    shape;
+  - the winit-host harness resolves only rendered matches;
+  - Pelt's Frisket shell lowers through `accesskit_tree_with_style`. That is
+    also a behaviour change: Frisket's tree now carries generated
+    `::before`/`::after` text, which the plain `accesskit_tree` call left out.
+
+  `a_hidden_element_leaves_the_accessibility_tree` asserts that a
+  `visibility: hidden` button leaves the synced tree, with the visible button
+  under the plain sheet as its control. Against the old projection it fails
+  on the hidden assertion. The five crates pass 302/0.
+
+  The adoption plan took the archived projection receipts plan's gated field
+  receipts as Track F (mere `28985298`, stack seams S61).
+
+  Next: the viewer cone.
