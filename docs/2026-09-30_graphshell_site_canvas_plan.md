@@ -2056,3 +2056,25 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   - Correction to Ruling 111's question: the crates reaching genet-livery are
     11, not seven. Seven counted only direct holders.
   - Knot's step is on Knot branch `genet-d851-image-decode`, `ef89a18`.
+- 2026-10-06: the genet chain (Rulings 111-117) landed. Ruling 111's
+  done-condition holds: mere's lock has one genet revision and one Knot
+  revision.
+  - **Knot, origin `ef89a18`.** genet moves to `d851a9db0cd` and all 43 Mere
+    rows to `e0cea3e0` (Ruling 117).
+    - Tests: 570 passed across 45 binaries.
+    - The only failures are 7 `knot-composition` `wordnet_import` tests, from
+      this machine's CRLF checkout of `assets/oewn-notices.txt` and
+      `tests/fixtures/wordnet.xml` (`text=auto`, no `eol=lf`). With both as
+      LF, all 12 pass, so the failures are not the repin's. Left to Knot's
+      owner.
+  - **mere, origin `2e0a17d2`.** djinn and the root pin Knot `ef89a18`; genet
+    `bd3e8861`'s `fleece` and `layout-dom-api` copies leave the lock.
+    - Verify: 1,559 packages, all targets. djinn: 116 passed across 20
+      binaries.
+    - The first djinn run hit os error 1455 (paging file exhausted while
+      several sessions compiled). The retry at `-j 4` was clean.
+  - The vault-lock seed fix was not yet on Knot, so the vault-lock lane moves
+    djinn's pin when it lands (Ruling 115).
+  - C: had 429 GB free, under the 500 GB floor; the Knot worktree and its
+    target were removed.
+  - Next: Ruling 114's taproot opt-ins with stack seams P2, then the cone.
