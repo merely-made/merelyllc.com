@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-114 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-115 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 The payload budget waits on P0's viewer-cone measurement (Ruling 26). Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
 No code has changed.
 
@@ -1161,6 +1161,13 @@ follow-ups (checked on origin):
   (Recommended)". The repin stays pins plus `image-decode` forwards. The four
   call-site moves follow as a small branch, coordinated with stack seams P2,
   which is working in rootstock and the winit host.
+- **Ruling 115 (2026-10-06), Knot's seed fix.** Vault-lock ruling 50 makes
+  Knot's seed fix the next Knot commit after `c966e31`, so djinn's Knot pin
+  needs one more move. Options: fold it into this chain's djinn step; the
+  seed fix's djinn move first. Mark: "Fold into my chain's djinn step
+  (Recommended)". If the seed fix is on Knot before this chain's Knot step,
+  the Knot genet repin builds on it and the chain's single djinn move covers
+  both. If it lands after, the vault-lock lane moves djinn's pin.
 
 The cone's feature-table prep is committed on mere branch `viewer-cone`
 (`698c1c20`, rebased onto origin `19e6dc9f`, unbuilt):
@@ -2024,3 +2031,4 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   2. Knot's P1 adaptation, pushed;
   3. djinn's repin onto that Knot head;
   4. this session's genet window, whose Knot step builds on that head.
+- 2026-10-06: the genet window opened (mere origin `840c543d`: djinn on Knot `c966e31`, seiche-speed, G9, P1, S32, vault lock L1). Ruling 115 recorded.
