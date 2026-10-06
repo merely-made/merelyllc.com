@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-115 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-117 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 The payload budget waits on P0's viewer-cone measurement (Ruling 26). Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
 No code has changed.
 
@@ -1168,6 +1168,16 @@ follow-ups (checked on origin):
   (Recommended)". If the seed fix is on Knot before this chain's Knot step,
   the Knot genet repin builds on it and the chain's single djinn move covers
   both. If it lands after, the vault-lock lane moves djinn's pin.
+- **Ruling 116 (2026-10-06), how mere's repin reaches origin.** Mere's local main
+  held 19 doc commits from other sessions. Options: push this branch only; merge
+  into local main and push all; hold for Mark. Mark: "Push my branch only
+  (Recommended)". Pushed `genet-image-decode` as a fast-forward of origin to
+  `e0cea3e0`.
+- **Ruling 117 (2026-10-06), Knot's Mere rows.** Knot pinned Mere at two
+  revisions on purpose: 41 rows at `19e6dc9f` (P1), and `esp` plus the
+  `cubecl-runtime` patch at `5fecd707` (stable Burn). Options: unify all 43 on
+  `e0cea3e0`; keep the split. Mark: "Unify all 43 on e0cea3e0 (Recommended)".
+  `e0cea3e0` contains both, so Knot's graph has one Mere revision again.
 
 The cone's feature-table prep is committed on mere branch `viewer-cone`
 (`698c1c20`, rebased onto origin `19e6dc9f`, unbuilt):
@@ -2032,3 +2042,17 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   3. djinn's repin onto that Knot head;
   4. this session's genet window, whose Knot step builds on that head.
 - 2026-10-06: the genet window opened (mere origin `840c543d`: djinn on Knot `c966e31`, seiche-speed, G9, P1, S32, vault lock L1). Ruling 115 recorded.
+- 2026-10-06: mere's genet repin landed and was pushed (origin `e0cea3e0`).
+  - All 38 pins are on genet `d851a9db0cd`.
+  - image-decode is forwarded through the 11 workspace crates on a path to
+    genet-livery, plus graphshell-web.
+  - Origin's stable-Burn migration (`d11c5b56`) was merged in, and both locks
+    were re-resolved: they change only genet and vano.
+  - Gates: cargo_mode verify (root 1,557 packages, distillery probe 776), the
+    graphshell-web wasm check with and without defaults, and tests for the
+    eight genet-facing crates, all green.
+  - `image` is in the default web graph and absent without defaults, with the
+    default build as the control.
+  - Correction to Ruling 111's question: the crates reaching genet-livery are
+    11, not seven. Seven counted only direct holders.
+  - Knot's step is on Knot branch `genet-d851-image-decode`, `ef89a18`.
