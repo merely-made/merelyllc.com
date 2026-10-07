@@ -1,0 +1,12 @@
+[
+  {
+    "label": "site21",
+    "scenario": "p0_viewer_site_frames_21",
+    "query": "nodes=21&seed=7&links=none&physics_speed=1&gpu=off",
+    "expected": "pass",
+    "reason": "",
+    "harness_exit": 1,
+    "receipt": "viewer-release-site21",
+    "accepted": false
+  }
+]

@@ -1,0 +1,23 @@
+serving /home/markik/Code/testing/mere/viewer-cone/review/default on http://127.0.0.1:8983, receipts to /home/markik/Code/testing/mere/viewer-cone/review/receipts/default-fast
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-receipt HTTP/1.1" 204 -
+receipt written to /home/markik/Code/testing/mere/viewer-cone/review/receipts/default-fast (RESULT ok, 0 capture(s))

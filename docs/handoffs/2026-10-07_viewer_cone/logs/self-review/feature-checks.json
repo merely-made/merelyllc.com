@@ -1,0 +1,124 @@
+{
+  "runtime_commit": "8175b69ee36093f1e210a6046073bbcac7c840a7",
+  "scenario_commit": "c91f7b85f9dce8f5e3043c99316a93e94c9964c4",
+  "checks": [
+    {
+      "features": "none",
+      "validation": "dev build and bindgen",
+      "exit_code": 0
+    },
+    {
+      "features": "default",
+      "validation": "dev build and bindgen",
+      "exit_code": 0
+    },
+    {
+      "features": "canvas-gpu",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "-j",
+        "4",
+        "--no-default-features",
+        "--features",
+        "canvas-gpu"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 135.33
+    },
+    {
+      "features": "product",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "-j",
+        "4",
+        "--no-default-features",
+        "--features",
+        "product"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 51.27
+    },
+    {
+      "features": "remote",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "-j",
+        "4",
+        "--no-default-features",
+        "--features",
+        "remote"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 30.86
+    },
+    {
+      "features": "product,remote",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "-j",
+        "4",
+        "--no-default-features",
+        "--features",
+        "product,remote"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 31.55
+    },
+    {
+      "features": "main-page",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "-j",
+        "4",
+        "--no-default-features",
+        "--features",
+        "main-page"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 4.82
+    },
+    {
+      "features": "image-decode",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "-j",
+        "4",
+        "--no-default-features",
+        "--features",
+        "image-decode"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 32.87
+    }
+  ]
+}

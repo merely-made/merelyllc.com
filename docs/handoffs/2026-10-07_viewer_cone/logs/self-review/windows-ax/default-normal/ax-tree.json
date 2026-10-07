@@ -1,0 +1,149 @@
+{
+  "slot": "11 of 11 shown",
+  "items": [
+    {
+      "name": "I2P port notes",
+      "buttons": [
+        {
+          "name": "Drag",
+          "described": true
+        },
+        {
+          "name": "Pin",
+          "described": true
+        }
+      ]
+    },
+    {
+      "name": "I2P service",
+      "buttons": [
+        {
+          "name": "Drag",
+          "described": true
+        },
+        {
+          "name": "Pin",
+          "described": true
+        }
+      ]
+    },
+    {
+      "name": "Reference notes",
+      "buttons": [
+        {
+          "name": "Drag",
+          "described": true
+        },
+        {
+          "name": "Pin",
+          "described": true
+        }
+      ]
+    },
+    {
+      "name": "Reference-host scene",
+      "buttons": [
+        {
+          "name": "Drag",
+          "described": true
+        },
+        {
+          "name": "Pin",
+          "described": true
+        }
+      ]
+    },
+    {
+      "name": "Mounted remote projection",
+      "buttons": [
+        {
+          "name": "Drag",
+          "described": true
+        },
+        {
+          "name": "Pin",
+          "described": true
+        }
+      ]
+    },
+    {
+      "name": "Alice",
+      "buttons": [
+        {
+          "name": "Drag",
+          "described": true
+        },
+        {
+          "name": "Pin",
+          "described": true
+        }
+      ]
+    },
+    {
+      "name": "Alice's laptop",
+      "buttons": [
+        {
+          "name": "Drag",
+          "described": true
+        },
+        {
+          "name": "Pin",
+          "described": true
+        }
+      ]
+    },
+    {
+      "name": "Alice's phone",
+      "buttons": [
+        {
+          "name": "Drag",
+          "described": true
+        },
+        {
+          "name": "Pin",
+          "described": true
+        }
+      ]
+    },
+    {
+      "name": "SSH signing key reference",
+      "buttons": [
+        {
+          "name": "Drag",
+          "described": true
+        },
+        {
+          "name": "Pin",
+          "described": true
+        }
+      ]
+    },
+    {
+      "name": "Open-address grant",
+      "buttons": [
+        {
+          "name": "Drag",
+          "described": true
+        },
+        {
+          "name": "Pin",
+          "described": true
+        }
+      ]
+    },
+    {
+      "name": "Synthetic signing receipt",
+      "buttons": [
+        {
+          "name": "Drag",
+          "described": true
+        },
+        {
+          "name": "Pin",
+          "described": true
+        }
+      ]
+    }
+  ],
+  "failures": []
+}

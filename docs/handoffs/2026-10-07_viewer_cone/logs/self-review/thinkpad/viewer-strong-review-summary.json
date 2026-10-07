@@ -1,0 +1,19 @@
+[
+  {
+    "label": "slow-max",
+    "scenario": "p6_tree_speed_fast_slow_max",
+    "query": "nodes=300&seed=7&links=none&gpu=off&physics_speed=1&physics_plant_max_frame_ms=3000",
+    "expected": "pass",
+    "reason": "",
+    "harness_exit": 0,
+    "receipt": "viewer-strong-slow-max",
+    "accepted": true,
+    "result": "ok",
+    "bundle_sha256": "9be4392e28bf89d80ec5436da70ddfe3adcb9553bbbb024231ea036a454a59b2",
+    "scenario_sha256": "6118bbb503ca60c46833849292a50a72d2d7d85c06f415163f04be85445d9d33",
+    "cpu_before_percent": 2.377972465581979,
+    "page_errors": [],
+    "gate_failures": [],
+    "elapsed_seconds": 264.39
+  }
+]

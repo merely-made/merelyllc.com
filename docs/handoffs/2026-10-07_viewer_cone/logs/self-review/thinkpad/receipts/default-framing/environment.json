@@ -1,0 +1,115 @@
+{
+  "machine": "thinkpad-l14-f",
+  "platform": "Linux-7.2.8-200.fc44.x86_64-x86_64-with-glibc2.43",
+  "bundle_sha256": "8e69f9e21acd6bfe81683b8763501b20d570678725dd4564ba8f88818fff25d1",
+  "bundle_bytes": 116467761,
+  "scenario": "p4_tree_physics_framing_control",
+  "scenario_sha256": "8466a1bf0f8ce4d9f687f4887ffa168159321100a988472d7a9899c5ffdc355f",
+  "query": "gpu=off",
+  "load_before": [
+    3.41796875,
+    2.53564453125,
+    1.5693359375
+  ],
+  "unsafe_webgpu": true,
+  "cpu_samples": [
+    {
+      "seconds": 1.26,
+      "percent": 37.97
+    },
+    {
+      "seconds": 2.26,
+      "percent": 51.05
+    },
+    {
+      "seconds": 3.26,
+      "percent": 35.99
+    },
+    {
+      "seconds": 4.26,
+      "percent": 31.57
+    },
+    {
+      "seconds": 5.26,
+      "percent": 24.63
+    },
+    {
+      "seconds": 6.27,
+      "percent": 23.73
+    },
+    {
+      "seconds": 7.27,
+      "percent": 68.66
+    },
+    {
+      "seconds": 8.27,
+      "percent": 33.58
+    },
+    {
+      "seconds": 9.27,
+      "percent": 26.91
+    },
+    {
+      "seconds": 10.27,
+      "percent": 21.85
+    },
+    {
+      "seconds": 11.27,
+      "percent": 29.22
+    },
+    {
+      "seconds": 12.27,
+      "percent": 35.19
+    },
+    {
+      "seconds": 13.27,
+      "percent": 40.42
+    },
+    {
+      "seconds": 14.27,
+      "percent": 46.99
+    },
+    {
+      "seconds": 15.27,
+      "percent": 43.46
+    },
+    {
+      "seconds": 16.27,
+      "percent": 41.13
+    },
+    {
+      "seconds": 17.27,
+      "percent": 29.43
+    }
+  ],
+  "cpu_before_percent": 0.9975062344139696,
+  "command": [
+    "flatpak",
+    "run",
+    "--filesystem=/home/markik/Code/testing/mere/viewer-cone/review/receipts/default-framing",
+    "com.google.Chrome",
+    "--user-data-dir=/home/markik/Code/testing/mere/viewer-cone/review/receipts/default-framing/chrome-profile",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--enable-logging=stderr",
+    "--ozone-platform=wayland",
+    "--disable-features=CalculateNativeWinOcclusion",
+    "--disable-backgrounding-occluded-windows",
+    "--disable-renderer-backgrounding",
+    "--new-window",
+    "--window-size=1400,900",
+    "--enable-unsafe-webgpu",
+    "--enable-features=Vulkan",
+    "--use-angle=vulkan",
+    "http://127.0.0.1:8993/tree.html?scenario=scenarios/p4_tree_physics_framing_control.scn&sink=http://127.0.0.1:8993/scenario-receipt&gpu=off"
+  ],
+  "result": "ok",
+  "page_errors": [],
+  "gate_failures": [],
+  "elapsed_seconds": 17.28,
+  "load_after": [
+    3.0703125,
+    2.51611328125,
+    1.583984375
+  ]
+}

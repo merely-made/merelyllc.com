@@ -1,0 +1,351 @@
+{
+  "machine": "thinkpad-l14-f",
+  "platform": "Linux-7.2.8-200.fc44.x86_64-x86_64-with-glibc2.43",
+  "bundle_sha256": "9be4392e28bf89d80ec5436da70ddfe3adcb9553bbbb024231ea036a454a59b2",
+  "bundle_bytes": 56551392,
+  "scenario": "p4_tree_arrangement_roles",
+  "scenario_sha256": "c30732aa841e5677f77f1b5f9bf9e23afc4e305d85955ff2c4baa3c547a0d979",
+  "query": "gpu=off",
+  "load_before": [
+    2.5546875,
+    1.35986328125,
+    0.6787109375
+  ],
+  "unsafe_webgpu": true,
+  "cpu_samples": [
+    {
+      "seconds": 1.29,
+      "percent": 23.86
+    },
+    {
+      "seconds": 2.29,
+      "percent": 60.0
+    },
+    {
+      "seconds": 3.29,
+      "percent": 37.67
+    },
+    {
+      "seconds": 4.29,
+      "percent": 22.43
+    },
+    {
+      "seconds": 5.29,
+      "percent": 25.74
+    },
+    {
+      "seconds": 6.29,
+      "percent": 23.24
+    },
+    {
+      "seconds": 7.29,
+      "percent": 63.93
+    },
+    {
+      "seconds": 8.29,
+      "percent": 42.01
+    },
+    {
+      "seconds": 9.29,
+      "percent": 23.54
+    },
+    {
+      "seconds": 10.29,
+      "percent": 23.24
+    },
+    {
+      "seconds": 11.29,
+      "percent": 23.76
+    },
+    {
+      "seconds": 12.29,
+      "percent": 29.21
+    },
+    {
+      "seconds": 13.29,
+      "percent": 22.96
+    },
+    {
+      "seconds": 14.29,
+      "percent": 41.19
+    },
+    {
+      "seconds": 15.29,
+      "percent": 53.03
+    },
+    {
+      "seconds": 16.29,
+      "percent": 37.24
+    },
+    {
+      "seconds": 17.3,
+      "percent": 26.21
+    },
+    {
+      "seconds": 18.3,
+      "percent": 28.06
+    },
+    {
+      "seconds": 19.3,
+      "percent": 32.59
+    },
+    {
+      "seconds": 20.3,
+      "percent": 22.37
+    },
+    {
+      "seconds": 21.3,
+      "percent": 22.65
+    },
+    {
+      "seconds": 22.3,
+      "percent": 27.97
+    },
+    {
+      "seconds": 23.3,
+      "percent": 31.77
+    },
+    {
+      "seconds": 24.3,
+      "percent": 38.59
+    },
+    {
+      "seconds": 25.3,
+      "percent": 29.17
+    },
+    {
+      "seconds": 26.3,
+      "percent": 21.31
+    },
+    {
+      "seconds": 27.3,
+      "percent": 25.62
+    },
+    {
+      "seconds": 28.3,
+      "percent": 23.49
+    },
+    {
+      "seconds": 29.3,
+      "percent": 24.14
+    },
+    {
+      "seconds": 30.3,
+      "percent": 21.51
+    },
+    {
+      "seconds": 31.3,
+      "percent": 23.73
+    },
+    {
+      "seconds": 32.3,
+      "percent": 23.79
+    },
+    {
+      "seconds": 33.3,
+      "percent": 23.17
+    },
+    {
+      "seconds": 34.3,
+      "percent": 24.44
+    },
+    {
+      "seconds": 35.3,
+      "percent": 22.54
+    },
+    {
+      "seconds": 36.31,
+      "percent": 22.5
+    },
+    {
+      "seconds": 37.31,
+      "percent": 32.05
+    },
+    {
+      "seconds": 38.31,
+      "percent": 28.8
+    },
+    {
+      "seconds": 39.31,
+      "percent": 26.76
+    },
+    {
+      "seconds": 40.31,
+      "percent": 23.17
+    },
+    {
+      "seconds": 41.31,
+      "percent": 22.9
+    },
+    {
+      "seconds": 42.31,
+      "percent": 24.54
+    },
+    {
+      "seconds": 43.31,
+      "percent": 22.55
+    },
+    {
+      "seconds": 44.31,
+      "percent": 21.38
+    },
+    {
+      "seconds": 45.31,
+      "percent": 23.77
+    },
+    {
+      "seconds": 46.31,
+      "percent": 33.33
+    },
+    {
+      "seconds": 47.31,
+      "percent": 24.1
+    },
+    {
+      "seconds": 48.31,
+      "percent": 23.4
+    },
+    {
+      "seconds": 49.31,
+      "percent": 22.3
+    },
+    {
+      "seconds": 50.31,
+      "percent": 21.65
+    },
+    {
+      "seconds": 51.31,
+      "percent": 22.99
+    },
+    {
+      "seconds": 52.31,
+      "percent": 22.93
+    },
+    {
+      "seconds": 53.31,
+      "percent": 23.3
+    },
+    {
+      "seconds": 54.31,
+      "percent": 22.29
+    },
+    {
+      "seconds": 55.31,
+      "percent": 23.67
+    },
+    {
+      "seconds": 56.31,
+      "percent": 21.58
+    },
+    {
+      "seconds": 57.32,
+      "percent": 24.72
+    },
+    {
+      "seconds": 58.32,
+      "percent": 23.86
+    },
+    {
+      "seconds": 59.32,
+      "percent": 22.99
+    },
+    {
+      "seconds": 60.32,
+      "percent": 25.0
+    },
+    {
+      "seconds": 61.32,
+      "percent": 23.37
+    },
+    {
+      "seconds": 62.32,
+      "percent": 25.68
+    },
+    {
+      "seconds": 63.32,
+      "percent": 28.02
+    },
+    {
+      "seconds": 64.32,
+      "percent": 24.6
+    },
+    {
+      "seconds": 65.32,
+      "percent": 25.31
+    },
+    {
+      "seconds": 66.32,
+      "percent": 27.69
+    },
+    {
+      "seconds": 67.32,
+      "percent": 26.02
+    },
+    {
+      "seconds": 68.32,
+      "percent": 22.62
+    },
+    {
+      "seconds": 69.32,
+      "percent": 27.1
+    },
+    {
+      "seconds": 70.32,
+      "percent": 25.56
+    },
+    {
+      "seconds": 71.32,
+      "percent": 28.43
+    },
+    {
+      "seconds": 72.32,
+      "percent": 30.77
+    },
+    {
+      "seconds": 73.32,
+      "percent": 35.56
+    },
+    {
+      "seconds": 74.32,
+      "percent": 25.12
+    },
+    {
+      "seconds": 75.32,
+      "percent": 36.67
+    },
+    {
+      "seconds": 76.33,
+      "percent": 41.8
+    }
+  ],
+  "cpu_before_percent": 1.7478152309613026,
+  "command": [
+    "flatpak",
+    "run",
+    "--filesystem=/home/markik/Code/testing/mere/viewer-cone/review/receipts/viewer-arrangement",
+    "com.google.Chrome",
+    "--user-data-dir=/home/markik/Code/testing/mere/viewer-cone/review/receipts/viewer-arrangement/chrome-profile",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--enable-logging=stderr",
+    "--ozone-platform=wayland",
+    "--disable-features=CalculateNativeWinOcclusion",
+    "--disable-backgrounding-occluded-windows",
+    "--disable-renderer-backgrounding",
+    "--new-window",
+    "--window-size=1400,900",
+    "--enable-unsafe-webgpu",
+    "--enable-features=Vulkan",
+    "--use-angle=vulkan",
+    "http://127.0.0.1:8992/tree.html?scenario=scenarios/p4_tree_arrangement_roles.scn&sink=http://127.0.0.1:8992/scenario-receipt&gpu=off"
+  ],
+  "result": "ok",
+  "page_errors": [],
+  "gate_failures": [],
+  "elapsed_seconds": 76.34,
+  "load_after": [
+    2.328125,
+    1.544921875,
+    0.80224609375
+  ]
+}

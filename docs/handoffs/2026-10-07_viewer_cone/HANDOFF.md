@@ -2,27 +2,30 @@
 artifact_contract: "ce-handoff/v1"
 created_at: "2026-10-07T03:59:13Z"
 title: "mer3ly P0 viewer cone: the calm-machine receipts and Ruling 107's timings"
-summary: "The ThinkPad release speed rows and approved 21-node frame benchmark pass. Both viewer builds have about 60 Hz median cadence; GPU physics submits no work. Plain viewer selected under Ruling 121; candidate rebased and license gate repaired. Current speed-lane acceptance, conatus review, and the numerical payload cap remain open. See RESUME.md."
+summary: "Codex directly reviewed and combined the viewer cone with the speed estimator at Mark's request. Fresh feature, native, headed and accessibility receipts are in RESUME.md. Plain viewer selected; six rebuilt assets total 2,125,171 B brotli. Numerical cap and latest-main integration remain open."
 keywords: ["mer3ly", "viewer-cone", "graphshell-web", "P0", "Ruling 26", "Ruling 107", "payload budget", "headed receipts", "canvas-gpu"]
 cwd: "C:/Users/mark_/Code (machine-local)"
-resume_focus: "Forward REVIEW_REQUEST.md to the existing Claude conatus chat; resolve the combined speed-lane conflict and acceptance, and settle the numerical payload cap before integration."
+resume_focus: "Read RESUME.md#candidate-review and logs/self-review/review-summary.json. Choose the numerical payload cap and integrate against latest main; no pending Claude review."
 repository: "merely-made/mere (the cone) and merely-made/merelyllc.com (this plan, mer3ly)"
 branch: "mere: viewer-cone"
-head: "mere local viewer-cone e9678fdd; measured origin/viewer-cone 6963ebe5; mer3ly main carries this file"
+head: "mere local viewer-cone 7ef65d8d; runtime 8175b69e; measured origin/viewer-cone 6963ebe5; mer3ly main carries this file"
 ---
 
 # P0 viewer cone: handoff
 
-**Resumed 2026-10-07:** [RESUME.md](RESUME.md) records the ThinkPad's headed
-reruns, unchanged bundle hashes and load samples. All five outstanding release
-rows pass; the four fast development rows still fail. The slow viewer row
-passes both profiles. A planted-stall receipt detects its intended miss.
-Under Ruling 120, the 21-node frame benchmark also passes in both release
-viewer builds: approximately 60 Hz median cadence, zero physics-device
-submissions. Mark selected the plain viewer (Ruling 121). The local candidate is rebased
-and its license gate passes; current speed-lane acceptance, numerical cap
-and conatus review remain open. The remainder
-preserves the original handoff's evidence and context.
+**Current review, 2026-10-07:** Mark asked Codex to check the work directly
+after the other sessions ran out of capacity (Ruling 122).
+[RESUME.md](RESUME.md#candidate-review) records the combined candidate,
+source review, receipt corrections and fresh validation. The speed worker
+is shared by both hosts; newer session work and all ruled assertions remain.
+The numerical payload cap and latest-main integration remain open.
+
+The earlier `6963ebe5` release and GPU measurements remain useful historical
+evidence. Their four development failures are preserved. Plain viewer is
+selected under Ruling 121; the rebuilt six-asset total is 2,125,171 B brotli.
+The review request for Claude is superseded, not still an approval gate.
+The remainder of this file preserves the original handoff's checkpoint and
+checklist; use RESUME.md for current status.
 
 ## What this is
 
@@ -66,7 +69,7 @@ i'll have it happen on another machine").
   physics, seiche status") is that the branch goes to that session for a check
   before main. It has not been sent yet.
 
-## Status
+## Original status at the measured checkpoint
 
 Done and verified on this machine:
 - Every feature combination compiles for wasm32 with no warnings from the

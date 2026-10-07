@@ -1,0 +1,447 @@
+{
+  "scenario": {
+    "state": "ok",
+    "errors": [],
+    "gate_failures": [],
+    "result": {
+      "captures": 1,
+      "frames": 121,
+      "log": [
+        "captured physics_speed_select_bound",
+        "physics speed select receipt complete"
+      ],
+      "result": "ok",
+      "steps": 30,
+      "timings": []
+    },
+    "captures": [
+      {
+        "name": "physics_speed_select_bound",
+        "width": 1366,
+        "height": 593,
+        "bytes": 125786
+      }
+    ]
+  },
+  "receipt": {
+    "practice": null,
+    "title": "GRAPHSHELL H3 READY",
+    "ready": true,
+    "session": "local",
+    "detailOpen": false,
+    "actionCount": 0,
+    "storage": "IndexedDB seeded \u00b7 not persistent, may be evicted",
+    "capture": {
+      "accepted": 0,
+      "dropped": 0
+    },
+    "remote": {
+      "link": "fixture",
+      "state": "fixture",
+      "revision": "1",
+      "generation": "7",
+      "cards": "2",
+      "cardLabels": "Projection boundary card\nCoastal map tile",
+      "overlaps": 0,
+      "resume": "",
+      "actions": [
+        {
+          "intent": "fixture.open-note",
+          "label": "Open field note"
+        },
+        {
+          "intent": "fixture.open-live-view",
+          "label": "Open saved live view"
+        },
+        {
+          "intent": "fixture.inspect-tile",
+          "label": "Inspect map tile"
+        }
+      ]
+    },
+    "chronicle": null,
+    "camera": "681.80,295.80,0.251",
+    "product": {
+      "status": "Speed set to 1x",
+      "nodeCount": 11,
+      "filterCount": 11,
+      "layout": "free",
+      "physicsPaused": false,
+      "selectedCount": 0,
+      "exportBytes": 0,
+      "importedNodes": 0,
+      "relationFamily": "all",
+      "face": "derived"
+    },
+    "viewport": {
+      "width": 1366,
+      "height": 593
+    },
+    "projectionEditor": {
+      "open": false,
+      "panel": "source",
+      "content": "open:graphshell.projection-editor.panel:source",
+      "validation": "valid",
+      "errors": 0,
+      "saveCount": 0,
+      "status": "Draft ready \u00b7 unsaved",
+      "preview": "Graphshell reference projection \u00b7 read nodes by title \u00b7 phyllotaxis.default \u00b7 x=x y=y \u00b7 canvas",
+      "source": {
+        "authority": "graphshell-reference-host",
+        "domain": "mere.graph",
+        "resource": "fixture.graphshell/reference"
+      },
+      "reading": {
+        "key": "title"
+      },
+      "encoding": {
+        "x": "x",
+        "y": "y"
+      },
+      "arrangement": {
+        "kind": "phyllotaxis.default",
+        "direction": "horizontal",
+        "spacing": "16"
+      },
+      "appearance": {
+        "realization": "canvas",
+        "title": "Graphshell reference projection"
+      },
+      "provenance": {
+        "author": "Graphshell reference host",
+        "sourceRevision": "fixture-v1",
+        "note": "Host-owned editor fixture"
+      }
+    },
+    "semantics": {
+      "role": "main",
+      "label": "Graphshell reference host",
+      "id": "gs-semantic-host",
+      "children": [
+        {
+          "label": "Mounted sessions",
+          "children": [
+            {
+              "role": "button",
+              "label": "Local Mere",
+              "id": "gs-session-local",
+              "pressed": true,
+              "children": []
+            },
+            {
+              "role": "button",
+              "label": "Remote mount",
+              "id": "gs-session-remote",
+              "pressed": false,
+              "children": []
+            }
+          ]
+        },
+        {
+          "role": "navigation",
+          "label": "Graph controls",
+          "children": [
+            {
+              "role": "button",
+              "label": "Select research object",
+              "children": []
+            },
+            {
+              "role": "button",
+              "label": "Edit selected object",
+              "children": []
+            },
+            {
+              "role": "button",
+              "label": "Pan left",
+              "children": []
+            },
+            {
+              "role": "button",
+              "label": "Pan right",
+              "children": []
+            },
+            {
+              "role": "button",
+              "label": "Pan up",
+              "children": []
+            },
+            {
+              "role": "button",
+              "label": "Pan down",
+              "children": []
+            },
+            {
+              "role": "button",
+              "label": "Zoom in",
+              "children": []
+            },
+            {
+              "role": "button",
+              "label": "Zoom out",
+              "children": []
+            }
+          ]
+        },
+        {
+          "label": "Graph tools",
+          "id": "gs-product-panel",
+          "children": [
+            {
+              "role": "region",
+              "id": "gs-capture-panel",
+              "children": [
+                {
+                  "label": "Browser history",
+                  "children": []
+                },
+                {
+                  "role": "status",
+                  "label": "Checking capture permission\u2026",
+                  "id": "gs-capture-status",
+                  "children": []
+                },
+                {
+                  "children": [
+                    {
+                      "role": "button",
+                      "label": "Enable capture",
+                      "id": "gs-capture-enable",
+                      "children": []
+                    },
+                    {
+                      "role": "button",
+                      "label": "Save privacy settings",
+                      "id": "gs-capture-save",
+                      "children": []
+                    },
+                    {
+                      "role": "button",
+                      "label": "Stop capture",
+                      "id": "gs-capture-disable",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "role": "button",
+                  "label": "Filter stored visits",
+                  "id": "gs-history-filter-apply",
+                  "children": []
+                },
+                {
+                  "role": "status",
+                  "label": "Loading stored visits\u2026",
+                  "id": "gs-history-result-status",
+                  "children": []
+                },
+                {
+                  "role": "button",
+                  "label": "Forget this address",
+                  "id": "gs-history-forget",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "role": "region",
+              "children": [
+                {
+                  "label": "Add an object",
+                  "children": []
+                },
+                {
+                  "role": "button",
+                  "label": "Add address",
+                  "children": []
+                },
+                {
+                  "role": "button",
+                  "label": "Edit projection",
+                  "children": []
+                },
+                {
+                  "role": "button",
+                  "label": "Open practice projection",
+                  "children": []
+                },
+                {
+                  "role": "button",
+                  "label": "Reopen saved practice projection",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "role": "region",
+              "children": [
+                {
+                  "label": "Find and arrange",
+                  "children": []
+                },
+                {
+                  "children": [
+                    {
+                      "role": "button",
+                      "label": "Apply",
+                      "children": []
+                    },
+                    {
+                      "role": "button",
+                      "label": "Clear",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "children": [
+                    {
+                      "role": "button",
+                      "label": "Arrange",
+                      "children": []
+                    },
+                    {
+                      "role": "button",
+                      "label": "Pause physics",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "children": [
+                    {
+                      "role": "button",
+                      "label": "Apply role",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "role": "note",
+                  "id": "gs-overlay-note",
+                  "children": []
+                },
+                {
+                  "children": [
+                    {
+                      "role": "button",
+                      "label": "Apply physics",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "role": "status",
+                  "label": "Reached 14.9x",
+                  "id": "gs-speed-note",
+                  "children": []
+                },
+                {
+                  "children": [
+                    {
+                      "role": "button",
+                      "label": "Apply profile",
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "role": "region",
+              "children": [
+                {
+                  "label": "Scene and transfer",
+                  "children": []
+                },
+                {
+                  "children": [
+                    {
+                      "role": "button",
+                      "label": "Save scene",
+                      "children": []
+                    },
+                    {
+                      "role": "button",
+                      "label": "Reopen",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "children": [
+                    {
+                      "role": "button",
+                      "label": "Export",
+                      "children": []
+                    },
+                    {
+                      "role": "button",
+                      "label": "Open export",
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "label": "Graph codicil JSON",
+                  "id": "gs-codicil-data",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "role": "region",
+          "label": "Executable projection",
+          "id": "gs-projection-live",
+          "children": []
+        },
+        {
+          "role": "region",
+          "label": "Host status",
+          "children": [
+            {
+              "label": "Current state",
+              "children": []
+            },
+            {
+              "children": [
+                {
+                  "label": "Local Mere \u00b7 11 objects",
+                  "id": "gs-active-session",
+                  "children": []
+                },
+                {
+                  "label": "No object selected",
+                  "id": "gs-selection-status",
+                  "children": []
+                },
+                {
+                  "role": "status",
+                  "label": "Ready",
+                  "id": "gs-action-status",
+                  "children": []
+                },
+                {
+                  "label": "1366 by 593",
+                  "id": "gs-viewport-status",
+                  "children": []
+                },
+                {
+                  "role": "status",
+                  "label": "Speed set to 1x",
+                  "id": "gs-product-status",
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "capture_files": [
+    "physics_speed_select_bound"
+  ]
+}

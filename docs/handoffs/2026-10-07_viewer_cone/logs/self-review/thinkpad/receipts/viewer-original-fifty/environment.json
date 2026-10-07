@@ -1,0 +1,83 @@
+{
+  "machine": "thinkpad-l14-f",
+  "platform": "Linux-7.2.8-200.fc44.x86_64-x86_64-with-glibc2.43",
+  "bundle_sha256": "9be4392e28bf89d80ec5436da70ddfe3adcb9553bbbb024231ea036a454a59b2",
+  "bundle_bytes": 56551392,
+  "scenario": "p6_tree_speed_fast_control",
+  "scenario_sha256": "372ff12bd648f28be2af4fd7043319dd513607fe93ac44490d28415f18173100",
+  "query": "nodes=24&seed=7&links=none&gpu=off&physics_speed=1",
+  "load_before": [
+    0.3359375,
+    0.14453125,
+    0.142578125
+  ],
+  "unsafe_webgpu": true,
+  "cpu_samples": [
+    {
+      "seconds": 1.26,
+      "percent": 31.38
+    },
+    {
+      "seconds": 2.26,
+      "percent": 52.72
+    },
+    {
+      "seconds": 3.26,
+      "percent": 33.0
+    },
+    {
+      "seconds": 4.26,
+      "percent": 22.21
+    },
+    {
+      "seconds": 5.26,
+      "percent": 24.97
+    },
+    {
+      "seconds": 6.26,
+      "percent": 26.37
+    },
+    {
+      "seconds": 7.27,
+      "percent": 72.17
+    },
+    {
+      "seconds": 8.27,
+      "percent": 33.79
+    },
+    {
+      "seconds": 9.27,
+      "percent": 20.47
+    }
+  ],
+  "cpu_before_percent": 1.7456359102244412,
+  "command": [
+    "flatpak",
+    "run",
+    "--filesystem=/home/markik/Code/testing/mere/viewer-cone/review/receipts/viewer-original-fifty",
+    "com.google.Chrome",
+    "--user-data-dir=/home/markik/Code/testing/mere/viewer-cone/review/receipts/viewer-original-fifty/chrome-profile",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--enable-logging=stderr",
+    "--ozone-platform=wayland",
+    "--disable-features=CalculateNativeWinOcclusion",
+    "--disable-backgrounding-occluded-windows",
+    "--disable-renderer-backgrounding",
+    "--new-window",
+    "--window-size=1400,900",
+    "--enable-unsafe-webgpu",
+    "--enable-features=Vulkan",
+    "--use-angle=vulkan",
+    "http://127.0.0.1:8981/tree.html?scenario=scenarios/p6_tree_speed_fast_control.scn&sink=http://127.0.0.1:8981/scenario-receipt&nodes=24&seed=7&links=none&gpu=off&physics_speed=1"
+  ],
+  "result": "ok",
+  "page_errors": [],
+  "gate_failures": [],
+  "elapsed_seconds": 9.27,
+  "load_after": [
+    1.17431640625,
+    0.33642578125,
+    0.20556640625
+  ]
+}

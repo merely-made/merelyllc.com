@@ -1,0 +1,46 @@
+[
+  {
+    "cdp": "EXIT 0\nCDP OK: 11 of 11 shown, 11 items, each with Drag and Pin\r\n",
+    "plant": "normal",
+    "bundle": "viewer",
+    "wasm_sha256": "9be4392e28bf89d80ec5436da70ddfe3adcb9553bbbb024231ea036a454a59b2",
+    "scenario_sha256": "bc9c856e37562ae2bca7cabf5b0a3863418ae40436543248394d0d009b0da74e",
+    "accepted": true,
+    "machine": "Windows workstation",
+    "browser_launch": "Chrome, non-headless, hidden window; accessibility checks only",
+    "cdp_mode": "Accessibility.getFullAXTree, read-only"
+  },
+  {
+    "cdp": "EXIT 1\nCDP FAIL: Pin missing on \"I2P port notes\"; Pin missing on \"I2P service\"; Pin missing on \"Reference notes\"\r\n",
+    "plant": "missing_action",
+    "bundle": "viewer",
+    "wasm_sha256": "9be4392e28bf89d80ec5436da70ddfe3adcb9553bbbb024231ea036a454a59b2",
+    "scenario_sha256": "bc9c856e37562ae2bca7cabf5b0a3863418ae40436543248394d0d009b0da74e",
+    "accepted": true,
+    "machine": "Windows workstation",
+    "browser_launch": "Chrome, non-headless, hidden window; accessibility checks only",
+    "cdp_mode": "Accessibility.getFullAXTree, read-only"
+  },
+  {
+    "cdp": "EXIT 0\nCDP OK: 11 of 11 shown, 11 items, each with Drag and Pin\r\n",
+    "plant": "normal",
+    "bundle": "default",
+    "wasm_sha256": "8e69f9e21acd6bfe81683b8763501b20d570678725dd4564ba8f88818fff25d1",
+    "scenario_sha256": "bc9c856e37562ae2bca7cabf5b0a3863418ae40436543248394d0d009b0da74e",
+    "accepted": true,
+    "machine": "Windows workstation",
+    "browser_launch": "Chrome, non-headless, hidden window; accessibility checks only",
+    "cdp_mode": "Accessibility.getFullAXTree, read-only"
+  },
+  {
+    "cdp": "EXIT 1\nCDP FAIL: Pin missing on \"I2P port notes\"; Pin missing on \"I2P service\"; Pin missing on \"Reference notes\"\r\n",
+    "plant": "missing_action",
+    "bundle": "default",
+    "wasm_sha256": "8e69f9e21acd6bfe81683b8763501b20d570678725dd4564ba8f88818fff25d1",
+    "scenario_sha256": "bc9c856e37562ae2bca7cabf5b0a3863418ae40436543248394d0d009b0da74e",
+    "accepted": true,
+    "machine": "Windows workstation",
+    "browser_launch": "Chrome, non-headless, hidden window; accessibility checks only",
+    "cdp_mode": "Accessibility.getFullAXTree, read-only"
+  }
+]

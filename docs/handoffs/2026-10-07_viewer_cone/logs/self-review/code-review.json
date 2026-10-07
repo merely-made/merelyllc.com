@@ -1,0 +1,63 @@
+{
+  "candidate_commit": "7ef65d8d5a40bbdd8f872fdaa0d097c83d892f34",
+  "runtime_commit": "8175b69ee36093f1e210a6046073bbcac7c840a7",
+  "measured_checkpoint": "6963ebe539d9d469dbd848c449335baae54a840e",
+  "tested_main_baseline": "a59e4c47a2a5c2024427eeb54b689f2e4f2c345b",
+  "remote_main_observed": "d041cc69b588b6f1dadd22308c2bc4059496cabd",
+  "remote_viewer_branch": "6963ebe539d9d469dbd848c449335baae54a840e",
+  "later_paths": [
+    "design_docs/mere_docs/implementation_strategy/2026-09-02_physics_catalog_plan.md",
+    "ports/graphshell/web/scenarios/p6_tree_speed_fast.scn",
+    "ports/graphshell/web/scenarios/p6_tree_speed_fast_control.scn",
+    "ports/graphshell/web/scenarios/p6_tree_speed_fast_control_capped.scn",
+    "ports/graphshell/web/scenarios/p6_tree_speed_fast_slow_max.scn"
+  ],
+  "main_paths_since_baseline": [
+    "Cargo.lock",
+    "crates/cambium/cambium-winit-a11y/Cargo.toml",
+    "crates/cambium/cambium-winit-a11y/examples/e1b_two_sessions.rs",
+    "crates/forme/uxtree/src/graft.rs",
+    "crates/system/document-lanes/src/session.rs",
+    "crates/system/document-lanes/src/smolweb.rs",
+    "crates/system/document-lanes/src/smolweb/a11y.rs",
+    "design_docs/cambium_docs/research/2026-10-06_app_composition_brief.md"
+  ],
+  "keep_list": {
+    "constructor_before_rust_start": true,
+    "loader_page_error_gate": true,
+    "scenario_exports_without_main_page": true,
+    "tree_verbs_and_snapshots": true,
+    "view_follow_and_role_selects": true,
+    "local_actions_retained": true,
+    "meaning_job_conditional": "Type absent in current source; not removed by cone"
+  },
+  "root_lock_merge_delta": "",
+  "worker_host_resolution": "Shared module in web.rs; field/feed/start in web_main.rs; tree uses unchanged",
+  "fixture_assertions": "Unchanged from merged speed lane; only warmups and slow-Max query documentation differ",
+  "fixture_proof": [
+    {
+      "fixture": "p6_tree_speed_fast.scn",
+      "assertions": 18,
+      "assertions_unchanged": true,
+      "sha256": "5811803df71a8f212697ef6a62dc782308c0ba8c763b8dcbbf4160a0d7e785d3"
+    },
+    {
+      "fixture": "p6_tree_speed_fast_control.scn",
+      "assertions": 16,
+      "assertions_unchanged": true,
+      "sha256": "d668256fc4cc43380a5c0fde931a5ba52d63e767ad5587990eccbdeb5c6cd8af"
+    },
+    {
+      "fixture": "p6_tree_speed_fast_control_capped.scn",
+      "assertions": 9,
+      "assertions_unchanged": true,
+      "sha256": "fa449be6fc123385e1ddc94b163ee676c5a72f79ed105e835f96c00a3a95c832"
+    },
+    {
+      "fixture": "p6_tree_speed_fast_slow_max.scn",
+      "assertions": 11,
+      "assertions_unchanged": true,
+      "sha256": "6118bbb503ca60c46833849292a50a72d2d7d85c06f415163f04be85445d9d33"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "machine": "thinkpad-l14-f",
+  "platform": "Linux-7.2.8-200.fc44.x86_64-x86_64-with-glibc2.43",
+  "bundle_sha256": "9be4392e28bf89d80ec5436da70ddfe3adcb9553bbbb024231ea036a454a59b2",
+  "bundle_bytes": 56551392,
+  "scenario": "p4_tree_saved_edit",
+  "scenario_sha256": "ae1502a3123283376895ae55e745d7e20092435832648b3aa879cd02766172ed",
+  "query": "gpu=off&app=local",
+  "load_before": [
+    3.39892578125,
+    1.95166015625,
+    0.984375
+  ],
+  "unsafe_webgpu": true,
+  "cpu_samples": [
+    {
+      "seconds": 1.26,
+      "percent": 38.99
+    },
+    {
+      "seconds": 2.26,
+      "percent": 46.41
+    },
+    {
+      "seconds": 3.26,
+      "percent": 54.29
+    },
+    {
+      "seconds": 4.26,
+      "percent": 33.95
+    },
+    {
+      "seconds": 5.26,
+      "percent": 35.34
+    }
+  ],
+  "cpu_before_percent": 1.3732833957553092,
+  "command": [
+    "flatpak",
+    "run",
+    "--filesystem=/home/markik/Code/testing/mere/viewer-cone/review/receipts/viewer-saved-refused",
+    "com.google.Chrome",
+    "--user-data-dir=/home/markik/Code/testing/mere/viewer-cone/review/receipts/viewer-saved-refused/chrome-profile",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--enable-logging=stderr",
+    "--ozone-platform=wayland",
+    "--disable-features=CalculateNativeWinOcclusion",
+    "--disable-backgrounding-occluded-windows",
+    "--disable-renderer-backgrounding",
+    "--new-window",
+    "--window-size=1400,900",
+    "--enable-unsafe-webgpu",
+    "--enable-features=Vulkan",
+    "--use-angle=vulkan",
+    "http://127.0.0.1:8999/tree.html?scenario=scenarios/p4_tree_saved_edit.scn&sink=http://127.0.0.1:8999/scenario-receipt&gpu=off&app=local"
+  ],
+  "result": "fail",
+  "page_errors": [],
+  "gate_failures": [],
+  "elapsed_seconds": 5.27,
+  "load_after": [
+    3.28662109375,
+    1.95263671875,
+    0.990234375
+  ]
+}

@@ -112,21 +112,17 @@ if ($Fixture) {
     $Query = if ($Query) { "$Query&signal=http://127.0.0.1:$SignalPort" } else { "signal=http://127.0.0.1:$SignalPort" }
 }
 
-# A sink left over from an earlier run would answer the port poll below and
-# write this run's receipt into *its* directory, and this run would wait on
-# a file that never comes. Stop any such sink first, and refuse a port
-# something else holds.
-Get-CimInstance Win32_Process -Filter "Name = 'python.exe'" |
-    Where-Object { $_.CommandLine -like "*graphshell-web-sink.py*" -and $_.CommandLine -like "*--port $Port*" } |
-    ForEach-Object { Write-Warning "stopping a stale sink (pid $($_.ProcessId))"; Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
-Start-Sleep -Milliseconds 300
+# Refuse occupied ports; a matching sink may belong to another active lane.
 # Only a listener a live process owns holds the port: a stopped sink's socket
 # can linger owned by pid 0 for minutes (this lane's round two, the pre.4
 # lane's finding), and the next sink binds over it.
 $held = @(Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue |
     Where-Object { $_.OwningProcess -ne 0 -and (Get-Process -Id $_.OwningProcess -ErrorAction SilentlyContinue) })
 if ($held.Count -gt 0) {
-    throw "port $Port is already listening and is not a sink of ours"
+    throw "port $Port is already listening"
+}
+if ($Cdp -and @(Get-NetTCPConnection -LocalPort $CdpPort -State Listen -ErrorAction SilentlyContinue | Where-Object { $_.OwningProcess -ne 0 }).Count -gt 0) {
+    throw "CDP port $CdpPort is already listening"
 }
 
 $sink = Start-Process python -PassThru -WindowStyle Hidden -ArgumentList @(
@@ -147,7 +143,7 @@ try {
     # (a page holds a ~70 MB module and a WebGPU device; left open, they add
     # up). The profile persists across runs so IndexedDB reopens as in a real
     # visit. The user's own Chrome is never touched.
-    $profile = Join-Path $PSScriptRoot $ProfileName
+    $profile = if ([IO.Path]::IsPathRooted($ProfileName)) { $ProfileName } else { Join-Path $PSScriptRoot $ProfileName }
     New-Item -ItemType Directory -Force $profile | Out-Null
     $profile = (Resolve-Path $profile).Path
     # WebRtcHideLocalIpsWithMdns is Chrome's default and replaces host
@@ -164,7 +160,7 @@ try {
         "--new-window", "--window-size=1400,900")
     if ($Cdp) { $arguments += "--remote-debugging-port=$CdpPort" }
     $arguments += $url
-    $browser = Start-Process $chrome -PassThru -ArgumentList $arguments
+    $browser = Start-Process $chrome -PassThru -WindowStyle Hidden -ArgumentList $arguments
     try {
         $done = Join-Path $Out "scenario.done"
         $deadline = (Get-Date).AddSeconds($TimeoutSeconds)

@@ -1,0 +1,6 @@
+RESULT fail
+captured physics_framing_planted
+captured physics_framing_fitted
+physics framing control complete
+gpu timestamps: no
+FAIL: receipt gate: 1 uncaught page error(s), rejection(s) or panic(s)

@@ -1,0 +1,22 @@
+{
+  "source_commit": "8175b69ee36093f1e210a6046073bbcac7c840a7",
+  "web_lock_sha256": "bcab7badca9550eef419dd67f2d732a481cc95c283b080c4d44b03197e646eb5",
+  "target": "C:\\t\\cargo-targets\\mere\\seiche-speed\\web",
+  "bindgen": "wasm-bindgen 0.2.129",
+  "rows": [
+    {
+      "build": "viewer",
+      "profile": "dev, debug=0",
+      "elapsed_seconds": 177.87,
+      "bundle_sha256": "9be4392e28bf89d80ec5436da70ddfe3adcb9553bbbb024231ea036a454a59b2",
+      "bundle_bytes": 56551392
+    },
+    {
+      "build": "default",
+      "profile": "dev, debug=0",
+      "elapsed_seconds": 216.57,
+      "bundle_sha256": "8e69f9e21acd6bfe81683b8763501b20d570678725dd4564ba8f88818fff25d1",
+      "bundle_bytes": 116467761
+    }
+  ]
+}

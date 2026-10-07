@@ -1,0 +1,894 @@
+{
+  "scenario": {
+    "state": "ok",
+    "errors": [],
+    "gate_failures": [],
+    "result": {
+      "canvas_logical_size": [
+        1066,
+        498
+      ],
+      "canvas_physical_size": [
+        1066,
+        498
+      ],
+      "log": [
+        "p6 speed fast control receipt complete",
+        "timing speed-fast-control frames=6 interval_ms p50=47.000 p95=61.500 max=61.500 cpu_ms p50=46.000 p95=185.400 max=185.400 gpu_ms p50=47.959 p95=187.539 max=187.539 producer_render_us p50=27000.000 p95=39700.000 max=39700.000 producer_stage_us p50=200.000 p95=600.000 max=600.000 cull p50=0.100 p95=0.100 max=0.100 dom_frame p50=10.500 p95=18.300 max=18.300 dom_mutate p50=12.000 p95=12.800 max=12.800 dom_prepare p50=0.100 p95=0.200 max=0.200 faces p50=0.400 p95=0.600 max=0.600 lower p50=0.100 p95=0.200 max=0.200 overlays p50=0.000 p95=0.100 max=0.100 physics p50=2.300 p95=2.900 max=2.900 prepare p50=0.200 p95=0.700 max=0.700 rasterize p50=1.400 p95=2.400 max=2.400 underlay p50=0.300 p95=0.800 max=0.800",
+        "pace: speed 1 effective 0.441 bound false ticks 82 over 30 frames drawn-moved 28 stepped 28 compute-max 5000 us over-budget-max -9223372036854775808 us budget 8332 us (0.5 of a 16.67 ms display period, inferred at 1.00 from the worker; last frame 99.9 ms) margin 200 us; every window: worst none us, 0 frames past the grain",
+        "pace mark one-x: speed 1 effective 0.583",
+        "pace: speed 50 effective 4.905 bound false ticks 1003 over 30 frames drawn-moved 30 stepped 30 compute-max 3800 us over-budget-max -4533 us budget 8332 us (0.5 of a 16.66 ms display period, inferred at 1.00 from the worker; last frame 50.1 ms) margin 200 us; every window: worst -4533 us, 0 frames past the grain",
+        "pace: speed 50 effective 35.109 bound false ticks 5302 over 30 frames drawn-moved 30 stepped 30 compute-max 3400 us over-budget-max -4932 us budget 8332 us (0.5 of a 16.67 ms display period, inferred at 1.00 from the worker; last frame 50.0 ms) margin 200 us; every window: worst -4533 us, 0 frames past the grain",
+        "physics fast-control: law spring.rapier nodes 24 energy 0.4 spread 309 overlaps 0 device off device-steps 0 cpu-steps 0 submissions 0 answers 0 failures 0 waiting 0 stale 0 mismatched 0 last-age 0 layout-outside 0 layout-extent -373,-378,381,387 view-extent -1159,-539,1167,548 view-follow true",
+        "pace fast-control: speed 50 effective 32.852 (marked 0.583, ratio 56.366) budget 8332 us margin 200 us display period 16.665 ms (inferred, fitting 1.00 of the recent intervals from the worker, a 100 us clock); every window: 43 frames the gate admitted ticks in, worst -4533 us over budget (frame 1: admitted ticks ended at 3800 us of 150 ticks against a 8333 us budget), 0 past the grain; 0 floor-only frames past it; bar 14.571 (half the lesser of 50x the marked 0.583 and the 120.008 the budget fits, 500.0 ticks a frame at 16.3 us a tick)",
+        "gpu timestamps: yes"
+      ],
+      "result": "ok",
+      "saved_graph": null,
+      "timings": [
+        {
+          "counts": {
+            "paint_after_cull": {
+              "max": 101,
+              "min": 101
+            },
+            "paint_before_cull": {
+              "max": 101,
+              "min": 101
+            },
+            "physics_carried_us": {
+              "max": 289,
+              "min": 155
+            },
+            "physics_discarded_us": {
+              "max": 16700,
+              "min": 0
+            },
+            "physics_steps": {
+              "max": 150,
+              "min": 100
+            },
+            "total_nodes": {
+              "max": 24,
+              "min": 24
+            },
+            "visible_nodes": {
+              "max": 24,
+              "min": 24
+            }
+          },
+          "cpu_ms": {
+            "max": 185.4,
+            "p50": 46,
+            "p95": 185.4
+          },
+          "frames": 6,
+          "gpu_ms": {
+            "max": 187.539,
+            "p50": 47.959,
+            "p95": 187.539
+          },
+          "hidden": false,
+          "interval_ms": {
+            "max": 61.5,
+            "p50": 47,
+            "p95": 61.5
+          },
+          "label": "speed-fast-control",
+          "producer_render_us": {
+            "max": 39700,
+            "p50": 27000,
+            "p95": 39700
+          },
+          "producer_stage_us": {
+            "max": 600,
+            "p50": 200,
+            "p95": 600
+          },
+          "stages_ms": {
+            "cull": {
+              "max": 0.1,
+              "p50": 0.1,
+              "p95": 0.1
+            },
+            "dom_frame": {
+              "max": 18.3,
+              "p50": 10.5,
+              "p95": 18.3
+            },
+            "dom_mutate": {
+              "max": 12.8,
+              "p50": 12,
+              "p95": 12.8
+            },
+            "dom_prepare": {
+              "max": 0.2,
+              "p50": 0.1,
+              "p95": 0.2
+            },
+            "faces": {
+              "max": 0.6,
+              "p50": 0.4,
+              "p95": 0.6
+            },
+            "lower": {
+              "max": 0.2,
+              "p50": 0.1,
+              "p95": 0.2
+            },
+            "overlays": {
+              "max": 0.1,
+              "p50": 0,
+              "p95": 0.1
+            },
+            "physics": {
+              "max": 2.9,
+              "p50": 2.3,
+              "p95": 2.9
+            },
+            "prepare": {
+              "max": 0.7,
+              "p50": 0.2,
+              "p95": 0.7
+            },
+            "rasterize": {
+              "max": 2.4,
+              "p50": 1.4,
+              "p95": 2.4
+            },
+            "underlay": {
+              "max": 0.8,
+              "p50": 0.3,
+              "p95": 0.8
+            }
+          }
+        }
+      ]
+    },
+    "captures": []
+  },
+  "receipt": {
+    "page": "tree",
+    "semanticTree": {
+      "role": "region",
+      "label": "Graphshell, one tree",
+      "children": [
+        {
+          "role": "main",
+          "children": [
+            {
+              "role": "heading",
+              "label": "Graphshell, one tree",
+              "children": []
+            },
+            {
+              "role": "status",
+              "label": "generated, seed 7 \u00b7 24 nodes \u00b7 picked: none",
+              "children": []
+            },
+            {
+              "role": "navigation",
+              "label": "Graph controls",
+              "children": [
+                {
+                  "role": "button",
+                  "label": "Pan left",
+                  "children": []
+                },
+                {
+                  "role": "button",
+                  "label": "Pan right",
+                  "children": []
+                },
+                {
+                  "role": "button",
+                  "label": "Pan up",
+                  "children": []
+                },
+                {
+                  "role": "button",
+                  "label": "Pan down",
+                  "children": []
+                },
+                {
+                  "role": "button",
+                  "label": "Zoom in",
+                  "children": []
+                },
+                {
+                  "role": "button",
+                  "label": "Zoom out",
+                  "children": []
+                },
+                {
+                  "role": "button",
+                  "label": "Fit graph",
+                  "children": []
+                },
+                {
+                  "role": "button",
+                  "label": "Restore arrangement",
+                  "children": []
+                },
+                {
+                  "role": "button",
+                  "label": "Pause physics",
+                  "children": []
+                }
+              ]
+            },
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "role": "group",
+                      "label": "24 of 24 shown",
+                      "children": [
+                        {
+                          "role": "group",
+                          "label": "node-0.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-1.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-2.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-3.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-4.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-5.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-6.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-7.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-8.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-9.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-10.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-11.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-12.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-13.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-14.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-15.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-16.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-17.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-18.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-19.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-20.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-21.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-22.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "role": "group",
+                          "label": "node-23.generated.test",
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Drag",
+                              "description": "Drag this item; nothing returns it.",
+                              "children": []
+                            },
+                            {
+                              "role": "button",
+                              "label": "Pin",
+                              "description": "Pin this item; it stays held in place, and a drag moves where it is held.",
+                              "children": []
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Arrangement and physics",
+                              "expanded": true,
+                              "children": []
+                            },
+                            {
+                              "children": [
+                                {
+                                  "children": [
+                                    {
+                                      "role": "combobox",
+                                      "label": "Arrangement",
+                                      "expanded": false,
+                                      "children": []
+                                    }
+                                  ]
+                                },
+                                {
+                                  "role": "button",
+                                  "label": "Apply arrangement",
+                                  "children": []
+                                },
+                                {
+                                  "children": [
+                                    {
+                                      "role": "combobox",
+                                      "label": "Role",
+                                      "expanded": false,
+                                      "children": []
+                                    }
+                                  ]
+                                },
+                                {
+                                  "role": "button",
+                                  "label": "Apply role",
+                                  "children": []
+                                },
+                                {
+                                  "children": [
+                                    {
+                                      "role": "combobox",
+                                      "label": "Physics law",
+                                      "expanded": false,
+                                      "children": []
+                                    }
+                                  ]
+                                },
+                                {
+                                  "role": "group",
+                                  "label": "Overlays",
+                                  "children": [
+                                    {
+                                      "children": [
+                                        {
+                                          "role": "checkbox",
+                                          "children": []
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "children": [
+                                        {
+                                          "role": "checkbox",
+                                          "children": []
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "children": [
+                                        {
+                                          "role": "checkbox",
+                                          "children": []
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "children": [
+                                        {
+                                          "role": "checkbox",
+                                          "children": []
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "children": [
+                                        {
+                                          "role": "checkbox",
+                                          "children": []
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "children": [
+                                        {
+                                          "role": "checkbox",
+                                          "children": []
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "children": [
+                                        {
+                                          "role": "checkbox",
+                                          "children": []
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "children": [
+                                        {
+                                          "role": "checkbox",
+                                          "children": []
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "children": [
+                                    {
+                                      "role": "combobox",
+                                      "label": "Kinds",
+                                      "expanded": false,
+                                      "children": []
+                                    }
+                                  ]
+                                },
+                                {
+                                  "children": [
+                                    {
+                                      "role": "combobox",
+                                      "label": "Mass",
+                                      "expanded": false,
+                                      "children": []
+                                    }
+                                  ]
+                                },
+                                {
+                                  "children": [
+                                    {
+                                      "role": "combobox",
+                                      "label": "Depth",
+                                      "expanded": false,
+                                      "children": []
+                                    }
+                                  ]
+                                },
+                                {
+                                  "role": "button",
+                                  "label": "Apply physics",
+                                  "children": []
+                                },
+                                {
+                                  "children": [
+                                    {
+                                      "role": "combobox",
+                                      "label": "Speed",
+                                      "expanded": false,
+                                      "children": []
+                                    }
+                                  ]
+                                },
+                                {
+                                  "role": "status",
+                                  "label": "Reached 32.7x",
+                                  "children": []
+                                },
+                                {
+                                  "children": [
+                                    {
+                                      "role": "combobox",
+                                      "label": "Profile",
+                                      "expanded": false,
+                                      "children": []
+                                    }
+                                  ]
+                                },
+                                {
+                                  "role": "button",
+                                  "label": "Apply profile",
+                                  "children": []
+                                },
+                                {
+                                  "role": "status",
+                                  "label": "Speed set to 50x",
+                                  "children": []
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "role": "button",
+                              "label": "Remote session",
+                              "expanded": false,
+                              "children": []
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "title": "Graphshell, one tree",
+    "visibility": "visible",
+    "viewport": {
+      "width": 1366,
+      "height": 593
+    }
+  },
+  "capture_files": []
+}

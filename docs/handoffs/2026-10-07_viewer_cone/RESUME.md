@@ -1,11 +1,10 @@
 # Viewer cone: ThinkPad reruns, 2026-10-07
 
-The five outstanding speed rows pass on the **release** bundles at
-`6963ebe539d9d469dbd848c449335baae54a840e`. The development bundles still fail
-both fast rows. P0 remains open: development acceptance needs the conatus
-session's review. Ruling 107's approved site-size benchmark is now recorded:
-both builds pass, with approximately 60 Hz median live intervals and zero
-physics-device submissions. GPU inclusion and the payload budget await Mark.
+**Current checkpoint:** Mark asked Codex to do the review directly after the
+other sessions exhausted their capacity. See [Candidate review](#candidate-review)
+for the combined code and fresh evidence. The original `6963ebe5` measurements
+below remain historical; their four development misses are not waived. Plain
+viewer is selected under Ruling 121; the numerical payload cap remains open.
 
 ## Evidence
 
@@ -214,3 +213,121 @@ and receipts remain as evidence. The original local release bundles remain
 owned by the P0 lane. Receipt browsers and sinks are stopped. Transfer
 archives and temporary Chrome profiles are removed after receipt collection
 and ownership checks.
+
+## Candidate review
+
+Mark: "Eh, they're out of gas. Have a look yourself". Ruling 122 replaces
+the unavailable conatus review with this direct review. The cone and speed
+estimator are combined in the existing cone worktree. The bounded review passes: **36/36 current development cases, 4/4 Chrome AX
+checks and the rebuilt release's 21-node frame receipt** meet their expected
+verdicts. [`review-summary.json`](logs/self-review/review-summary.json) records
+the counts, replacement control, complete rows and remaining integration limits.
+The Max/50x runs started at 3.7-13.7% total CPU use; this does not claim an
+entirely idle machine or remove the recorded load samples.
+
+### Code and receipt findings
+
+The feature cone retains the constructor helper before other startup code,
+the loader's page-error gate, scenario exports and tree verbs, snapshots,
+view-follow, role selects and local actions. The default host remains behind
+`main-page`; standalone `product` and `remote` remain additive. The product-off
+object is uninhabited and opens as `None`; remote-off rejects the operation
+without a page error. The no-GPU lane reports zero device counts. The
+conditional keep-list item for `MeaningJob` is inactive: no such type exists
+in this candidate, and the cone did not remove one. No lexical functionality
+is newly claimed by this review.
+
+Merged the existing speed lane at `4b916a2e` into the cone in `8175b69e`. The
+only source conflict was `web.rs`: the worker module remains in the shared
+root, and its field, feed and startup calls move into `web_main.rs`. Both
+hosts retain the worker, labelled main-thread fallback and ruled cap fallback.
+The newer session seam, E1a and root Cargo lock remain unchanged. This is a
+merge into the candidate, not into main; the other lane's checkout is untouched.
+
+Two receipt defects needed correction:
+
+- The effective-speed meter keeps 32 frames across a speed change. The old
+  warmups mixed 1x and selected-speed samples. `c91f7b85` warms both phases
+  for a full meter window in four fixtures. All assertions and ruled bars are
+  unchanged. The earlier short-warmup 50x diagnostic passed, so it is not
+  presented as a failure fixed by changing the fixture.
+- With full warmup, the 500 ms slowed-Max plant still reached 2.571 times 1x.
+  It was too weak to produce the intended negative case at steady state.
+  `dd41d322` documents a 3000 ms configurable plant with the same <= 0.99
+  assertion. The failed 500 ms control remains in the evidence. The stronger
+  control passes in both builds: Max/marked-1x is 0.626 in the viewer and
+  0.639 in default. Its verdict is separate in the final summary.
+
+### Fresh validation and limits
+
+[`bundles.json`](logs/self-review/bundles.json) binds both development builds
+to runtime commit `8175b69e`, exact wasm-bindgen 0.2.129 and the locked web
+dependency graph. Later code commits only alter scenario fixtures and the
+physics plan; Rust runtime source remains unchanged. All eight wasm32 feature
+configurations pass with warnings, recorded in
+[`feature-checks.json`](logs/self-review/feature-checks.json). Focused native
+`graphshell --no-default-features --features web --lib` passes 117 tests,
+with four ignored; this does not claim the earlier full native/default suite.
+The MPL header check and its planted-defect self-test pass.
+
+Headed ThinkPad development checks cover both builds' slow, Max, 50x,
+stall/slowed-Max/cap controls, speed selects, tree reader actions and its
+missing-action control, role selects, framing/view-follow, the planted
+page-error gate and worker/default/main/failure paths. The viewer also refuses
+remote and saved edits cleanly and handles the loader's remote export without
+a page error. One browser runs at a time with the recorded hardware Vulkan
+flags. CPU samples, bundle and scenario hashes accompany each receipt. These
+are bounded current receipts; live WebRTC joins, all historical product
+scenarios, Firefox boot and a large-graph GPU crossover were not rerun.
+
+Fresh Windows checks use Chrome's computed accessibility tree, read-only,
+under the existing F68 exception. Both builds expose all 11 item groups with
+Drag and Pin; removing Pin makes both checks fail for that reason. The
+[`four-row summary`](logs/self-review/windows-ax/summary.json) and actual AX
+trees are retained. Chrome ran without headless mode in a hidden window;
+these are accessibility checks, not timing measurements. The Windows runner
+now refuses occupied ports instead of killing a matching sink, accepts
+absolute profile paths and launches its background browser hidden.
+
+The rebuilt plain release WASM is 8,844,841 raw bytes and 2,028,647 bytes
+brotli; generated JS is 14,194 bytes brotli. All six component assets total
+**2,125,171 bytes brotli**, 4,840 above the earlier checkpoint. The four static
+assets have unchanged hashes. [`release-payload.json`](logs/self-review/release-payload.json)
+records hashes and build settings. The new 21-node frame receipt passes with live interval medians
+16.6/17.1/16.6 ms and p95 23.9/21.6/17.3 ms. All nodes remain visible, the
+four timing windows are visible and viewport/canvas sizes are recorded.
+Physics-device work stays at zero. This is separate from the older plain/GPU
+pair and cannot establish a causal GPU benefit. The first new release launch
+was refused before browser startup because the preceding port's connections
+were in TIME_WAIT, with no live listener; the recorded retry uses free port
+9050. No product result is inferred from that launch refusal.
+
+The numerical cap remains for Mark. The review does not claim a deployment
+or merge into main. The tested baseline is `a59e4c47`; the shared remote-main
+ref advanced during the review to `d041cc69`, adding smolweb projection work
+and the E1b probe. Those three commits do not overlap this cone's changed
+paths, but integration against that later head remains distinct from these
+receipts. `origin/viewer-cone` and the measured tag remain at `6963ebe5`.
+
+### Resource ownership after review
+
+The existing cone worktree remains owned by P0 for integration, and the other
+lane's existing worktree is preserved. Existing Cargo caches under
+`C:/t/cargo-targets/mere/seiche-speed` (native) and its `web` child were reused
+to avoid colliding with active builds in the primary checkout's shared target.
+No Cargo home or new worktree was created. Local review bundles and four
+fresh Chrome profiles remain under
+`C:/Users/mark_/Code/testing/mere/viewer-cone/review`, owned by this review.
+Their hashes and marker were checked and no Chrome or bindgen owner remained,
+but automatic approval review rejected both the bounded computed-path cleanup
+and the explicit-path cleanup with only "blocked by policy". The retained
+paths and target ownership are recorded in
+[`cleanup-local.json`](logs/self-review/cleanup-local.json). Source fixtures,
+original measured local bundles and receipts are preserved.
+
+The ThinkPad's 39 temporary profiles, three copied `pkg` bundles and three
+transfer archives were removed after streaming the evidence locally and
+checking the marker, hashes, absolute containment and lack of live owners.
+[`cleanup-thinkpad.json`](logs/self-review/cleanup-thinkpad.json) records the
+removed paths. Source fixtures, static sources and receipts remain. Receipt
+browsers and sinks are stopped on both machines.

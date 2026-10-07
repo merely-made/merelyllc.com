@@ -1,3 +1,7 @@
+> Superseded 2026-10-07: Mark asked Codex to perform this review directly.
+> The completed review is in [RESUME.md](RESUME.md#candidate-review).
+> The request below preserves the prior candidate and review scope.
+
 # Viewer cone: review request for Conatus, physics, seiche status
 
 The resumed P0 lane is ready for your pre-main review under site canvas

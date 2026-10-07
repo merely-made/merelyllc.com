@@ -1,0 +1,71 @@
+{
+  "machine": "thinkpad-l14-f",
+  "platform": "Linux-7.2.8-200.fc44.x86_64-x86_64-with-glibc2.43",
+  "bundle_sha256": "9be4392e28bf89d80ec5436da70ddfe3adcb9553bbbb024231ea036a454a59b2",
+  "bundle_bytes": 56551392,
+  "scenario": "p4_tree_canvas_reader",
+  "scenario_sha256": "153fd81bbcf9433f37c3069a080062ec92bc6ea28ca7cc759cb33e12bd8c934e",
+  "query": "gpu=off&signal=ws://127.0.0.1:8999",
+  "load_before": [
+    3.28662109375,
+    1.95263671875,
+    0.990234375
+  ],
+  "unsafe_webgpu": true,
+  "cpu_samples": [
+    {
+      "seconds": 1.26,
+      "percent": 41.83
+    },
+    {
+      "seconds": 2.26,
+      "percent": 62.52
+    },
+    {
+      "seconds": 3.26,
+      "percent": 40.02
+    },
+    {
+      "seconds": 4.26,
+      "percent": 26.02
+    },
+    {
+      "seconds": 5.27,
+      "percent": 25.37
+    },
+    {
+      "seconds": 6.27,
+      "percent": 33.5
+    }
+  ],
+  "cpu_before_percent": 2.244389027431426,
+  "command": [
+    "flatpak",
+    "run",
+    "--filesystem=/home/markik/Code/testing/mere/viewer-cone/review/receipts/viewer-remote-export",
+    "com.google.Chrome",
+    "--user-data-dir=/home/markik/Code/testing/mere/viewer-cone/review/receipts/viewer-remote-export/chrome-profile",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--enable-logging=stderr",
+    "--ozone-platform=wayland",
+    "--disable-features=CalculateNativeWinOcclusion",
+    "--disable-backgrounding-occluded-windows",
+    "--disable-renderer-backgrounding",
+    "--new-window",
+    "--window-size=1400,900",
+    "--enable-unsafe-webgpu",
+    "--enable-features=Vulkan",
+    "--use-angle=vulkan",
+    "http://127.0.0.1:9000/tree.html?scenario=scenarios/p4_tree_canvas_reader.scn&sink=http://127.0.0.1:9000/scenario-receipt&gpu=off&signal=ws://127.0.0.1:8999"
+  ],
+  "result": "ok",
+  "page_errors": [],
+  "gate_failures": [],
+  "elapsed_seconds": 6.28,
+  "load_after": [
+    3.17529296875,
+    1.97119140625,
+    1.00732421875
+  ]
+}

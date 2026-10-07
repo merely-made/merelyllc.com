@@ -1,10 +1,12 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-120 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
-The payload budget waits on P0's viewer-cone measurement (Ruling 26). Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
-Implementation and measurements are recorded in Progress below; the viewer
-cone remains on its own branch pending review and integration.
+**Status:** assessment complete; Action under way. Rulings 1-122 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+P0's viewer measurements and direct candidate review are complete. The
+numerical payload cap and integration against latest main remain open. Plain
+viewer is selected (Ruling 121); the six rebuilt assets total 2,125,171 B
+brotli. See Progress and the handoff's candidate review before continuing
+Assemble (Ruling 22).
 
 ## Purpose
 
@@ -1236,6 +1238,15 @@ The numerical payload cap remains for Mark to choose. This does not waive
 the conatus review or the current speed lane's integration and acceptance
 requirements.
 
+### Ruling 122 (2026-10-07): direct review of the combined candidate
+
+Mark: "Eh, they're out of gas. Have a look yourself". Codex performs the
+pre-main review directly instead of waiting for the unavailable conatus
+session. Carry the speed estimator into the cone, preserve the keep-list and
+newer main work, and validate the combined candidate against the ruled bars.
+This changes the reviewer; it does not change those bars or set a payload cap.
+The result is recorded in the [candidate review](handoffs/2026-10-07_viewer_cone/RESUME.md#candidate-review).
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
@@ -2270,3 +2281,33 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     conflicts; its worker's host uses must move into `web_main.rs` while
     keeping the module shared. Combined acceptance and pre-main review remain.
   - Remote branch stays at the measured commit; no push or main merge.
+
+- 2026-10-07: Mark asked Codex to perform the review directly (Ruling 122).
+  The existing cone candidate now merges `seiche-speed-estimator` at
+  `4b916a2e`; the shared worker module and both hosts are retained. The
+  worker's three reference-host uses move into `web_main.rs`, preserving the
+  newer session seam/E1a and root lock. The other lane's checkout is untouched.
+  - Fixed two receipt issues: four fixtures now warm both speed phases for
+    the meter's full 32-frame window; the slowed-Max control uses a 3000 ms
+    configured plant after 500 ms still reached 2.571 times 1x at steady state.
+    Every assertion and ruled bar is unchanged. The earlier misses and weak
+    control are retained, with the fresh verdict in the handoff review.
+  - All 36 current development headed cases meet their expected verdicts,
+    including the 3000 ms controls in both builds. The fresh release
+    21-node receipt passes with live medians 16.6/17.1/16.6 ms; four Chrome
+    AX checks pass, counting the deliberately missing-Pin failures.
+  - Fresh development viewer/default builds, all eight feature configurations
+    (with warnings), 117 focused native tests and the MPL gate/self-test pass.
+    Headed ThinkPad coverage includes current speed bars and controls, roles,
+    framing, page errors, worker/fallback and clean viewer refusals. Four fresh
+    Windows Chrome AX checks cover both normal trees and deliberately missing
+    Pin actions. Full historical/native/GPU/live-peer coverage remains separate.
+  - Rebuilt plain release: 2,028,647 B brotli WASM, 14,194 B generated JS;
+    six component assets total 2,125,171 B, up 4,840 B from the old checkpoint.
+    No numerical cap is assumed. Source hashes, final headed counts and the
+    new 21-node frame result are in the
+    [candidate review](handoffs/2026-10-07_viewer_cone/RESUME.md#candidate-review).
+  - The tested baseline is `a59e4c47`; the remote main ref advanced to
+    `d041cc69` during this review. Its smolweb/E1b changes do not overlap the
+    candidate's changed paths. Main integration against that later head
+    remains separate. Remote viewer branch and measured tag stay at `6963ebe5`.

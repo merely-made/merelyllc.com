@@ -1,0 +1,23 @@
+{
+  "source_commit": "8175b69ee36093f1e210a6046073bbcac7c840a7",
+  "command": [
+    "cargo",
+    "test",
+    "--locked",
+    "--offline",
+    "-p",
+    "graphshell",
+    "--no-default-features",
+    "--features",
+    "web",
+    "--lib",
+    "-j",
+    "2"
+  ],
+  "target": "C:\\t\\cargo-targets\\mere\\seiche-speed",
+  "exit_code": 0,
+  "elapsed_seconds": 309.88,
+  "passed": 117,
+  "failed": 0,
+  "ignored": 4
+}

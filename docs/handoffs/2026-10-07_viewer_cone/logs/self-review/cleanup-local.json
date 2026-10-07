@@ -1,0 +1,26 @@
+{
+  "owner": "viewer-cone self review",
+  "local_root": "C:\\Users\\mark_\\Code\\testing\\mere\\viewer-cone\\review",
+  "marker": "generated-bundles.json",
+  "hashes_verified": true,
+  "active_chrome_or_bindgen_owner": false,
+  "cleanup_status": "Rejected twice by automatic approval review: blocked by policy; no further reason supplied",
+  "retained": [
+    "viewer/pkg",
+    "default/pkg",
+    "viewer-release/pkg",
+    "chrome-viewer-normal",
+    "chrome-viewer-missing_action",
+    "chrome-default-normal",
+    "chrome-default-missing_action",
+    "viewer-transfer.tar.gz",
+    "review-fixtures.tar.gz",
+    "release-transfer.tar.gz"
+  ],
+  "existing_targets": [
+    "C:\\t\\cargo-targets\\mere\\seiche-speed",
+    "C:\\t\\cargo-targets\\mere\\seiche-speed\\web"
+  ],
+  "target_reason": "Reused existing lane caches while primary target has active concurrent builds; kept for integration",
+  "retained_bytecode": "C:\\Users\\mark_\\Code\\repos\\mer3ly\\docs\\handoffs\\2026-10-07_viewer_cone\\harness\\__pycache__\\run-linux-review-batch.cpython-311.pyc"
+}

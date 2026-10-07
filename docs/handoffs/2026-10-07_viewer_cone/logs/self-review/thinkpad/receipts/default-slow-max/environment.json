@@ -1,0 +1,1107 @@
+{
+  "machine": "thinkpad-l14-f",
+  "platform": "Linux-7.2.8-200.fc44.x86_64-x86_64-with-glibc2.43",
+  "bundle_sha256": "8e69f9e21acd6bfe81683b8763501b20d570678725dd4564ba8f88818fff25d1",
+  "bundle_bytes": 116467761,
+  "scenario": "p6_tree_speed_fast_slow_max",
+  "scenario_sha256": "6118bbb503ca60c46833849292a50a72d2d7d85c06f415163f04be85445d9d33",
+  "query": "nodes=300&seed=7&links=none&gpu=off&physics_speed=1&physics_plant_max_frame_ms=3000",
+  "load_before": [
+    1.49462890625,
+    0.90283203125,
+    0.78369140625
+  ],
+  "unsafe_webgpu": true,
+  "cpu_samples": [
+    {
+      "seconds": 1.26,
+      "percent": 39.5
+    },
+    {
+      "seconds": 2.26,
+      "percent": 50.68
+    },
+    {
+      "seconds": 3.26,
+      "percent": 44.26
+    },
+    {
+      "seconds": 4.26,
+      "percent": 31.73
+    },
+    {
+      "seconds": 5.26,
+      "percent": 26.43
+    },
+    {
+      "seconds": 6.27,
+      "percent": 22.89
+    },
+    {
+      "seconds": 7.27,
+      "percent": 63.65
+    },
+    {
+      "seconds": 8.27,
+      "percent": 22.19
+    },
+    {
+      "seconds": 9.27,
+      "percent": 19.28
+    },
+    {
+      "seconds": 10.27,
+      "percent": 18.51
+    },
+    {
+      "seconds": 11.27,
+      "percent": 22.42
+    },
+    {
+      "seconds": 12.27,
+      "percent": 19.16
+    },
+    {
+      "seconds": 13.27,
+      "percent": 23.79
+    },
+    {
+      "seconds": 14.27,
+      "percent": 44.98
+    },
+    {
+      "seconds": 15.27,
+      "percent": 29.14
+    },
+    {
+      "seconds": 16.27,
+      "percent": 33.29
+    },
+    {
+      "seconds": 17.27,
+      "percent": 17.56
+    },
+    {
+      "seconds": 18.27,
+      "percent": 14.91
+    },
+    {
+      "seconds": 19.27,
+      "percent": 26.37
+    },
+    {
+      "seconds": 20.27,
+      "percent": 15.34
+    },
+    {
+      "seconds": 21.27,
+      "percent": 17.19
+    },
+    {
+      "seconds": 22.27,
+      "percent": 22.4
+    },
+    {
+      "seconds": 23.27,
+      "percent": 14.98
+    },
+    {
+      "seconds": 24.27,
+      "percent": 12.98
+    },
+    {
+      "seconds": 25.27,
+      "percent": 14.21
+    },
+    {
+      "seconds": 26.27,
+      "percent": 16.5
+    },
+    {
+      "seconds": 27.27,
+      "percent": 14.98
+    },
+    {
+      "seconds": 28.27,
+      "percent": 24.78
+    },
+    {
+      "seconds": 29.28,
+      "percent": 13.45
+    },
+    {
+      "seconds": 30.28,
+      "percent": 14.46
+    },
+    {
+      "seconds": 31.28,
+      "percent": 14.59
+    },
+    {
+      "seconds": 32.28,
+      "percent": 21.97
+    },
+    {
+      "seconds": 33.28,
+      "percent": 16.85
+    },
+    {
+      "seconds": 34.28,
+      "percent": 12.88
+    },
+    {
+      "seconds": 35.28,
+      "percent": 13.81
+    },
+    {
+      "seconds": 36.28,
+      "percent": 16.13
+    },
+    {
+      "seconds": 37.28,
+      "percent": 14.59
+    },
+    {
+      "seconds": 38.28,
+      "percent": 12.89
+    },
+    {
+      "seconds": 39.28,
+      "percent": 13.81
+    },
+    {
+      "seconds": 40.28,
+      "percent": 13.48
+    },
+    {
+      "seconds": 41.28,
+      "percent": 14.59
+    },
+    {
+      "seconds": 42.28,
+      "percent": 16.31
+    },
+    {
+      "seconds": 43.28,
+      "percent": 14.32
+    },
+    {
+      "seconds": 44.28,
+      "percent": 13.11
+    },
+    {
+      "seconds": 45.28,
+      "percent": 12.98
+    },
+    {
+      "seconds": 46.28,
+      "percent": 13.48
+    },
+    {
+      "seconds": 47.28,
+      "percent": 15.75
+    },
+    {
+      "seconds": 48.28,
+      "percent": 13.22
+    },
+    {
+      "seconds": 49.28,
+      "percent": 14.11
+    },
+    {
+      "seconds": 50.28,
+      "percent": 13.22
+    },
+    {
+      "seconds": 51.28,
+      "percent": 13.34
+    },
+    {
+      "seconds": 52.28,
+      "percent": 13.23
+    },
+    {
+      "seconds": 53.29,
+      "percent": 13.61
+    },
+    {
+      "seconds": 54.29,
+      "percent": 14.0
+    },
+    {
+      "seconds": 55.29,
+      "percent": 13.48
+    },
+    {
+      "seconds": 56.29,
+      "percent": 15.19
+    },
+    {
+      "seconds": 57.29,
+      "percent": 13.2
+    },
+    {
+      "seconds": 58.29,
+      "percent": 25.31
+    },
+    {
+      "seconds": 59.29,
+      "percent": 13.59
+    },
+    {
+      "seconds": 60.29,
+      "percent": 13.33
+    },
+    {
+      "seconds": 61.29,
+      "percent": 13.25
+    },
+    {
+      "seconds": 62.29,
+      "percent": 32.75
+    },
+    {
+      "seconds": 63.29,
+      "percent": 29.4
+    },
+    {
+      "seconds": 64.29,
+      "percent": 20.82
+    },
+    {
+      "seconds": 65.29,
+      "percent": 21.22
+    },
+    {
+      "seconds": 66.29,
+      "percent": 19.55
+    },
+    {
+      "seconds": 67.29,
+      "percent": 13.45
+    },
+    {
+      "seconds": 68.29,
+      "percent": 17.27
+    },
+    {
+      "seconds": 69.29,
+      "percent": 19.23
+    },
+    {
+      "seconds": 70.29,
+      "percent": 13.02
+    },
+    {
+      "seconds": 71.29,
+      "percent": 20.97
+    },
+    {
+      "seconds": 72.29,
+      "percent": 18.08
+    },
+    {
+      "seconds": 73.29,
+      "percent": 15.05
+    },
+    {
+      "seconds": 74.29,
+      "percent": 16.96
+    },
+    {
+      "seconds": 75.3,
+      "percent": 23.01
+    },
+    {
+      "seconds": 76.3,
+      "percent": 18.06
+    },
+    {
+      "seconds": 77.3,
+      "percent": 16.75
+    },
+    {
+      "seconds": 78.3,
+      "percent": 13.57
+    },
+    {
+      "seconds": 79.3,
+      "percent": 23.92
+    },
+    {
+      "seconds": 80.3,
+      "percent": 13.72
+    },
+    {
+      "seconds": 81.3,
+      "percent": 13.36
+    },
+    {
+      "seconds": 82.3,
+      "percent": 15.34
+    },
+    {
+      "seconds": 83.3,
+      "percent": 13.38
+    },
+    {
+      "seconds": 84.3,
+      "percent": 13.33
+    },
+    {
+      "seconds": 85.3,
+      "percent": 13.97
+    },
+    {
+      "seconds": 86.3,
+      "percent": 14.07
+    },
+    {
+      "seconds": 87.3,
+      "percent": 23.01
+    },
+    {
+      "seconds": 88.3,
+      "percent": 13.61
+    },
+    {
+      "seconds": 89.3,
+      "percent": 15.23
+    },
+    {
+      "seconds": 90.3,
+      "percent": 12.78
+    },
+    {
+      "seconds": 91.3,
+      "percent": 13.97
+    },
+    {
+      "seconds": 92.3,
+      "percent": 13.47
+    },
+    {
+      "seconds": 93.3,
+      "percent": 13.33
+    },
+    {
+      "seconds": 94.3,
+      "percent": 12.98
+    },
+    {
+      "seconds": 95.3,
+      "percent": 14.86
+    },
+    {
+      "seconds": 96.3,
+      "percent": 13.48
+    },
+    {
+      "seconds": 97.3,
+      "percent": 13.0
+    },
+    {
+      "seconds": 98.3,
+      "percent": 14.07
+    },
+    {
+      "seconds": 99.31,
+      "percent": 13.34
+    },
+    {
+      "seconds": 100.31,
+      "percent": 13.2
+    },
+    {
+      "seconds": 101.31,
+      "percent": 25.65
+    },
+    {
+      "seconds": 102.31,
+      "percent": 15.94
+    },
+    {
+      "seconds": 103.31,
+      "percent": 14.43
+    },
+    {
+      "seconds": 104.31,
+      "percent": 13.14
+    },
+    {
+      "seconds": 105.31,
+      "percent": 13.47
+    },
+    {
+      "seconds": 106.31,
+      "percent": 13.34
+    },
+    {
+      "seconds": 107.31,
+      "percent": 14.68
+    },
+    {
+      "seconds": 108.31,
+      "percent": 18.13
+    },
+    {
+      "seconds": 109.31,
+      "percent": 13.45
+    },
+    {
+      "seconds": 110.31,
+      "percent": 13.61
+    },
+    {
+      "seconds": 111.31,
+      "percent": 14.07
+    },
+    {
+      "seconds": 112.31,
+      "percent": 13.11
+    },
+    {
+      "seconds": 113.31,
+      "percent": 13.22
+    },
+    {
+      "seconds": 114.31,
+      "percent": 13.43
+    },
+    {
+      "seconds": 115.31,
+      "percent": 15.94
+    },
+    {
+      "seconds": 116.31,
+      "percent": 12.89
+    },
+    {
+      "seconds": 117.31,
+      "percent": 16.67
+    },
+    {
+      "seconds": 118.31,
+      "percent": 26.34
+    },
+    {
+      "seconds": 119.31,
+      "percent": 13.08
+    },
+    {
+      "seconds": 120.31,
+      "percent": 13.22
+    },
+    {
+      "seconds": 121.32,
+      "percent": 14.52
+    },
+    {
+      "seconds": 122.32,
+      "percent": 18.45
+    },
+    {
+      "seconds": 123.32,
+      "percent": 18.13
+    },
+    {
+      "seconds": 124.32,
+      "percent": 13.38
+    },
+    {
+      "seconds": 125.32,
+      "percent": 14.94
+    },
+    {
+      "seconds": 126.32,
+      "percent": 15.57
+    },
+    {
+      "seconds": 127.32,
+      "percent": 13.34
+    },
+    {
+      "seconds": 128.32,
+      "percent": 15.53
+    },
+    {
+      "seconds": 129.32,
+      "percent": 13.7
+    },
+    {
+      "seconds": 130.32,
+      "percent": 16.58
+    },
+    {
+      "seconds": 131.32,
+      "percent": 13.59
+    },
+    {
+      "seconds": 132.32,
+      "percent": 14.0
+    },
+    {
+      "seconds": 133.32,
+      "percent": 14.71
+    },
+    {
+      "seconds": 134.32,
+      "percent": 14.23
+    },
+    {
+      "seconds": 135.32,
+      "percent": 13.82
+    },
+    {
+      "seconds": 136.32,
+      "percent": 15.36
+    },
+    {
+      "seconds": 137.32,
+      "percent": 14.09
+    },
+    {
+      "seconds": 138.32,
+      "percent": 13.61
+    },
+    {
+      "seconds": 139.32,
+      "percent": 22.61
+    },
+    {
+      "seconds": 140.32,
+      "percent": 13.68
+    },
+    {
+      "seconds": 141.32,
+      "percent": 17.31
+    },
+    {
+      "seconds": 142.32,
+      "percent": 14.11
+    },
+    {
+      "seconds": 143.32,
+      "percent": 13.0
+    },
+    {
+      "seconds": 144.33,
+      "percent": 14.8
+    },
+    {
+      "seconds": 145.33,
+      "percent": 13.0
+    },
+    {
+      "seconds": 146.33,
+      "percent": 13.02
+    },
+    {
+      "seconds": 147.33,
+      "percent": 23.88
+    },
+    {
+      "seconds": 148.33,
+      "percent": 14.48
+    },
+    {
+      "seconds": 149.33,
+      "percent": 13.45
+    },
+    {
+      "seconds": 150.33,
+      "percent": 13.0
+    },
+    {
+      "seconds": 151.33,
+      "percent": 14.71
+    },
+    {
+      "seconds": 152.33,
+      "percent": 13.57
+    },
+    {
+      "seconds": 153.33,
+      "percent": 13.25
+    },
+    {
+      "seconds": 154.33,
+      "percent": 15.32
+    },
+    {
+      "seconds": 155.33,
+      "percent": 13.72
+    },
+    {
+      "seconds": 156.33,
+      "percent": 13.84
+    },
+    {
+      "seconds": 157.33,
+      "percent": 13.5
+    },
+    {
+      "seconds": 158.33,
+      "percent": 13.18
+    },
+    {
+      "seconds": 159.33,
+      "percent": 12.89
+    },
+    {
+      "seconds": 160.33,
+      "percent": 13.31
+    },
+    {
+      "seconds": 161.33,
+      "percent": 15.09
+    },
+    {
+      "seconds": 162.33,
+      "percent": 13.12
+    },
+    {
+      "seconds": 163.33,
+      "percent": 13.2
+    },
+    {
+      "seconds": 164.33,
+      "percent": 14.8
+    },
+    {
+      "seconds": 165.33,
+      "percent": 13.59
+    },
+    {
+      "seconds": 166.33,
+      "percent": 13.11
+    },
+    {
+      "seconds": 167.34,
+      "percent": 16.71
+    },
+    {
+      "seconds": 168.34,
+      "percent": 12.98
+    },
+    {
+      "seconds": 169.34,
+      "percent": 13.33
+    },
+    {
+      "seconds": 170.34,
+      "percent": 13.72
+    },
+    {
+      "seconds": 171.34,
+      "percent": 13.97
+    },
+    {
+      "seconds": 172.34,
+      "percent": 13.25
+    },
+    {
+      "seconds": 173.34,
+      "percent": 13.33
+    },
+    {
+      "seconds": 174.34,
+      "percent": 14.77
+    },
+    {
+      "seconds": 175.34,
+      "percent": 13.97
+    },
+    {
+      "seconds": 176.34,
+      "percent": 13.09
+    },
+    {
+      "seconds": 177.34,
+      "percent": 13.86
+    },
+    {
+      "seconds": 178.34,
+      "percent": 13.45
+    },
+    {
+      "seconds": 179.34,
+      "percent": 25.62
+    },
+    {
+      "seconds": 180.34,
+      "percent": 15.42
+    },
+    {
+      "seconds": 181.34,
+      "percent": 16.37
+    },
+    {
+      "seconds": 182.34,
+      "percent": 13.0
+    },
+    {
+      "seconds": 183.34,
+      "percent": 17.06
+    },
+    {
+      "seconds": 184.34,
+      "percent": 21.3
+    },
+    {
+      "seconds": 185.34,
+      "percent": 15.14
+    },
+    {
+      "seconds": 186.34,
+      "percent": 15.38
+    },
+    {
+      "seconds": 187.34,
+      "percent": 14.23
+    },
+    {
+      "seconds": 188.35,
+      "percent": 13.0
+    },
+    {
+      "seconds": 189.35,
+      "percent": 14.32
+    },
+    {
+      "seconds": 190.35,
+      "percent": 13.95
+    },
+    {
+      "seconds": 191.35,
+      "percent": 14.84
+    },
+    {
+      "seconds": 192.35,
+      "percent": 13.12
+    },
+    {
+      "seconds": 193.35,
+      "percent": 14.94
+    },
+    {
+      "seconds": 194.35,
+      "percent": 13.12
+    },
+    {
+      "seconds": 195.35,
+      "percent": 14.59
+    },
+    {
+      "seconds": 196.35,
+      "percent": 13.7
+    },
+    {
+      "seconds": 197.35,
+      "percent": 14.36
+    },
+    {
+      "seconds": 198.35,
+      "percent": 13.22
+    },
+    {
+      "seconds": 199.35,
+      "percent": 21.78
+    },
+    {
+      "seconds": 200.35,
+      "percent": 15.59
+    },
+    {
+      "seconds": 201.35,
+      "percent": 13.77
+    },
+    {
+      "seconds": 202.35,
+      "percent": 13.45
+    },
+    {
+      "seconds": 203.35,
+      "percent": 13.7
+    },
+    {
+      "seconds": 204.35,
+      "percent": 13.11
+    },
+    {
+      "seconds": 205.35,
+      "percent": 13.11
+    },
+    {
+      "seconds": 206.35,
+      "percent": 13.77
+    },
+    {
+      "seconds": 207.35,
+      "percent": 23.44
+    },
+    {
+      "seconds": 208.35,
+      "percent": 14.36
+    },
+    {
+      "seconds": 209.35,
+      "percent": 13.12
+    },
+    {
+      "seconds": 210.35,
+      "percent": 13.59
+    },
+    {
+      "seconds": 211.36,
+      "percent": 13.22
+    },
+    {
+      "seconds": 212.36,
+      "percent": 15.07
+    },
+    {
+      "seconds": 213.36,
+      "percent": 14.36
+    },
+    {
+      "seconds": 214.36,
+      "percent": 13.09
+    },
+    {
+      "seconds": 215.36,
+      "percent": 13.52
+    },
+    {
+      "seconds": 216.36,
+      "percent": 14.23
+    },
+    {
+      "seconds": 217.36,
+      "percent": 13.25
+    },
+    {
+      "seconds": 218.36,
+      "percent": 22.7
+    },
+    {
+      "seconds": 219.36,
+      "percent": 19.83
+    },
+    {
+      "seconds": 220.36,
+      "percent": 14.2
+    },
+    {
+      "seconds": 221.36,
+      "percent": 13.39
+    },
+    {
+      "seconds": 222.36,
+      "percent": 13.31
+    },
+    {
+      "seconds": 223.36,
+      "percent": 13.47
+    },
+    {
+      "seconds": 224.36,
+      "percent": 13.02
+    },
+    {
+      "seconds": 225.36,
+      "percent": 13.09
+    },
+    {
+      "seconds": 226.36,
+      "percent": 14.66
+    },
+    {
+      "seconds": 227.36,
+      "percent": 13.98
+    },
+    {
+      "seconds": 228.36,
+      "percent": 13.34
+    },
+    {
+      "seconds": 229.36,
+      "percent": 13.72
+    },
+    {
+      "seconds": 230.36,
+      "percent": 12.89
+    },
+    {
+      "seconds": 231.36,
+      "percent": 13.82
+    },
+    {
+      "seconds": 232.36,
+      "percent": 13.11
+    },
+    {
+      "seconds": 233.37,
+      "percent": 15.21
+    },
+    {
+      "seconds": 234.37,
+      "percent": 13.09
+    },
+    {
+      "seconds": 235.37,
+      "percent": 13.22
+    },
+    {
+      "seconds": 236.37,
+      "percent": 17.81
+    },
+    {
+      "seconds": 237.37,
+      "percent": 15.25
+    },
+    {
+      "seconds": 238.37,
+      "percent": 23.16
+    },
+    {
+      "seconds": 239.37,
+      "percent": 14.71
+    },
+    {
+      "seconds": 240.37,
+      "percent": 13.34
+    },
+    {
+      "seconds": 241.37,
+      "percent": 13.11
+    },
+    {
+      "seconds": 242.37,
+      "percent": 22.85
+    },
+    {
+      "seconds": 243.37,
+      "percent": 15.32
+    },
+    {
+      "seconds": 244.37,
+      "percent": 12.98
+    },
+    {
+      "seconds": 245.37,
+      "percent": 14.59
+    },
+    {
+      "seconds": 246.37,
+      "percent": 17.68
+    },
+    {
+      "seconds": 247.37,
+      "percent": 13.33
+    },
+    {
+      "seconds": 248.37,
+      "percent": 12.98
+    },
+    {
+      "seconds": 249.37,
+      "percent": 14.57
+    },
+    {
+      "seconds": 250.37,
+      "percent": 13.23
+    },
+    {
+      "seconds": 251.37,
+      "percent": 12.98
+    },
+    {
+      "seconds": 252.37,
+      "percent": 14.23
+    },
+    {
+      "seconds": 253.37,
+      "percent": 13.82
+    },
+    {
+      "seconds": 254.37,
+      "percent": 13.22
+    },
+    {
+      "seconds": 255.37,
+      "percent": 13.57
+    },
+    {
+      "seconds": 256.38,
+      "percent": 13.91
+    },
+    {
+      "seconds": 257.38,
+      "percent": 14.11
+    },
+    {
+      "seconds": 258.38,
+      "percent": 12.88
+    },
+    {
+      "seconds": 259.38,
+      "percent": 23.73
+    },
+    {
+      "seconds": 260.38,
+      "percent": 15.46
+    },
+    {
+      "seconds": 261.38,
+      "percent": 13.56
+    },
+    {
+      "seconds": 262.38,
+      "percent": 13.25
+    },
+    {
+      "seconds": 263.38,
+      "percent": 13.11
+    },
+    {
+      "seconds": 264.38,
+      "percent": 13.56
+    },
+    {
+      "seconds": 265.38,
+      "percent": 14.5
+    }
+  ],
+  "cpu_before_percent": 0.995024875621886,
+  "command": [
+    "flatpak",
+    "run",
+    "--filesystem=/home/markik/Code/testing/mere/viewer-cone/review/receipts/default-slow-max",
+    "com.google.Chrome",
+    "--user-data-dir=/home/markik/Code/testing/mere/viewer-cone/review/receipts/default-slow-max/chrome-profile",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--enable-logging=stderr",
+    "--ozone-platform=wayland",
+    "--disable-features=CalculateNativeWinOcclusion",
+    "--disable-backgrounding-occluded-windows",
+    "--disable-renderer-backgrounding",
+    "--new-window",
+    "--window-size=1400,900",
+    "--enable-unsafe-webgpu",
+    "--enable-features=Vulkan",
+    "--use-angle=vulkan",
+    "http://127.0.0.1:8986/tree.html?scenario=scenarios/p6_tree_speed_fast_slow_max.scn&sink=http://127.0.0.1:8986/scenario-receipt&nodes=300&seed=7&links=none&gpu=off&physics_speed=1&physics_plant_max_frame_ms=3000"
+  ],
+  "result": "ok",
+  "page_errors": [],
+  "gate_failures": [],
+  "elapsed_seconds": 265.39,
+  "load_after": [
+    1.24072265625,
+    1.21337890625,
+    0.97216796875
+  ]
+}

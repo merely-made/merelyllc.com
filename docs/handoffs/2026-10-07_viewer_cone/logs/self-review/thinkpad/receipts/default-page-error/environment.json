@@ -1,0 +1,115 @@
+{
+  "machine": "thinkpad-l14-f",
+  "platform": "Linux-7.2.8-200.fc44.x86_64-x86_64-with-glibc2.43",
+  "bundle_sha256": "8e69f9e21acd6bfe81683b8763501b20d570678725dd4564ba8f88818fff25d1",
+  "bundle_bytes": 116467761,
+  "scenario": "p4_tree_physics_framing_control",
+  "scenario_sha256": "8466a1bf0f8ce4d9f687f4887ffa168159321100a988472d7a9899c5ffdc355f",
+  "query": "gpu=off&plant_page_error=throw",
+  "load_before": [
+    3.0703125,
+    2.51611328125,
+    1.583984375
+  ],
+  "unsafe_webgpu": true,
+  "cpu_samples": [
+    {
+      "seconds": 1.26,
+      "percent": 38.65
+    },
+    {
+      "seconds": 2.26,
+      "percent": 51.29
+    },
+    {
+      "seconds": 3.26,
+      "percent": 35.73
+    },
+    {
+      "seconds": 4.26,
+      "percent": 23.2
+    },
+    {
+      "seconds": 5.26,
+      "percent": 23.33
+    },
+    {
+      "seconds": 6.26,
+      "percent": 24.01
+    },
+    {
+      "seconds": 7.26,
+      "percent": 67.54
+    },
+    {
+      "seconds": 8.27,
+      "percent": 35.19
+    },
+    {
+      "seconds": 9.27,
+      "percent": 25.19
+    },
+    {
+      "seconds": 10.27,
+      "percent": 22.8
+    },
+    {
+      "seconds": 11.27,
+      "percent": 28.66
+    },
+    {
+      "seconds": 12.27,
+      "percent": 26.54
+    },
+    {
+      "seconds": 13.27,
+      "percent": 33.09
+    },
+    {
+      "seconds": 14.27,
+      "percent": 52.29
+    },
+    {
+      "seconds": 15.27,
+      "percent": 46.49
+    },
+    {
+      "seconds": 16.27,
+      "percent": 45.8
+    }
+  ],
+  "cpu_before_percent": 1.995012468827928,
+  "command": [
+    "flatpak",
+    "run",
+    "--filesystem=/home/markik/Code/testing/mere/viewer-cone/review/receipts/default-page-error",
+    "com.google.Chrome",
+    "--user-data-dir=/home/markik/Code/testing/mere/viewer-cone/review/receipts/default-page-error/chrome-profile",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--enable-logging=stderr",
+    "--ozone-platform=wayland",
+    "--disable-features=CalculateNativeWinOcclusion",
+    "--disable-backgrounding-occluded-windows",
+    "--disable-renderer-backgrounding",
+    "--new-window",
+    "--window-size=1400,900",
+    "--enable-unsafe-webgpu",
+    "--enable-features=Vulkan",
+    "--use-angle=vulkan",
+    "http://127.0.0.1:8994/tree.html?scenario=scenarios/p4_tree_physics_framing_control.scn&sink=http://127.0.0.1:8994/scenario-receipt&gpu=off&plant_page_error=throw"
+  ],
+  "result": "fail",
+  "page_errors": [
+    "Uncaught Error: receipt-gate-control: planted page error"
+  ],
+  "gate_failures": [
+    "uncaught: Uncaught Error: receipt-gate-control: planted page error"
+  ],
+  "elapsed_seconds": 16.27,
+  "load_after": [
+    3.1474609375,
+    2.5576171875,
+    1.6123046875
+  ]
+}

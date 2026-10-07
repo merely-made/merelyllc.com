@@ -1,0 +1,3 @@
+serving /home/markik/Code/testing/mere/viewer-cone/review/viewer on http://127.0.0.1:8997, receipts to /home/markik/Code/testing/mere/viewer-cone/review/receipts/viewer-worker-failed
+127.0.0.1 - "POST /scenario-receipt HTTP/1.1" 204 -
+receipt written to /home/markik/Code/testing/mere/viewer-cone/review/receipts/viewer-worker-failed (RESULT ok, 0 capture(s))

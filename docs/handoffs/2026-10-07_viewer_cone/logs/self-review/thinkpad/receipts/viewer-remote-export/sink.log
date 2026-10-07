@@ -1,0 +1,4 @@
+serving /home/markik/Code/testing/mere/viewer-cone/review/viewer on http://127.0.0.1:9000, receipts to /home/markik/Code/testing/mere/viewer-cone/review/receipts/viewer-remote-export
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-receipt HTTP/1.1" 204 -
+receipt written to /home/markik/Code/testing/mere/viewer-cone/review/receipts/viewer-remote-export (RESULT ok, 1 capture(s))
