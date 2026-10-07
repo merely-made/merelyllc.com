@@ -62,7 +62,7 @@ jobs:
       - name: Install locked build dependencies
         run: |
           npm ci --ignore-scripts
-          cargo install wasm-bindgen-cli --version 0.2.126 --locked
+          cargo install wasm-bindgen-cli --version 0.2.129 --locked
 
       - name: Validate the committed authority
         run: cargo run --locked --bin authority -- validate

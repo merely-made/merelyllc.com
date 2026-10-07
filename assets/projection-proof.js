@@ -612,7 +612,7 @@ function validateArtifact(artifact) {
   if (
     artifact?.schema !== "mer3ly.portable-projection/v1" ||
     artifact?.adapter !== "mer3ly.repository-graph/v1" ||
-    artifact?.score?.version !== 4 ||
+    artifact?.score?.version !== 5 ||
     !Array.isArray(artifact.nodes) ||
     !Array.isArray(artifact.relations) ||
     !Array.isArray(artifact.default_trace)
@@ -622,7 +622,8 @@ function validateArtifact(artifact) {
   // Score version 2 added holds: authored placements the solver honored ahead
   // of the arrangement. Their effect is already baked into the snapshot this
   // viewer renders, so nothing here re-applies them; the shape is checked so a
-  // malformed hold is refused rather than ignored.
+  // malformed hold is refused rather than ignored. Version 5 renamed what the
+  // hold classes mean; this viewer reads none of them, so only the gate moved.
   if (artifact.score.holds !== undefined && !Array.isArray(artifact.score.holds)) {
     throw new Error("invalid portable projection artifact");
   }

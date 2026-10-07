@@ -3477,17 +3477,18 @@ mod tests {
         }
     }
 
-    fn ft7_grant(subject: [u8; 32]) -> personae::delegation::SignedDelegationCertificate {
+    fn ft7_grant(subject: [u8; 32]) -> insigne::delegation::SignedDelegationCertificate {
         use personae::IdentityProvider as _;
+        use personae::delegation::Issue as _;
 
         let owner = ft7_owner();
-        personae::delegation::SignedDelegationCertificate::issue(
+        insigne::delegation::SignedDelegationCertificate::issue(
             &owner,
-            personae::delegation::DelegationCertificate::new(
-                personae::delegation::DelegationParent::Root(FT7_ROOT_AUTHORITY),
+            insigne::delegation::DelegationCertificate::new(
+                insigne::delegation::DelegationParent::Root(FT7_ROOT_AUTHORITY),
                 owner.master_public_key().to_bytes(),
                 subject,
-                personae::delegation::CapabilityScope {
+                insigne::delegation::CapabilityScope {
                     domain: graphshell::admission::GRAPHSHELL_DOMAIN.into(),
                     resource: FT7_NETWORK.0.to_vec(),
                     path_prefix: graphshell::admission::PROJECTION_SERVICE.into(),
@@ -3556,7 +3557,7 @@ mod tests {
             presentation,
             cache_policy: chirograph::CachePolicy::default(),
         };
-        let local_carrier = graphshell_local::LocalCarrier::new(
+        let local_carrier = graphshell_endpoint::local::LocalCarrier::new(
             MatrixSnapshotEndpoint {
                 snapshot: snapshot.clone(),
                 resources: resources.clone(),
