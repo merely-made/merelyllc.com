@@ -17,7 +17,7 @@ summary = "The public Merely company site and repository-family map."
 class = "product"
 status = "active"
 license = "MPL-2.0"
-homepage = "https://mer3ly.net/"
+homepage = "https://merelyllc.com/"
 public = true
 
 [[repository]]
@@ -153,17 +153,6 @@ homepage = "https://github.com/merely-made/woodshed"
 public = true
 
 [[repository]]
-id = "hocket"
-github_slug = "merely-made/hocket"
-name = "Hocket"
-summary = "A turn-based, cooperative, peer-to-peer audio looper."
-class = "product"
-status = "prototype"
-license = "MIT OR Apache-2.0"
-homepage = "https://github.com/merely-made/hocket"
-public = true
-
-[[repository]]
 id = "isocosm"
 github_slug = "merely-made/isocosm"
 name = "Isocosm"
@@ -183,4 +172,59 @@ class = "foundation"
 status = "active"
 license = "MPL-2.0"
 homepage = "https://github.com/merely-made/vano"
+public = true
+
+[[repository]]
+id = "cleromancy"
+github_slug = "merely-made/cleromancy"
+name = "Cleromancy"
+summary = "A local-first Tarot, dice, and astrology journal built on Graphshell, with replayable readings and explicit sync consent."
+class = "product"
+status = "active"
+license = "MIT OR Apache-2.0"
+homepage = "https://github.com/merely-made/cleromancy"
+public = true
+
+[[repository]]
+id = "emblem"
+github_slug = "merely-made/emblem"
+name = "Emblem"
+summary = "A pure-Rust IconVG encoder and decoder that turns compact vector graphics into paths and fills for a host renderer."
+class = "foundation"
+status = "active"
+license = "MPL-2.0"
+homepage = "https://github.com/merely-made/emblem"
+public = true
+
+[[repository]]
+id = "mora"
+github_slug = "merely-made/mora"
+name = "Mora"
+summary = "A dependency-free prosody engine for syllabification, syllable weight, verse meter, rhyme, and other sound relationships."
+class = "foundation"
+status = "active"
+license = "MPL-2.0"
+homepage = "https://github.com/merely-made/mora"
+public = true
+
+[[repository]]
+id = "pipit"
+github_slug = "merely-made/pipit"
+name = "Pipit"
+summary = "A dependency-free speech codec for constrained links, with framed IMA ADPCM and low-bitrate LPC voice clips."
+class = "foundation"
+status = "active"
+license = "MIT OR Apache-2.0"
+homepage = "https://github.com/merely-made/pipit"
+public = true
+
+[[repository]]
+id = "turquet"
+github_slug = "merely-made/turquet"
+name = "Turquet"
+summary = "A celestial calculation engine for positions and events, with explicit time scales, observer frames, and reproducible model provenance."
+class = "foundation"
+status = "active"
+license = "MIT"
+homepage = "https://github.com/merely-made/turquet"
 public = true

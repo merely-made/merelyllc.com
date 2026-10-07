@@ -1,11 +1,11 @@
 # Mer3ly
 
-The source for the Merely public site at [mer3ly.net](https://mer3ly.net/): a
+The source for the Merely public site at [merelyllc.com](https://merelyllc.com/): a
 small static Rust build (Cambium views serialized to HTML) plus a WebGPU
 repository-graph client, deployed to GitHub Pages. The complete site remains
 readable without JavaScript, WebAssembly, or WebGPU.
 
-## Status (2026-08-12)
+## Status (2026-10-07)
 
 Live and deployed. The pages.yml workflow rebuilds, validates, browser-smokes,
 and deploys on main pushes, manual dispatch, and a daily schedule.
@@ -19,10 +19,16 @@ and deploys on main pushes, manual dispatch, and a daily schedule.
 - An authority binary validates content manifests, the metadata cache, and
   the exact Pages artifact (file set, structured data, absence of secrets
   and personal data), emitting SHA-256 JSON receipts.
-- The five dated plans in `docs/` (live repos graph, project showcase,
-  discovery and sharing, authority reconciliation, device catalog) are
-  executed through their milestones; current work deepens the live
-  repository graph.
+- Eight dated plans live in `docs/`. The first five cover the shipped site;
+  browser delivery, canvas stage unification, and
+  [Graphshell as the site canvas](docs/2026-09-30_graphshell_site_canvas_plan.md)
+  cover the replacement of the site-owned interactive surfaces.
+- Graphshell integration is in P0: the viewer cone and speed estimator are
+  merged into Mere main at `ea9e6da7`, with fresh browser, accessibility and
+  frame receipts. The six-asset plain viewer payload is 2,147,689 B brotli;
+  its numerical budget remains open. The site still ships its own sandbox;
+  P1 export and P2 surface replacement remain ahead. See the
+  [integration receipt](docs/handoffs/2026-10-07_viewer_cone/RESUME.md#authorized-integration).
 
 `content/*.toml` is the editorial authority for repository roles, summaries,
 relations, showcases, and the device catalog; the GitHub listing is the live

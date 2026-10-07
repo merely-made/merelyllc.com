@@ -106,7 +106,7 @@ try {
   assert.ok(sitemapUrls.length > 6);
   assert.equal(new Set(sitemapUrls).size, sitemapUrls.length);
   assert.equal(
-    sitemapUrls.every((url) => url.startsWith("https://mer3ly.net/")),
+    sitemapUrls.every((url) => url.startsWith("https://merelyllc.com/")),
     true,
   );
   for (const unsupported of ["lastmod", "changefreq", "priority"]) {
@@ -121,7 +121,7 @@ try {
   );
   assert.equal(
     await robotsResponse.text(),
-    "User-agent: *\nAllow: /\nSitemap: https://mer3ly.net/sitemap.xml\n",
+    "User-agent: *\nAllow: /\nSitemap: https://merelyllc.com/sitemap.xml\n",
   );
 
   const faviconResponse = await fetch(`${baseUrl}/favicon.svg`);
@@ -553,7 +553,7 @@ try {
   const visualMetadata = await projectMetadata(visualProject);
   assert.equal(
     visualMetadata.social_image,
-    "https://mer3ly.net/showcase/mere.png",
+    "https://merelyllc.com/showcase/mere.png",
   );
   assert.equal(visualMetadata.social_image_type, "image/png");
   assert.equal(visualMetadata.twitter_image, visualMetadata.social_image);
@@ -591,9 +591,9 @@ try {
   const projectionArtifact = await projectionArtifactResponse.json();
   assert.equal(projectionArtifact.schema, "mer3ly.portable-projection/v1");
   assert.equal(projectionArtifact.adapter, "mer3ly.repository-graph/v1");
-  assert.equal(projectionArtifact.score.items.length, 8);
-  assert.equal(projectionArtifact.snapshot.tables.items.length, 8);
-  assert.equal(projectionArtifact.snapshot.tables.relations.length, 10);
+  assert.equal(projectionArtifact.score.items.length, 11);
+  assert.equal(projectionArtifact.snapshot.tables.items.length, 11);
+  assert.equal(projectionArtifact.snapshot.tables.relations.length, 13);
   assert.equal(projectionArtifact.default_trace.length, 7);
 
   const projectionDesktop = await browser.newPage({
@@ -625,10 +625,10 @@ try {
   const swatchProjection = projectionProof.locator(
     '[data-projection-view="swatch"]',
   );
-  assert.equal(await canvasProjection.locator("[data-projection-node]").count(), 8);
-  assert.equal(await swatchProjection.locator("[data-projection-node]").count(), 8);
-  assert.equal(await canvasProjection.locator("[data-projection-edge]").count(), 10);
-  assert.equal(await swatchProjection.locator("[data-projection-edge]").count(), 10);
+  assert.equal(await canvasProjection.locator("[data-projection-node]").count(), 11);
+  assert.equal(await swatchProjection.locator("[data-projection-node]").count(), 11);
+  assert.equal(await canvasProjection.locator("[data-projection-edge]").count(), 13);
+  assert.equal(await swatchProjection.locator("[data-projection-edge]").count(), 13);
   assert.equal(
     await canvasProjection
       .locator('[data-projection-node="mere"]')
@@ -947,7 +947,7 @@ try {
     1,
   );
   const textMetadata = await projectMetadata(textProject);
-  assert.equal(textMetadata.social_image, "https://mer3ly.net/og.jpg");
+  assert.equal(textMetadata.social_image, "https://merelyllc.com/og.jpg");
   assert.equal(textMetadata.social_image_type, "image/jpeg");
   assert.equal(textMetadata.twitter_image, textMetadata.social_image);
   assert.equal(textMetadata.twitter_image_alt, textMetadata.social_image_alt);

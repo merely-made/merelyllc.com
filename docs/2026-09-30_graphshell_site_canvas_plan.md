@@ -8,6 +8,10 @@ payload cap and initial-site deployment remain open. Plain viewer is selected
 (Ruling 121); six fresh assets total 2,147,689 B brotli. See Progress and the
 handoff's authorized integration before continuing Assemble (Ruling 22).
 
+The site still ships its own sandbox. Rulings 103 and 104 landed the manual-pin
+and legacy-link resolver fixes; P1 export and P2 Graphshell surface replacement
+remain ahead.
+
 ## Purpose
 
 Mere's projection grammar adoption plan ruled on 2026-09-01 that Graphshell's

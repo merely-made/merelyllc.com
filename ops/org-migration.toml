@@ -631,3 +631,103 @@ actions_workflows = 1
 old_owner_files = 0
 old_owner_manifests = 0
 local_locator = "crates/xilem"
+
+# Existing public repository inventoried 2026-10-06 for editorial coverage.
+# This does not claim the historical migration review covered this project.
+[[migration]]
+id = "cleromancy"
+current_slug = "merely-made/cleromancy"
+target_slug = "merely-made/cleromancy"
+classification = "product"
+batch = "product"
+disposition = "already-in-org"
+visibility = "public"
+default_branch = "main"
+head = "32a4b9485e0a0059df1f89666e5eb99a6b8e68e7"
+license_status = "MIT OR Apache-2.0"
+provenance_status = "not-assessed-in-historical-migration"
+sensitive_information_status = "not-assessed-in-historical-migration"
+publication_gate_status = "not-applicable"
+pages_status = "none"
+packages_status = "not-inventoried"
+actions_workflows = 0
+
+# Existing public repository inventoried 2026-10-06 for editorial coverage.
+# This does not claim the historical migration review covered this project.
+[[migration]]
+id = "emblem"
+current_slug = "merely-made/emblem"
+target_slug = "merely-made/emblem"
+classification = "foundation"
+batch = "foundation"
+disposition = "already-in-org"
+visibility = "public"
+default_branch = "main"
+head = "8c9aebb8ed2a512392d96fbcfc25b6e9d94be6b2"
+license_status = "MPL-2.0"
+provenance_status = "not-assessed-in-historical-migration"
+sensitive_information_status = "not-assessed-in-historical-migration"
+publication_gate_status = "not-applicable"
+pages_status = "none"
+packages_status = "not-inventoried"
+actions_workflows = 0
+
+# Existing public repository inventoried 2026-10-06 for editorial coverage.
+# This does not claim the historical migration review covered this project.
+[[migration]]
+id = "mora"
+current_slug = "merely-made/mora"
+target_slug = "merely-made/mora"
+classification = "foundation"
+batch = "foundation"
+disposition = "already-in-org"
+visibility = "public"
+default_branch = "main"
+head = "4250c63cb3e9528cefb9ae9832d257ba16f22f48"
+license_status = "MPL-2.0"
+provenance_status = "not-assessed-in-historical-migration"
+sensitive_information_status = "not-assessed-in-historical-migration"
+publication_gate_status = "not-applicable"
+pages_status = "none"
+packages_status = "not-inventoried"
+actions_workflows = 0
+
+# Existing public repository inventoried 2026-10-06 for editorial coverage.
+# This does not claim the historical migration review covered this project.
+[[migration]]
+id = "pipit"
+current_slug = "merely-made/pipit"
+target_slug = "merely-made/pipit"
+classification = "foundation"
+batch = "foundation"
+disposition = "already-in-org"
+visibility = "public"
+default_branch = "main"
+head = "e41954790fee7c76221a5a88796875c6668ac2ac"
+license_status = "MIT OR Apache-2.0"
+provenance_status = "not-assessed-in-historical-migration"
+sensitive_information_status = "not-assessed-in-historical-migration"
+publication_gate_status = "not-applicable"
+pages_status = "none"
+packages_status = "not-inventoried"
+actions_workflows = 0
+
+# Existing public repository inventoried 2026-10-06 for editorial coverage.
+# This does not claim the historical migration review covered this project.
+[[migration]]
+id = "turquet"
+current_slug = "merely-made/turquet"
+target_slug = "merely-made/turquet"
+classification = "foundation"
+batch = "foundation"
+disposition = "already-in-org"
+visibility = "public"
+default_branch = "main"
+head = "30833e512015d5b4341db50a9ba5e1c3df581cdd"
+license_status = "MIT"
+provenance_status = "not-assessed-in-historical-migration"
+sensitive_information_status = "not-assessed-in-historical-migration"
+publication_gate_status = "not-applicable"
+pages_status = "none"
+packages_status = "not-inventoried"
+actions_workflows = 1

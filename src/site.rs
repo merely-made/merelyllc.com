@@ -11,9 +11,9 @@ pub type SiteView = Box<dyn AnyView<(), (), GenetCtx, GenetElement>>;
 pub const SITE_CSS: &str = include_str!("../assets/site.css");
 pub const DEVICE_CSS: &str = include_str!("../assets/devices.css");
 
-pub const ORGANIZATION_ID: &str = "https://mer3ly.net/#organization";
-pub const WEBSITE_ID: &str = "https://mer3ly.net/#website";
-pub const DEFAULT_SOCIAL_IMAGE_URL: &str = "https://mer3ly.net/og.jpg";
+pub const ORGANIZATION_ID: &str = "https://merelyllc.com/#organization";
+pub const WEBSITE_ID: &str = "https://merelyllc.com/#website";
+pub const DEFAULT_SOCIAL_IMAGE_URL: &str = "https://merelyllc.com/og.jpg";
 pub const DEFAULT_SOCIAL_IMAGE_ALT: &str =
     "Merely, software and hardware for people who are their own infrastructure.";
 
@@ -51,7 +51,7 @@ pub fn base_schema_graph() -> Vec<Value> {
             "@type": "Organization",
             "@id": ORGANIZATION_ID,
             "name": "Merely LLC",
-            "url": "https://mer3ly.net/",
+            "url": "https://merelyllc.com/",
             "email": "markik@mer3ly.net",
             "sameAs": ["https://github.com/merely-made"],
             "address": {
@@ -65,7 +65,7 @@ pub fn base_schema_graph() -> Vec<Value> {
             "@type": "WebSite",
             "@id": WEBSITE_ID,
             "name": "Merely",
-            "url": "https://mer3ly.net/",
+            "url": "https://merelyllc.com/",
             "publisher": { "@id": ORGANIZATION_ID }
         }),
     ]
@@ -228,7 +228,7 @@ pub fn shell(active: ActivePage, main: SiteView) -> SiteView {
             element(
                 "p",
                 &[],
-                vec![txt("Merely LLC · Ashland, Kentucky · mer3ly.net")],
+                vec![txt("Merely LLC · Ashland, Kentucky · merelyllc.com")],
             ),
             element(
                 "p",

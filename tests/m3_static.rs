@@ -58,7 +58,7 @@ fn pages_are_static_genet_documents() {
             "{name} has structured data"
         );
         assert!(
-            document.contains("https://mer3ly.net/og.jpg"),
+            document.contains("https://merelyllc.com/og.jpg"),
             "{name} names the generated social preview"
         );
         assert!(
