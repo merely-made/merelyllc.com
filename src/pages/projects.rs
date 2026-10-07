@@ -45,7 +45,7 @@ pub fn document(root: &Path, repository_id: &str) -> Result<String, AuthorityErr
 
 pub fn document_for(data: &PublicSiteData, repository: &RepositoryRecord) -> String {
     let title = format!("{} | Merely", repository.name);
-    let canonical = format!("https://mer3ly.net/projects/{}/", repository.id);
+    let canonical = format!("https://merelyllc.com/projects/{}/", repository.id);
     let repository_metadata = data
         .metadata
         .repository
@@ -54,7 +54,7 @@ pub fn document_for(data: &PublicSiteData, repository: &RepositoryRecord) -> Str
     let showcase = data.showcases.for_repository(&repository.id);
     let image_url = showcase.map_or_else(
         || DEFAULT_SOCIAL_IMAGE_URL.to_owned(),
-        |showcase| format!("https://mer3ly.net/{}", showcase.image),
+        |showcase| format!("https://merelyllc.com/{}", showcase.image),
     );
     let image_type = if showcase.is_some() {
         "image/png"
@@ -471,7 +471,7 @@ fn hero(repository: &RepositoryRecord) -> SiteView {
         ),
     ];
     if repository.homepage != github_url
-        && repository.homepage != format!("https://mer3ly.net{project_href}")
+        && repository.homepage != format!("https://merelyllc.com{project_href}")
     {
         links.push(external_link(
             &repository.homepage,

@@ -9,7 +9,7 @@ use crate::site::{
 pub const METADATA: PageMetadata = PageMetadata {
     title: "Merely | Local-first software and community radio",
     description: "Merely builds local-first software, graph-shaped web tools, and community-owned radio infrastructure in Ashland, Kentucky.",
-    canonical_url: "https://mer3ly.net/",
+    canonical_url: "https://merelyllc.com/",
 };
 
 pub fn document(root: &Path) -> Result<String, AuthorityError> {

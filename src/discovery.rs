@@ -1,6 +1,7 @@
 use crate::repositories::{Authority, PublicSiteData};
 
-pub const ROBOTS_TXT: &str = "User-agent: *\nAllow: /\nSitemap: https://mer3ly.net/sitemap.xml\n";
+pub const ROBOTS_TXT: &str =
+    "User-agent: *\nAllow: /\nSitemap: https://merelyllc.com/sitemap.xml\n";
 
 pub fn canonical_urls(data: &PublicSiteData) -> Vec<String> {
     canonical_urls_from_authority_and_devices(&data.authority, &data.devices)
@@ -11,10 +12,10 @@ pub fn canonical_urls_from_authority_and_devices(
     devices: &crate::devices::DeviceCatalog,
 ) -> Vec<String> {
     let mut urls = vec![
-        "https://mer3ly.net/".to_owned(),
-        "https://mer3ly.net/repos/".to_owned(),
-        "https://mer3ly.net/radio.html".to_owned(),
-        "https://mer3ly.net/devices/".to_owned(),
+        "https://merelyllc.com/".to_owned(),
+        "https://merelyllc.com/repos/".to_owned(),
+        "https://merelyllc.com/radio.html".to_owned(),
+        "https://merelyllc.com/devices/".to_owned(),
     ];
     urls.extend(
         authority
@@ -22,13 +23,13 @@ pub fn canonical_urls_from_authority_and_devices(
             .repository
             .iter()
             .filter(|repository| repository.public)
-            .map(|repository| format!("https://mer3ly.net/projects/{}/", repository.id)),
+            .map(|repository| format!("https://merelyllc.com/projects/{}/", repository.id)),
     );
     urls.extend(
         devices
             .ordered()
             .into_iter()
-            .map(|device| format!("https://mer3ly.net/devices/{}/", device.id)),
+            .map(|device| format!("https://merelyllc.com/devices/{}/", device.id)),
     );
     urls
 }

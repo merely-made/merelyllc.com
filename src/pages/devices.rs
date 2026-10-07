@@ -18,7 +18,7 @@ const RADIO_SIMULATOR: &[u8] = include_bytes!("../../assets/radio-simulator.js")
 pub const INDEX_METADATA: PageMetadata = PageMetadata {
     title: "Radio hardware catalog | Merely",
     description: "Open radio hardware recipes ordered by product role, with demonstrated network support, installation paths, authorization records, missing work, and sale state kept separate.",
-    canonical_url: "https://mer3ly.net/devices/",
+    canonical_url: "https://merelyllc.com/devices/",
 };
 
 pub fn documents(data: &PublicSiteData) -> Vec<(String, String)> {
@@ -53,7 +53,7 @@ pub fn document(root: &Path, device_id: &str) -> Result<String, AuthorityError> 
 
 pub fn document_for(device: &DeviceRecord, firmware: &FirmwareCatalog) -> String {
     let title = format!("{} | Merely", device.name);
-    let canonical = format!("https://mer3ly.net/devices/{}/", device.id);
+    let canonical = format!("https://merelyllc.com/devices/{}/", device.id);
     let json_ld = device_json_ld(device, &canonical);
     let metadata = DocumentMetadata {
         title: &title,
@@ -970,7 +970,7 @@ mod tests {
     fn tech_article_does_not_emit_an_offer() {
         let data = PublicSiteData::load(env!("CARGO_MANIFEST_DIR")).expect("public site data");
         let device = data.devices.ordered()[0];
-        let canonical = format!("https://mer3ly.net/devices/{}/", device.id);
+        let canonical = format!("https://merelyllc.com/devices/{}/", device.id);
         let encoded = device_json_ld(device, &canonical);
         let value: Value = serde_json::from_str(&encoded).expect("valid JSON-LD");
         assert_eq!(value["@context"], "https://schema.org");

@@ -50,7 +50,7 @@ fn sitemap_projects_exact_canonical_authority_without_fake_freshness() {
     assert!(
         actual
             .iter()
-            .all(|url| url.starts_with("https://mer3ly.net/"))
+            .all(|url| url.starts_with("https://merelyllc.com/"))
     );
     for unsupported in ["lastmod", "changefreq", "priority"] {
         assert!(!document.contains(unsupported));
@@ -61,7 +61,7 @@ fn sitemap_projects_exact_canonical_authority_without_fake_freshness() {
 fn robots_policy_names_the_canonical_sitemap() {
     assert_eq!(
         ROBOTS_TXT,
-        "User-agent: *\nAllow: /\nSitemap: https://mer3ly.net/sitemap.xml\n"
+        "User-agent: *\nAllow: /\nSitemap: https://merelyllc.com/sitemap.xml\n"
     );
 }
 
@@ -125,7 +125,7 @@ fn project_social_images_follow_showcase_evidence() {
             .expect("render public project profile");
         let showcase = data.showcases.for_repository(&repository.id);
         let image_url = showcase.map_or(DEFAULT_SOCIAL_IMAGE_URL.to_owned(), |showcase| {
-            format!("https://mer3ly.net/{}", showcase.image)
+            format!("https://merelyllc.com/{}", showcase.image)
         });
         let image_type = if showcase.is_some() {
             "image/png"
@@ -164,7 +164,7 @@ fn project_json_ld_names_the_public_source_and_work_type() {
             .expect("render public project profile");
         let value = json_ld(&document);
         let graph = graph(&value);
-        let canonical = format!("https://mer3ly.net/projects/{}/", repository.id);
+        let canonical = format!("https://merelyllc.com/projects/{}/", repository.id);
         let entity_id = format!("{canonical}#repository");
         let entity = graph
             .iter()

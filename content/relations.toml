@@ -26,51 +26,6 @@ evidence = "Genet Cargo manifests use the scrying package from merely-made/wgpu-
 verified_on = "2026-07-29"
 
 [[relation]]
-id = "hocket-depends-on-genet"
-source = "hocket"
-target = "genet"
-kind = "depends_on"
-provenance = "derived"
-evidence = "Hocket's root Cargo manifest uses Genet's layout, scripted-DOM, clipboard, and probe packages from merely-made/genet."
-verified_on = "2026-09-04"
-
-[[relation]]
-id = "hocket-depends-on-mere"
-source = "hocket"
-target = "mere"
-kind = "depends_on"
-provenance = "derived"
-evidence = "Hocket's root Cargo manifest uses Armillary, Luggage, Muniment, and Personae from merely-made/mere, and takes Cambium, Sprigging, Workbench, Tinct, and the surface API from there since they moved to Mere on 2026-09-03."
-verified_on = "2026-09-04"
-
-[[relation]]
-id = "hocket-depends-on-netrender"
-source = "hocket"
-target = "netrender"
-kind = "depends_on"
-provenance = "derived"
-evidence = "Hocket's root Cargo manifest uses rendering packages from merely-made/netrender."
-verified_on = "2026-07-29"
-
-[[relation]]
-id = "hocket-depends-on-wavicle"
-source = "hocket"
-target = "wavicle"
-kind = "depends_on"
-provenance = "derived"
-evidence = "Hocket's root Cargo manifest uses Wavicle with encoding enabled."
-verified_on = "2026-07-29"
-
-[[relation]]
-id = "hocket-depends-on-woodshed"
-source = "hocket"
-target = "woodshed"
-kind = "depends_on"
-provenance = "derived"
-evidence = "Hocket's root Cargo manifest uses Woodshed's audio-primitives package."
-verified_on = "2026-07-29"
-
-[[relation]]
 id = "isocosm-depends-on-genet"
 source = "isocosm"
 target = "genet"
@@ -258,3 +213,57 @@ kind = "renders_with"
 provenance = "curated"
 evidence = "Mere's README identifies Genet as its HTML engine and product-neutral host layer."
 verified_on = "2026-07-29"
+
+[[relation]]
+id = "cleromancy-depends-on-mere"
+source = "cleromancy"
+target = "mere"
+kind = "depends_on"
+provenance = "derived"
+evidence = "Cleromancy Cargo.toml pins Graphshell, Cambium, and the Mere graph and persistence crates from merely-made/mere."
+verified_on = "2026-10-06"
+
+[[relation]]
+id = "cleromancy-depends-on-genet"
+source = "cleromancy"
+target = "genet"
+kind = "depends_on"
+provenance = "derived"
+evidence = "Cleromancy Cargo.toml pins layout-dom-api and taproot from merely-made/genet."
+verified_on = "2026-10-06"
+
+[[relation]]
+id = "cleromancy-depends-on-turquet"
+source = "cleromancy"
+target = "turquet"
+kind = "depends_on"
+provenance = "derived"
+evidence = "Cleromancy Cargo.toml uses Turquet for the optional analytic-ephemeris and sky-timeline features."
+verified_on = "2026-10-06"
+
+[[relation]]
+id = "mere-depends-on-emblem"
+source = "mere"
+target = "emblem"
+kind = "depends_on"
+provenance = "derived"
+evidence = "Mere Cargo.toml declares emblem 0.2.0 for IconVG faces."
+verified_on = "2026-10-06"
+
+[[relation]]
+id = "mere-depends-on-mora"
+source = "mere"
+target = "mora"
+kind = "depends_on"
+provenance = "derived"
+evidence = "Mere Cargo.toml declares mora 0.1.0 and the mora-cmudict adapter."
+verified_on = "2026-10-06"
+
+[[relation]]
+id = "retinue-depends-on-pipit"
+source = "retinue"
+target = "pipit"
+kind = "depends_on"
+provenance = "derived"
+evidence = "Retinue crates/outrider/Cargo.toml uses pipit 0.2 behind the optional voice feature."
+verified_on = "2026-10-06"

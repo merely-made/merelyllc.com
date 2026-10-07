@@ -52,7 +52,7 @@ fn repository_page_is_static_semantic_and_filterable() {
 
     assert_eq!(document.matches("<h1").count(), 1);
     assert!(document.contains("<main id=\"main\""));
-    assert!(document.contains("https://mer3ly.net/repos/"));
+    assert!(document.contains("https://merelyllc.com/repos/"));
     assert_eq!(
         document.match_indices("name=\"repository-class\"").count(),
         5
