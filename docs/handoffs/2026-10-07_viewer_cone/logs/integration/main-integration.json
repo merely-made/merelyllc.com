@@ -1,0 +1,10 @@
+{
+  "authorization": "Mark: authorized",
+  "primary_before": "e7ec66aff19923d904e0d0155ea00d78b7015fea",
+  "origin_before": "57b4893db6909d5ed9c4ccae30216f0d8164201a",
+  "tested_runtime": "ea38f335422798b1f7925a7ad4d3f3eabfcdafc4",
+  "main_commit": "ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7",
+  "remote_main_verified": "ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7",
+  "method": "clean primary checkout, ff-only merge, normal push; no force push",
+  "measured_origin_viewer_preserved": "6963ebe539d9d469dbd848c449335baae54a840e"
+}

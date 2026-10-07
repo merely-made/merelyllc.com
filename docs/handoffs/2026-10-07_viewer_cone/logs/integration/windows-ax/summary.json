@@ -1,0 +1,34 @@
+[
+  {
+    "accepted": true,
+    "plant": "normal",
+    "cdp": "EXIT 0\nCDP OK: 11 of 11 shown, 11 items, each with Drag and Pin\r\n",
+    "wasm_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+    "scenario_sha256": "bc9c856e37562ae2bca7cabf5b0a3863418ae40436543248394d0d009b0da74e",
+    "bundle": "viewer"
+  },
+  {
+    "accepted": true,
+    "plant": "missing_action",
+    "cdp": "EXIT 1\nCDP FAIL: Pin missing on \"I2P port notes\"; Pin missing on \"I2P service\"; Pin missing on \"Reference notes\"\r\n",
+    "wasm_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+    "scenario_sha256": "bc9c856e37562ae2bca7cabf5b0a3863418ae40436543248394d0d009b0da74e",
+    "bundle": "viewer"
+  },
+  {
+    "accepted": true,
+    "plant": "normal",
+    "cdp": "EXIT 0\nCDP OK: 11 of 11 shown, 11 items, each with Drag and Pin\r\n",
+    "wasm_sha256": "b735a0d0c86d4ccf4cb6b252cd320740075e9ac608d78593fddd1af9f665ba86",
+    "scenario_sha256": "bc9c856e37562ae2bca7cabf5b0a3863418ae40436543248394d0d009b0da74e",
+    "bundle": "default"
+  },
+  {
+    "accepted": true,
+    "plant": "missing_action",
+    "cdp": "EXIT 1\nCDP FAIL: Pin missing on \"I2P port notes\"; Pin missing on \"I2P service\"; Pin missing on \"Reference notes\"\r\n",
+    "wasm_sha256": "b735a0d0c86d4ccf4cb6b252cd320740075e9ac608d78593fddd1af9f665ba86",
+    "scenario_sha256": "bc9c856e37562ae2bca7cabf5b0a3863418ae40436543248394d0d009b0da74e",
+    "bundle": "default"
+  }
+]

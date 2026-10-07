@@ -1,0 +1,7 @@
+RESULT ok
+p6 speed slow receipt complete
+pace: speed 0.2 effective 0.107 bound false ticks 16 over 30 frames drawn-moved 29 stepped 16 compute-max 6200 us over-budget-max -9223372036854775808 us budget 8332 us (0.5 of a 16.66 ms display period, inferred at 1.00 from the worker; last frame 50.0 ms) margin 200 us; every window: worst none us, 0 frames past the grain
+physics slow: law spring.rapier nodes 11 energy 29354.8 spread 119 overlaps 0 device off device-steps 0 cpu-steps 0 submissions 0 answers 0 failures 0 waiting 0 stale 0 mismatched 0 last-age 0 layout-outside 0 layout-extent -128,-131,118,105 view-extent -593,-289,586,262 view-follow true
+pace: speed 0.2 effective 0.148 bound false ticks 31 over 30 frames drawn-moved 30 stepped 15 compute-max 200 us over-budget-max -9223372036854775808 us budget 8331 us (0.5 of a 16.66 ms display period, inferred at 1.00 from the worker; last frame 50.0 ms) margin 200 us; every window: worst none us, 0 frames past the grain
+gpu timestamps: no
+

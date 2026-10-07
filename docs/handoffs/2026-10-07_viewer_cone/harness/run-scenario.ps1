@@ -67,14 +67,13 @@ param(
     [string]$Web
 )
 $ErrorActionPreference = "Stop"
-# The viewer-cone lane's copy (2026-10-06) of the grammar-g9 lane's fourth-round copy: ports
-# 8960-8999, its own profiles, the cone worktree, and a fixture built from the cone branch.
-# The grammar-g9 lane's fourth-round copy (2026-10-05): a port and profile per run, a live-owner port check, and -Cdp: its own port, Chrome profile and
-# receipt folder, a sink sweep limited to its own port, and the lane's worktree.
+# The viewer cone landed on main (2026-10-07); the default page directory now
+# follows the primary checkout. Use -Web for a separately built receipt bundle.
+# Each run retains its own profile and receipt folder and refuses occupied ports.
 $web = if ($Web) {
     Resolve-Path $Web
 } else {
-    Resolve-Path "C:\Users\mark_\Code\worktrees\mere-viewer-cone\ports\graphshell\web"
+    Resolve-Path "C:\Users\mark_\Code\repos\mere\ports\graphshell\web"
 }
 $sinkScript = "C:\Users\mark_\Code\testing\mere\scripts\graphshell-web-sink.py"
 $name = [IO.Path]::GetFileNameWithoutExtension($Scenario)

@@ -1,0 +1,10 @@
+RESULT fail
+FAIL: assert snap reader-buttons Contains 'Alice:Drag+Pin': got 'I2P port notes:Drag|I2P service:Drag|Reference notes:Drag|Reference-host scene:Drag|Mounted remote projection:Drag|Alice:Drag|Alice's laptop:Drag|Alice's phone:Drag|SSH signing key reference:Drag|Open-address grant:Drag|Synthetic signing receipt:Drag'
+FAIL: assert snap reader-buttons Contains 'Reference notes:Drag+Pin': got 'I2P port notes:Drag|I2P service:Drag|Reference notes:Drag|Reference-host scene:Drag|Mounted remote projection:Drag|Alice:Drag|Alice's laptop:Drag|Alice's phone:Drag|SSH signing key reference:Drag|Open-address grant:Drag|Synthetic signing receipt:Drag'
+FAIL: assert snap reader-described Eq '22': got '11'
+FAIL: reader-click: "Alice" has no "Pin" button
+FAIL: assert snap pinned Contains 'Alice': got ''
+captured canvas_reader
+waited 0 frames
+canvas reader receipt complete
+gpu timestamps: no

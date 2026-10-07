@@ -1,0 +1,19 @@
+{
+  "candidate": "ea38f335422798b1f7925a7ad4d3f3eabfcdafc4",
+  "command": [
+    "cargo",
+    "test",
+    "--locked",
+    "--offline",
+    "-p",
+    "graphshell",
+    "--no-default-features",
+    "--features",
+    "web",
+    "--lib",
+    "-j",
+    "2"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 154.22
+}

@@ -1,0 +1,6 @@
+{
+  "owner": "viewer-cone main integration",
+  "source_commit": "ea38f335422798b1f7925a7ad4d3f3eabfcdafc4",
+  "purpose": "Disposable latest-main headed bundles; earlier measured bundles preserved",
+  "target": "C:\\t\\cargo-targets\\mere\\seiche-speed\\web"
+}

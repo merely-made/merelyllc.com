@@ -1,0 +1,9 @@
+RESULT fail
+captured remote_absent_closed
+FAIL: assert snap tools-sections Eq 'physics:open,remote:open': got 'physics:open,remote:closed'
+FAIL: assert snap session Eq 'remote': got 'local'
+FAIL: assert snap active-session Eq 'Remote projection · no link': got 'Local Mere · 11 objects'
+remote absent receipt complete
+FAIL: no current DOM target for Selector { surface: None, matcher: Role("button"), text: Some("Remote session"), attr: None }
+FAIL: no current DOM target for Selector { surface: None, matcher: Role("button"), text: Some("Remote mount"), attr: None }
+gpu timestamps: no

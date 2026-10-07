@@ -1,0 +1,6 @@
+RESULT ok
+worker source checked
+pace worker: speed 1 effective none (marked none, ratio none) budget 8333 us margin 200 us display period 16.666 ms (inferred, fitting 1.00 of the recent intervals from the main (no worker rAF), a 100 us clock); every window: 0 frames the gate admitted ticks in, worst none us over budget (no frame), 0 past the grain; 0 floor-only frames past it; bar none
+intervals worker: 725.278 45.922 116.600 50.100 33.300 33.400 33.300 50.000 33.400 16.600 33.300 33.400 33.300 16.700 33.300 33.300 16.600 33.400 33.400 33.300 33.300 33.300 16.700 50.000 33.400 16.600 33.300 33.400 33.300 16.700 33.200 33.400 33.400 33.200 33.400 33.300 33.400 16.600 33.300 16.800 33.300 16.700 33.300 16.700 33.200
+intervals-worker worker: 
+gpu timestamps: no

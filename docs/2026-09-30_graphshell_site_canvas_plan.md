@@ -1,12 +1,12 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-122 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
-P0's viewer measurements and direct candidate review are complete. The
-numerical payload cap and integration against latest main remain open. Plain
-viewer is selected (Ruling 121); the six rebuilt assets total 2,125,171 B
-brotli. See Progress and the handoff's candidate review before continuing
-Assemble (Ruling 22).
+**Status:** assessment complete; Action under way. Rulings 1-123 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+P0's viewer review and main integration are complete (Rulings 122-123).
+Mere main is pushed at `ea9e6da7`, with current Genet `965b64e2`. The numerical
+payload cap and initial-site deployment remain open. Plain viewer is selected
+(Ruling 121); six fresh assets total 2,147,689 B brotli. See Progress and the
+handoff's authorized integration before continuing Assemble (Ruling 22).
 
 ## Purpose
 
@@ -1247,6 +1247,14 @@ newer main work, and validate the combined candidate against the ruled bars.
 This changes the reviewer; it does not change those bars or set a payload cap.
 The result is recorded in the [candidate review](handoffs/2026-10-07_viewer_cone/RESUME.md#candidate-review).
 
+### Ruling 123 (2026-10-07): authorize integration and cleanup
+
+Mark: "authorized", following the direct review and remaining main integration
+and cleanup steps. Integrate the verified candidate against current main and
+clean up its disposable outputs, preserving concurrent work and receipts.
+This does not select a numerical payload cap. The completed result is recorded
+in [Authorized integration](handoffs/2026-10-07_viewer_cone/RESUME.md#authorized-integration).
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
@@ -2311,3 +2319,26 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     `d041cc69` during this review. Its smolweb/E1b changes do not overlap the
     candidate's changed paths. Main integration against that later head
     remains separate. Remote viewer branch and measured tag stay at `6963ebe5`.
+
+- 2026-10-07: authorized integration and cleanup (Ruling 123) are complete.
+  Mere main is pushed and verified at `ea9e6da7`; tested runtime `ea38f335`
+  merges latest main `57b4893d`, including Genet `965b64e2`, while preserving
+  main's root manifest/lock and the cone's feature table. The standalone web
+  lock refreshes minimally offline, then all gates use locked/offline checks.
+  - Eight feature configurations pass with warnings; focused native tests
+    pass 117 with four ignored. Current headed integration passes viewer 18
+    and default 16, plus four computed-AX checks and the release's 21-node
+    frame receipt. Its three live interval medians are 16.7 ms. The two long
+    slowed-Max controls remain from the prior review, with their unchanged
+    simulation/estimator/worker/bar/fixture sources verified separately.
+  - Current cap basis: six assets **2,147,689 B brotli**, WASM 2,051,137 and
+    generated JS 14,222. The numerical cap and site deployment remain open.
+    Earlier payload measurements remain historical, not a current size claim.
+  - Local generated bundles, transfer archives, profiles and Python bytecode
+    are cleaned using narrower explicit operations after bulk cleanup was
+    rejected. The ThinkPad's copied binaries/profiles/archives are cleaned.
+    Source fixtures and receipts remain. The integrated cone worktree/local
+    branch are retired after preserving its original ignored default-dev
+    bundle and current standalone lock. Existing shared Cargo caches and
+    the other speed worktree remain untouched for subsequent consumer gates.
+    [Final evidence and resource ownership](handoffs/2026-10-07_viewer_cone/RESUME.md#authorized-integration).

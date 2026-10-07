@@ -1,0 +1,11 @@
+{
+  "comparison": "reviewed 7ef65d8d vs integrated ea38f335",
+  "unchanged": {
+    "ports/graphshell/src/frame_budget.rs": "23ef165c357413547f3812a5af9f05fcc7b4862e2fa620cdc2ac0adc2ba3a6ca",
+    "ports/graphshell/src/speed_bar.rs": "3f4f39009745c62ce93fb4a144c9e96210954c9d9b41402fa9dbeb6cd599b7b4",
+    "ports/graphshell/src/web_period_worker.rs": "506a9bba12e53a27be8967656cbac8a84752a99da73fed225a9a67d7fffcbed4",
+    "crates/conatus/seiche/src/runtime/speed.rs": "7bcd0476a042eee166988720195343f08a278725a0daba65dd93bcaaebc3e4d2",
+    "ports/graphshell/web/scenarios/p6_tree_speed_fast_slow_max.scn": "6118bbb503ca60c46833849292a50a72d2d7d85c06f415163f04be85445d9d33"
+  },
+  "gate_scope": "Repeat current speed rows except slow-Max 3000ms cases; those positive controls passed in both builds during prior review, and these sources are unchanged"
+}

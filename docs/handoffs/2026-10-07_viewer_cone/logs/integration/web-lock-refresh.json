@@ -1,0 +1,9 @@
+{
+  "old_sha256": "bcab7badca9550eef419dd67f2d732a481cc95c283b080c4d44b03197e646eb5",
+  "new_sha256": "d5625feecedd356dc9986cabb384f8389f8bc9bc2dbf5d71d339f5b9ec581b4e",
+  "resolution": "cargo check --offline without --locked once to minimally refresh the ignored standalone web lock; subsequent gates locked/offline",
+  "genet": "965b64e206a47d1c8808472de9aa461233638768",
+  "config": "Tracked portable config; no config.local.toml loaded in cone",
+  "old_source_count": 19,
+  "new_source_count": 19
+}

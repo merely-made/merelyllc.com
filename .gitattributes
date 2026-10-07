@@ -58,3 +58,6 @@ docs/handoffs/2026-10-07_viewer_cone/harness/webgpu-probe.html text eol=lf
 # Fresh receipts retain literal stdout whitespace as well as their bytes.
 docs/handoffs/2026-10-07_viewer_cone/logs/self-review/** -text -whitespace
 docs/handoffs/2026-10-07_viewer_cone/harness/p0_worker_*.scn -text whitespace=cr-at-eol
+
+# Authorized integration receipts retain hashes and literal tool output.
+docs/handoffs/2026-10-07_viewer_cone/logs/integration/** -text -whitespace

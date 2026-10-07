@@ -2,30 +2,24 @@
 artifact_contract: "ce-handoff/v1"
 created_at: "2026-10-07T03:59:13Z"
 title: "mer3ly P0 viewer cone: the calm-machine receipts and Ruling 107's timings"
-summary: "Codex directly reviewed and combined the viewer cone with the speed estimator at Mark's request. Fresh feature, native, headed and accessibility receipts are in RESUME.md. Plain viewer selected; six rebuilt assets total 2,125,171 B brotli. Numerical cap and latest-main integration remain open."
+summary: "Viewer cone and speed estimator are integrated and pushed to Mere main ea9e6da7. Fresh integration gates and cleanup are complete. Plain six-asset payload is 2,147,689 B brotli; numerical cap and site deployment remain open. See RESUME.md authorized integration."
 keywords: ["mer3ly", "viewer-cone", "graphshell-web", "P0", "Ruling 26", "Ruling 107", "payload budget", "headed receipts", "canvas-gpu"]
 cwd: "C:/Users/mark_/Code (machine-local)"
-resume_focus: "Read RESUME.md#candidate-review and logs/self-review/review-summary.json. Choose the numerical payload cap and integrate against latest main; no pending Claude review."
+resume_focus: "Read RESUME.md#authorized-integration and logs/integration/summary.json. Choose the numerical payload cap and continue the initial-site plain viewer work; no pending review or main merge."
 repository: "merely-made/mere (the cone) and merely-made/merelyllc.com (this plan, mer3ly)"
-branch: "mere: viewer-cone"
-head: "mere local viewer-cone 7ef65d8d; runtime 8175b69e; measured origin/viewer-cone 6963ebe5; mer3ly main carries this file"
+branch: "mere and mer3ly: main; cone worktree and local branch retired"
+head: "mere main ea9e6da7; tested runtime ea38f335; measured origin/viewer-cone 6963ebe5; mer3ly main carries this file"
 ---
 
 # P0 viewer cone: handoff
 
-**Current review, 2026-10-07:** Mark asked Codex to check the work directly
-after the other sessions ran out of capacity (Ruling 122).
-[RESUME.md](RESUME.md#candidate-review) records the combined candidate,
-source review, receipt corrections and fresh validation. The speed worker
-is shared by both hosts; newer session work and all ruled assertions remain.
-The numerical payload cap and latest-main integration remain open.
-
-The earlier `6963ebe5` release and GPU measurements remain useful historical
-evidence. Their four development failures are preserved. Plain viewer is
-selected under Ruling 121; the rebuilt six-asset total is 2,125,171 B brotli.
-The review request for Claude is superseded, not still an approval gate.
-The remainder of this file preserves the original handoff's checkpoint and
-checklist; use RESUME.md for current status.
+**Current integration, 2026-10-07:** Mark authorized integration and cleanup.
+Mere main is pushed at `ea9e6da7`, including the current Genet pin and the
+reviewed viewer/speed candidate. [RESUME.md](RESUME.md#authorized-integration)
+records all fresh gates, the 2,147,689 B six-asset cap basis and completed
+cleanup. The cone worktree/local branch are retired; historical bundles and
+receipts remain. The numerical cap and initial-site deployment are still open.
+The remainder preserves the original handoff's checkpoint and checklist.
 
 ## What this is
 

@@ -1,0 +1,13 @@
+{
+  "worktree": "C:\\Users\\mark_\\Code\\worktrees\\mere-viewer-cone",
+  "status": "retired after clean-state, main/origin ancestry, preserved ignored artifacts and live-owner checks",
+  "branch": "viewer-cone local branch deleted normally; origin/viewer-cone and viewer-cone-measured unchanged",
+  "preserved_ignored_bundle": "C:\\Users\\mark_\\Code\\testing\\mere\\viewer-cone\\measured-default-dev",
+  "preserved_web_lock": "web-lock-after.txt",
+  "other_worktrees": "untouched",
+  "existing_targets": [
+    "C:\\t\\cargo-targets\\mere\\seiche-speed",
+    "C:\\t\\cargo-targets\\mere\\seiche-speed\\web"
+  ],
+  "target_owner": "Existing seiche/P0 reusable gate caches; preserved for subsequent consumer checks"
+}

@@ -1,0 +1,24 @@
+{
+  "authorization": "Mark: authorized",
+  "owners": [
+    "viewer-cone self review",
+    "viewer-cone main integration"
+  ],
+  "roots": [
+    "C:\\Users\\mark_\\Code\\testing\\mere\\viewer-cone\\review",
+    "C:\\Users\\mark_\\Code\\testing\\mere\\viewer-cone\\integration"
+  ],
+  "removed": [
+    "Six generated pkg bundles",
+    "Five transfer archives",
+    "Eight temporary Chrome profiles",
+    "Generated Python bytecode"
+  ],
+  "method": "Verified individual generated files, empty directories and exact profile paths; native PowerShell without Force",
+  "earlier_rejections": "Bulk/forced cleanup was rejected; narrower explicit operations succeeded",
+  "preserved": [
+    "Source fixtures, static sources, receipt logs and owner markers",
+    "Original measured bundles, including relocated original default-dev bundle",
+    "Existing Cargo caches"
+  ]
+}

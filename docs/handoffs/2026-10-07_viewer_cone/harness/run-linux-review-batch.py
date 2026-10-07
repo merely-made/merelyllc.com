@@ -12,7 +12,7 @@ parser.add_argument('--root', type=pathlib.Path, required=True)
 parser.add_argument('--sink', type=pathlib.Path, required=True)
 parser.add_argument('--bundle', choices=['viewer', 'default', 'viewer-release'], required=True)
 parser.add_argument('--port', type=int, default=8982, help='First receipt port; occupied ports are refused.')
-parser.add_argument('--only', help='Run one named row.')
+parser.add_argument('--only', help='Run comma-separated named rows.')
 parser.add_argument('--suffix', default='', help='New output suffix for a replacement control.')
 args = parser.parse_args()
 if args.suffix and not re.fullmatch('[a-z0-9-]+', args.suffix):
@@ -50,9 +50,11 @@ elif args.bundle == 'default':
 if args.bundle == 'viewer-release':
     rows = [('site21', 'p0_viewer_site_frames_21', 'nodes=21&seed=7&links=none&physics_speed=1&gpu=off', 'pass', '')]
 if args.only:
-    rows = [row for row in rows if row[0] == args.only]
-    if not rows:
-        parser.error('unknown row')
+    names = set(args.only.split(','))
+    unknown = names - {row[0] for row in rows}
+    if unknown:
+        parser.error('unknown rows: ' + ', '.join(sorted(unknown)))
+    rows = [row for row in rows if row[0] in names]
 run_name = args.bundle + ('-' + args.suffix if args.suffix else '')
 results = []
 for index, (label, scenario, query, expected, reason) in enumerate(rows):

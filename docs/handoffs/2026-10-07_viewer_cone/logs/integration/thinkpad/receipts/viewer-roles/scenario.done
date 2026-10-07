@@ -1,0 +1,7 @@
+RESULT ok
+captured roles_anchored_home
+wait: still busy after 600 frames
+captured roles_seeded_again
+wait: still busy after 600 frames
+role controls receipt complete
+gpu timestamps: no

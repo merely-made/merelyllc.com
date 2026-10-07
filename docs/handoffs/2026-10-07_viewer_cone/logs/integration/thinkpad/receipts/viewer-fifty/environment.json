@@ -1,0 +1,95 @@
+{
+  "machine": "thinkpad-l14-f",
+  "platform": "Linux-7.2.8-200.fc44.x86_64-x86_64-with-glibc2.43",
+  "bundle_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+  "bundle_bytes": 56458786,
+  "scenario": "p6_tree_speed_fast_control",
+  "scenario_sha256": "d668256fc4cc43380a5c0fde931a5ba52d63e767ad5587990eccbdeb5c6cd8af",
+  "query": "nodes=24&seed=7&links=none&gpu=off&physics_speed=1",
+  "load_before": [
+    1.8740234375,
+    0.822265625,
+    0.48046875
+  ],
+  "unsafe_webgpu": true,
+  "cpu_samples": [
+    {
+      "seconds": 1.26,
+      "percent": 43.67
+    },
+    {
+      "seconds": 2.26,
+      "percent": 48.76
+    },
+    {
+      "seconds": 3.26,
+      "percent": 38.84
+    },
+    {
+      "seconds": 4.26,
+      "percent": 23.05
+    },
+    {
+      "seconds": 5.26,
+      "percent": 28.61
+    },
+    {
+      "seconds": 6.26,
+      "percent": 28.61
+    },
+    {
+      "seconds": 7.26,
+      "percent": 72.95
+    },
+    {
+      "seconds": 8.27,
+      "percent": 37.52
+    },
+    {
+      "seconds": 9.27,
+      "percent": 24.97
+    },
+    {
+      "seconds": 10.27,
+      "percent": 30.0
+    },
+    {
+      "seconds": 11.27,
+      "percent": 26.88
+    },
+    {
+      "seconds": 12.27,
+      "percent": 22.52
+    }
+  ],
+  "cpu_before_percent": 6.857855361596011,
+  "command": [
+    "flatpak",
+    "run",
+    "--filesystem=/home/markik/Code/testing/mere/viewer-cone/integration/receipts/viewer-fifty",
+    "com.google.Chrome",
+    "--user-data-dir=/home/markik/Code/testing/mere/viewer-cone/integration/receipts/viewer-fifty/chrome-profile",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--enable-logging=stderr",
+    "--ozone-platform=wayland",
+    "--disable-features=CalculateNativeWinOcclusion",
+    "--disable-backgrounding-occluded-windows",
+    "--disable-renderer-backgrounding",
+    "--new-window",
+    "--window-size=1400,900",
+    "--enable-unsafe-webgpu",
+    "--enable-features=Vulkan",
+    "--use-angle=vulkan",
+    "http://127.0.0.1:9042/tree.html?scenario=scenarios/p6_tree_speed_fast_control.scn&sink=http://127.0.0.1:9042/scenario-receipt&nodes=24&seed=7&links=none&gpu=off&physics_speed=1"
+  ],
+  "result": "ok",
+  "page_errors": [],
+  "gate_failures": [],
+  "elapsed_seconds": 12.28,
+  "load_after": [
+    1.6796875,
+    0.83154296875,
+    0.4892578125
+  ]
+}

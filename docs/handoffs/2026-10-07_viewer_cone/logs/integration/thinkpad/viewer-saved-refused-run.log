@@ -1,0 +1,21 @@
+RESULT fail
+FAIL: assert snap source Eq 'saved graph': got 'fixture'
+FAIL: assert snap detail-open: no such field
+waited 0 frames
+FAIL: assert snap save-state: no such field
+FAIL: assert snap detail-title: no such field
+FAIL: assert snap detail-tags: no such field
+FAIL: checkpoint selected has no detail-member
+FAIL: checkpoint selected has no graph-session
+captured p4_tree_saved_edit
+FAIL: assert snap detail-open: no such field
+FAIL: assert snap detail-open: no such field
+FAIL: assert snap detail-title: no such field
+waited 0 frames
+FAIL: no current DOM target for Selector { surface: None, matcher: Role("textbox"), text: Some("Title"), attr: None }
+FAIL: no current DOM target for Selector { surface: None, matcher: Role("textbox"), text: Some("Tags"), attr: None }
+FAIL: no current DOM target for Selector { surface: None, matcher: Role("button"), text: Some("Save changes"), attr: None }
+FAIL: no current DOM target for Selector { surface: None, matcher: Role("button"), text: Some("Close details"), attr: None }
+FAIL: no current DOM target for Selector { surface: None, matcher: Role("button"), text: Some("Open details"), attr: None }
+gpu timestamps: no
+

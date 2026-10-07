@@ -1,0 +1,15 @@
+{
+  "candidate": "ea38f335422798b1f7925a7ad4d3f3eabfcdafc4",
+  "command": [
+    "cargo",
+    "check",
+    "--offline",
+    "--target",
+    "wasm32-unknown-unknown",
+    "--no-default-features",
+    "-j",
+    "4"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 31.36
+}

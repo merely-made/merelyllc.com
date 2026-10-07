@@ -1,0 +1,19 @@
+[
+  {
+    "label": "site21",
+    "scenario": "p0_viewer_site_frames_21",
+    "query": "nodes=21&seed=7&links=none&physics_speed=1&gpu=off",
+    "expected": "pass",
+    "reason": "",
+    "harness_exit": 0,
+    "receipt": "viewer-release-port-retry-site21",
+    "accepted": true,
+    "result": "ok",
+    "bundle_sha256": "c2a30aa75b857973659cf7ec707f8edacb9553d0400839382b5ef6d3fdf97ec2",
+    "scenario_sha256": "058f48dd97d84aae1e4a5ff35310781aa79e14f4f92a6c26ba5e6f5001d08f3a",
+    "cpu_before_percent": 3.2459425717852652,
+    "page_errors": [],
+    "gate_failures": [],
+    "elapsed_seconds": 12.29
+  }
+]

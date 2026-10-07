@@ -1,10 +1,12 @@
 # Viewer cone: ThinkPad reruns, 2026-10-07
 
-**Current checkpoint:** Mark asked Codex to do the review directly after the
-other sessions exhausted their capacity. See [Candidate review](#candidate-review)
-for the combined code and fresh evidence. The original `6963ebe5` measurements
-below remain historical; their four development misses are not waived. Plain
-viewer is selected under Ruling 121; the numerical payload cap remains open.
+**Current checkpoint:** Mark authorized integration and cleanup. Mere main
+is pushed at `ea9e6da7`, including latest-main Genet `965b64e2` and the reviewed
+viewer/speed changes. See [Authorized integration](#authorized-integration)
+for fresh gates and cleanup. The plain component now measures 2,147,689 B
+brotli across six assets. The numerical cap remains open. Earlier `6963ebe5`
+and `8175b69e` receipts remain historical, with their misses and controls
+preserved.
 
 ## Evidence
 
@@ -331,3 +333,71 @@ checking the marker, hashes, absolute containment and lack of live owners.
 [`cleanup-thinkpad.json`](logs/self-review/cleanup-thinkpad.json) records the
 removed paths. Source fixtures, static sources and receipts remain. Receipt
 browsers and sinks are stopped on both machines.
+
+## Authorized integration
+
+Mark: "authorized", following the direct review and its remaining integration
+and cleanup steps (Ruling 123). The numerical cap is not selected by this reply.
+Mere main now contains the viewer cone and speed estimator, pushed and verified
+at **`ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7`**. The tested runtime is
+`ea38f335`: later code changes only update the physics plan. The primary
+checkout fast-forwarded from clean `e7ec66af`; the push advanced remote main
+from `57b4893d`. The measured remote viewer branch and `viewer-cone-measured`
+tag remain at `6963ebe5`.
+
+The new main baseline includes Genet `965b64e2`, the browser prerequisite,
+smolweb accessibility projection and E1b. It merges cleanly into the candidate;
+main's root manifest and lock are exact. The ignored standalone web lock
+refreshes minimally offline, then all gates use locked/offline resolution and
+the tracked portable configuration. Its before/after bytes and hashes are
+recorded separately. No local path-patch configuration is used for these gates.
+
+[`Integration summary`](logs/integration/summary.json) records:
+
+- All eight wasm32 feature configurations pass, with warnings; both default
+  and viewer development bundles and a plain release were rebuilt using exact
+  wasm-bindgen 0.2.129. Focused native tests pass 117 with four ignored.
+- **34 current headed development cases** pass their expected verdicts:
+  viewer 18, default 16. They repeat the review's normal speed, stall/cap,
+  tree/role/framing, error-gate, worker/fallback and clean-refusal coverage.
+  The two 3000 ms slowed-Max cases passed in the prior review and are not
+  repeated here. Their simulation, estimator, worker, bar and fixture sources
+  are identical, with hashes in `unchanged-speed-source.json`. This is a
+  bounded integration round, not a claim of the entire historical suite.
+- Four fresh Chrome computed-AX checks pass, including the missing-Pin
+  controls. The release's approved synthetic 21-node frame receipt passes:
+  live interval medians are 16.7/16.7/16.7 ms, with all nodes visible, no hidden
+  timing windows and zero physics-device work. Its first launch was refused
+  before Chrome startup because an unrelated listener owned port 9090; the
+  same scenario passes on verified-free 9120. The owner was not stopped.
+- The fresh six assets total **2,147,689 B brotli**, using CLI 1.2.0 quality 11.
+  WASM is 9,315,298 B raw and 2,051,137 B brotli; generated JS is 14,222 B
+  brotli. This replaces the prior 2,125,171 B candidate size as the current
+  cap basis, an increase of 22,518 B. Site data and HTTP overhead remain
+  outside those six assets. The numerical cap and site deployment remain open.
+
+### Integration cleanup
+
+Local cleanup is complete. Bulk/forced deletion was initially rejected even
+after authorization. Narrower native PowerShell operations on verified
+individual generated files, empty directories and exact Chrome profile paths
+succeeded without Force. Six disposable `pkg` bundles, five transfer archives,
+eight Chrome profiles and generated Python bytecode are removed. Source
+fixtures, static sources and receipt logs remain. The new ThinkPad round's
+35 profiles, three copied bundles and two archives are also removed after
+streaming evidence and confirming hashes and no live owners. The cleanup
+records are linked from the integration summary.
+
+The cone worktree and local branch are retired after the main push, clean-state
+and ancestry checks. The Windows harness now defaults to the primary main
+checkout; its configurable `-Web` path remains available for receipt bundles.
+The updated harness parses successfully and its default directory exists.
+Its original ignored development default bundle was
+preserved, byte-identical, at
+`C:/Users/mark_/Code/testing/mere/viewer-cone/measured-default-dev`, owned by
+P0's historical receipts. The current standalone lock is preserved in
+`logs/integration/web-lock-after.txt`. Earlier measured local bundles remain.
+Other worktrees, including the original speed lane, are untouched. No Cargo
+home was created. Existing shared native and web caches under
+`C:/t/cargo-targets/mere/seiche-speed` are preserved for subsequent consumer
+gates; no new Cargo target was created. Receipt browsers and sinks are stopped.

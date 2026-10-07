@@ -1,0 +1,204 @@
+{
+  "source_commit": "ea38f335422798b1f7925a7ad4d3f3eabfcdafc4",
+  "web_lock_sha256": "d5625feecedd356dc9986cabb384f8389f8bc9bc2dbf5d71d339f5b9ec581b4e",
+  "rows": [
+    {
+      "label": "build-viewer",
+      "command": [
+        "cargo",
+        "build",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "-j",
+        "4",
+        "--no-default-features"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 36.12
+    },
+    {
+      "label": "bindgen-viewer",
+      "command": [
+        "C:\\t\\wasm-bindgen-0.2.129\\bin\\wasm-bindgen.exe",
+        "--target",
+        "web",
+        "--no-demangle",
+        "--out-dir",
+        "C:\\Users\\mark_\\Code\\testing\\mere\\viewer-cone\\integration\\viewer\\pkg",
+        "C:\\t\\cargo-targets\\mere\\seiche-speed\\web\\wasm32-unknown-unknown\\debug\\graphshell_web.wasm"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.97
+    },
+    {
+      "label": "build-default",
+      "command": [
+        "cargo",
+        "build",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "-j",
+        "4"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 50.05
+    },
+    {
+      "label": "bindgen-default",
+      "command": [
+        "C:\\t\\wasm-bindgen-0.2.129\\bin\\wasm-bindgen.exe",
+        "--target",
+        "web",
+        "--no-demangle",
+        "--out-dir",
+        "C:\\Users\\mark_\\Code\\testing\\mere\\viewer-cone\\integration\\default\\pkg",
+        "C:\\t\\cargo-targets\\mere\\seiche-speed\\web\\wasm32-unknown-unknown\\debug\\graphshell_web.wasm"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 6.89
+    },
+    {
+      "label": "check-canvas-gpu",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "--no-default-features",
+        "--features",
+        "canvas-gpu",
+        "-j",
+        "4"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 15.97
+    },
+    {
+      "label": "check-product",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "--no-default-features",
+        "--features",
+        "product",
+        "-j",
+        "4"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 8.14
+    },
+    {
+      "label": "check-remote",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "--no-default-features",
+        "--features",
+        "remote",
+        "-j",
+        "4"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 8.3
+    },
+    {
+      "label": "check-product-remote",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "--no-default-features",
+        "--features",
+        "product,remote",
+        "-j",
+        "4"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 8.75
+    },
+    {
+      "label": "check-main-page",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "--no-default-features",
+        "--features",
+        "main-page",
+        "-j",
+        "4"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 4.69
+    },
+    {
+      "label": "check-image-decode",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "--no-default-features",
+        "--features",
+        "image-decode",
+        "-j",
+        "4"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 13.12
+    },
+    {
+      "label": "build-viewer-release",
+      "command": [
+        "cargo",
+        "build",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "--release",
+        "--no-default-features",
+        "-j",
+        "4"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 99.27
+    },
+    {
+      "label": "bindgen-viewer-release",
+      "command": [
+        "C:\\t\\wasm-bindgen-0.2.129\\bin\\wasm-bindgen.exe",
+        "--target",
+        "web",
+        "--no-demangle",
+        "--out-dir",
+        "C:\\Users\\mark_\\Code\\testing\\mere\\viewer-cone\\integration\\viewer-release\\pkg",
+        "C:\\t\\cargo-targets\\mere\\seiche-speed\\web\\wasm32-unknown-unknown\\release\\graphshell_web.wasm"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.78
+    }
+  ]
+}

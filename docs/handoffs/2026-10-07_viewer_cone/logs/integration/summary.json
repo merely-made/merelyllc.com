@@ -1,0 +1,1209 @@
+{
+  "status": "Merged and pushed to Mere main; integration gates pass",
+  "main": {
+    "authorization": "Mark: authorized",
+    "primary_before": "e7ec66aff19923d904e0d0155ea00d78b7015fea",
+    "origin_before": "57b4893db6909d5ed9c4ccae30216f0d8164201a",
+    "tested_runtime": "ea38f335422798b1f7925a7ad4d3f3eabfcdafc4",
+    "main_commit": "ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7",
+    "remote_main_verified": "ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7",
+    "method": "clean primary checkout, ff-only merge, normal push; no force push",
+    "measured_origin_viewer_preserved": "6963ebe539d9d469dbd848c449335baae54a840e"
+  },
+  "runtime_commit": "ea38f335422798b1f7925a7ad4d3f3eabfcdafc4",
+  "native": {
+    "passed": 117,
+    "failed": 0,
+    "ignored": 4
+  },
+  "feature_configurations": 8,
+  "development_headed": {
+    "accepted": 34,
+    "rows": {
+      "viewer": [
+        {
+          "label": "slow",
+          "scenario": "p6_tree_speed_slow",
+          "query": "physics_speed=0.2&gpu=off",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "viewer-slow",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+          "scenario_sha256": "c8df0d3bb1e1be3b6bab8f024bad303d05b49299d24ba7a99239af2e7ac2043d",
+          "cpu_before_percent": 2.621722846441943,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 9.3
+        },
+        {
+          "label": "fast",
+          "scenario": "p6_tree_speed_fast",
+          "query": "nodes=300&seed=7&links=none&gpu=off&physics_speed=1",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "viewer-fast",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+          "scenario_sha256": "5811803df71a8f212697ef6a62dc782308c0ba8c763b8dcbbf4160a0d7e785d3",
+          "cpu_before_percent": 7.740324594257175,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 45.3
+        },
+        {
+          "label": "fifty",
+          "scenario": "p6_tree_speed_fast_control",
+          "query": "nodes=24&seed=7&links=none&gpu=off&physics_speed=1",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "viewer-fifty",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+          "scenario_sha256": "d668256fc4cc43380a5c0fde931a5ba52d63e767ad5587990eccbdeb5c6cd8af",
+          "cpu_before_percent": 6.857855361596011,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 12.28
+        },
+        {
+          "label": "stall",
+          "scenario": "p6_tree_speed_fast_planted",
+          "query": "nodes=300&seed=7&links=none&gpu=off&physics_speed=max&physics_plant_stall_ms=10",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "viewer-stall",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+          "scenario_sha256": "7c50f1a1a0c71840fa036ed666aafc1a7b70cebc8e6d32a66eb8759bed176696",
+          "cpu_before_percent": 1.6270337922402955,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 27.32
+        },
+        {
+          "label": "cap",
+          "scenario": "p6_tree_speed_fast_control_capped",
+          "query": "nodes=24&seed=7&links=none&gpu=off&physics_speed=1&physics_plant_owed=1x",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "viewer-cap",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+          "scenario_sha256": "fa449be6fc123385e1ddc94b163ee676c5a72f79ed105e835f96c00a3a95c832",
+          "cpu_before_percent": 3.731343283582089,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 11.27
+        },
+        {
+          "label": "select",
+          "scenario": "p6_tree_speed_select",
+          "query": "nodes=300&seed=7&links=none&gpu=off",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "viewer-select",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+          "scenario_sha256": "90c8926e482f0b13f05f499ef22e09244c4b944d1e7b8801c2c626423692c273",
+          "cpu_before_percent": 4.010025062656641,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 48.29
+        },
+        {
+          "label": "reader",
+          "scenario": "p4_tree_canvas_reader",
+          "query": "gpu=off",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "viewer-reader",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+          "scenario_sha256": "153fd81bbcf9433f37c3069a080062ec92bc6ea28ca7cc759cb33e12bd8c934e",
+          "cpu_before_percent": 2.6184538653366562,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 5.28
+        },
+        {
+          "label": "reader-control",
+          "scenario": "p4_tree_canvas_reader",
+          "query": "gpu=off&plant_a11y=missing_action",
+          "expected": "fail",
+          "reason": "reader-buttons",
+          "harness_exit": 0,
+          "receipt": "viewer-reader-control",
+          "accepted": true,
+          "result": "fail",
+          "bundle_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+          "scenario_sha256": "153fd81bbcf9433f37c3069a080062ec92bc6ea28ca7cc759cb33e12bd8c934e",
+          "cpu_before_percent": 2.6249999999999996,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 5.27
+        },
+        {
+          "label": "roles",
+          "scenario": "p4_tree_role_controls",
+          "query": "gpu=off",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "viewer-roles",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+          "scenario_sha256": "a7abfc58f596d676aadc44618f0770fcc4efea42b905fb8c6e69a82c9d49d356",
+          "cpu_before_percent": 13.059701492537313,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 66.31
+        },
+        {
+          "label": "arrangement",
+          "scenario": "p4_tree_arrangement_roles",
+          "query": "gpu=off",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "viewer-arrangement",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+          "scenario_sha256": "c30732aa841e5677f77f1b5f9bf9e23afc4e305d85955ff2c4baa3c547a0d979",
+          "cpu_before_percent": 2.372034956304614,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 77.32
+        },
+        {
+          "label": "framing",
+          "scenario": "p4_tree_physics_framing_control",
+          "query": "gpu=off",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "viewer-framing",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+          "scenario_sha256": "8466a1bf0f8ce4d9f687f4887ffa168159321100a988472d7a9899c5ffdc355f",
+          "cpu_before_percent": 4.460966542750933,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 16.28
+        },
+        {
+          "label": "page-error",
+          "scenario": "p4_tree_physics_framing_control",
+          "query": "gpu=off&plant_page_error=throw",
+          "expected": "gate",
+          "reason": "receipt gate",
+          "harness_exit": 0,
+          "receipt": "viewer-page-error",
+          "accepted": true,
+          "result": "fail",
+          "bundle_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+          "scenario_sha256": "8466a1bf0f8ce4d9f687f4887ffa168159321100a988472d7a9899c5ffdc355f",
+          "cpu_before_percent": 3.1094527363184077,
+          "page_errors": [
+            "Uncaught Error: receipt-gate-control: planted page error"
+          ],
+          "gate_failures": [
+            "uncaught: Uncaught Error: receipt-gate-control: planted page error"
+          ],
+          "elapsed_seconds": 16.28
+        },
+        {
+          "label": "worker",
+          "scenario": "p0_worker_worker",
+          "query": "gpu=off",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "viewer-worker",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+          "scenario_sha256": "b201ee408adec671595fd4f32860d33fdfbf1a96db0638ff57ae47d330d8f0ec",
+          "cpu_before_percent": 3.1094527363184077,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 4.28
+        },
+        {
+          "label": "worker-off",
+          "scenario": "p0_worker_main",
+          "query": "gpu=off&physics_period_source=main",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "viewer-worker-off",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+          "scenario_sha256": "1811d3e3cc678a5eb4f46500d90f35de8743e36e6a0a7a4f2ddca4d32466b22f",
+          "cpu_before_percent": 3.237858032378582,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 4.27
+        },
+        {
+          "label": "worker-failed",
+          "scenario": "p0_worker_failed",
+          "query": "gpu=off&physics_plant_worker=fail",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "viewer-worker-failed",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+          "scenario_sha256": "c8e29fa2ce3d5c2bd78e033c035e9f2674b428e9648c58578a9ad07a01c22cde",
+          "cpu_before_percent": 4.850746268656714,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 4.27
+        },
+        {
+          "label": "remote-refused",
+          "scenario": "p4_tree_remote_absent",
+          "query": "gpu=off",
+          "expected": "fail",
+          "reason": "Remote session",
+          "harness_exit": 0,
+          "receipt": "viewer-remote-refused",
+          "accepted": true,
+          "result": "fail",
+          "bundle_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+          "scenario_sha256": "798b9990da250bc0d5d4211044f74ff7d2123bd3c2d64327de20e7d9295a7764",
+          "cpu_before_percent": 4.0000000000000036,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 4.27
+        },
+        {
+          "label": "saved-refused",
+          "scenario": "p4_tree_saved_edit",
+          "query": "gpu=off&app=local",
+          "expected": "fail",
+          "reason": "source",
+          "harness_exit": 0,
+          "receipt": "viewer-saved-refused",
+          "accepted": true,
+          "result": "fail",
+          "bundle_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+          "scenario_sha256": "ae1502a3123283376895ae55e745d7e20092435832648b3aa879cd02766172ed",
+          "cpu_before_percent": 4.364089775561098,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 5.27
+        },
+        {
+          "label": "remote-export",
+          "scenario": "p4_tree_canvas_reader",
+          "query": "gpu=off&signal=ws://127.0.0.1:8999",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "viewer-remote-export",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+          "scenario_sha256": "153fd81bbcf9433f37c3069a080062ec92bc6ea28ca7cc759cb33e12bd8c934e",
+          "cpu_before_percent": 2.6249999999999996,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 6.27
+        }
+      ],
+      "default": [
+        {
+          "label": "slow",
+          "scenario": "p6_tree_speed_slow",
+          "query": "physics_speed=0.2&gpu=off",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "default-slow",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "b735a0d0c86d4ccf4cb6b252cd320740075e9ac608d78593fddd1af9f665ba86",
+          "scenario_sha256": "c8df0d3bb1e1be3b6bab8f024bad303d05b49299d24ba7a99239af2e7ac2043d",
+          "cpu_before_percent": 0.5006257822277815,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 8.28
+        },
+        {
+          "label": "fast",
+          "scenario": "p6_tree_speed_fast",
+          "query": "nodes=300&seed=7&links=none&gpu=off&physics_speed=1",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "default-fast",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "b735a0d0c86d4ccf4cb6b252cd320740075e9ac608d78593fddd1af9f665ba86",
+          "scenario_sha256": "5811803df71a8f212697ef6a62dc782308c0ba8c763b8dcbbf4160a0d7e785d3",
+          "cpu_before_percent": 2.9962546816479363,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 47.3
+        },
+        {
+          "label": "fifty",
+          "scenario": "p6_tree_speed_fast_control",
+          "query": "nodes=24&seed=7&links=none&gpu=off&physics_speed=1",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "default-fifty",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "b735a0d0c86d4ccf4cb6b252cd320740075e9ac608d78593fddd1af9f665ba86",
+          "scenario_sha256": "d668256fc4cc43380a5c0fde931a5ba52d63e767ad5587990eccbdeb5c6cd8af",
+          "cpu_before_percent": 2.487562189054726,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 13.28
+        },
+        {
+          "label": "stall",
+          "scenario": "p6_tree_speed_fast_planted",
+          "query": "nodes=300&seed=7&links=none&gpu=off&physics_speed=max&physics_plant_stall_ms=10",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "default-stall",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "b735a0d0c86d4ccf4cb6b252cd320740075e9ac608d78593fddd1af9f665ba86",
+          "scenario_sha256": "7c50f1a1a0c71840fa036ed666aafc1a7b70cebc8e6d32a66eb8759bed176696",
+          "cpu_before_percent": 1.995012468827928,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 28.29
+        },
+        {
+          "label": "cap",
+          "scenario": "p6_tree_speed_fast_control_capped",
+          "query": "nodes=24&seed=7&links=none&gpu=off&physics_speed=1&physics_plant_owed=1x",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "default-cap",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "b735a0d0c86d4ccf4cb6b252cd320740075e9ac608d78593fddd1af9f665ba86",
+          "scenario_sha256": "fa449be6fc123385e1ddc94b163ee676c5a72f79ed105e835f96c00a3a95c832",
+          "cpu_before_percent": 9.328358208955223,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 13.28
+        },
+        {
+          "label": "select",
+          "scenario": "p6_tree_speed_select",
+          "query": "nodes=300&seed=7&links=none&gpu=off",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "default-select",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "b735a0d0c86d4ccf4cb6b252cd320740075e9ac608d78593fddd1af9f665ba86",
+          "scenario_sha256": "90c8926e482f0b13f05f499ef22e09244c4b944d1e7b8801c2c626423692c273",
+          "cpu_before_percent": 1.122194513715713,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 49.3
+        },
+        {
+          "label": "reader",
+          "scenario": "p4_tree_canvas_reader",
+          "query": "gpu=off",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "default-reader",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "b735a0d0c86d4ccf4cb6b252cd320740075e9ac608d78593fddd1af9f665ba86",
+          "scenario_sha256": "153fd81bbcf9433f37c3069a080062ec92bc6ea28ca7cc759cb33e12bd8c934e",
+          "cpu_before_percent": 1.7456359102244412,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 6.28
+        },
+        {
+          "label": "reader-control",
+          "scenario": "p4_tree_canvas_reader",
+          "query": "gpu=off&plant_a11y=missing_action",
+          "expected": "fail",
+          "reason": "reader-buttons",
+          "harness_exit": 0,
+          "receipt": "default-reader-control",
+          "accepted": true,
+          "result": "fail",
+          "bundle_sha256": "b735a0d0c86d4ccf4cb6b252cd320740075e9ac608d78593fddd1af9f665ba86",
+          "scenario_sha256": "153fd81bbcf9433f37c3069a080062ec92bc6ea28ca7cc759cb33e12bd8c934e",
+          "cpu_before_percent": 15.230961298377032,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 6.27
+        },
+        {
+          "label": "roles",
+          "scenario": "p4_tree_role_controls",
+          "query": "gpu=off",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "default-roles",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "b735a0d0c86d4ccf4cb6b252cd320740075e9ac608d78593fddd1af9f665ba86",
+          "scenario_sha256": "a7abfc58f596d676aadc44618f0770fcc4efea42b905fb8c6e69a82c9d49d356",
+          "cpu_before_percent": 2.244389027431426,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 68.31
+        },
+        {
+          "label": "arrangement",
+          "scenario": "p4_tree_arrangement_roles",
+          "query": "gpu=off",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "default-arrangement",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "b735a0d0c86d4ccf4cb6b252cd320740075e9ac608d78593fddd1af9f665ba86",
+          "scenario_sha256": "c30732aa841e5677f77f1b5f9bf9e23afc4e305d85955ff2c4baa3c547a0d979",
+          "cpu_before_percent": 0.8750000000000036,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 80.31
+        },
+        {
+          "label": "framing",
+          "scenario": "p4_tree_physics_framing_control",
+          "query": "gpu=off",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "default-framing",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "b735a0d0c86d4ccf4cb6b252cd320740075e9ac608d78593fddd1af9f665ba86",
+          "scenario_sha256": "8466a1bf0f8ce4d9f687f4887ffa168159321100a988472d7a9899c5ffdc355f",
+          "cpu_before_percent": 1.6249999999999987,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 16.28
+        },
+        {
+          "label": "page-error",
+          "scenario": "p4_tree_physics_framing_control",
+          "query": "gpu=off&plant_page_error=throw",
+          "expected": "gate",
+          "reason": "receipt gate",
+          "harness_exit": 0,
+          "receipt": "default-page-error",
+          "accepted": true,
+          "result": "fail",
+          "bundle_sha256": "b735a0d0c86d4ccf4cb6b252cd320740075e9ac608d78593fddd1af9f665ba86",
+          "scenario_sha256": "8466a1bf0f8ce4d9f687f4887ffa168159321100a988472d7a9899c5ffdc355f",
+          "cpu_before_percent": 1.9975031210986316,
+          "page_errors": [
+            "Uncaught Error: receipt-gate-control: planted page error"
+          ],
+          "gate_failures": [
+            "uncaught: Uncaught Error: receipt-gate-control: planted page error"
+          ],
+          "elapsed_seconds": 17.28
+        },
+        {
+          "label": "worker",
+          "scenario": "p0_worker_worker",
+          "query": "gpu=off",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "default-worker",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "b735a0d0c86d4ccf4cb6b252cd320740075e9ac608d78593fddd1af9f665ba86",
+          "scenario_sha256": "b201ee408adec671595fd4f32860d33fdfbf1a96db0638ff57ae47d330d8f0ec",
+          "cpu_before_percent": 1.3732833957553092,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 4.27
+        },
+        {
+          "label": "worker-off",
+          "scenario": "p0_worker_main",
+          "query": "gpu=off&physics_period_source=main",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "default-worker-off",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "b735a0d0c86d4ccf4cb6b252cd320740075e9ac608d78593fddd1af9f665ba86",
+          "scenario_sha256": "1811d3e3cc678a5eb4f46500d90f35de8743e36e6a0a7a4f2ddca4d32466b22f",
+          "cpu_before_percent": 4.607721046077207,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 4.27
+        },
+        {
+          "label": "worker-failed",
+          "scenario": "p0_worker_failed",
+          "query": "gpu=off&physics_plant_worker=fail",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "default-worker-failed",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "b735a0d0c86d4ccf4cb6b252cd320740075e9ac608d78593fddd1af9f665ba86",
+          "scenario_sha256": "c8e29fa2ce3d5c2bd78e033c035e9f2674b428e9648c58578a9ad07a01c22cde",
+          "cpu_before_percent": 14.837905236907734,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 5.27
+        },
+        {
+          "label": "main-select",
+          "scenario": "physics_speed_select",
+          "query": "nodes=300&seed=7&links=none&gpu=off",
+          "expected": "pass",
+          "reason": "",
+          "harness_exit": 0,
+          "receipt": "default-main-select",
+          "accepted": true,
+          "result": "ok",
+          "bundle_sha256": "b735a0d0c86d4ccf4cb6b252cd320740075e9ac608d78593fddd1af9f665ba86",
+          "scenario_sha256": "194d71726048beb30f8ecfc0757dcc55948700b882de22d068bde8e450a3d3ba",
+          "cpu_before_percent": 2.2471910112359605,
+          "page_errors": [],
+          "gate_failures": [],
+          "elapsed_seconds": 37.29
+        }
+      ]
+    }
+  },
+  "computed_ax": {
+    "accepted": 4,
+    "rows": [
+      {
+        "accepted": true,
+        "plant": "normal",
+        "cdp": "EXIT 0\nCDP OK: 11 of 11 shown, 11 items, each with Drag and Pin\r\n",
+        "wasm_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+        "scenario_sha256": "bc9c856e37562ae2bca7cabf5b0a3863418ae40436543248394d0d009b0da74e",
+        "bundle": "viewer"
+      },
+      {
+        "accepted": true,
+        "plant": "missing_action",
+        "cdp": "EXIT 1\nCDP FAIL: Pin missing on \"I2P port notes\"; Pin missing on \"I2P service\"; Pin missing on \"Reference notes\"\r\n",
+        "wasm_sha256": "a3c9befc6d9d667c5b5fc03349be8ab29c55d0ffa83a00d9ca51e4d1119f1fc2",
+        "scenario_sha256": "bc9c856e37562ae2bca7cabf5b0a3863418ae40436543248394d0d009b0da74e",
+        "bundle": "viewer"
+      },
+      {
+        "accepted": true,
+        "plant": "normal",
+        "cdp": "EXIT 0\nCDP OK: 11 of 11 shown, 11 items, each with Drag and Pin\r\n",
+        "wasm_sha256": "b735a0d0c86d4ccf4cb6b252cd320740075e9ac608d78593fddd1af9f665ba86",
+        "scenario_sha256": "bc9c856e37562ae2bca7cabf5b0a3863418ae40436543248394d0d009b0da74e",
+        "bundle": "default"
+      },
+      {
+        "accepted": true,
+        "plant": "missing_action",
+        "cdp": "EXIT 1\nCDP FAIL: Pin missing on \"I2P port notes\"; Pin missing on \"I2P service\"; Pin missing on \"Reference notes\"\r\n",
+        "wasm_sha256": "b735a0d0c86d4ccf4cb6b252cd320740075e9ac608d78593fddd1af9f665ba86",
+        "scenario_sha256": "bc9c856e37562ae2bca7cabf5b0a3863418ae40436543248394d0d009b0da74e",
+        "bundle": "default"
+      }
+    ]
+  },
+  "release_site21": {
+    "row": {
+      "label": "site21",
+      "scenario": "p0_viewer_site_frames_21",
+      "query": "nodes=21&seed=7&links=none&physics_speed=1&gpu=off",
+      "expected": "pass",
+      "reason": "",
+      "harness_exit": 0,
+      "receipt": "viewer-release-port-retry-site21",
+      "accepted": true,
+      "result": "ok",
+      "bundle_sha256": "c2a30aa75b857973659cf7ec707f8edacb9553d0400839382b5ef6d3fdf97ec2",
+      "scenario_sha256": "058f48dd97d84aae1e4a5ff35310781aa79e14f4f92a6c26ba5e6f5001d08f3a",
+      "cpu_before_percent": 3.2459425717852652,
+      "page_errors": [],
+      "gate_failures": [],
+      "elapsed_seconds": 12.29
+    },
+    "timings": [
+      {
+        "counts": {
+          "paint_after_cull": {
+            "max": 89,
+            "min": 89
+          },
+          "paint_before_cull": {
+            "max": 89,
+            "min": 89
+          },
+          "physics_carried_us": {
+            "max": 0,
+            "min": 0
+          },
+          "physics_discarded_us": {
+            "max": 0,
+            "min": 0
+          },
+          "physics_steps": {
+            "max": 0,
+            "min": 0
+          },
+          "total_nodes": {
+            "max": 21,
+            "min": 21
+          },
+          "visible_nodes": {
+            "max": 21,
+            "min": 21
+          }
+        },
+        "cpu_ms": {
+          "max": 12.8,
+          "p50": 9.1,
+          "p95": 11.9
+        },
+        "frames": 62,
+        "gpu_ms": {
+          "max": 19.853,
+          "p50": 15.562,
+          "p95": 18.45
+        },
+        "hidden": false,
+        "interval_ms": {
+          "max": 23.3,
+          "p50": 16.7,
+          "p95": 20
+        },
+        "label": "site-paused",
+        "producer_render_us": {
+          "max": 3400,
+          "p50": 1900,
+          "p95": 3000
+        },
+        "producer_stage_us": {
+          "max": 400,
+          "p50": 100,
+          "p95": 300
+        },
+        "stages_ms": {
+          "cull": {
+            "max": 0.1,
+            "p50": 0,
+            "p95": 0.1
+          },
+          "dom_frame": {
+            "max": 0.1,
+            "p50": 0,
+            "p95": 0.1
+          },
+          "dom_mutate": {
+            "max": 0.1,
+            "p50": 0,
+            "p95": 0.1
+          },
+          "dom_prepare": {
+            "max": 0.2,
+            "p50": 0.1,
+            "p95": 0.2
+          },
+          "faces": {
+            "max": 0.4,
+            "p50": 0.2,
+            "p95": 0.3
+          },
+          "lower": {
+            "max": 0.2,
+            "p50": 0.1,
+            "p95": 0.2
+          },
+          "overlays": {
+            "max": 0.1,
+            "p50": 0,
+            "p95": 0.1
+          },
+          "physics": {
+            "max": 1,
+            "p50": 0,
+            "p95": 0.1
+          },
+          "prepare": {
+            "max": 1,
+            "p50": 0.2,
+            "p95": 0.3
+          },
+          "rasterize": {
+            "max": 2,
+            "p50": 1,
+            "p95": 1.7
+          },
+          "underlay": {
+            "max": 0.3,
+            "p50": 0.1,
+            "p95": 0.2
+          }
+        }
+      },
+      {
+        "counts": {
+          "paint_after_cull": {
+            "max": 89,
+            "min": 89
+          },
+          "paint_before_cull": {
+            "max": 89,
+            "min": 89
+          },
+          "physics_carried_us": {
+            "max": 16499,
+            "min": 16299
+          },
+          "physics_discarded_us": {
+            "max": 0,
+            "min": 0
+          },
+          "physics_steps": {
+            "max": 2,
+            "min": 1
+          },
+          "total_nodes": {
+            "max": 21,
+            "min": 21
+          },
+          "visible_nodes": {
+            "max": 21,
+            "min": 21
+          }
+        },
+        "cpu_ms": {
+          "max": 27.9,
+          "p50": 12.8,
+          "p95": 22.2
+        },
+        "frames": 122,
+        "gpu_ms": {
+          "max": 32.86,
+          "p50": 16.178,
+          "p95": 24.476
+        },
+        "hidden": false,
+        "interval_ms": {
+          "max": 30,
+          "p50": 16.7,
+          "p95": 24.8
+        },
+        "label": "site-live-1",
+        "producer_render_us": {
+          "max": 15200,
+          "p50": 6500,
+          "p95": 10900
+        },
+        "producer_stage_us": {
+          "max": 500,
+          "p50": 100,
+          "p95": 200
+        },
+        "stages_ms": {
+          "cull": {
+            "max": 0.1,
+            "p50": 0,
+            "p95": 0
+          },
+          "dom_frame": {
+            "max": 7.7,
+            "p50": 2,
+            "p95": 3.6
+          },
+          "dom_mutate": {
+            "max": 6.1,
+            "p50": 3.1,
+            "p95": 5.3
+          },
+          "dom_prepare": {
+            "max": 0.6,
+            "p50": 0.1,
+            "p95": 0.1
+          },
+          "faces": {
+            "max": 0.4,
+            "p50": 0.1,
+            "p95": 0.2
+          },
+          "lower": {
+            "max": 0.2,
+            "p50": 0,
+            "p95": 0.2
+          },
+          "overlays": {
+            "max": 0.1,
+            "p50": 0,
+            "p95": 0.1
+          },
+          "physics": {
+            "max": 1.6,
+            "p50": 0.1,
+            "p95": 0.3
+          },
+          "prepare": {
+            "max": 0.3,
+            "p50": 0.1,
+            "p95": 0.2
+          },
+          "rasterize": {
+            "max": 3.9,
+            "p50": 0.8,
+            "p95": 1.3
+          },
+          "underlay": {
+            "max": 0.5,
+            "p50": 0.1,
+            "p95": 0.2
+          }
+        }
+      },
+      {
+        "counts": {
+          "paint_after_cull": {
+            "max": 89,
+            "min": 89
+          },
+          "paint_before_cull": {
+            "max": 89,
+            "min": 89
+          },
+          "physics_carried_us": {
+            "max": 16399,
+            "min": 16166
+          },
+          "physics_discarded_us": {
+            "max": 0,
+            "min": 0
+          },
+          "physics_steps": {
+            "max": 2,
+            "min": 1
+          },
+          "total_nodes": {
+            "max": 21,
+            "min": 21
+          },
+          "visible_nodes": {
+            "max": 21,
+            "min": 21
+          }
+        },
+        "cpu_ms": {
+          "max": 30.2,
+          "p50": 13.5,
+          "p95": 18.4
+        },
+        "frames": 122,
+        "gpu_ms": {
+          "max": 24.542,
+          "p50": 16.067,
+          "p95": 20.48
+        },
+        "hidden": false,
+        "interval_ms": {
+          "max": 32,
+          "p50": 16.7,
+          "p95": 20.9
+        },
+        "label": "site-live-2",
+        "producer_render_us": {
+          "max": 11800,
+          "p50": 6800,
+          "p95": 9200
+        },
+        "producer_stage_us": {
+          "max": 300,
+          "p50": 100,
+          "p95": 200
+        },
+        "stages_ms": {
+          "cull": {
+            "max": 0.1,
+            "p50": 0,
+            "p95": 0.1
+          },
+          "dom_frame": {
+            "max": 4.1,
+            "p50": 2.1,
+            "p95": 3
+          },
+          "dom_mutate": {
+            "max": 5.9,
+            "p50": 3.1,
+            "p95": 4.5
+          },
+          "dom_prepare": {
+            "max": 0.2,
+            "p50": 0,
+            "p95": 0.2
+          },
+          "faces": {
+            "max": 0.3,
+            "p50": 0.1,
+            "p95": 0.2
+          },
+          "lower": {
+            "max": 0.2,
+            "p50": 0,
+            "p95": 0.1
+          },
+          "overlays": {
+            "max": 0.1,
+            "p50": 0,
+            "p95": 0.1
+          },
+          "physics": {
+            "max": 0.4,
+            "p50": 0.1,
+            "p95": 0.3
+          },
+          "prepare": {
+            "max": 0.4,
+            "p50": 0.1,
+            "p95": 0.2
+          },
+          "rasterize": {
+            "max": 1.4,
+            "p50": 0.8,
+            "p95": 1.1
+          },
+          "underlay": {
+            "max": 0.2,
+            "p50": 0.1,
+            "p95": 0.1
+          }
+        }
+      },
+      {
+        "counts": {
+          "paint_after_cull": {
+            "max": 89,
+            "min": 89
+          },
+          "paint_before_cull": {
+            "max": 89,
+            "min": 89
+          },
+          "physics_carried_us": {
+            "max": 16299,
+            "min": 16066
+          },
+          "physics_discarded_us": {
+            "max": 0,
+            "min": 0
+          },
+          "physics_steps": {
+            "max": 2,
+            "min": 1
+          },
+          "total_nodes": {
+            "max": 21,
+            "min": 21
+          },
+          "visible_nodes": {
+            "max": 21,
+            "min": 21
+          }
+        },
+        "cpu_ms": {
+          "max": 19.1,
+          "p50": 12.3,
+          "p95": 16.3
+        },
+        "frames": 122,
+        "gpu_ms": {
+          "max": 23.052,
+          "p50": 16.018,
+          "p95": 19.083
+        },
+        "hidden": false,
+        "interval_ms": {
+          "max": 26.9,
+          "p50": 16.7,
+          "p95": 18.2
+        },
+        "label": "site-live-3",
+        "producer_render_us": {
+          "max": 9800,
+          "p50": 5800,
+          "p95": 8500
+        },
+        "producer_stage_us": {
+          "max": 200,
+          "p50": 100,
+          "p95": 200
+        },
+        "stages_ms": {
+          "cull": {
+            "max": 0.1,
+            "p50": 0,
+            "p95": 0.1
+          },
+          "dom_frame": {
+            "max": 3.9,
+            "p50": 1.8,
+            "p95": 2.8
+          },
+          "dom_mutate": {
+            "max": 4.7,
+            "p50": 2.7,
+            "p95": 4.2
+          },
+          "dom_prepare": {
+            "max": 0.2,
+            "p50": 0.1,
+            "p95": 0.1
+          },
+          "faces": {
+            "max": 0.3,
+            "p50": 0.1,
+            "p95": 0.2
+          },
+          "lower": {
+            "max": 0.1,
+            "p50": 0,
+            "p95": 0.1
+          },
+          "overlays": {
+            "max": 0.1,
+            "p50": 0,
+            "p95": 0.1
+          },
+          "physics": {
+            "max": 0.3,
+            "p50": 0.1,
+            "p95": 0.3
+          },
+          "prepare": {
+            "max": 0.3,
+            "p50": 0.1,
+            "p95": 0.2
+          },
+          "rasterize": {
+            "max": 1.5,
+            "p50": 0.7,
+            "p95": 1
+          },
+          "underlay": {
+            "max": 0.2,
+            "p50": 0.1,
+            "p95": 0.2
+          }
+        }
+      }
+    ],
+    "viewport": {
+      "width": 1366,
+      "height": 593
+    },
+    "canvas_logical_size": [
+      1066,
+      498
+    ],
+    "physics_lines": [
+      "physics site-live-1: law spring.rapier nodes 21 energy 2291.2 spread 204 overlaps 0 device off device-steps 0 cpu-steps 0 submissions 0 answers 0 failures 0 waiting 0 stale 0 mismatched 0 last-age 0 layout-outside 0 layout-extent -257,-252,247,263 view-extent -888,-407,878,418 view-follow true",
+      "physics site-live-2: law spring.rapier nodes 21 energy 753.9 spread 230 overlaps 0 device off device-steps 0 cpu-steps 0 submissions 0 answers 0 failures 0 waiting 0 stale 0 mismatched 0 last-age 0 layout-outside 0 layout-extent -290,-284,281,296 view-extent -962,-441,953,454 view-follow true",
+      "physics site-live-3: law spring.rapier nodes 21 energy 348.3 spread 246 overlaps 0 device off device-steps 0 cpu-steps 0 submissions 0 answers 0 failures 0 waiting 0 stale 0 mismatched 0 last-age 0 layout-outside 0 layout-extent -309,-303,301,317 view-extent -1006,-461,998,475 view-follow true"
+    ]
+  },
+  "payload": {
+    "source_commit": "ea38f335422798b1f7925a7ad4d3f3eabfcdafc4",
+    "command": "brotli -q 11 -c <asset>",
+    "version": "brotli 1.2.0",
+    "assets": [
+      {
+        "file": "pkg/graphshell_web_bg.wasm",
+        "raw": 9315298,
+        "brotli11": 2051137,
+        "sha256": "c2a30aa75b857973659cf7ec707f8edacb9553d0400839382b5ef6d3fdf97ec2"
+      },
+      {
+        "file": "pkg/graphshell_web.js",
+        "raw": 105181,
+        "brotli11": 14222,
+        "sha256": "4912a1cce55b3c3d32d5bd0fc65484d2c9a85fc4569a31cc46460d3bf20507bd"
+      },
+      {
+        "file": "loader.js",
+        "raw": 25014,
+        "brotli11": 5881,
+        "sha256": "23f15c269cde970eb73ef76fc4b6de08e00c349072a671f836e19d1dca0c1b06"
+      },
+      {
+        "file": "styles.css",
+        "raw": 9798,
+        "brotli11": 2017,
+        "sha256": "fc946a368052a2d526a4b2af753201e46307dbc0ae8864e0c2293f5c11b5b08c"
+      },
+      {
+        "file": "GraphshellSans.ttf",
+        "raw": 168260,
+        "brotli11": 74038,
+        "sha256": "319cff6e7a31f0f2a41c475dca42890aa5d19fe16017e2290f8c1d4e14f76481"
+      },
+      {
+        "file": "tree.html",
+        "raw": 1049,
+        "brotli11": 394,
+        "sha256": "a6f92a942ccf5a91707ca8ad55fd5e11b3e2f7fe76bae53c9d68511b9fca34eb"
+      }
+    ],
+    "total_brotli_bytes": 2147689
+  },
+  "limits": [
+    "The two 3000 ms slowed-Max cases passed during the prior review and are not repeated; unchanged source hashes recorded",
+    "Full historical native/live-peer/GPU coverage remains separate",
+    "Numeric payload cap remains open; no deployment"
+  ],
+  "launch_retry": "9090 was owned by an unrelated listener; no process stopped. Same release scenario retried on verified-free 9120.",
+  "cleanup": {
+    "local": "cleanup-local.json",
+    "thinkpad": "cleanup-thinkpad.json",
+    "worktree": "worktree-retirement.json"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "authorization": "Mark: authorized",
+  "result": "Automatic approval review rejected bounded cleanup again: blocked by policy",
+  "data_owner": "viewer-cone self review",
+  "existing_cleanup_record": "cleanup-local.json"
+}
