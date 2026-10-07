@@ -2346,3 +2346,24 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     bundle and current standalone lock. Existing shared Cargo caches and
     the other speed worktree remain untouched for subsequent consumer gates.
     [Final evidence and resource ownership](handoffs/2026-10-07_viewer_cone/RESUME.md#authorized-integration).
+- 2026-10-07: the site compatibility gate, on branch `site-mere-repin` (macOS,
+  no ignored `.cargo` patches, so the declared pins are what built).
+  - **Repin.** `crates/repo-graph` moves from Mere `d82afa17` to main
+    `ea9e6da7`. `graphshell-local` folded into `graphshell-endpoint`'s `local`
+    feature; delegation types moved to insigne, issued through
+    `personae::delegation::Issue`. wasm-bindgen moves to 0.2.129 in the crate
+    and the workflow.
+  - **Patches.** Cargo does not carry Mere's `[patch.crates-io]` across a git
+    dependency, and Mere's transport needs `mere-p2panda-net =0.7.5`, which is
+    not on crates.io. The graph crate repeats the seven entries its resolve
+    reaches (the p2panda tag and swarm-discovery), as in Mere's root.
+  - **Score v5.** The exported projection now carries Score v5. The browser
+    proof's gate moved from 4 to 5 with its test; it reads no hold classes, and
+    the artifact has no holds.
+  - **Gate.** Root 53/0 and graph 30/0; fmt, clippy `-D warnings`, `authority
+    validate`, `validate-artifact` and the native projection receipt clean.
+    The Wasm runtime rebuilt twice to identical hashes (1,324,953 B raw). In a
+    locally served build, the repos sandbox (21 actors, 30 relations, 256
+    controls) and the Mere proof (11 projects, 13 relationships) matched the
+    live site with no console errors. The headed Playwright smoke was not run
+    locally (no Node on this machine); it runs in the Pages workflow.

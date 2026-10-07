@@ -81,6 +81,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "armillary"
+version = "0.1.1"
+source = "git+https://github.com/merely-made/mere.git?rev=ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7#ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7"
+dependencies = [
+ "tracing",
+]
+
+[[package]]
 name = "arrayref"
 version = "0.3.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -314,7 +322,7 @@ checksum = "9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801"
 [[package]]
 name = "chartulary"
 version = "0.2.2"
-source = "git+https://github.com/merely-made/mere.git?rev=d82afa17e2cca86da843f07a2d718d2e69eb9f10#d82afa17e2cca86da843f07a2d718d2e69eb9f10"
+source = "git+https://github.com/merely-made/mere.git?rev=ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7#ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7"
 dependencies = [
  "muniment",
  "petgraph",
@@ -327,7 +335,7 @@ dependencies = [
 [[package]]
 name = "chirograph"
 version = "0.0.2"
-source = "git+https://github.com/merely-made/mere.git?rev=d82afa17e2cca86da843f07a2d718d2e69eb9f10#d82afa17e2cca86da843f07a2d718d2e69eb9f10"
+source = "git+https://github.com/merely-made/mere.git?rev=ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7#ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7"
 dependencies = [
  "base64",
  "blake3",
@@ -335,7 +343,7 @@ dependencies = [
  "scenotime",
  "serde",
  "serde_json",
- "titulus",
+ "sha2 0.11.0",
 ]
 
 [[package]]
@@ -1405,7 +1413,7 @@ checksum = "edcd27d72f2f071c64249075f42e205ff93c9a4c5f6c6da53e79ed9f9832c285"
 [[package]]
 name = "incipit"
 version = "0.2.0"
-source = "git+https://github.com/merely-made/mere.git?rev=d82afa17e2cca86da843f07a2d718d2e69eb9f10#d82afa17e2cca86da843f07a2d718d2e69eb9f10"
+source = "git+https://github.com/merely-made/mere.git?rev=ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7#ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7"
 dependencies = [
  "serde",
  "uuid",
@@ -1476,9 +1484,9 @@ dependencies = [
 
 [[package]]
 name = "js-sys"
-version = "0.3.103"
+version = "0.3.106"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "53b44bfcdb3f8d5837a46dae1ca9660a837176eee74a28b229bc626816589102"
+checksum = "7883d941dae510fb2d978fc3fe018c71c9e2892fd38854de3e8b92c2e5ad9cc5"
 dependencies = [
  "cfg-if",
  "futures-util",
@@ -1686,7 +1694,7 @@ dependencies = [
 [[package]]
 name = "mere-cartography"
 version = "0.0.2"
-source = "git+https://github.com/merely-made/mere.git?rev=d82afa17e2cca86da843f07a2d718d2e69eb9f10#d82afa17e2cca86da843f07a2d718d2e69eb9f10"
+source = "git+https://github.com/merely-made/mere.git?rev=ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7#ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7"
 dependencies = [
  "mere-kernel",
  "sceno",
@@ -1697,7 +1705,7 @@ dependencies = [
 [[package]]
 name = "mere-forme"
 version = "0.1.0"
-source = "git+https://github.com/merely-made/mere.git?rev=d82afa17e2cca86da843f07a2d718d2e69eb9f10#d82afa17e2cca86da843f07a2d718d2e69eb9f10"
+source = "git+https://github.com/merely-made/mere.git?rev=ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7#ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7"
 dependencies = [
  "serde",
  "serde_json",
@@ -1708,7 +1716,7 @@ dependencies = [
 [[package]]
 name = "mere-kernel"
 version = "0.0.2"
-source = "git+https://github.com/merely-made/mere.git?rev=d82afa17e2cca86da843f07a2d718d2e69eb9f10#d82afa17e2cca86da843f07a2d718d2e69eb9f10"
+source = "git+https://github.com/merely-made/mere.git?rev=ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7#ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7"
 dependencies = [
  "accesskit",
  "chartulary",
@@ -1802,7 +1810,7 @@ dependencies = [
 [[package]]
 name = "muniment"
 version = "0.1.2"
-source = "git+https://github.com/merely-made/mere.git?rev=d82afa17e2cca86da843f07a2d718d2e69eb9f10#d82afa17e2cca86da843f07a2d718d2e69eb9f10"
+source = "git+https://github.com/merely-made/mere.git?rev=ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7#ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7"
 dependencies = [
  "async-trait",
  "blake3",
@@ -1935,7 +1943,7 @@ dependencies = [
 [[package]]
 name = "numen"
 version = "0.2.0"
-source = "git+https://github.com/merely-made/mere.git?rev=d82afa17e2cca86da843f07a2d718d2e69eb9f10#d82afa17e2cca86da843f07a2d718d2e69eb9f10"
+source = "git+https://github.com/merely-made/mere.git?rev=ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7#ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7"
 dependencies = [
  "serde",
  "strum",
@@ -2625,16 +2633,16 @@ dependencies = [
 [[package]]
 name = "sceno"
 version = "0.0.4"
-source = "git+https://github.com/merely-made/mere.git?rev=d82afa17e2cca86da843f07a2d718d2e69eb9f10#d82afa17e2cca86da843f07a2d718d2e69eb9f10"
+source = "git+https://github.com/merely-made/mere.git?rev=ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7#ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7"
 dependencies = [
  "serde",
  "serde_json",
 ]
 
 [[package]]
-name = "scenomise"
+name = "scenograph"
 version = "0.0.4"
-source = "git+https://github.com/merely-made/mere.git?rev=d82afa17e2cca86da843f07a2d718d2e69eb9f10#d82afa17e2cca86da843f07a2d718d2e69eb9f10"
+source = "git+https://github.com/merely-made/mere.git?rev=ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7#ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7"
 dependencies = [
  "sceno",
  "serde",
@@ -2642,9 +2650,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "scenomise"
+version = "0.0.4"
+source = "git+https://github.com/merely-made/mere.git?rev=ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7#ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7"
+dependencies = [
+ "sceno",
+ "scenograph",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "scenotime"
 version = "0.0.4"
-source = "git+https://github.com/merely-made/mere.git?rev=d82afa17e2cca86da843f07a2d718d2e69eb9f10#d82afa17e2cca86da843f07a2d718d2e69eb9f10"
+source = "git+https://github.com/merely-made/mere.git?rev=ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7#ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7"
 dependencies = [
  "sceno",
  "serde",
@@ -2658,9 +2677,10 @@ checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
 
 [[package]]
 name = "seiche"
-version = "0.0.5"
-source = "git+https://github.com/merely-made/mere.git?rev=d82afa17e2cca86da843f07a2d718d2e69eb9f10#d82afa17e2cca86da843f07a2d718d2e69eb9f10"
+version = "0.0.6"
+source = "git+https://github.com/merely-made/mere.git?rev=ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7#ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7"
 dependencies = [
+ "armillary",
  "euclid",
  "numen",
  "petgraph",
@@ -3243,7 +3263,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "32497e9a4c7b38532efcdebeef879707aa9f794296a4f0244f6f69e9bc8574bd"
 dependencies = [
  "fastrand",
- "getrandom 0.3.4",
+ "getrandom 0.4.3",
  "once_cell",
  "rustix",
  "windows-sys",
@@ -3397,18 +3417,6 @@ name = "tinyvec_macros"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
-
-[[package]]
-name = "titulus"
-version = "0.0.2"
-source = "git+https://github.com/merely-made/mere.git?rev=d82afa17e2cca86da843f07a2d718d2e69eb9f10#d82afa17e2cca86da843f07a2d718d2e69eb9f10"
-dependencies = [
- "base64",
- "blake3",
- "serde",
- "serde_json",
- "sha2 0.11.0",
-]
 
 [[package]]
 name = "to_shmem"
@@ -3786,9 +3794,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen"
-version = "0.2.126"
+version = "0.2.129"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4b067c0c11094aef6b7a801c1e34a26affafdf3d051dba08456b868789aaf9a4"
+checksum = "9bb54f33acc68fd454578d9820b0bde1a1a3d17aa17bb7b6595806d02886d409"
 dependencies = [
  "cfg-if",
  "once_cell",
@@ -3799,9 +3807,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-macro"
-version = "0.2.126"
+version = "0.2.129"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "167ce5e579f6bcf889c4f7175a8a5a585de84e8ff93976ce393efa5f2837aab1"
+checksum = "2e29d0c35b16e224a7eeb5cd2d25e3e1968fbd65604117b44d3b789d00ee8535"
 dependencies = [
  "quote",
  "wasm-bindgen-macro-support",
@@ -3809,22 +3817,22 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-macro-support"
-version = "0.2.126"
+version = "0.2.129"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f3997c7839262f4ef12cf90b818d6340c18e80f263f1a94bf157d0ec4420380e"
+checksum = "6f501a8bc3719dba86ef8ae4728879c08001bea749eb1333ac5b91e040e2a6b7"
 dependencies = [
  "bumpalo",
  "proc-macro2",
  "quote",
- "syn 2.0.119",
+ "syn 3.0.3",
  "wasm-bindgen-shared",
 ]
 
 [[package]]
 name = "wasm-bindgen-shared"
-version = "0.2.126"
+version = "0.2.129"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "dc1b4cb0cc549fcf58d7dfc081778139b3d283a081644e833e84682ad71cea24"
+checksum = "23f0c9c52aa7cd7d77769a4cfe2a9adb1b331f489a41d912ce14513d5ab995c6"
 dependencies = [
  "unicode-ident",
 ]

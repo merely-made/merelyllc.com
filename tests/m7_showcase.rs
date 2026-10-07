@@ -161,13 +161,14 @@ fn mere_profile_projects_one_authority_into_canvas_and_swatch_views() {
     assert_eq!(artifact["adapter"], "mer3ly.repository-graph/v1");
     // The score wire version moves when the contract does (2 added holds,
     // 3 renamed Board to Grid, 4 added the arrangement catalog and its item
-    // disclosures), and this assertion moving with it is the consumer noticing
-    // rather than silently accepting a shape it never knew.
-    assert_eq!(artifact["score"]["version"], 4);
+    // disclosures, 5 gave the holds their three arrangement roles), and this
+    // assertion moving with it is the consumer noticing rather than silently
+    // accepting a shape it never knew.
+    assert_eq!(artifact["score"]["version"], 5);
     let projection_proof = std::fs::read_to_string(root.join("assets/projection-proof.js"))
         .expect("projection proof runtime");
     assert!(
-        projection_proof.contains("artifact?.score?.version !== 4"),
+        projection_proof.contains("artifact?.score?.version !== 5"),
         "the browser consumer must recognize the same Score wire as the native consumer"
     );
     assert_eq!(
