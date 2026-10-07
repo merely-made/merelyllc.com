@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-117 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-119 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 The payload budget waits on P0's viewer-cone measurement (Ruling 26). Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
 No code has changed.
 
@@ -1178,6 +1178,27 @@ follow-ups (checked on origin):
   `cubecl-runtime` patch at `5fecd707` (stable Burn). Options: unify all 43 on
   `e0cea3e0`; keep the split. Mark: "Unify all 43 on e0cea3e0 (Recommended)".
   `e0cea3e0` contains both, so Knot's graph has one Mere revision again.
+- **Ruling 118 (2026-10-06), `web_product` and `web_practice`.** Ruling 110 put
+  both under `product`, but each imports the reference host's `BrowserHost`
+  (`web_product.rs:29`, `web_practice.rs:38`), so neither compiles without
+  `main-page`. Options: gate them on `main-page`; decouple them for `product`.
+  Mark: "Gate them on main-page (Recommended)". `product` keeps IndexedDB,
+  saved scenes and the tree's product mode. The default build is unchanged
+  because `main-page` requires `product`.
+- **Ruling 119 (2026-10-06), how the tree page drops product and remote.** About
+  55 call sites (remote 33, product 13, the GPU physics device 9) sit in
+  `web_tree.rs` and `web_tree/lane.rs`, which the estimator branch is editing.
+  Options: feature-off stand-in modules; a cfg at every call site; split the
+  tree page's state. Mark: "Feature-off stand-in modules (Recommended)".
+  `product_off.rs` and `remote_off.rs` carry the real modules' API, inert. The
+  GPU device becomes an uninhabited type, and its repulsion lane reports zero
+  counts.
+  *Reading, not ruled:* the main page is pulled in with
+  `#[cfg(feature = "main-page")] include!("web_main.rs")`, not as a child
+  module. A module would have needed `pub(super)` on roughly a hundred moved
+  items and fields, because Rust privacy follows module boundaries. The
+  include keeps the file separate, verbatim and gated by one cfg, as Ruling
+  109 asks.
 
 The cone's feature-table prep is committed on mere branch `viewer-cone`
 (`698c1c20`, rebased onto origin `19e6dc9f`, unbuilt):
@@ -2099,3 +2120,21 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   receipts as Track F (mere `28985298`, stack seams S61).
 
   Next: the viewer cone.
+- 2026-10-06: the viewer cone is built on mere branch `viewer-cone` (`390e0f50`),
+  not merged.
+  - `web.rs` is 114 lines; the reference host is verbatim in `web_main.rs`.
+  - Every feature combination compiles for wasm32 with no warnings from the
+    crate (none, canvas-gpu, product, remote, product+remote, main-page,
+    image-decode, default).
+  - The viewer (`--no-default-features`) resolves 470 packages against the
+    default's 722, or 667 with `canvas-gpu`. Muniment loses `indexeddb`, and
+    `mere-webrtc-carrier`, the image decoders and Burn/CubeCL leave. The
+    `cargo tree -f` query that shows it also shows `indexeddb` on in the
+    default build.
+  - Finding: `personae` stays in the viewer through `pandect`, because the
+    tree page runs `GraphshellApp` on muniment's `MemoryBackend` through
+    graphshell's `web` feature. Cutting it means splitting graphshell's own
+    feature; that is a question for after the measurement.
+  - Still to do: the default page's headed receipts on this branch, the
+    viewer's tree receipts, the release measurements (default, viewer, viewer
+    with `canvas-gpu`) with frame timings, then the conatus session's check.
