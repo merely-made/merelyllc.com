@@ -5,7 +5,7 @@ small static Rust build (Cambium views serialized to HTML) plus a WebGPU
 repository-graph client, deployed to GitHub Pages. The complete site remains
 readable without JavaScript, WebAssembly, or WebGPU.
 
-## Status (2026-10-06)
+## Status (2026-10-07)
 
 Live and deployed. The pages.yml workflow rebuilds, validates, browser-smokes,
 and deploys on main pushes, manual dispatch, and a daily schedule.
@@ -23,9 +23,10 @@ and deploys on main pushes, manual dispatch, and a daily schedule.
   browser delivery, canvas stage unification, and
   [Graphshell as the site canvas](docs/2026-09-30_graphshell_site_canvas_plan.md)
   cover the replacement of the site-owned interactive surfaces.
-- Graphshell integration is in P0: the viewer feature build is recorded as
-  compiling on an unmerged Mere branch, with browser validation, release-size
-  measurements, and the payload budget still pending. The site still ships
+- Graphshell integration is in P0: the viewer feature build is on an
+  unmerged Mere branch with its browser receipts and release sizes recorded
+  (2.02 MB brotli against 3.46 MB for the full page); calm timing reruns,
+  frame timings, and the payload budget are still pending. The site still ships
   its own sandbox; the Ruling 103 pin and Ruling 104 resolver fixes landed.
 
 `content/*.toml` is the editorial authority for repository roles, summaries,

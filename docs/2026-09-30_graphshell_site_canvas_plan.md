@@ -2,11 +2,13 @@
 
 **Date:** 2026-09-30
 **Status:** assessment complete; Action under way. Rulings 1-119 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
-**Current phase (2026-10-06):** P0. The viewer cone compiles on Mere branch
-`viewer-cone` at `390e0f50`, not merged, as recorded in Progress. Next: default
-and viewer browser receipts, release measurements with and without GPU
-physics, frame timings, and review. The payload budget waits on those
-measurements (Ruling 26).
+**Current phase (2026-10-07):** P0. The viewer cone is on Mere branch
+`viewer-cone` at `6963ebe5` (pushed, not merged). Its headed receipts and
+release payload are recorded in Progress: the viewer is 2.02 MB brotli against
+3.46 MB for the full page, and 2.77 MB with `canvas-gpu`. Still to do: the calm
+timing reruns, Ruling 107's frame timings, and the conatus session's check,
+handed off to another machine (`docs/handoffs/2026-10-07_viewer_cone/`). The
+payload budget can now be ruled against the measured sizes (Ruling 26).
 Code has changed in the supporting stack and in the site: Rulings 103 and 104
 landed the manual-pin and legacy-link resolver fixes. The site still ships its
 own sandbox; P1 export and P2 Graphshell surface replacement remain ahead.
