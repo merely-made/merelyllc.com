@@ -1,0 +1,5 @@
+serving /home/markik/Code/testing/mere/viewer-cone/default on http://127.0.0.1:8961, receipts to /home/markik/Code/testing/mere/viewer-cone/receipts/default-p6_tree_speed_fast_control-hardware
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-receipt HTTP/1.1" 204 -
+receipt written to /home/markik/Code/testing/mere/viewer-cone/receipts/default-p6_tree_speed_fast_control-hardware (RESULT fail, 0 capture(s))

@@ -1,0 +1,618 @@
+    Checking thiserror v2.0.20
+   Compiling crossbeam-utils v0.8.22
+    Checking num-bigint v0.4.8
+    Checking kurbo v0.13.1
+    Checking either v1.18.0
+   Compiling crossbeam-epoch v0.9.20
+   Compiling crossbeam-deque v0.8.7
+    Checking peniko v0.6.1
+   Compiling equator-macro v0.4.2
+   Compiling rayon-core v1.13.0
+    Checking num-rational v0.4.2
+   Compiling anyhow v1.0.104
+    Checking naga-types v30.0.1
+    Checking as-slice v0.2.1
+    Checking equator v0.4.2
+   Compiling built v0.8.1
+    Checking aligned-vec v0.6.4
+    Checking rayon v1.12.0
+    Checking v_frame v0.3.9
+   Compiling av-scenechange v0.14.1
+    Checking aligned v0.4.3
+    Checking wgpu-types v30.0.0
+    Checking no_std_io2 v0.9.4
+    Checking nom v8.0.0
+   Compiling rav1e v0.8.1
+   Compiling arg_enum_proc_macro v0.3.4
+   Compiling pastey v0.1.1
+    Checking y4m v0.8.0
+    Checking wgpu v30.0.1
+    Checking bitstream-io v4.10.0
+    Checking av1-grain v0.2.5
+    Checking maybe-rayon v0.1.1
+    Checking vello_encoding v0.10.0
+    Checking itertools v0.14.0
+   Compiling simd_helpers v0.1.0
+   Compiling noop_proc_macro v0.3.0
+    Checking imgref v1.12.2
+    Checking quick-error v2.0.1
+    Checking loop9 v0.1.5
+    Checking vello_shaders v0.10.0
+    Checking avif-serialize v0.8.9
+    Checking zune-core v0.5.3
+    Checking weezl v0.1.12
+    Checking color_quant v1.1.0
+    Checking byteorder-lite v0.1.0
+    Checking pxfm v0.1.30
+    Checking rgb v0.8.53
+    Checking image-webp v0.2.4
+    Checking zune-jpeg v0.5.15
+    Checking gif v0.14.2
+    Checking genet-taffy v0.14.0 (https://github.com/merely-made/genet.git?rev=d851a9db0cd1ff7837768250f21e9dff63455940#d851a9db)
+    Checking ravif v0.13.0
+    Checking muniment v0.1.2 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\eidetic\muniment)
+    Checking buckram v0.0.3 (https://github.com/merely-made/genet.git?rev=d851a9db0cd1ff7837768250f21e9dff63455940#d851a9db)
+    Checking taffy v0.11.0-experimental-cache-fix.3
+    Checking netrender-vello v0.10.1
+    Checking moxcms v0.8.1
+    Checking netrender_device v0.1.2 (https://github.com/merely-made/netrender.git?rev=9607d16f1907f6c2085648ae96abcaa30d7c3d41#9607d16f)
+    Checking vello_encoding v0.10.0 (https://github.com/mark-ik/vello.git?tag=vello-0.10.0#4354955e)
+    Checking nalgebra v0.35.0
+    Checking netrender v0.1.2 (https://github.com/merely-made/netrender.git?rev=9607d16f1907f6c2085648ae96abcaa30d7c3d41#9607d16f)
+    Checking vello v0.10.0 (https://github.com/mark-ik/vello.git?tag=vello-0.10.0#4354955e)
+    Checking mere-forme v0.1.0 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\forme\forme)
+    Checking paint_list_render v0.1.2 (https://github.com/merely-made/netrender.git?rev=9607d16f1907f6c2085648ae96abcaa30d7c3d41#9607d16f)
+    Checking chartulary v0.2.2 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\eidetic\chartulary)
+    Checking crossbeam-channel v0.5.16
+    Checking sprigging v0.2.1 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\cambium\sprigging)
+    Checking cobs v0.3.0
+    Checking image v0.25.10
+    Checking mere-kernel v0.0.2 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\graph\graph-kernel)
+    Checking chirograph v0.0.2 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\chirograph)
+warning: unused imports: `astar`, `dijkstra`, `has_path_connecting`, and `kosaraju_scc`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\graph\graph-kernel\src\graph\mod.rs:21:22
+   |
+21 | use petgraph::algo::{astar, dijkstra, has_path_connecting, kosaraju_scc};
+   |                      ^^^^^  ^^^^^^^^  ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused imports: `Archived`, `Place`, and `Resolver`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\graph\graph-kernel\src\graph\mod.rs:25:21
+   |
+25 | use rkyv::{Archive, Archived, Deserialize, Place, Resolver, Serialize, rancor::Fallible};
+   |                     ^^^^^^^^               ^^^^^  ^^^^^^^^
+
+warning: unused import: `HashSet`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\graph\graph-kernel\src\graph\mod.rs:26:43
+   |
+26 | use std::collections::{BTreeMap, HashMap, HashSet};
+   |                                           ^^^^^^^
+
+warning: unused imports: `GraphSnapshot`, `PersistedAddress`, `PersistedArrangementEdgeData`, `PersistedArrangementSubKind`, `PersistedContainmentEdgeData`, `PersistedContainmentSubKind`, `PersistedEdgeFamily`, `PersistedEdge`, `PersistedImportedEdgeData`, `PersistedImportedSubKind`, `PersistedNavigationTrigger`, `PersistedNodeSessionState`, `PersistedNode`, `PersistedProvenanceEdgeData`, `PersistedProvenanceSubKind`, `PersistedSemanticEdgeData`, `PersistedSemanticSubKind`, `PersistedTraversalEdgeData`, `PersistedTraversalMetrics`, and `PersistedTraversalRecord`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\graph\graph-kernel\src\graph\mod.rs:35:5
+   |
+35 |     GraphSnapshot, PersistedAddress, PersistedArrangementEdgeData, PersistedArrangementSubKind,
+   |     ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+36 |     PersistedContainmentEdgeData, PersistedContainmentSubKind, PersistedEdge, PersistedEdgeFamily,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^
+37 |     PersistedImportedEdgeData, PersistedImportedSubKind, PersistedNavigationTrigger, PersistedNode,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^
+38 |     PersistedNodeSessionState, PersistedProvenanceEdgeData, PersistedProvenanceSubKind,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+39 |     PersistedSemanticEdgeData, PersistedSemanticSubKind, PersistedTraversalEdgeData,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^
+40 |     PersistedTraversalMetrics, PersistedTraversalRecord,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `address_from_url`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\graph\graph-kernel\src\graph\node.rs:26:31
+   |
+26 | use crate::address::{Address, address_from_url};
+   |                               ^^^^^^^^^^^^^^^^
+
+warning: unused import: `VecDeque`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\graph\graph-kernel\src\graph\query.rs:17:42
+   |
+17 | use std::collections::{HashMap, HashSet, VecDeque};
+   |                                          ^^^^^^^^
+
+    Checking postcard v1.1.3
+    Checking genet-livery v0.0.4 (https://github.com/merely-made/genet.git?rev=d851a9db0cd1ff7837768250f21e9dff63455940#d851a9db)
+    Checking cambium v0.3.3 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\cambium\cambium)
+    Checking glamx v0.3.0
+    Checking parry2d v0.28.0
+warning: unused import: `rancor::Fallible`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\graph\graph-kernel\src\graph\mod.rs:25:72
+   |
+25 | use rkyv::{Archive, Archived, Deserialize, Place, Resolver, Serialize, rancor::Fallible};
+   |                                                                        ^^^^^^^^^^^^^^^^
+
+warning: unused import: `EdgeRef`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\graph\graph-kernel\src\graph\mod.rs:24:23
+   |
+24 | use petgraph::visit::{EdgeRef, IntoEdgeReferences};
+   |                       ^^^^^^^
+
+    Checking insigne v0.0.1 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\dramatis\insigne)
+    Checking cambium-winit v0.3.0 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\cambium\cambium-winit)
+    Checking genet-render v0.2.0 (https://github.com/merely-made/genet.git?rev=d851a9db0cd1ff7837768250f21e9dff63455940#d851a9db)
+    Checking genet-render-host v0.2.0 (https://github.com/merely-made/genet.git?rev=d851a9db0cd1ff7837768250f21e9dff63455940#d851a9db)
+    Checking personae v0.2.1 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\dramatis\personae)
+    Checking cambium-rootstock v0.1.0 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\cambium\cambium-rootstock)
+    Checking rapier2d v0.33.0
+    Checking taproot v0.1.0 (https://github.com/merely-made/genet.git?rev=d851a9db0cd1ff7837768250f21e9dff63455940#d851a9db)
+    Checking notochord v0.1.0 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\notochord)
+    Checking eidetic v0.0.2 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\eidetic\eidetic-core)
+warning: methods `navigate_node`, `branch_history`, `node_history_back`, and `node_history_forward` are never used
+   --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\graph\graph-kernel\src\graph\mod.rs:550:19
+    |
+338 | impl Graph {
+    | ---------- methods in this implementation
+...
+550 |     pub(crate) fn navigate_node(&mut self, key: NodeKey, url: &str) {
+    |                   ^^^^^^^^^^^^^
+...
+564 |     pub(crate) fn branch_history(&mut self, child: NodeKey, parent: NodeKey) {
+    |                   ^^^^^^^^^^^^^^
+...
+576 |     pub(crate) fn node_history_back(&mut self, key: NodeKey) -> Option<String> {
+    |                   ^^^^^^^^^^^^^^^^^
+...
+586 |     pub(crate) fn node_history_forward(&mut self, key: NodeKey) -> Option<String> {
+    |                   ^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `assert_semantic_predicate` is never used
+   --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\graph\graph-kernel\src\graph\edge_payload.rs:258:19
+    |
+ 45 | impl EdgePayload {
+    | ---------------- method in this implementation
+...
+258 |     pub(crate) fn assert_semantic_predicate(&mut self, predicate: String) -> bool {
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: struct `LogIdAsString` is never constructed
+   --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\graph\graph-kernel\src\graph\identity.rs:129:19
+    |
+129 | pub(crate) struct LogIdAsString;
+    |                   ^^^^^^^^^^^^^
+
+warning: methods `dissolve_remove_node_collect_traversals` and `get_edge_mut` are never used
+   --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\graph\graph-kernel\src\graph\edge_ops.rs:236:19
+    |
+ 32 | impl Graph {
+    | ---------- methods in this implementation
+...
+236 |     pub(crate) fn dissolve_remove_node_collect_traversals(
+    |                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+...
+436 |     pub(crate) fn get_edge_mut(&mut self, key: EdgeKey) -> Option<&mut EdgePayload> {
+    |                   ^^^^^^^^^^^^
+
+warning: method `get_node_mut` is never used
+   --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\graph\graph-kernel\src\graph\query.rs:108:19
+    |
+101 | impl Graph {
+    | ---------- method in this implementation
+...
+108 |     pub(crate) fn get_node_mut(&mut self, key: NodeKey) -> Option<&mut Node> {
+    |                   ^^^^^^^^^^^^
+
+warning: `mere-kernel` (lib) generated 13 warnings (run `cargo fix --lib -p mere-kernel` to apply 6 suggestions)
+    Checking mere-cartography v0.0.2 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\canvas\cartography)
+    Checking mere-alembic v0.0.1 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\ports\distillery\alembic)
+    Checking mesquite v0.1.0 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\cambium\mesquite)
+    Checking seiche v0.0.6 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\conatus\seiche)
+    Checking graphshell-endpoint v0.0.2 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\graphshell\graphshell-endpoint)
+    Checking pandect v0.1.1 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect)
+    Checking graphshell-client v0.0.2 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\graphshell\graphshell-client)
+    Checking cambium-genet-web-host v0.1.0 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\cambium\cambium-genet-web-host)
+warning: unused import: `std::fmt`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\mod.rs:20:5
+   |
+20 | use std::fmt;
+   |     ^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `std::path::Path`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\mod.rs:22:5
+   |
+22 | use std::path::Path;
+   |     ^^^^^^^^^^^^^^^
+
+warning: unused imports: `Aead` and `Payload`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\mod.rs:25:30
+   |
+25 | use chacha20poly1305::aead::{Aead, KeyInit, Payload};
+   |                              ^^^^           ^^^^^^^
+
+warning: unused imports: `Key`, `XChaCha20Poly1305`, and `XNonce`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\mod.rs:26:24
+   |
+26 | use chacha20poly1305::{Key, XChaCha20Poly1305, XNonce};
+   |                        ^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^
+
+warning: unused imports: `Ed25519Keypair`, `Ed25519PublicKey`, `Ed25519Signature`, `IdentityProvider`, and `InMemoryProvider`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\mod.rs:28:5
+   |
+28 |     Ed25519Keypair, Ed25519PublicKey, Ed25519Signature, IdentityProvider, InMemoryProvider,
+   |     ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^
+
+warning: unused import: `Deserialize`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\mod.rs:30:13
+   |
+30 | use serde::{Deserialize, Serialize};
+   |             ^^^^^^^^^^^
+
+warning: unused import: `crate::manifest::PersonaId`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\mod.rs:33:5
+   |
+33 | use crate::manifest::PersonaId;
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `CapabilitySlotRef`, `DeviceGrantRef`, `DeviceRecord`, `DeviceRoster`, `IdentityWalletManifest`, `LocalDeviceIdentity`, `PersonaWalletRef`, `RemoteAuthWrappingKeyBridge`, `RemoteAuthWrappingKeyRecord`, `device_grant_path`, `device_roster_ref`, `ensure_persona_epoch_bridge`, `load_current_private_epoch`, `load_device_grant`, `load_device_roster`, `load_identity_seed`, `load_identity_wallet`, `load_local_device_identity`, `load_persona_wallet`, `load_remote_auth_wrapping_key_bridge`, `save_device_grant`, `save_device_roster`, `save_identity_wallet`, `save_persona_wallet`, `save_remote_auth_wrapping_key_bridge`, and `stage_persona_private_epoch`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\mod.rs:35:5
+   |
+35 |     CapabilitySlotRef, CarryRef, DeviceExposure, DeviceGrantRef, DeviceId, DeviceMode,
+   |     ^^^^^^^^^^^^^^^^^                            ^^^^^^^^^^^^^^
+36 |     DevicePublicKey, DeviceRecord, DeviceRoster, IdentityWalletManifest, KeyEpochId,
+   |                      ^^^^^^^^^^^^  ^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^
+37 |     LocalDeviceIdentity, PersonaWalletManifest, PersonaWalletRef, RemoteAuthWrappingKeyBridge,
+   |     ^^^^^^^^^^^^^^^^^^^                         ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+38 |     RemoteAuthWrappingKeyRecord, device_grant_path, device_roster_ref, ensure_persona_epoch_bridge,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+39 |     load_current_private_epoch, load_device_grant, load_device_roster, load_identity_seed,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
+40 |     load_identity_wallet, load_local_device_identity, load_persona_wallet,
+   |     ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^
+41 |     load_remote_auth_wrapping_key_bridge, save_device_grant, save_device_roster,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^
+42 |     save_identity_wallet, save_persona_wallet, save_remote_auth_wrapping_key_bridge,
+   |     ^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+43 |     stage_persona_private_epoch,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `Ed25519Keypair`, `IdentityProvider`, and `InMemoryProvider`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\enroll.rs:13:16
+   |
+13 | use identity::{Ed25519Keypair, IdentityProvider, InMemoryProvider, PersonaId};
+   |                ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^
+
+warning: unused imports: `Ed25519Keypair` and `PersonaId`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\issue.rs:14:16
+   |
+14 | use identity::{Ed25519Keypair, IdentityProvider, InMemoryProvider, PersonaId};
+   |                ^^^^^^^^^^^^^^                                      ^^^^^^^^^
+
+warning: unused import: `std::io`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\pairing.rs:10:5
+   |
+10 | use std::io;
+   |     ^^^^^^^
+
+warning: unused import: `std::io`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\records.rs:10:5
+   |
+10 | use std::io;
+   |     ^^^^^^^
+
+warning: unused import: `std::path::Path`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\records.rs:11:5
+   |
+11 | use std::path::Path;
+   |     ^^^^^^^^^^^^^^^
+
+warning: unused imports: `Ed25519Keypair`, `IdentityProvider`, `InMemoryProvider`, and `PersonaId`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\records.rs:13:16
+   |
+13 | use identity::{Ed25519Keypair, IdentityProvider, InMemoryProvider, PersonaId};
+   |                ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^
+
+warning: unused imports: `Ed25519Keypair` and `IdentityProvider`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\refresh.rs:13:16
+   |
+13 | use identity::{Ed25519Keypair, IdentityProvider, InMemoryProvider, PersonaId};
+   |                ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^
+
+warning: unused imports: `Ed25519Keypair`, `IdentityProvider`, and `InMemoryProvider`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\revoke.rs:13:16
+   |
+13 | use identity::{Ed25519Keypair, IdentityProvider, InMemoryProvider, PersonaId};
+   |                ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^
+
+warning: unused import: `Ed25519Signature`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\types.rs:14:16
+   |
+14 | use identity::{Ed25519Signature, PersonaId};
+   |                ^^^^^^^^^^^^^^^^
+
+warning: unused imports: `DEVICE_GRANT_SCHEMA_VERSION` and `DeviceGrantError`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\types.rs:19:5
+   |
+19 |     DEVICE_GRANT_SCHEMA_VERSION, DeviceExposure, DeviceGrantError, DeviceId, DevicePublicKey,
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^                  ^^^^^^^^^^^^^^^^
+
+warning: unused imports: `Ed25519Keypair`, `IdentityProvider`, `InMemoryProvider`, and `PersonaId`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\validate.rs:13:16
+   |
+13 | use identity::{Ed25519Keypair, IdentityProvider, InMemoryProvider, PersonaId};
+   |                ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^
+
+warning: unused imports: `Ed25519Keypair`, `IdentityProvider`, `InMemoryProvider`, and `PersonaId`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\wrapping.rs:13:16
+   |
+13 | use identity::{Ed25519Keypair, IdentityProvider, InMemoryProvider, PersonaId};
+   |                ^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^  ^^^^^^^^^
+
+warning: unused imports: `install_remote_auth_enrollment_bundle_inner` and `restore_wrapped_private_epochs`
+   --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\mod.rs:127:5
+    |
+127 |     install_remote_auth_enrollment_bundle_inner, restore_wrapped_private_epochs,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `epochs::wrapped_epoch_aad`
+   --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\mod.rs:129:16
+    |
+129 | pub(crate) use epochs::wrapped_epoch_aad;
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused imports: `derive_pairing_key_from_transcript` and `remote_auth_pairing_transcript`
+   --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\mod.rs:130:26
+    |
+130 | pub(crate) use pairing::{derive_pairing_key_from_transcript, remote_auth_pairing_transcript};
+    |                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `refresh_remote_auth_private_read_grant`
+   --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\mod.rs:135:5
+    |
+135 |     refresh_remote_auth_private_read_grant, refresh_remote_auth_private_read_grants,
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `revoke::revoke_persona_grant_access`
+   --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\mod.rs:138:16
+    |
+138 | pub(crate) use revoke::revoke_persona_grant_access;
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+    Checking pictograph v0.2.0 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\canvas\pictograph)
+warning: unused import: `KeyInit`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\mod.rs:25:36
+   |
+25 | use chacha20poly1305::aead::{Aead, KeyInit, Payload};
+   |                                    ^^^^^^^
+
+warning: unused variable: `provider`
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\system\pandect\src\wallet_grant\refresh.rs:53:5
+   |
+53 |     provider: &InMemoryProvider,
+   |     ^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_provider`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `pandect` (lib) generated 27 warnings (run `cargo fix --lib -p pandect` to apply 26 suggestions)
+warning: function `build_affinity_spring` is never used
+  --> C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\canvas\pictograph\src\canvas.rs:66:4
+   |
+66 | fn build_affinity_spring(scores: &crate::signals::AffinityScores) -> AffinitySpring {
+   |    ^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `pictograph` (lib) generated 1 warning
+    Checking mere v0.0.2 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\crates\mere)
+    Checking graphshell v0.0.2 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\ports\graphshell)
+    Checking graphshell-web v0.1.0 (C:\Users\mark_\Code\worktrees\mere-viewer-cone\ports\graphshell\web)
+warning: unused import: `std::cell::RefCell`
+  --> ..\src\web_scenario.rs:43:5
+   |
+43 | use std::cell::RefCell;
+   |     ^^^^^^^^^^^^^^^^^^
+   |
+   = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `std::rc::Rc`
+  --> ..\src\web_scenario.rs:44:5
+   |
+44 | use std::rc::Rc;
+   |     ^^^^^^^^^^^
+
+warning: unused imports: `Automatable`, `Driveable`, `ProbeSnapshot`, `ProbeSurface`, `Progress`, and `Scenario`
+  --> ..\src\web_scenario.rs:46:15
+   |
+46 | use taproot::{Automatable, Driveable, ProbeSnapshot, ProbeSurface, Progress, Scenario};
+   |               ^^^^^^^^^^^  ^^^^^^^^^  ^^^^^^^^^^^^^  ^^^^^^^^^^^^  ^^^^^^^^  ^^^^^^^^
+
+warning: unused imports: `EventInit`, `Event`, `HtmlElement`, `HtmlInputElement`, `HtmlSelectElement`, `HtmlTextAreaElement`, `KeyboardEventInit`, `KeyboardEvent`, `PointerEventInit`, and `PointerEvent`
+  --> ..\src\web_scenario.rs:50:40
+   |
+50 |     CanvasRenderingContext2d, Element, Event, EventInit, HtmlCanvasElement, HtmlElement,
+   |                                        ^^^^^  ^^^^^^^^^                     ^^^^^^^^^^^
+51 |     HtmlInputElement, HtmlSelectElement, HtmlTextAreaElement, ImageData, KeyboardEvent,
+   |     ^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^^^^             ^^^^^^^^^^^^^
+52 |     KeyboardEventInit, PointerEvent, PointerEventInit,
+   |     ^^^^^^^^^^^^^^^^^  ^^^^^^^^^^^^  ^^^^^^^^^^^^^^^^
+
+warning: unused import: `std::rc::Rc`
+  --> ..\src\web_timing.rs:24:5
+   |
+24 | use std::rc::Rc;
+   |     ^^^^^^^^^^^
+
+warning: unused variable: `options`
+   --> ..\src\web_tree.rs:183:17
+    |
+183 |             let options = shared.gpu_options;
+    |                 ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_options`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `CONTENT_KEY` is never used
+  --> ..\src\web_gpu.rs:25:7
+   |
+25 | const CONTENT_KEY: u64 = 1;
+   |       ^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `CHROME_KEY` is never used
+  --> ..\src\web_gpu.rs:26:7
+   |
+26 | const CHROME_KEY: u64 = 2;
+   |       ^^^^^^^^^^
+
+warning: constant `CAPTURE_CONTENT_KEY` is never used
+  --> ..\src\web_gpu.rs:27:7
+   |
+27 | const CAPTURE_CONTENT_KEY: u64 = 3;
+   |       ^^^^^^^^^^^^^^^^^^^
+
+warning: constant `CAPTURE_CHROME_KEY` is never used
+  --> ..\src\web_gpu.rs:28:7
+   |
+28 | const CAPTURE_CHROME_KEY: u64 = 4;
+   |       ^^^^^^^^^^^^^^^^^^
+
+warning: struct `PendingCapture` is never constructed
+  --> ..\src\web_gpu.rs:46:19
+   |
+46 | pub(crate) struct PendingCapture {
+   |                   ^^^^^^^^^^^^^^
+
+warning: methods `ready` and `take` are never used
+  --> ..\src\web_gpu.rs:55:19
+   |
+54 | impl PendingCapture {
+   | ------------------- methods in this implementation
+55 |     pub(crate) fn ready(&self) -> bool {
+   |                   ^^^^^
+...
+60 |     pub(crate) fn take(self) -> Result<(u32, u32, Vec<u8>), String> {
+   |                   ^^^^
+
+warning: struct `GpuPresenter` is never constructed
+  --> ..\src\web_gpu.rs:77:19
+   |
+77 | pub(crate) struct GpuPresenter {
+   |                   ^^^^^^^^^^^^
+
+warning: multiple associated items are never used
+   --> ..\src\web_gpu.rs:89:19
+    |
+ 86 | impl GpuPresenter {
+    | ----------------- associated items in this implementation
+...
+ 89 |     pub(super) fn retain(&self, scene: Scene, old: Option<u64>) -> Result<u64, String> {
+    |                   ^^^^^^
+...
+103 |     pub(super) fn release_fragment(&self, id: u64) {
+    |                   ^^^^^^^^^^^^^^^^
+...
+106 |     pub(crate) async fn boot(
+    |                         ^^^^
+...
+135 |     pub(crate) fn capture(
+    |                   ^^^^^^^
+...
+246 |     pub(crate) fn resize(&mut self, width: u32, height: u32) {
+    |                   ^^^^^^
+...
+251 |     pub(crate) fn gpu(&self) -> (&wgpu::Device, &wgpu::Queue) {
+    |                   ^^^
+...
+262 |     pub(crate) fn present(
+    |                   ^^^^^^^
+
+warning: function `label` is never used
+   --> ..\src\web_speed.rs:203:15
+    |
+203 | pub(crate) fn label(speed: Speed) -> String {
+    |               ^^^^^
+
+warning: function `board_line` is never used
+   --> ..\src\web_speed.rs:221:15
+    |
+221 | pub(crate) fn board_line(speed: Speed) -> String {
+    |               ^^^^^^^^^^
+
+warning: field `draft` is never read
+   --> ..\src\web_tree.rs:431:5
+    |
+416 | pub(crate) struct TreePage {
+    |                   -------- field in this struct
+...
+431 |     draft: remote::DraftControls,
+    |     ^^^^^
+
+warning: field `enabled` is never read
+   --> ..\src\web_tree\controls.rs:130:16
+    |
+129 | pub(super) struct GpuOptions {
+    |                   ---------- field in this struct
+130 |     pub(super) enabled: bool,
+    |                ^^^^^^^
+    |
+    = note: `GpuOptions` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: fields `address`, `role`, and `status` are never read
+  --> ..\src\web_tree\product_off.rs:20:16
+   |
+16 | pub(super) struct SavedProduct {
+   |                   ------------ fields in this struct
+...
+20 |     pub(super) address: String,
+   |                ^^^^^^^
+21 |     pub(super) detail_open: bool,
+22 |     pub(super) role: SelectState,
+   |                ^^^^
+23 |     pub(super) saving: bool,
+24 |     pub(super) status: String,
+   |                ^^^^^^
+
+warning: method `save` is never used
+  --> ..\src\web_tree\product_off.rs:59:19
+   |
+42 | impl SavedProduct {
+   | ----------------- method in this implementation
+...
+59 |     pub(super) fn save(&mut self) {
+   |                   ^^^^
+
+warning: variant `Remote` is never constructed
+  --> ..\src\web_tree\remote_off.rs:44:5
+   |
+42 | pub(super) enum Session {
+   |                 ------- variant in this enum
+43 |     Local,
+44 |     Remote,
+   |     ^^^^^^
+   |
+   = note: `Session` has derived impls for the traits `Debug` and `Clone`, but these are intentionally ignored during dead code analysis
+
+warning: methods `pump`, `form_mut`, and `label` are never used
+   --> ..\src\web_tree\remote_off.rs:85:19
+    |
+ 73 | impl TreeRemote {
+    | --------------- methods in this implementation
+...
+ 85 |     pub(super) fn pump(&mut self) {
+    |                   ^^^^
+...
+ 93 |     pub(super) fn form_mut(&mut self) -> &mut ActionForm {
+    |                   ^^^^^^^^
+...
+113 |     pub(super) fn label(&self) -> String {
+    |                   ^^^^^
+
+warning: field `fields` is never read
+   --> ..\src\web_tree\remote_off.rs:136:16
+    |
+135 | pub(super) struct DraftControls {
+    |                   ------------- field in this struct
+136 |     pub(super) fields: Vec<SelectState>,
+    |                ^^^^^^
+
+warning: `graphshell-web` (lib) generated 23 warnings (run `cargo fix --lib -p graphshell-web` to apply 6 suggestions)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 30.36s

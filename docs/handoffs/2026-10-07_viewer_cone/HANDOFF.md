@@ -2,16 +2,27 @@
 artifact_contract: "ce-handoff/v1"
 created_at: "2026-10-07T03:59:13Z"
 title: "mer3ly P0 viewer cone: the calm-machine receipts and Ruling 107's timings"
-summary: "The graphshell-web viewer cone is built, receipted and measured on mere branch viewer-cone; what remains is three speed timing reruns, GPU-on/off frame timings at the site's graph size, the conatus session's check, and Mark's budget ruling."
+summary: "The ThinkPad release speed rows and approved 21-node frame benchmark pass. Both viewer builds have about 60 Hz median cadence; GPU physics submits no work. Plain viewer selected under Ruling 121; candidate rebased and license gate repaired. Current speed-lane acceptance, conatus review, and the numerical payload cap remain open. See RESUME.md."
 keywords: ["mer3ly", "viewer-cone", "graphshell-web", "P0", "Ruling 26", "Ruling 107", "payload budget", "headed receipts", "canvas-gpu"]
 cwd: "C:/Users/mark_/Code (machine-local)"
-resume_focus: "Run the calm-machine receipts and the canvas-gpu frame timings on another machine, then bring the payload budget to Mark."
+resume_focus: "Forward REVIEW_REQUEST.md to the existing Claude conatus chat; resolve the combined speed-lane conflict and acceptance, and settle the numerical payload cap before integration."
 repository: "merely-made/mere (the cone) and merely-made/merelyllc.com (this plan, mer3ly)"
 branch: "mere: viewer-cone"
-head: "mere viewer-cone 6963ebe5 (origin/viewer-cone); mer3ly main carries this file"
+head: "mere local viewer-cone e9678fdd; measured origin/viewer-cone 6963ebe5; mer3ly main carries this file"
 ---
 
 # P0 viewer cone: handoff
+
+**Resumed 2026-10-07:** [RESUME.md](RESUME.md) records the ThinkPad's headed
+reruns, unchanged bundle hashes and load samples. All five outstanding release
+rows pass; the four fast development rows still fail. The slow viewer row
+passes both profiles. A planted-stall receipt detects its intended miss.
+Under Ruling 120, the 21-node frame benchmark also passes in both release
+viewer builds: approximately 60 Hz median cadence, zero physics-device
+submissions. Mark selected the plain viewer (Ruling 121). The local candidate is rebased
+and its license gate passes; current speed-lane acceptance, numerical cap
+and conatus review remain open. The remainder
+preserves the original handoff's evidence and context.
 
 ## What this is
 
@@ -83,23 +94,28 @@ Done and verified on this machine:
   `wasm-opt -Os` enlarges every compressed figure, by 3-7%.
 
 Not done:
-1. **Calm reruns of three timing rows.** They missed only under load, and Mark's
-   ruling is that dial rows missing under load are rerun calm.
+1. **Development timing acceptance after calm reruns.** Reruns are now recorded
+   in RESUME.md: both fast rows still fail in development on the ThinkPad;
+   all five release rows pass. The original claim that they missed only under
+   load is no longer supported. Mark's ruling requires calm reruns; whether
+   release passes satisfy the gate remains for conatus review and Mark. The
+   physics catalog now records newer own-1x/budget-relative bars in the speed
+   lane; the combined candidate must be checked against those ruled bars.
    - Default build: `p6_tree_speed_fast`
      (`tree.html?nodes=300&seed=7&links=none&gpu=off&physics_speed=max`) and
      `p6_tree_speed_fast_control`
      (`tree.html?nodes=24&seed=7&links=none&gpu=off&physics_speed=50`).
    - Viewer build: the same two, plus `p6_tree_speed_slow` (`?physics_speed=0.2`).
-     Its first run never started because the sink did not come up.
-2. **Ruling 107's frame timings.** `canvas-gpu` on against off, at the site's
-   graph size. Ruling 107 was "Measure both, then rule (Recommended)". The size
-   half is in the table above. The timing half is not designed yet. My reading,
-   not ruled: the site's repos page shows about 21 nodes, and a scenario that
-   records frame timings (the `p4_tree_profile` / `p4_tree_live_profile` family
-   is the obvious candidate) run on both viewer bundles would answer it. Settle
-   the scenario and the node count with Mark before running.
+     Its original first run never started because the sink did not come up;
+     it now passes in development and release on the ThinkPad.
+2. **Ruling 107 settled for the initial site (Ruling 121).** Mark's
+   "Proceed" accepts the plain viewer. Both 21-node release benchmarks pass
+   with similar median cadence and no physics-device submissions. This does
+   not measure the exact site's edges/content, forced dispatch or larger graphs.
 3. **The conatus session's check of the branch**, and then its merge to main.
-   The branch will need a rebase onto current origin/main first.
+   The local branch is now rebased onto `a59e4c47`, with license repairs at
+   `e9678fdd`. `REVIEW_REQUEST.md` identifies the speed-lane merge conflict.
+   Remote branch and headed measurements remain at `6963ebe5`.
 4. **Mark's budget ruling (Ruling 26)**, with the sizes and timings together.
 
 ## Findings to carry

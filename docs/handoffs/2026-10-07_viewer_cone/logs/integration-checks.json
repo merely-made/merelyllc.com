@@ -1,0 +1,154 @@
+{
+  "source_commit": "e9678fddca5e050490b7d7bc3c80939242504f15",
+  "base_commit": "a59e4c47a2a5c2024427eeb54b689f2e4f2c345b",
+  "target": "C:\\t\\cargo-targets\\mere",
+  "web_lock_sha256": "bcab7badca9550eef419dd67f2d732a481cc95c283b080c4d44b03197e646eb5",
+  "checks": [
+    {
+      "features": "none",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "--no-default-features",
+        "-j",
+        "4"
+      ],
+      "exit_code": 0,
+      "note": "Initial tool-run check passed in 1m52s; graphshell-web emitted 23 warnings. Header-only commit completed during check."
+    },
+    {
+      "features": "canvas-gpu",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "-j",
+        "4",
+        "--no-default-features",
+        "--features",
+        "canvas-gpu"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 142.23,
+      "log": "compile-canvas-gpu.log"
+    },
+    {
+      "features": "product",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "-j",
+        "4",
+        "--no-default-features",
+        "--features",
+        "product"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 81.42,
+      "log": "compile-product.log"
+    },
+    {
+      "features": "remote",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "-j",
+        "4",
+        "--no-default-features",
+        "--features",
+        "remote"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 66.37,
+      "log": "compile-remote.log"
+    },
+    {
+      "features": "product,remote",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "-j",
+        "4",
+        "--no-default-features",
+        "--features",
+        "product,remote"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 58.36,
+      "log": "compile-product-remote.log"
+    },
+    {
+      "features": "main-page",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "-j",
+        "4",
+        "--no-default-features",
+        "--features",
+        "main-page"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 73.23,
+      "log": "compile-main-page.log"
+    },
+    {
+      "features": "image-decode",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "-j",
+        "4",
+        "--no-default-features",
+        "--features",
+        "image-decode"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 30.47,
+      "log": "compile-image-decode.log"
+    },
+    {
+      "features": "default",
+      "command": [
+        "cargo",
+        "check",
+        "--locked",
+        "--offline",
+        "--target",
+        "wasm32-unknown-unknown",
+        "-j",
+        "4"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 83.41,
+      "log": "compile-default.log"
+    }
+  ]
+}

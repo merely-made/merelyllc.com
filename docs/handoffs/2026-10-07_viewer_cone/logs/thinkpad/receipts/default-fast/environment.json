@@ -1,0 +1,520 @@
+{
+  "machine": "thinkpad-l14-f",
+  "platform": "Linux-7.2.8-200.fc44.x86_64-x86_64-with-glibc2.43",
+  "bundle_sha256": "686fd0115f2a42588aecbda3f80c77e4ed3e50a8e30485807f9006e121fbd592",
+  "bundle_bytes": 116346100,
+  "scenario": "p6_tree_speed_fast",
+  "scenario_sha256": "b183f3118f4180de96b8d1fdef024c89c7a9a5e0675501cec46d96b5863dfdd1",
+  "query": "nodes=300&seed=7&links=none&gpu=off&physics_speed=max",
+  "load_before": [
+    0.134765625,
+    0.1845703125,
+    0.1767578125
+  ],
+  "unsafe_webgpu": false,
+  "cpu_samples": [
+    {
+      "seconds": 1.26,
+      "percent": 38.26
+    },
+    {
+      "seconds": 2.26,
+      "percent": 46.77
+    },
+    {
+      "seconds": 3.26,
+      "percent": 7.09
+    },
+    {
+      "seconds": 4.26,
+      "percent": 25.84
+    },
+    {
+      "seconds": 5.26,
+      "percent": 39.68
+    },
+    {
+      "seconds": 6.27,
+      "percent": 2.62
+    },
+    {
+      "seconds": 7.27,
+      "percent": 0.5
+    },
+    {
+      "seconds": 8.27,
+      "percent": 0.5
+    },
+    {
+      "seconds": 9.27,
+      "percent": 1.0
+    },
+    {
+      "seconds": 10.27,
+      "percent": 0.13
+    },
+    {
+      "seconds": 11.27,
+      "percent": 4.75
+    },
+    {
+      "seconds": 12.27,
+      "percent": 16.96
+    },
+    {
+      "seconds": 13.27,
+      "percent": 3.37
+    },
+    {
+      "seconds": 14.27,
+      "percent": 15.4
+    },
+    {
+      "seconds": 15.27,
+      "percent": 3.23
+    },
+    {
+      "seconds": 16.27,
+      "percent": 9.17
+    },
+    {
+      "seconds": 17.27,
+      "percent": 10.21
+    },
+    {
+      "seconds": 18.27,
+      "percent": 2.99
+    },
+    {
+      "seconds": 19.27,
+      "percent": 1.75
+    },
+    {
+      "seconds": 20.28,
+      "percent": 5.48
+    },
+    {
+      "seconds": 21.28,
+      "percent": 7.97
+    },
+    {
+      "seconds": 22.28,
+      "percent": 27.28
+    },
+    {
+      "seconds": 23.28,
+      "percent": 9.61
+    },
+    {
+      "seconds": 24.28,
+      "percent": 14.34
+    },
+    {
+      "seconds": 25.28,
+      "percent": 3.99
+    },
+    {
+      "seconds": 26.28,
+      "percent": 5.1
+    },
+    {
+      "seconds": 27.28,
+      "percent": 2.62
+    },
+    {
+      "seconds": 28.28,
+      "percent": 1.5
+    },
+    {
+      "seconds": 29.28,
+      "percent": 0.88
+    },
+    {
+      "seconds": 30.28,
+      "percent": 1.5
+    },
+    {
+      "seconds": 31.28,
+      "percent": 3.49
+    },
+    {
+      "seconds": 32.28,
+      "percent": 13.49
+    },
+    {
+      "seconds": 33.28,
+      "percent": 2.37
+    },
+    {
+      "seconds": 34.29,
+      "percent": 1.0
+    },
+    {
+      "seconds": 35.29,
+      "percent": 1.0
+    },
+    {
+      "seconds": 36.29,
+      "percent": 0.5
+    },
+    {
+      "seconds": 37.29,
+      "percent": 1.25
+    },
+    {
+      "seconds": 38.29,
+      "percent": 0.38
+    },
+    {
+      "seconds": 39.29,
+      "percent": 0.62
+    },
+    {
+      "seconds": 40.29,
+      "percent": 10.36
+    },
+    {
+      "seconds": 41.29,
+      "percent": 1.62
+    },
+    {
+      "seconds": 42.29,
+      "percent": 0.62
+    },
+    {
+      "seconds": 43.29,
+      "percent": 2.12
+    },
+    {
+      "seconds": 44.29,
+      "percent": 0.13
+    },
+    {
+      "seconds": 45.29,
+      "percent": 0.5
+    },
+    {
+      "seconds": 46.3,
+      "percent": 0.5
+    },
+    {
+      "seconds": 47.3,
+      "percent": 1.5
+    },
+    {
+      "seconds": 48.3,
+      "percent": 0.25
+    },
+    {
+      "seconds": 49.3,
+      "percent": 0.75
+    },
+    {
+      "seconds": 50.3,
+      "percent": 0.87
+    },
+    {
+      "seconds": 51.3,
+      "percent": 0.25
+    },
+    {
+      "seconds": 52.3,
+      "percent": 1.12
+    },
+    {
+      "seconds": 53.3,
+      "percent": 0.13
+    },
+    {
+      "seconds": 54.3,
+      "percent": 1.62
+    },
+    {
+      "seconds": 55.3,
+      "percent": 0.62
+    },
+    {
+      "seconds": 56.3,
+      "percent": 0.5
+    },
+    {
+      "seconds": 57.3,
+      "percent": 0.5
+    },
+    {
+      "seconds": 58.3,
+      "percent": 0.87
+    },
+    {
+      "seconds": 59.31,
+      "percent": 0.37
+    },
+    {
+      "seconds": 60.31,
+      "percent": 7.97
+    },
+    {
+      "seconds": 61.31,
+      "percent": 0.88
+    },
+    {
+      "seconds": 62.31,
+      "percent": 12.66
+    },
+    {
+      "seconds": 63.31,
+      "percent": 11.41
+    },
+    {
+      "seconds": 64.31,
+      "percent": 6.47
+    },
+    {
+      "seconds": 65.31,
+      "percent": 3.49
+    },
+    {
+      "seconds": 66.31,
+      "percent": 10.05
+    },
+    {
+      "seconds": 67.31,
+      "percent": 6.85
+    },
+    {
+      "seconds": 68.31,
+      "percent": 6.37
+    },
+    {
+      "seconds": 69.31,
+      "percent": 2.88
+    },
+    {
+      "seconds": 70.31,
+      "percent": 11.07
+    },
+    {
+      "seconds": 71.31,
+      "percent": 13.06
+    },
+    {
+      "seconds": 72.31,
+      "percent": 4.0
+    },
+    {
+      "seconds": 73.31,
+      "percent": 1.5
+    },
+    {
+      "seconds": 74.32,
+      "percent": 2.86
+    },
+    {
+      "seconds": 75.32,
+      "percent": 9.98
+    },
+    {
+      "seconds": 76.32,
+      "percent": 0.88
+    },
+    {
+      "seconds": 77.32,
+      "percent": 2.12
+    },
+    {
+      "seconds": 78.32,
+      "percent": 2.37
+    },
+    {
+      "seconds": 79.32,
+      "percent": 2.62
+    },
+    {
+      "seconds": 80.32,
+      "percent": 1.62
+    },
+    {
+      "seconds": 81.32,
+      "percent": 0.75
+    },
+    {
+      "seconds": 82.32,
+      "percent": 2.62
+    },
+    {
+      "seconds": 83.32,
+      "percent": 0.62
+    },
+    {
+      "seconds": 84.32,
+      "percent": 2.38
+    },
+    {
+      "seconds": 85.32,
+      "percent": 0.5
+    },
+    {
+      "seconds": 86.32,
+      "percent": 0.5
+    },
+    {
+      "seconds": 87.32,
+      "percent": 1.38
+    },
+    {
+      "seconds": 88.33,
+      "percent": 3.37
+    },
+    {
+      "seconds": 89.33,
+      "percent": 0.5
+    },
+    {
+      "seconds": 90.33,
+      "percent": 1.12
+    },
+    {
+      "seconds": 91.33,
+      "percent": 1.38
+    },
+    {
+      "seconds": 92.33,
+      "percent": 8.84
+    },
+    {
+      "seconds": 93.33,
+      "percent": 2.12
+    },
+    {
+      "seconds": 94.33,
+      "percent": 1.12
+    },
+    {
+      "seconds": 95.33,
+      "percent": 0.75
+    },
+    {
+      "seconds": 96.33,
+      "percent": 0.38
+    },
+    {
+      "seconds": 97.33,
+      "percent": 0.5
+    },
+    {
+      "seconds": 98.33,
+      "percent": 0.87
+    },
+    {
+      "seconds": 99.34,
+      "percent": 0.75
+    },
+    {
+      "seconds": 100.34,
+      "percent": 7.99
+    },
+    {
+      "seconds": 101.34,
+      "percent": 2.5
+    },
+    {
+      "seconds": 102.34,
+      "percent": 0.5
+    },
+    {
+      "seconds": 103.34,
+      "percent": 3.87
+    },
+    {
+      "seconds": 104.34,
+      "percent": 0.25
+    },
+    {
+      "seconds": 105.34,
+      "percent": 0.62
+    },
+    {
+      "seconds": 106.34,
+      "percent": 0.5
+    },
+    {
+      "seconds": 107.34,
+      "percent": 1.75
+    },
+    {
+      "seconds": 108.34,
+      "percent": 4.09
+    },
+    {
+      "seconds": 109.34,
+      "percent": 0.5
+    },
+    {
+      "seconds": 110.34,
+      "percent": 0.75
+    },
+    {
+      "seconds": 111.35,
+      "percent": 0.5
+    },
+    {
+      "seconds": 112.35,
+      "percent": 0.38
+    },
+    {
+      "seconds": 113.35,
+      "percent": 0.5
+    },
+    {
+      "seconds": 114.35,
+      "percent": 1.37
+    },
+    {
+      "seconds": 115.35,
+      "percent": 0.87
+    },
+    {
+      "seconds": 116.35,
+      "percent": 0.5
+    },
+    {
+      "seconds": 117.35,
+      "percent": 0.38
+    },
+    {
+      "seconds": 118.35,
+      "percent": 0.38
+    },
+    {
+      "seconds": 119.35,
+      "percent": 0.38
+    },
+    {
+      "seconds": 120.35,
+      "percent": 0.37
+    }
+  ],
+  "cpu_before_percent": 1.3732833957553092,
+  "command": [
+    "flatpak",
+    "run",
+    "--filesystem=/home/markik/Code/testing/mere/viewer-cone/receipts/default-fast",
+    "com.google.Chrome",
+    "--user-data-dir=/home/markik/Code/testing/mere/viewer-cone/receipts/default-fast/chrome-profile",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--ozone-platform=wayland",
+    "--disable-features=CalculateNativeWinOcclusion",
+    "--disable-backgrounding-occluded-windows",
+    "--disable-renderer-backgrounding",
+    "--new-window",
+    "--window-size=1400,900",
+    "http://127.0.0.1:8960/tree.html?scenario=scenarios/p6_tree_speed_fast.scn&sink=http://127.0.0.1:8960/scenario-receipt&nodes=300&seed=7&links=none&gpu=off&physics_speed=max"
+  ],
+  "elapsed_seconds": 120.36,
+  "load_after": [
+    0.2626953125,
+    0.2177734375,
+    0.1884765625
+  ]
+}

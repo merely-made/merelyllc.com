@@ -1,0 +1,167 @@
+{
+  "machine": "thinkpad-l14-f",
+  "platform": "Linux-7.2.8-200.fc44.x86_64-x86_64-with-glibc2.43",
+  "bundle_sha256": "686fd0115f2a42588aecbda3f80c77e4ed3e50a8e30485807f9006e121fbd592",
+  "bundle_bytes": 116346100,
+  "scenario": "p6_tree_speed_fast",
+  "scenario_sha256": "b183f3118f4180de96b8d1fdef024c89c7a9a5e0675501cec46d96b5863dfdd1",
+  "query": "nodes=300&seed=7&links=none&gpu=off&physics_speed=max",
+  "load_before": [
+    2.19384765625,
+    0.8115234375,
+    0.3974609375
+  ],
+  "unsafe_webgpu": true,
+  "cpu_samples": [
+    {
+      "seconds": 1.26,
+      "percent": 47.71
+    },
+    {
+      "seconds": 2.26,
+      "percent": 56.75
+    },
+    {
+      "seconds": 3.26,
+      "percent": 28.7
+    },
+    {
+      "seconds": 4.26,
+      "percent": 34.78
+    },
+    {
+      "seconds": 5.26,
+      "percent": 25.56
+    },
+    {
+      "seconds": 6.27,
+      "percent": 30.81
+    },
+    {
+      "seconds": 7.27,
+      "percent": 64.84
+    },
+    {
+      "seconds": 8.27,
+      "percent": 24.53
+    },
+    {
+      "seconds": 9.27,
+      "percent": 23.79
+    },
+    {
+      "seconds": 10.27,
+      "percent": 25.5
+    },
+    {
+      "seconds": 11.27,
+      "percent": 23.98
+    },
+    {
+      "seconds": 12.27,
+      "percent": 17.62
+    },
+    {
+      "seconds": 13.27,
+      "percent": 21.89
+    },
+    {
+      "seconds": 14.27,
+      "percent": 41.69
+    },
+    {
+      "seconds": 15.27,
+      "percent": 36.54
+    },
+    {
+      "seconds": 16.27,
+      "percent": 29.28
+    },
+    {
+      "seconds": 17.27,
+      "percent": 17.29
+    },
+    {
+      "seconds": 18.27,
+      "percent": 15.59
+    },
+    {
+      "seconds": 19.27,
+      "percent": 15.05
+    },
+    {
+      "seconds": 20.27,
+      "percent": 15.61
+    },
+    {
+      "seconds": 21.27,
+      "percent": 17.46
+    },
+    {
+      "seconds": 22.27,
+      "percent": 29.61
+    },
+    {
+      "seconds": 23.27,
+      "percent": 21.27
+    },
+    {
+      "seconds": 24.27,
+      "percent": 18.45
+    },
+    {
+      "seconds": 25.27,
+      "percent": 15.3
+    },
+    {
+      "seconds": 26.27,
+      "percent": 17.27
+    },
+    {
+      "seconds": 27.28,
+      "percent": 16.29
+    },
+    {
+      "seconds": 28.28,
+      "percent": 14.86
+    },
+    {
+      "seconds": 29.28,
+      "percent": 14.57
+    },
+    {
+      "seconds": 30.28,
+      "percent": 16.67
+    }
+  ],
+  "cpu_before_percent": 0.6242197253433224,
+  "command": [
+    "flatpak",
+    "run",
+    "--filesystem=/home/markik/Code/testing/mere/viewer-cone/receipts/default-fast-hardware",
+    "com.google.Chrome",
+    "--user-data-dir=/home/markik/Code/testing/mere/viewer-cone/receipts/default-fast-hardware/chrome-profile",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--enable-logging=stderr",
+    "--ozone-platform=wayland",
+    "--disable-features=CalculateNativeWinOcclusion",
+    "--disable-backgrounding-occluded-windows",
+    "--disable-renderer-backgrounding",
+    "--new-window",
+    "--window-size=1400,900",
+    "--enable-unsafe-webgpu",
+    "--enable-features=Vulkan",
+    "--use-angle=vulkan",
+    "http://127.0.0.1:8960/tree.html?scenario=scenarios/p6_tree_speed_fast.scn&sink=http://127.0.0.1:8960/scenario-receipt&nodes=300&seed=7&links=none&gpu=off&physics_speed=max"
+  ],
+  "result": "fail",
+  "page_errors": [],
+  "gate_failures": [],
+  "elapsed_seconds": 30.3,
+  "load_after": [
+    2.083984375,
+    0.9248046875,
+    0.4501953125
+  ]
+}

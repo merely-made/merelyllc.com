@@ -1,0 +1,25 @@
+[1007/011510.523732:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /app/extra/CHROME_VERSION_EXTRA
+[1007/011510.771189:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /app/extra/CHROME_VERSION_EXTRA
+[2:2:1007/011510.782968:WARNING:ui/ozone/platform/wayland/common/wayland_object.cc:119] Binding to wl_shm version 1 but version 2 is available.
+[2:2:1007/011510.783078:WARNING:ui/ozone/platform/wayland/common/wayland_object.cc:119] Binding to zwp_pointer_gestures_v1 version 1 but version 3 is available.
+[2:2:1007/011510.783138:WARNING:ui/ozone/platform/wayland/common/wayland_object.cc:119] Binding to zwp_linux_dmabuf_v1 version 4 but version 5 is available.
+[2:2:1007/011510.783201:WARNING:ui/ozone/platform/wayland/common/wayland_object.cc:119] Binding to wp_color_manager_v1 version 1 but version 2 is available.
+[2:2:1007/011510.783224:WARNING:ui/ozone/platform/wayland/common/wayland_object.cc:119] Binding to wp_cursor_shape_manager_v1 version 1 but version 2 is available.
+[2:2:1007/011510.885592:INFO:components/enterprise/browser/controller/chrome_browser_cloud_management_controller.cc:241] No machine level policy manager exists.
+[89:4:1007/011510.951743:WARNING:third_party/crashpad/crashpad/client/crashpad_client_linux.cc:376] prctl: Invalid argument (22)
+[65:65:1007/011510.970247:ERROR:ui/ozone/platform/wayland/gpu/wayland_surface_factory.cc:249] '--ozone-platform=wayland' is not compatible with Vulkan. Consider switching to '--ozone-platform=x11' or disabling Vulkan
+[2:2:1007/011510.992011:WARNING:ui/ozone/platform/wayland/host/wayland_surface.cc:170] Server doesn't support zcr_alpha_compositing_v1.
+[2:2:1007/011510.992044:WARNING:ui/ozone/platform/wayland/host/wayland_surface.cc:185] Server doesn't support overlay_prioritizer.
+[2:2:1007/011510.992051:WARNING:ui/ozone/platform/wayland/host/wayland_surface.cc:200] Server doesn't support wp_content_type_v1
+[65:65:1007/011510.997036:WARNING:sandbox/policy/linux/sandbox_linux.cc:405] InitializeSandbox() called with multiple threads in process gpu-process.
+[126:12:1007/011511.009965:WARNING:third_party/crashpad/crashpad/client/crashpad_client_linux.cc:376] prctl: Invalid argument (22)
+[2:2:1007/011511.093123:WARNING:ui/ozone/platform/wayland/host/org_gnome_mutter_idle_monitor.cc:87] org.gnome.Mutter.IdleMonitor D-Bus service does not exist
+[2:2:1007/011511.235640:WARNING:ui/base/idle/idle_linux.cc:111] None of the known D-Bus ScreenSaver services could be used.
+Warning: maxDynamicUniformBuffersPerPipelineLayout artificially reduced from 507904 to 16 to fit dynamic offset allocation limit.
+Warning: maxDynamicStorageBuffersPerPipelineLayout artificially reduced from 507904 to 16 to fit dynamic offset allocation limit.
+[2:48:1007/011516.633720:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: PHONE_REGISTRATION_ERROR
+[2:48:1007/011516.634261:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: PHONE_REGISTRATION_ERROR
+[2:48:1007/011516.636585:ERROR:google_apis/gcm/engine/registration_request.cc:291] Registration response error message: PHONE_REGISTRATION_ERROR
+Created TensorFlow Lite XNNPACK delegate for CPU.
+Created TensorFlow Lite XNNPACK delegate for CPU.
+[2:48:1007/011538.233788:ERROR:google_apis/gcm/engine/connection_factory_impl.cc:484] ConnectionHandler failed with net error: -2

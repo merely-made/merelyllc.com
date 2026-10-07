@@ -1,0 +1,16 @@
+[1007/011309.656335:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /app/extra/CHROME_VERSION_EXTRA
+[1007/011309.891909:WARNING:chrome/app/chrome_main_linux.cc:84] Read channel stable from /app/extra/CHROME_VERSION_EXTRA
+[2:2:1007/011309.906121:WARNING:ui/ozone/platform/wayland/common/wayland_object.cc:119] Binding to wl_shm version 1 but version 2 is available.
+[2:2:1007/011309.906253:WARNING:ui/ozone/platform/wayland/common/wayland_object.cc:119] Binding to zwp_pointer_gestures_v1 version 1 but version 3 is available.
+[2:2:1007/011309.906311:WARNING:ui/ozone/platform/wayland/common/wayland_object.cc:119] Binding to zwp_linux_dmabuf_v1 version 4 but version 5 is available.
+[2:2:1007/011309.906384:WARNING:ui/ozone/platform/wayland/common/wayland_object.cc:119] Binding to wp_color_manager_v1 version 1 but version 2 is available.
+[2:2:1007/011309.906408:WARNING:ui/ozone/platform/wayland/common/wayland_object.cc:119] Binding to wp_cursor_shape_manager_v1 version 1 but version 2 is available.
+[2:2:1007/011310.007787:INFO:components/enterprise/browser/controller/chrome_browser_cloud_management_controller.cc:241] No machine level policy manager exists.
+[66:66:1007/011310.086025:WARNING:sandbox/policy/linux/sandbox_linux.cc:405] InitializeSandbox() called with multiple threads in process gpu-process.
+[100:4:1007/011310.083305:WARNING:third_party/crashpad/crashpad/client/crashpad_client_linux.cc:376] prctl: Invalid argument (22)
+[2:2:1007/011310.126330:WARNING:ui/ozone/platform/wayland/host/wayland_surface.cc:170] Server doesn't support zcr_alpha_compositing_v1.
+[2:2:1007/011310.126376:WARNING:ui/ozone/platform/wayland/host/wayland_surface.cc:185] Server doesn't support overlay_prioritizer.
+[2:2:1007/011310.126384:WARNING:ui/ozone/platform/wayland/host/wayland_surface.cc:200] Server doesn't support wp_content_type_v1
+[130:12:1007/011310.145498:WARNING:third_party/crashpad/crashpad/client/crashpad_client_linux.cc:376] prctl: Invalid argument (22)
+[2:2:1007/011310.239842:WARNING:ui/ozone/platform/wayland/host/org_gnome_mutter_idle_monitor.cc:87] org.gnome.Mutter.IdleMonitor D-Bus service does not exist
+[2:2:1007/011310.401631:WARNING:ui/base/idle/idle_linux.cc:111] None of the known D-Bus ScreenSaver services could be used.

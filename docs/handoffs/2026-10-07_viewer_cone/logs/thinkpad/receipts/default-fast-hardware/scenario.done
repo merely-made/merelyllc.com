@@ -1,0 +1,11 @@
+RESULT fail
+FAIL: assert snap physics-effective-speed Ge '1': got '0.998'
+FAIL: assert snap pace-over-budget-worst-us Le '100': got '867'
+FAIL: assert snap pace-over-grain-frames Eq '0': got '1'
+p6 speed fast receipt complete
+timing speed-fast frames=32 interval_ms p50=282.200 p95=450.100 max=501.900 cpu_ms p50=277.100 p95=415.700 max=490.700 gpu_ms p50=276.682 p95=415.033 max=490.097 producer_render_us p50=247100.000 p95=276100.000 max=328100.000 producer_stage_us p50=200.000 p95=400.000 max=500.000 cull p50=0.100 p95=0.200 max=0.200 dom_frame p50=90.000 p95=107.200 max=138.500 dom_mutate p50=134.300 p95=161.800 max=177.000 dom_prepare p50=0.500 p95=0.700 max=1.200 faces p50=4.300 p95=4.500 max=4.800 lower p50=0.800 p95=0.900 max=1.100 overlays p50=0.000 p95=0.200 max=0.200 physics p50=8.000 p95=8.100 max=8.600 prepare p50=1.500 p95=1.600 max=1.800 rasterize p50=5.500 p95=5.800 max=6.600 underlay p50=0.700 p95=1.000 max=1.400
+pace: speed max effective 0.554 bound true ticks 386 over 30 frames drawn-moved 28 stepped 28 compute-max 9200 us over-budget-max 867 us budget 8333 us (0.5 of a 16.67 ms display period, fallback 1.383; last frame 299.9 ms) margin 200 us; every window: worst 867 us, 1 frames past the grain
+physics fast: law spring.rapier nodes 300 energy 2490.8 spread 682 overlaps 0 device off device-steps 0 cpu-steps 0 submissions 0 answers 0 failures 0 waiting 0 stale 0 mismatched 0 last-age 0 layout-outside 0 layout-extent -981,-984,990,990 view-extent -2449,-1143,2458,1149 view-follow true
+pace: speed max effective 0.988 bound true ticks 935 over 30 frames drawn-moved 30 stepped 30 compute-max 8100 us over-budget-max -233 us budget 8333 us (0.5 of a 16.67 ms display period, fallback 1.379; last frame 266.6 ms) margin 200 us; every window: worst 867 us, 1 frames past the grain
+pace fast: speed max budget 8333 us margin 200 us display period 16.667 ms (fallback, worst interval 1.379 ms off its multiple); every window: 56 frames the gate admitted ticks in, worst 867 us over budget (frame 2: admitted ticks ended at 9200 us of 8 ticks against a 8333 us budget), 1 past the grain; 1 floor-only frames past it
+gpu timestamps: yes

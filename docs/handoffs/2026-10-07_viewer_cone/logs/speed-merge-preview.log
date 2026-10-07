@@ -1,0 +1,9 @@
+bdec71c97dc2831e4255bd0105ab9b1326f483a3
+100644 711eb597d61228711a2272b9a045dbd139f3c16c 1	ports/graphshell/src/web.rs
+100644 5fbce0ead374161c3bc523207e5a3d917b15e81f 2	ports/graphshell/src/web.rs
+100644 dfbaff799e80d125580d7a228c91164074130e3b 3	ports/graphshell/src/web.rs
+
+Auto-merging ports/graphshell/src/web.rs
+CONFLICT (content): Merge conflict in ports/graphshell/src/web.rs
+Auto-merging ports/graphshell/src/web_tree.rs
+Auto-merging ports/graphshell/web/Cargo.toml

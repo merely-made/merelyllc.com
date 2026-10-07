@@ -1,0 +1,51 @@
+{
+  "receipt": {
+    "gpu": true,
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+    "adapter": true,
+    "info": {
+      "vendor": "amd",
+      "architecture": "gcn-5",
+      "device": "",
+      "description": "",
+      "isFallbackAdapter": false
+    },
+    "features": [
+      "depth32float-stencil8",
+      "rg11b10ufloat-renderable",
+      "texture-formats-tier1",
+      "bgra8unorm-storage",
+      "chromium-experimental-multi-draw-indirect",
+      "texture-compression-bc",
+      "dual-source-blending",
+      "chromium-experimental-sampling-resource-table",
+      "core-features-and-limits",
+      "chromium-experimental-timestamp-query-inside-passes",
+      "float32-filterable",
+      "indirect-first-instance",
+      "float32-blendable",
+      "subgroup-size-control",
+      "texture-compression-unaligned",
+      "depth-clip-control",
+      "texture-compression-bc-sliced-3d",
+      "texture-formats-tier2",
+      "timestamp-query",
+      "clip-distances",
+      "shader-f16",
+      "primitive-index",
+      "texture-component-swizzle",
+      "subgroups"
+    ]
+  },
+  "scenario": {
+    "errors": [],
+    "gate_failures": [],
+    "result": {
+      "result": "ok",
+      "log": [
+        "{\"gpu\":true,\"userAgent\":\"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36\",\"adapter\":true,\"info\":{\"vendor\":\"amd\",\"architecture\":\"gcn-5\",\"device\":\"\",\"description\":\"\",\"isFallbackAdapter\":false},\"features\":[\"depth32float-stencil8\",\"rg11b10ufloat-renderable\",\"texture-formats-tier1\",\"bgra8unorm-storage\",\"chromium-experimental-multi-draw-indirect\",\"texture-compression-bc\",\"dual-source-blending\",\"chromium-experimental-sampling-resource-table\",\"core-features-and-limits\",\"chromium-experimental-timestamp-query-inside-passes\",\"float32-filterable\",\"indirect-first-instance\",\"float32-blendable\",\"subgroup-size-control\",\"texture-compression-unaligned\",\"depth-clip-control\",\"texture-compression-bc-sliced-3d\",\"texture-formats-tier2\",\"timestamp-query\",\"clip-distances\",\"shader-f16\",\"primitive-index\",\"texture-component-swizzle\",\"subgroups\"]}"
+      ]
+    }
+  },
+  "capture_files": []
+}

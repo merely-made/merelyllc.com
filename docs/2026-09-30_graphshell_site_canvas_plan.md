@@ -1,9 +1,10 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-119 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-120 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 The payload budget waits on P0's viewer-cone measurement (Ruling 26). Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
-No code has changed.
+Implementation and measurements are recorded in Progress below; the viewer
+cone remains on its own branch pending review and integration.
 
 ## Purpose
 
@@ -1208,6 +1209,33 @@ The cone's feature-table prep is committed on mere branch `viewer-cone`
 - muniment's `indexeddb`, graphshell's `webrtc-browser` and `canvas-gpu` move
   behind features.
 
+### Ruling 120 (2026-10-07): Ruling 107's frame benchmark
+
+Put after the ThinkPad speed reruns: "Use the prepared 21-node benchmark at
+the normal GPU threshold next?" Mark: "Ok". What follows:
+- compare the two existing release viewer bundles at `6963ebe5`, with seed 7,
+  no links, speed 1, one paused window and three live windows after warmup;
+- use `gpu=off` for the plain viewer and the normal GPU settings, including
+  the 400-node dispatch threshold, for `canvas-gpu`;
+- record frame intervals, CPU and GPU-render spans, hidden state and physics
+  dispatch counters. A physics device at 21 nodes is not a GPU dispatch;
+- this is a count-matched synthetic graph. The current source projects 21
+  nodes and 24 edges; the diagnostic does not reproduce those edges or content.
+
+This approves the measurement setup. GPU inclusion, the payload budget,
+development acceptance and integration remain separate decisions.
+
+### Ruling 121 (2026-10-07): plain viewer for the initial site
+
+After the completed Ruling 120 measurements and recommendation to use the
+plain viewer, Mark: "Proceed". Proceed with the initial site using the
+no-default-features viewer without `canvas-gpu`. The measured setup submits
+no physics-device work, and the extra GPU WASM costs 747,678 bytes brotli.
+
+The numerical payload cap remains for Mark to choose. This does not waive
+the conatus review or the current speed lane's integration and acceptance
+requirements.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
@@ -2177,3 +2205,68 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   93-100% CPU. The handoff and the lane's harness and logs are in
   `docs/handoffs/2026-10-07_viewer_cone/`. mere `viewer-cone` is pushed
   (`origin/viewer-cone`, `6963ebe5`).
+- 2026-10-07: resumed the handoff on the lightly loaded ThinkPad, using the
+  existing bundles at `6963ebe5`, without rebuilding or changing Mere.
+  [Resume evidence](handoffs/2026-10-07_viewer_cone/RESUME.md) records hashes,
+  load samples, adapter probes and every result.
+  - All five outstanding speed rows pass in the release profile: default
+    fast/control, viewer fast/control, and viewer slow. The release planted
+    stall is detected as intended. Every completed speed receipt has zero
+    page errors and gate failures.
+  - Development fast and fast-control still fail in both bundles; viewer
+    slow passes. The previous "only under load" explanation is insufficient.
+    Release passes do not silently waive the development acceptance gate.
+  - Headed Linux Chrome needs WebGPU plus Vulkan flags to obtain the AMD
+    hardware adapter; stock Chrome returns none, and WebGPU alone selects
+    SwiftShader. Those startup diagnostics and flags accompany the receipts.
+  - Current tracked data reconciles to 21 nodes and 24 edges; ignored generated
+    HTML has a stale 26/29 snapshot. A 21-node paused/live diagnostic is prepared,
+    awaiting Mark's scenario choice. Normal physics GPU dispatch starts at
+    400 nodes, so a device at this size does not prove GPU work.
+  - Ruling 107 frame timings, conatus review, integration and payload rulings
+    remain open. No message, rebase, push or merge was performed. The existing
+    cone worktree and two remote release viewer bundles remain for those gates;
+    receipt processes, temporary profiles and transfer archives are cleaned up.
+- 2026-10-07: Mark approved the prepared 21-node benchmark at the normal GPU
+  threshold (Ruling 120). Both release viewer receipts pass on the ThinkPad,
+  with all nodes visible, matching viewport/canvas sizes, no hidden timing
+  windows, and zero page errors or gate failures. The
+  [structured frame results](handoffs/2026-10-07_viewer_cone/logs/thinkpad/site21/summary.json)
+  and [interpretation](handoffs/2026-10-07_viewer_cone/RESUME.md) are recorded.
+  - Each bundle records a paused window (62 frames) and three live windows
+    (122 frames each). Live interval medians: plain viewer 16.7/17.0/16.7 ms,
+    GPU viewer 16.7/16.7/16.6 ms. Per-window p95 ranges are 18.5-27.0 ms and
+    18.8-26.1 ms respectively; these are not pooled percentiles.
+  - The GPU bundle installs its physics device, but neither build submits
+    physics-device work under this setup. Both use `spring.rapier`; live
+    physics-stage CPU medians are 0.1 ms. The device/threshold distinction is
+    retained in the receipt counters.
+  - Recommendation, not ruled: use the plain viewer for the initial site
+    canvas. It costs 2,024,097 B brotli WASM plus 13,904 B generated module JS;
+    `canvas-gpu` adds 747,678 B brotli WASM without demonstrated physics
+    acceleration here. Loader, stylesheet, font and other site assets remain
+    separate from those figures until Mark defines the budget's scope.
+  - Frame measurements are complete. GPU inclusion, payload budget,
+    development acceptance and conatus review/integration remain open. The
+    copied remote release binaries, temporary profiles and transfer archive
+    are cleaned up after recording the evidence. The original local bundles
+    and existing source worktree remain owned by this P0 lane for review.
+- 2026-10-07: Mark: "Proceed" after the completed frame measurements and plain
+  viewer recommendation (Ruling 121). Selected plain viewer for the initial
+  site; numerical cap still open. The six measured assets total 2,120,331 B
+  brotli, with hashes in the handoff's `logs/payload-assets.json`.
+  - Mere `viewer-cone` rebased cleanly onto freshly fetched `a59e4c47`.
+    All four original patches compare equal; measured `6963ebe5` is preserved
+    as `viewer-cone-measured`. Two small license-header commits bring the
+    local candidate to `e9678fdd`; license check and planted-defect test pass.
+  - All eight wasm32 feature combinations compile with warnings under
+    locked/offline checks, recorded separately from the old headed receipts. The existing shared Mere Cargo target
+    is reused. No post-rebase release or headed result is claimed.
+  - Conatus review chat located in Claude history; Codex cannot message that
+    session through its available tools. The
+    [review request](handoffs/2026-10-07_viewer_cone/REVIEW_REQUEST.md) is ready.
+    Speed-lane rulings have moved beyond the measured bundle's assertions.
+    A read-only merge preview with `seiche-speed-estimator` finds `web.rs`
+    conflicts; its worker's host uses must move into `web_main.rs` while
+    keeping the module shared. Combined acceptance and pre-main review remain.
+  - Remote branch stays at the measured commit; no push or main merge.

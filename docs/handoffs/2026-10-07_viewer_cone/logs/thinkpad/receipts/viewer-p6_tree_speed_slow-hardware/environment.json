@@ -1,0 +1,75 @@
+{
+  "machine": "thinkpad-l14-f",
+  "platform": "Linux-7.2.8-200.fc44.x86_64-x86_64-with-glibc2.43",
+  "bundle_sha256": "a53a08ad6df7486895d59879117dca3de9f59ab2bb4dd17b43256eece33b035e",
+  "bundle_bytes": 68843897,
+  "scenario": "p6_tree_speed_slow",
+  "scenario_sha256": "217f3bb130540c2cee4d795a5095a001662668338ea74c67cd33391203d9ed7f",
+  "query": "physics_speed=0.2",
+  "load_before": [
+    2.0517578125,
+    1.15283203125,
+    0.57763671875
+  ],
+  "unsafe_webgpu": true,
+  "cpu_samples": [
+    {
+      "seconds": 1.26,
+      "percent": 41.52
+    },
+    {
+      "seconds": 2.26,
+      "percent": 45.87
+    },
+    {
+      "seconds": 3.26,
+      "percent": 31.89
+    },
+    {
+      "seconds": 4.26,
+      "percent": 26.05
+    },
+    {
+      "seconds": 5.26,
+      "percent": 26.94
+    },
+    {
+      "seconds": 6.26,
+      "percent": 30.99
+    },
+    {
+      "seconds": 7.27,
+      "percent": 69.53
+    }
+  ],
+  "cpu_before_percent": 9.689440993788823,
+  "command": [
+    "flatpak",
+    "run",
+    "--filesystem=/home/markik/Code/testing/mere/viewer-cone/receipts/viewer-p6_tree_speed_slow-hardware",
+    "com.google.Chrome",
+    "--user-data-dir=/home/markik/Code/testing/mere/viewer-cone/receipts/viewer-p6_tree_speed_slow-hardware/chrome-profile",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--enable-logging=stderr",
+    "--ozone-platform=wayland",
+    "--disable-features=CalculateNativeWinOcclusion",
+    "--disable-backgrounding-occluded-windows",
+    "--disable-renderer-backgrounding",
+    "--new-window",
+    "--window-size=1400,900",
+    "--enable-unsafe-webgpu",
+    "--enable-features=Vulkan",
+    "--use-angle=vulkan",
+    "http://127.0.0.1:8964/tree.html?scenario=scenarios/p6_tree_speed_slow.scn&sink=http://127.0.0.1:8964/scenario-receipt&physics_speed=0.2"
+  ],
+  "result": "ok",
+  "page_errors": [],
+  "gate_failures": [],
+  "elapsed_seconds": 7.28,
+  "load_after": [
+    3.36083984375,
+    1.46142578125,
+    0.6845703125
+  ]
+}

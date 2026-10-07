@@ -1,0 +1,8 @@
+serving /home/markik/Code/testing/mere/viewer-cone/viewer-release on http://127.0.0.1:8960, receipts to /home/markik/Code/testing/mere/viewer-cone/receipts/site21-viewer
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-progress HTTP/1.1" 204 -
+127.0.0.1 - "POST /scenario-receipt HTTP/1.1" 204 -
+receipt written to /home/markik/Code/testing/mere/viewer-cone/receipts/site21-viewer (RESULT ok, 0 capture(s))

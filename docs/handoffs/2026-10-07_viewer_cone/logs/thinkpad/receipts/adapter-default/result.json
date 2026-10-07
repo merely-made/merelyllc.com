@@ -1,0 +1,18 @@
+{
+  "receipt": {
+    "gpu": true,
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36",
+    "adapter": false
+  },
+  "scenario": {
+    "errors": [],
+    "gate_failures": [],
+    "result": {
+      "result": "fail",
+      "log": [
+        "{\"gpu\":true,\"userAgent\":\"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/154.0.0.0 Safari/537.36\",\"adapter\":false}"
+      ]
+    }
+  },
+  "capture_files": []
+}

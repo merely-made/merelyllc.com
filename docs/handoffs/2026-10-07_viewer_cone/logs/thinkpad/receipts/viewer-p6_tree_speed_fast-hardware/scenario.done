@@ -1,0 +1,10 @@
+RESULT fail
+FAIL: assert snap pace-over-budget-worst-us Le '100': got '367'
+FAIL: assert snap pace-over-grain-frames Eq '0': got '1'
+p6 speed fast receipt complete
+timing speed-fast frames=32 interval_ms p50=284.900 p95=420.800 max=428.200 cpu_ms p50=273.600 p95=411.300 max=423.800 gpu_ms p50=273.617 p95=410.543 max=423.374 producer_render_us p50=242100.000 p95=302500.000 max=371300.000 producer_stage_us p50=200.000 p95=300.000 max=500.000 cull p50=0.200 p95=0.200 max=0.200 dom_frame p50=88.800 p95=126.900 max=186.600 dom_mutate p50=131.600 p95=155.600 max=178.800 dom_prepare p50=0.500 p95=0.700 max=1.300 faces p50=4.200 p95=4.400 max=5.000 lower p50=0.800 p95=0.900 max=1.000 overlays p50=0.100 p95=0.100 max=0.200 physics p50=8.100 p95=8.200 max=8.400 prepare p50=1.400 p95=1.600 max=2.600 rasterize p50=5.400 p95=6.500 max=7.100 underlay p50=0.700 p95=1.000 max=1.900
+pace: speed max effective 0.619 bound true ticks 388 over 30 frames drawn-moved 28 stepped 28 compute-max 9700 us over-budget-max 367 us budget 8333 us (0.5 of a 16.67 ms display period, fallback 0.630; last frame 333.4 ms) margin 200 us; every window: worst 367 us, 1 frames past the grain
+physics fast: law spring.rapier nodes 300 energy 2286.4 spread 683 overlaps 0 device off device-steps 0 cpu-steps 0 submissions 0 answers 0 failures 0 waiting 0 stale 0 mismatched 0 last-age 0 layout-outside 0 layout-extent -983,-986,991,991 view-extent -2452,-1145,2461,1150 view-follow true
+pace: speed max effective 1.033 bound true ticks 953 over 30 frames drawn-moved 30 stepped 30 compute-max 8200 us over-budget-max -233 us budget 8333 us (0.5 of a 16.67 ms display period, fallback 0.633; last frame 266.6 ms) margin 200 us; every window: worst 367 us, 1 frames past the grain
+pace fast: speed max budget 8333 us margin 200 us display period 16.667 ms (fallback, worst interval 0.633 ms off its multiple); every window: 57 frames the gate admitted ticks in, worst 367 us over budget (frame 2: admitted ticks ended at 8700 us of 7 ticks against a 8333 us budget), 1 past the grain; 1 floor-only frames past it
+gpu timestamps: yes

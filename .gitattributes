@@ -48,3 +48,9 @@
 # Digest-verified retained artifact: its bytes must match the recorded
 # hash, so line-ending conversion on Windows checkouts must never touch it.
 content/retinue-package-index.toml -text
+
+# Retain the headed Linux receipt bytes and reproducible scenario hashes.
+docs/handoffs/2026-10-07_viewer_cone/logs/thinkpad/** -text
+docs/handoffs/2026-10-07_viewer_cone/harness/p0_viewer_site_frames_21.scn text eol=lf
+docs/handoffs/2026-10-07_viewer_cone/harness/run-linux-*.py text eol=lf
+docs/handoffs/2026-10-07_viewer_cone/harness/webgpu-probe.html text eol=lf

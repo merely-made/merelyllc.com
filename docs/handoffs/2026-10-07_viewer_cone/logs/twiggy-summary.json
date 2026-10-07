@@ -1,0 +1,45 @@
+{
+  "version": "twiggy-opt 0.8.0",
+  "source_commit": "6963ebe539d9d469dbd848c449335baae54a840e",
+  "rows": [
+    {
+      "build": "default",
+      "command": [
+        "twiggy",
+        "top",
+        "-n",
+        "30",
+        "C:\\Users\\mark_\\Code\\testing\\mere\\viewer-cone\\release\\default\\graphshell_web_bg.wasm"
+      ],
+      "exit_code": 0,
+      "wasm_sha256": "49b56bd3b6c8e971d215ec6aab43a15abe2ad9a9488e8ff0c3b899d53a45be7a",
+      "log": "twiggy-default.txt"
+    },
+    {
+      "build": "viewer",
+      "command": [
+        "twiggy",
+        "top",
+        "-n",
+        "30",
+        "C:\\Users\\mark_\\Code\\testing\\mere\\viewer-cone\\release\\viewer\\graphshell_web_bg.wasm"
+      ],
+      "exit_code": 0,
+      "wasm_sha256": "3723753272428b9df78e8321078aeae46230fc0b108adcc698319ccd465fef73",
+      "log": "twiggy-viewer.txt"
+    },
+    {
+      "build": "viewer-gpu",
+      "command": [
+        "twiggy",
+        "top",
+        "-n",
+        "30",
+        "C:\\Users\\mark_\\Code\\testing\\mere\\viewer-cone\\release\\viewer-gpu\\graphshell_web_bg.wasm"
+      ],
+      "exit_code": 0,
+      "wasm_sha256": "f0c94918df4e88961f61803093cc09ac83ab12d680d2383df8832c8471eb12ab",
+      "log": "twiggy-viewer-gpu.txt"
+    }
+  ]
+}

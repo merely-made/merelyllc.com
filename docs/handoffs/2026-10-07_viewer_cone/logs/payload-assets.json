@@ -1,0 +1,43 @@
+{
+  "source_commit": "6963ebe539d9d469dbd848c449335baae54a840e",
+  "command": "brotli -q 11 -c <asset>",
+  "assets": [
+    {
+      "asset": "graphshell_web_bg.wasm",
+      "raw": 8821049,
+      "brotli11": 2024097,
+      "sha256": "3723753272428b9df78e8321078aeae46230fc0b108adcc698319ccd465fef73"
+    },
+    {
+      "asset": "graphshell_web.js",
+      "raw": 101470,
+      "brotli11": 13904,
+      "sha256": "e5d972364ca5ab4fb6fcc60675b130283edfd43dbe228b0459fad02aed3971b0"
+    },
+    {
+      "asset": "loader.js",
+      "raw": 25014,
+      "brotli11": 5881,
+      "sha256": "23f15c269cde970eb73ef76fc4b6de08e00c349072a671f836e19d1dca0c1b06"
+    },
+    {
+      "asset": "styles.css",
+      "raw": 9798,
+      "brotli11": 2017,
+      "sha256": "fc946a368052a2d526a4b2af753201e46307dbc0ae8864e0c2293f5c11b5b08c"
+    },
+    {
+      "asset": "GraphshellSans.ttf",
+      "raw": 168260,
+      "brotli11": 74038,
+      "sha256": "319cff6e7a31f0f2a41c475dca42890aa5d19fe16017e2290f8c1d4e14f76481"
+    },
+    {
+      "asset": "tree.html",
+      "raw": 1049,
+      "brotli11": 394,
+      "sha256": "a6f92a942ccf5a91707ca8ad55fd5e11b3e2f7fe76bae53c9d68511b9fca34eb"
+    }
+  ],
+  "total_brotli_bytes": 2120331
+}

@@ -1,0 +1,87 @@
+{
+  "machine": "thinkpad-l14-f",
+  "platform": "Linux-7.2.8-200.fc44.x86_64-x86_64-with-glibc2.43",
+  "bundle_sha256": "49b56bd3b6c8e971d215ec6aab43a15abe2ad9a9488e8ff0c3b899d53a45be7a",
+  "bundle_bytes": 18945432,
+  "scenario": "p6_tree_speed_fast_planted",
+  "scenario_sha256": "df7be9f37e7795db227dcf8e20b0db3d117c2e8bc11057921a7e8bcf730c74a8",
+  "query": "nodes=300&seed=7&links=none&gpu=off&physics_speed=max&physics_plant_stall_ms=10",
+  "load_before": [
+    2.58447265625,
+    1.5126953125,
+    0.77490234375
+  ],
+  "unsafe_webgpu": true,
+  "cpu_samples": [
+    {
+      "seconds": 1.26,
+      "percent": 36.72
+    },
+    {
+      "seconds": 2.26,
+      "percent": 63.24
+    },
+    {
+      "seconds": 3.26,
+      "percent": 38.0
+    },
+    {
+      "seconds": 4.26,
+      "percent": 20.4
+    },
+    {
+      "seconds": 5.26,
+      "percent": 23.39
+    },
+    {
+      "seconds": 6.26,
+      "percent": 17.66
+    },
+    {
+      "seconds": 7.26,
+      "percent": 64.88
+    },
+    {
+      "seconds": 8.27,
+      "percent": 27.26
+    },
+    {
+      "seconds": 9.27,
+      "percent": 17.37
+    },
+    {
+      "seconds": 10.27,
+      "percent": 18.31
+    }
+  ],
+  "cpu_before_percent": 2.867830423940154,
+  "command": [
+    "flatpak",
+    "run",
+    "--filesystem=/home/markik/Code/testing/mere/viewer-cone/receipts/release-default-planted",
+    "com.google.Chrome",
+    "--user-data-dir=/home/markik/Code/testing/mere/viewer-cone/receipts/release-default-planted/chrome-profile",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--enable-logging=stderr",
+    "--ozone-platform=wayland",
+    "--disable-features=CalculateNativeWinOcclusion",
+    "--disable-backgrounding-occluded-windows",
+    "--disable-renderer-backgrounding",
+    "--new-window",
+    "--window-size=1400,900",
+    "--enable-unsafe-webgpu",
+    "--enable-features=Vulkan",
+    "--use-angle=vulkan",
+    "http://127.0.0.1:8960/tree.html?scenario=scenarios/p6_tree_speed_fast_planted.scn&sink=http://127.0.0.1:8960/scenario-receipt&nodes=300&seed=7&links=none&gpu=off&physics_speed=max&physics_plant_stall_ms=10"
+  ],
+  "result": "ok",
+  "page_errors": [],
+  "gate_failures": [],
+  "elapsed_seconds": 10.28,
+  "load_after": [
+    2.34033203125,
+    1.4951171875,
+    0.77783203125
+  ]
+}

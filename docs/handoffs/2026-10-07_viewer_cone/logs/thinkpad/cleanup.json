@@ -1,0 +1,34 @@
+{
+  "removed": [
+    "receipts/default-fast/chrome-profile",
+    "receipts/adapter-default/chrome-profile",
+    "receipts/adapter-enabled/chrome-profile",
+    "receipts/adapter-vulkan/chrome-profile",
+    "receipts/default-fast-hardware/chrome-profile",
+    "receipts/default-p6_tree_speed_fast_control-hardware/chrome-profile",
+    "receipts/viewer-p6_tree_speed_fast-hardware/chrome-profile",
+    "receipts/viewer-p6_tree_speed_fast_control-hardware/chrome-profile",
+    "receipts/viewer-p6_tree_speed_slow-hardware/chrome-profile",
+    "receipts/release-default-control/chrome-profile",
+    "receipts/default-release-p6_tree_speed_fast-hardware/chrome-profile",
+    "receipts/viewer-release-p6_tree_speed_fast-hardware/chrome-profile",
+    "receipts/viewer-release-p6_tree_speed_fast_control-hardware/chrome-profile",
+    "receipts/viewer-release-p6_tree_speed_slow-hardware/chrome-profile",
+    "receipts/release-default-planted/chrome-profile",
+    "default/pkg/graphshell_web_bg.wasm",
+    "default/pkg/graphshell_web.js",
+    "viewer/pkg/graphshell_web_bg.wasm",
+    "viewer/pkg/graphshell_web.js",
+    "default-release/pkg/graphshell_web_bg.wasm",
+    "default-release/pkg/graphshell_web.js",
+    "thinkpad-input.tar.gz",
+    "thinkpad-release-input.tar.gz",
+    "thinkpad-receipts.tar.gz"
+  ],
+  "retained": {
+    "owner": "viewer-cone P0 resume",
+    "source_commit": "6963ebe539d9d469dbd848c449335baae54a840e",
+    "retained": "viewer-release and viewer-gpu-release pkg for pending Ruling 107",
+    "receipts_archived": true
+  }
+}

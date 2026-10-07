@@ -1,0 +1,87 @@
+{
+  "machine": "thinkpad-l14-f",
+  "platform": "Linux-7.2.8-200.fc44.x86_64-x86_64-with-glibc2.43",
+  "bundle_sha256": "3723753272428b9df78e8321078aeae46230fc0b108adcc698319ccd465fef73",
+  "bundle_bytes": 8821049,
+  "scenario": "p6_tree_speed_fast",
+  "scenario_sha256": "b183f3118f4180de96b8d1fdef024c89c7a9a5e0675501cec46d96b5863dfdd1",
+  "query": "nodes=300&seed=7&links=none&gpu=off&physics_speed=max",
+  "load_before": [
+    1.1455078125,
+    1.18994140625,
+    0.6513671875
+  ],
+  "unsafe_webgpu": true,
+  "cpu_samples": [
+    {
+      "seconds": 1.26,
+      "percent": 39.88
+    },
+    {
+      "seconds": 2.26,
+      "percent": 59.75
+    },
+    {
+      "seconds": 3.26,
+      "percent": 34.57
+    },
+    {
+      "seconds": 4.26,
+      "percent": 20.57
+    },
+    {
+      "seconds": 5.26,
+      "percent": 17.76
+    },
+    {
+      "seconds": 6.26,
+      "percent": 22.77
+    },
+    {
+      "seconds": 7.27,
+      "percent": 63.39
+    },
+    {
+      "seconds": 8.27,
+      "percent": 21.93
+    },
+    {
+      "seconds": 9.27,
+      "percent": 18.61
+    },
+    {
+      "seconds": 10.27,
+      "percent": 19.53
+    }
+  ],
+  "cpu_before_percent": 2.9925187032418976,
+  "command": [
+    "flatpak",
+    "run",
+    "--filesystem=/home/markik/Code/testing/mere/viewer-cone/receipts/viewer-release-p6_tree_speed_fast-hardware",
+    "com.google.Chrome",
+    "--user-data-dir=/home/markik/Code/testing/mere/viewer-cone/receipts/viewer-release-p6_tree_speed_fast-hardware/chrome-profile",
+    "--no-first-run",
+    "--no-default-browser-check",
+    "--enable-logging=stderr",
+    "--ozone-platform=wayland",
+    "--disable-features=CalculateNativeWinOcclusion",
+    "--disable-backgrounding-occluded-windows",
+    "--disable-renderer-backgrounding",
+    "--new-window",
+    "--window-size=1400,900",
+    "--enable-unsafe-webgpu",
+    "--enable-features=Vulkan",
+    "--use-angle=vulkan",
+    "http://127.0.0.1:8962/tree.html?scenario=scenarios/p6_tree_speed_fast.scn&sink=http://127.0.0.1:8962/scenario-receipt&nodes=300&seed=7&links=none&gpu=off&physics_speed=max"
+  ],
+  "result": "ok",
+  "page_errors": [],
+  "gate_failures": [],
+  "elapsed_seconds": 10.27,
+  "load_after": [
+    1.267578125,
+    1.2138671875,
+    0.66796875
+  ]
+}

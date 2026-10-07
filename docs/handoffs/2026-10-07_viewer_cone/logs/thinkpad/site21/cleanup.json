@@ -1,0 +1,12 @@
+{
+  "removed": [
+    "viewer-release/pkg/graphshell_web_bg.wasm",
+    "viewer-release/pkg/graphshell_web.js",
+    "receipts/site21-viewer/chrome-profile",
+    "viewer-gpu-release/pkg/graphshell_web_bg.wasm",
+    "viewer-gpu-release/pkg/graphshell_web.js",
+    "receipts/site21-viewer-gpu/chrome-profile",
+    "site21-receipts.tar.gz"
+  ],
+  "retained": "source fixtures and receipts as evidence; original bundles on Windows"
+}

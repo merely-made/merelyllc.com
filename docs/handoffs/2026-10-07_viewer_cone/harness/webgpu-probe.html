@@ -1,0 +1,20 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Viewer cone WebGPU adapter check</title>
+<pre id="report"></pre>
+<script type="module">
+const receipt = { gpu: !!navigator.gpu, userAgent: navigator.userAgent };
+try {
+  const adapter = await navigator.gpu?.requestAdapter();
+  receipt.adapter = !!adapter;
+  if (adapter) {
+    receipt.info = Object.fromEntries(['vendor', 'architecture', 'device', 'description', 'isFallbackAdapter'].map(key => [key, adapter.info[key]]));
+    receipt.features = [...adapter.features];
+  }
+} catch (error) { receipt.error = String(error); }
+document.getElementById('report').textContent = JSON.stringify(receipt, null, 2);
+await fetch(new URLSearchParams(location.search).get('sink'), {
+  method: 'POST', headers: {'content-type': 'application/json'},
+  body: JSON.stringify({ receipt, scenario: { errors: [], gate_failures: [], result: { result: receipt.adapter ? 'ok' : 'fail', log: [JSON.stringify(receipt)] } } }),
+});
+</script>

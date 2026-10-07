@@ -1,0 +1,180 @@
+[
+  {
+    "receipt": "adapter-default",
+    "result": "fail",
+    "page_errors": [],
+    "gate_failures": [],
+    "cpu_before_percent": 0.62,
+    "cpu_run_mean_percent": 32.32,
+    "cpu_run_max_percent": 38.21,
+    "bundle_sha256": "686fd0115f2a42588aecbda3f80c77e4ed3e50a8e30485807f9006e121fbd592",
+    "failures": []
+  },
+  {
+    "receipt": "adapter-enabled",
+    "result": "ok",
+    "page_errors": [],
+    "gate_failures": [],
+    "cpu_before_percent": 0.75,
+    "cpu_run_mean_percent": 39.74,
+    "cpu_run_max_percent": 45.77,
+    "bundle_sha256": "686fd0115f2a42588aecbda3f80c77e4ed3e50a8e30485807f9006e121fbd592",
+    "failures": []
+  },
+  {
+    "receipt": "adapter-vulkan",
+    "result": "ok",
+    "page_errors": [],
+    "gate_failures": [],
+    "cpu_before_percent": 1.38,
+    "cpu_run_mean_percent": 31.92,
+    "cpu_run_max_percent": 38.34,
+    "bundle_sha256": "686fd0115f2a42588aecbda3f80c77e4ed3e50a8e30485807f9006e121fbd592",
+    "failures": []
+  },
+  {
+    "receipt": "default-fast",
+    "result": "timeout",
+    "page_errors": null,
+    "gate_failures": null,
+    "cpu_before_percent": 1.37,
+    "cpu_run_mean_percent": 4.5,
+    "cpu_run_max_percent": 46.77,
+    "bundle_sha256": "686fd0115f2a42588aecbda3f80c77e4ed3e50a8e30485807f9006e121fbd592",
+    "failures": [
+      "harness timeout before scenario startup"
+    ]
+  },
+  {
+    "receipt": "default-fast-hardware",
+    "result": "fail",
+    "page_errors": [],
+    "gate_failures": [],
+    "cpu_before_percent": 0.62,
+    "cpu_run_mean_percent": 25.98,
+    "cpu_run_max_percent": 64.84,
+    "bundle_sha256": "686fd0115f2a42588aecbda3f80c77e4ed3e50a8e30485807f9006e121fbd592",
+    "failures": [
+      "FAIL: assert snap physics-effective-speed Ge '1': got '0.998'",
+      "FAIL: assert snap pace-over-budget-worst-us Le '100': got '867'",
+      "FAIL: assert snap pace-over-grain-frames Eq '0': got '1'"
+    ]
+  },
+  {
+    "receipt": "default-p6_tree_speed_fast_control-hardware",
+    "result": "fail",
+    "page_errors": [],
+    "gate_failures": [],
+    "cpu_before_percent": 0.25,
+    "cpu_run_mean_percent": 38.33,
+    "cpu_run_max_percent": 71.77,
+    "bundle_sha256": "686fd0115f2a42588aecbda3f80c77e4ed3e50a8e30485807f9006e121fbd592",
+    "failures": [
+      "FAIL: assert snap physics-effective-speed Ge '25': got '14.894'"
+    ]
+  },
+  {
+    "receipt": "default-release-p6_tree_speed_fast-hardware",
+    "result": "ok",
+    "page_errors": [],
+    "gate_failures": [],
+    "cpu_before_percent": 1.12,
+    "cpu_run_mean_percent": 31.69,
+    "cpu_run_max_percent": 65.84,
+    "bundle_sha256": "49b56bd3b6c8e971d215ec6aab43a15abe2ad9a9488e8ff0c3b899d53a45be7a",
+    "failures": []
+  },
+  {
+    "receipt": "release-default-control",
+    "result": "ok",
+    "page_errors": [],
+    "gate_failures": [],
+    "cpu_before_percent": 4.6,
+    "cpu_run_mean_percent": 46.03,
+    "cpu_run_max_percent": 63.57,
+    "bundle_sha256": "49b56bd3b6c8e971d215ec6aab43a15abe2ad9a9488e8ff0c3b899d53a45be7a",
+    "failures": []
+  },
+  {
+    "receipt": "release-default-planted",
+    "result": "ok",
+    "page_errors": [],
+    "gate_failures": [],
+    "cpu_before_percent": 2.87,
+    "cpu_run_mean_percent": 32.72,
+    "cpu_run_max_percent": 64.88,
+    "bundle_sha256": "49b56bd3b6c8e971d215ec6aab43a15abe2ad9a9488e8ff0c3b899d53a45be7a",
+    "failures": []
+  },
+  {
+    "receipt": "viewer-p6_tree_speed_fast-hardware",
+    "result": "fail",
+    "page_errors": [],
+    "gate_failures": [],
+    "cpu_before_percent": 1.87,
+    "cpu_run_mean_percent": 24.17,
+    "cpu_run_max_percent": 63.89,
+    "bundle_sha256": "a53a08ad6df7486895d59879117dca3de9f59ab2bb4dd17b43256eece33b035e",
+    "failures": [
+      "FAIL: assert snap pace-over-budget-worst-us Le '100': got '367'",
+      "FAIL: assert snap pace-over-grain-frames Eq '0': got '1'"
+    ]
+  },
+  {
+    "receipt": "viewer-p6_tree_speed_fast_control-hardware",
+    "result": "fail",
+    "page_errors": [],
+    "gate_failures": [],
+    "cpu_before_percent": 10.6,
+    "cpu_run_mean_percent": 37.64,
+    "cpu_run_max_percent": 67.5,
+    "bundle_sha256": "a53a08ad6df7486895d59879117dca3de9f59ab2bb4dd17b43256eece33b035e",
+    "failures": [
+      "FAIL: assert snap physics-effective-speed Ge '25': got '18.127'"
+    ]
+  },
+  {
+    "receipt": "viewer-p6_tree_speed_slow-hardware",
+    "result": "ok",
+    "page_errors": [],
+    "gate_failures": [],
+    "cpu_before_percent": 9.69,
+    "cpu_run_mean_percent": 38.97,
+    "cpu_run_max_percent": 69.53,
+    "bundle_sha256": "a53a08ad6df7486895d59879117dca3de9f59ab2bb4dd17b43256eece33b035e",
+    "failures": []
+  },
+  {
+    "receipt": "viewer-release-p6_tree_speed_fast-hardware",
+    "result": "ok",
+    "page_errors": [],
+    "gate_failures": [],
+    "cpu_before_percent": 2.99,
+    "cpu_run_mean_percent": 31.88,
+    "cpu_run_max_percent": 63.39,
+    "bundle_sha256": "3723753272428b9df78e8321078aeae46230fc0b108adcc698319ccd465fef73",
+    "failures": []
+  },
+  {
+    "receipt": "viewer-release-p6_tree_speed_fast_control-hardware",
+    "result": "ok",
+    "page_errors": [],
+    "gate_failures": [],
+    "cpu_before_percent": 2.86,
+    "cpu_run_mean_percent": 48.07,
+    "cpu_run_max_percent": 60.22,
+    "bundle_sha256": "3723753272428b9df78e8321078aeae46230fc0b108adcc698319ccd465fef73",
+    "failures": []
+  },
+  {
+    "receipt": "viewer-release-p6_tree_speed_slow-hardware",
+    "result": "ok",
+    "page_errors": [],
+    "gate_failures": [],
+    "cpu_before_percent": 3.13,
+    "cpu_run_mean_percent": 55.23,
+    "cpu_run_max_percent": 68.94,
+    "bundle_sha256": "3723753272428b9df78e8321078aeae46230fc0b108adcc698319ccd465fef73",
+    "failures": []
+  }
+]
