@@ -90,7 +90,7 @@ fn every_public_repository_has_one_semantic_project_profile() {
         assert!(document.starts_with("<!doctype html>"));
         assert_eq!(document.matches("<h1").count(), 1);
         assert!(document.contains(&format!("data-project-id=\"{repository_id}\"")));
-        assert!(document.contains(&format!("https://mer3ly.net/projects/{repository_id}/")));
+        assert!(document.contains(&format!("https://merelyllc.com/projects/{repository_id}/")));
         assert!(document.contains("href=\"mailto:markik@mer3ly.net\""));
         for relation in &data.authority.relations.relation {
             *relation_counts

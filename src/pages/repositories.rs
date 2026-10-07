@@ -20,7 +20,7 @@ use crate::site::{
 pub const METADATA: PageMetadata = PageMetadata {
     title: "Repository family | Merely",
     description: "Explore Merely's public repositories, their current status, and the concrete relationships among them.",
-    canonical_url: "https://mer3ly.net/repos/",
+    canonical_url: "https://merelyllc.com/repos/",
 };
 
 const GRAPH_SANDBOX_LOADER: &[u8] = include_bytes!("../../assets/graph-sandbox.js");

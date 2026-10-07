@@ -6,7 +6,7 @@ original site artwork in this repository are licensed by Merely LLC under the
 license](https://creativecommons.org/licenses/by/4.0/).
 
 When reusing that material, attribute it to **Merely LLC**, link to
-`https://mer3ly.net/`, link to the CC BY 4.0 license, and indicate whether you
+`https://merelyllc.com/`, link to the CC BY 4.0 license, and indicate whether you
 made changes.
 
 Project screenshots under `assets/showcase/` retain the license declared by

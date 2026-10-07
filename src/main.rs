@@ -103,6 +103,6 @@ fn build_site(output: &Path) -> std::io::Result<()> {
     fs::write(output.join("favicon.svg"), FAVICON)?;
     fs::write(output.join("sitemap.xml"), sitemap(&data))?;
     fs::write(output.join("robots.txt"), ROBOTS_TXT)?;
-    fs::write(output.join("CNAME"), "mer3ly.net\n")?;
+    fs::write(output.join("CNAME"), "merelyllc.com\n")?;
     Ok(())
 }

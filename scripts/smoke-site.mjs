@@ -106,7 +106,7 @@ try {
   assert.ok(sitemapUrls.length > 6);
   assert.equal(new Set(sitemapUrls).size, sitemapUrls.length);
   assert.equal(
-    sitemapUrls.every((url) => url.startsWith("https://mer3ly.net/")),
+    sitemapUrls.every((url) => url.startsWith("https://merelyllc.com/")),
     true,
   );
   for (const unsupported of ["lastmod", "changefreq", "priority"]) {
@@ -121,7 +121,7 @@ try {
   );
   assert.equal(
     await robotsResponse.text(),
-    "User-agent: *\nAllow: /\nSitemap: https://mer3ly.net/sitemap.xml\n",
+    "User-agent: *\nAllow: /\nSitemap: https://merelyllc.com/sitemap.xml\n",
   );
 
   const faviconResponse = await fetch(`${baseUrl}/favicon.svg`);
@@ -553,7 +553,7 @@ try {
   const visualMetadata = await projectMetadata(visualProject);
   assert.equal(
     visualMetadata.social_image,
-    "https://mer3ly.net/showcase/mere.png",
+    "https://merelyllc.com/showcase/mere.png",
   );
   assert.equal(visualMetadata.social_image_type, "image/png");
   assert.equal(visualMetadata.twitter_image, visualMetadata.social_image);
@@ -947,7 +947,7 @@ try {
     1,
   );
   const textMetadata = await projectMetadata(textProject);
-  assert.equal(textMetadata.social_image, "https://mer3ly.net/og.jpg");
+  assert.equal(textMetadata.social_image, "https://merelyllc.com/og.jpg");
   assert.equal(textMetadata.social_image_type, "image/jpeg");
   assert.equal(textMetadata.twitter_image, textMetadata.social_image);
   assert.equal(textMetadata.twitter_image_alt, textMetadata.social_image_alt);

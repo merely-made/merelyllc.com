@@ -1,6 +1,6 @@
 # Mer3ly
 
-The source for the Merely public site at [mer3ly.net](https://mer3ly.net/): a
+The source for the Merely public site at [merelyllc.com](https://merelyllc.com/): a
 small static Rust build (Cambium views serialized to HTML) plus a WebGPU
 repository-graph client, deployed to GitHub Pages. The complete site remains
 readable without JavaScript, WebAssembly, or WebGPU.

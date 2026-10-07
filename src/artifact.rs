@@ -236,7 +236,7 @@ pub fn validate_public_artifact(
     }
     validate_fixed_metadata(
         &home,
-        "https://mer3ly.net/",
+        "https://merelyllc.com/",
         DEFAULT_SOCIAL_IMAGE_URL,
         "image/jpeg",
         DEFAULT_SOCIAL_IMAGE_ALT,
@@ -244,7 +244,7 @@ pub fn validate_public_artifact(
     );
     validate_fixed_metadata(
         &radio,
-        "https://mer3ly.net/radio.html",
+        "https://merelyllc.com/radio.html",
         DEFAULT_SOCIAL_IMAGE_URL,
         "image/jpeg",
         DEFAULT_SOCIAL_IMAGE_ALT,
@@ -258,7 +258,7 @@ pub fn validate_public_artifact(
     }
     validate_fixed_metadata(
         &repositories,
-        "https://mer3ly.net/repos/",
+        "https://merelyllc.com/repos/",
         DEFAULT_SOCIAL_IMAGE_URL,
         "image/jpeg",
         DEFAULT_SOCIAL_IMAGE_ALT,
@@ -266,7 +266,7 @@ pub fn validate_public_artifact(
     );
     validate_fixed_metadata(
         &device_index,
-        "https://mer3ly.net/devices/",
+        "https://merelyllc.com/devices/",
         DEFAULT_SOCIAL_IMAGE_URL,
         "image/jpeg",
         DEFAULT_SOCIAL_IMAGE_ALT,
@@ -326,10 +326,10 @@ pub fn validate_public_artifact(
         }
         project_ids.extend(attribute_values(&project, "data-project-id"));
         project_relation_ids.extend(attribute_values(&project, "data-relation-id"));
-        let canonical = format!("https://mer3ly.net/projects/{}/", repository.id);
+        let canonical = format!("https://merelyllc.com/projects/{}/", repository.id);
         let showcase = showcases.for_repository(&repository.id);
         let social_image = showcase.map_or(DEFAULT_SOCIAL_IMAGE_URL.to_owned(), |showcase| {
-            format!("https://mer3ly.net/{}", showcase.image)
+            format!("https://merelyllc.com/{}", showcase.image)
         });
         let social_type = if showcase.is_some() {
             "image/png"
@@ -451,7 +451,7 @@ pub fn validate_public_artifact(
             ));
         }
         device_ids.extend(ids);
-        let canonical = format!("https://mer3ly.net/devices/{}/", device.id);
+        let canonical = format!("https://merelyllc.com/devices/{}/", device.id);
         let expected_social = ExpectedSocialMetadata {
             canonical: &canonical,
             image_url: DEFAULT_SOCIAL_IMAGE_URL,
@@ -751,7 +751,7 @@ fn scan_public_text(
 
 fn validate_cname(root: &Path, relative: &str, errors: &mut Vec<String>) {
     let contents = read_text(root, relative, errors);
-    if contents.trim() != "mer3ly.net" {
+    if contents.trim() != "merelyllc.com" {
         errors.push(format!(
             "{relative} does not name the approved public domain"
         ));
@@ -1200,7 +1200,7 @@ fn validate_sitemap(sitemap: &str, expected: &[String], errors: &mut Vec<String>
         || unique.len() != actual.len()
         || actual
             .iter()
-            .any(|url| !url.starts_with("https://mer3ly.net/"))
+            .any(|url| !url.starts_with("https://merelyllc.com/"))
     {
         errors.push("sitemap URLs differ from canonical public authority".to_owned());
     }

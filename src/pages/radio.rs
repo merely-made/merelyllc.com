@@ -10,7 +10,7 @@ const MESSAGE_PATH_LAB: &[u8] = include_bytes!("../../assets/message-path-lab.js
 pub const METADATA: PageMetadata = PageMetadata {
     title: "Community radio | Merely",
     description: "A low-cost, open-source LoRa radio pilot for community-owned backup communications across the FIVCO counties.",
-    canonical_url: "https://mer3ly.net/radio.html",
+    canonical_url: "https://merelyllc.com/radio.html",
 };
 
 pub fn document() -> String {
