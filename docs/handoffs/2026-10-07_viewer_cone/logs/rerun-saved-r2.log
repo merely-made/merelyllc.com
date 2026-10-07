@@ -1,0 +1,4 @@
+set rerun, suffix r2, ports from 8960, one at a time
+PASS p4_tree_saved_edit-r2-app-local: RESULT ok; page errors 0, gate failures 0 (22 s) page=tree.html query='app=local'
+FAIL p4_tree_saved_reopen-r2-app-local: RESULT fail; page errors 0, gate failures 0 (13 s) page=tree.html query='app=local'
+DONE: 2 receipts, 1 not as expected

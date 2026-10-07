@@ -1,0 +1,3 @@
+set rerun, suffix r3v, ports from 8960, one at a time
+control failed in Chrome's tree on 'Pin missing', as it should p4_tree_canvas_reader_cdp-r3v-plant-a11y-missing-action: RESULT ok; page errors 0, gate failures 0; EXIT 1 CDP FAIL: Pin missing on "I2P port notes"; Pin missing on "I2P service"; Pin missing on "Reference notes" (14 s) page=tree.html query='plant_a11y=missing_action'
+DONE: 1 receipts, 0 not as expected

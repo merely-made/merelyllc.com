@@ -1,0 +1,7 @@
+tree 6963ebe5, 0 changed paths
+web lock sha256 bcab7badca9550eef419dd67f2d732a481cc95c283b080c4d44b03197e646eb5
+default (flags '', 78s build)
+  wasm      raw 18945432 gzip9 5335292 brotli11 3464730
+  wasm -Os  raw 17000184 gzip9 5624836 brotli11 3735350
+  js        raw 136440 gzip9 20670 brotli11 17310
+  sha256    49b56bd3b6c8e971d215ec6aab43a15abe2ad9a9488e8ff0c3b899d53a45be7a

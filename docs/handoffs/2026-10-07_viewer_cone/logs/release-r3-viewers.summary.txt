@@ -1,0 +1,13 @@
+tree 6963ebe5, 0 changed paths
+web lock sha256 bcab7badca9550eef419dd67f2d732a481cc95c283b080c4d44b03197e646eb5
+viewer (flags '--no-default-features', 456s build)
+  wasm      raw 8821049 gzip9 2915887 brotli11 2024097
+  wasm -Os  raw 7971097 gzip9 3021551 brotli11 2139308
+  js        raw 101470 gzip9 16389 brotli11 13904
+  sha256    3723753272428b9df78e8321078aeae46230fc0b108adcc698319ccd465fef73
+viewer-gpu (flags '--no-default-features --features canvas-gpu', 686s build)
+  wasm      raw 14609347 gzip9 4211738 brotli11 2771775
+  wasm -Os  raw 13183195 gzip9 4435297 brotli11 2978219
+  js        raw 107245 gzip9 17040 brotli11 14426
+  sha256    f0c94918df4e88961f61803093cc09ac83ab12d680d2383df8832c8471eb12ab
+EXIT 0

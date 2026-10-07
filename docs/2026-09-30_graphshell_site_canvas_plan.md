@@ -2172,3 +2172,8 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     (2026-10-01) as `canvas-gpu`, stable Burn and the rest landed.
   - Still to do: the calm reruns, Ruling 107's frame timings at the site's
     graph size, and then the conatus session's check before main.
+- 2026-10-07: handed off to another machine at Mark's word ("Give me a handoff
+  and i'll have it happen on another machine"), because this one stayed at
+  93-100% CPU. The handoff and the lane's harness and logs are in
+  `docs/handoffs/2026-10-07_viewer_cone/`. mere `viewer-cone` is pushed
+  (`origin/viewer-cone`, `6963ebe5`).
