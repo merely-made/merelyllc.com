@@ -2138,3 +2138,37 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   - Still to do: the default page's headed receipts on this branch, the
     viewer's tree receipts, the release measurements (default, viewer, viewer
     with `canvas-gpu`) with frame timings, then the conatus session's check.
+- 2026-10-07: the cone's receipts and release measurements (mere `viewer-cone` at
+  `6963ebe5`; lane folder `Code/testing/mere/viewer-cone/`).
+  - **Two cone gaps, fixed on the branch.** The loader's `connect_remote`
+    (`4d013313`) and `run_scenario` (`6963ebe5`) exports were main-page only,
+    so the viewer could neither take `?signal=` cleanly nor run a scenario.
+    Without `main-page`, `web.rs` now exports both. Of the loader's five calls,
+    the viewer bundle lacks only `mount`, the main page's entry.
+  - **Default build, headed (one at a time, own ports and profiles).** 61 of 63
+    receipts behaved as expected: the law, GPU-lane, reader, CDP, role, keys,
+    practice, main-page, saved-graph and live-remote receipts, and every
+    planted control. The two left are timing rows (`p6_tree_speed_fast` and
+    its control) that missed under load; they wait for a calm rerun. The
+    saved-graph pair first failed on a harness fault: IndexedDB is per origin,
+    port included, and the pair ran on two ports. Pinned to one, both pass.
+  - **Viewer build, headed.** Every tree receipt and control behaved as
+    expected. All five product and remote receipts were refused cleanly (RESULT
+    fail, no page error): the saved-graph route, saved edit, remote-absent, the
+    remote draft and the live board. The same three timing rows wait for calm.
+  - **Release payload,** with P0's settings (opt-level "s", thin LTO, strip
+    symbols, codegen-units 1):
+
+    | Build | raw | gzip -9 | brotli -q 11 |
+    | --- | --- | --- | --- |
+    | Full page (default) | 18,945,432 | 5,335,292 | 3,464,730 |
+    | Viewer | 8,821,049 | 2,915,887 | 2,024,097 |
+    | Viewer + `canvas-gpu` | 14,609,347 | 4,211,738 | 2,771,775 |
+
+    The viewer is 53% smaller raw and 42% smaller by brotli. `canvas-gpu` adds
+    5.8 MB raw, about 748 KB brotli; that is the size half of Ruling 107.
+    `wasm-opt -Os` (given rustc's default wasm features) still enlarges every
+    compressed figure, by 3-7%. The full page grew from P0's 2.56 MB brotli
+    (2026-10-01) as `canvas-gpu`, stable Burn and the rest landed.
+  - Still to do: the calm reruns, Ruling 107's frame timings at the site's
+    graph size, and then the conatus session's check before main.
