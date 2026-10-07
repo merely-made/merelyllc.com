@@ -2,13 +2,19 @@
 
 **Date:** 2026-09-30
 **Status:** assessment complete; Action under way. Rulings 1-119 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
-The payload budget waits on P0's viewer-cone measurement (Ruling 26). Next: Assemble, starting with P0's tools and the retinue lanes (Ruling 22).
-No code has changed.
+**Current phase (2026-10-06):** P0. The viewer cone compiles on Mere branch
+`viewer-cone` at `390e0f50`, not merged, as recorded in Progress. Next: default
+and viewer browser receipts, release measurements with and without GPU
+physics, frame timings, and review. The payload budget waits on those
+measurements (Ruling 26).
+Code has changed in the supporting stack and in the site: Rulings 103 and 104
+landed the manual-pin and legacy-link resolver fixes. The site still ships its
+own sandbox; P1 export and P2 Graphshell surface replacement remain ahead.
 
 ## Purpose
 
 Mere's projection grammar adoption plan ruled on 2026-09-01 that Graphshell's
-first job on mer3ly.net is to supersede the site's own canvas, the repository
+first job on merelyllc.com is to supersede the site's own canvas, the repository
 graph sandbox, and to serve as the site index. The same ruling called this a
 new objective needing its own assessment. This document is that assessment.
 

@@ -5,7 +5,7 @@ small static Rust build (Cambium views serialized to HTML) plus a WebGPU
 repository-graph client, deployed to GitHub Pages. The complete site remains
 readable without JavaScript, WebAssembly, or WebGPU.
 
-## Status (2026-08-12)
+## Status (2026-10-06)
 
 Live and deployed. The pages.yml workflow rebuilds, validates, browser-smokes,
 and deploys on main pushes, manual dispatch, and a daily schedule.
@@ -19,10 +19,14 @@ and deploys on main pushes, manual dispatch, and a daily schedule.
 - An authority binary validates content manifests, the metadata cache, and
   the exact Pages artifact (file set, structured data, absence of secrets
   and personal data), emitting SHA-256 JSON receipts.
-- The five dated plans in `docs/` (live repos graph, project showcase,
-  discovery and sharing, authority reconciliation, device catalog) are
-  executed through their milestones; current work deepens the live
-  repository graph.
+- Eight dated plans live in `docs/`. The first five cover the shipped site;
+  browser delivery, canvas stage unification, and
+  [Graphshell as the site canvas](docs/2026-09-30_graphshell_site_canvas_plan.md)
+  cover the replacement of the site-owned interactive surfaces.
+- Graphshell integration is in P0: the viewer feature build is recorded as
+  compiling on an unmerged Mere branch, with browser validation, release-size
+  measurements, and the payload budget still pending. The site still ships
+  its own sandbox; the Ruling 103 pin and Ruling 104 resolver fixes landed.
 
 `content/*.toml` is the editorial authority for repository roles, summaries,
 relations, showcases, and the device catalog; the GitHub listing is the live

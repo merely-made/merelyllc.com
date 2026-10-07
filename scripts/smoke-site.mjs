@@ -591,9 +591,9 @@ try {
   const projectionArtifact = await projectionArtifactResponse.json();
   assert.equal(projectionArtifact.schema, "mer3ly.portable-projection/v1");
   assert.equal(projectionArtifact.adapter, "mer3ly.repository-graph/v1");
-  assert.equal(projectionArtifact.score.items.length, 8);
-  assert.equal(projectionArtifact.snapshot.tables.items.length, 8);
-  assert.equal(projectionArtifact.snapshot.tables.relations.length, 10);
+  assert.equal(projectionArtifact.score.items.length, 11);
+  assert.equal(projectionArtifact.snapshot.tables.items.length, 11);
+  assert.equal(projectionArtifact.snapshot.tables.relations.length, 13);
   assert.equal(projectionArtifact.default_trace.length, 7);
 
   const projectionDesktop = await browser.newPage({
@@ -625,10 +625,10 @@ try {
   const swatchProjection = projectionProof.locator(
     '[data-projection-view="swatch"]',
   );
-  assert.equal(await canvasProjection.locator("[data-projection-node]").count(), 8);
-  assert.equal(await swatchProjection.locator("[data-projection-node]").count(), 8);
-  assert.equal(await canvasProjection.locator("[data-projection-edge]").count(), 10);
-  assert.equal(await swatchProjection.locator("[data-projection-edge]").count(), 10);
+  assert.equal(await canvasProjection.locator("[data-projection-node]").count(), 11);
+  assert.equal(await swatchProjection.locator("[data-projection-node]").count(), 11);
+  assert.equal(await canvasProjection.locator("[data-projection-edge]").count(), 13);
+  assert.equal(await swatchProjection.locator("[data-projection-edge]").count(), 13);
   assert.equal(
     await canvasProjection
       .locator('[data-projection-node="mere"]')
