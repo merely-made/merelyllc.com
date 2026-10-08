@@ -121,7 +121,7 @@ reuse. The first Boa pre-push hook also used the pre-existing shared
 builds use approved stable targets. That shared target has other owners.
 
 The three isolated Cargo homes completed their gates, but verified cache
-cleanup was rejected by automatic approval review with "blocked by policy",
+cleanup was rejected by the command-execution layer with "blocked by policy",
 including a retry after explicit removal authorization:
 `C:\t\cargo-homes\turquet-upstreams`, `C:\t\cargo-homes\netrender-upstreams`,
 and `C:\t\cargo-homes\mere-upstreams`. They remain cache data owned by this
@@ -139,5 +139,9 @@ and generated files were archived and hash-verified before removal. The next
 dependency stage subsequently recreated `netrender-deps` and started new sha2
 and replay edits there; that new active worktree is retained under its owner. Active
 worktrees, unpublished commits, and Woodshed source work remain preserved.
-The unregistered `mere-proof42` directory is empty; automatic approval review
-also rejected its removal with "blocked by policy".
+The unregistered `mere-proof42` directory is empty; the command-execution layer
+also rejected its removal with "blocked by policy". The returned errors did not
+identify the enforcing rule or an automatic reviewer. Earlier attribution to
+automatic approval review was too specific: the observed user config selects
+`approvals_reviewer = "user"`, and this session reports `approval_policy =
+"never"` with full filesystem access. The exact enforcing policy remains unknown.
