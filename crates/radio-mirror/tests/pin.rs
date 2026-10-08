@@ -13,10 +13,11 @@ fn manifest_dir() -> &'static Path {
 #[test]
 fn the_lockfile_pins_radio_mirror_without_retinue_or_retinue_sim() {
     let lock = std::fs::read_to_string(manifest_dir().join("Cargo.lock")).expect("Cargo.lock");
-    let names = lock
-        .lines()
-        .filter_map(|line| line.strip_prefix("name = \""))
-        .map(|name| name.trim_end_matches('"'))
+    let parsed: toml::Value = toml::from_str(&lock).expect("valid Cargo lock");
+    let packages = parsed["package"].as_array().expect("Cargo packages");
+    let names = packages
+        .iter()
+        .map(|package| package["name"].as_str().expect("Cargo package name"))
         .collect::<Vec<_>>();
     for forbidden in ["retinue", "retinue-sim"] {
         assert!(
@@ -26,12 +27,14 @@ fn the_lockfile_pins_radio_mirror_without_retinue_or_retinue_sim() {
     }
     let pinned = format!("retinue.git?rev={RETINUE_REVISION}#{RETINUE_REVISION}");
     for package in ["radio-mirror", "radio-face", "embedded-graphics"] {
-        let entry = lock
-            .split("[[package]]")
-            .find(|entry| entry.contains(&format!("name = \"{package}\"\n")))
+        let entry = packages
+            .iter()
+            .find(|entry| entry["name"].as_str() == Some(package))
             .unwrap_or_else(|| panic!("{package} is not in the resolve"));
         assert!(
-            entry.contains(&pinned),
+            entry["source"]
+                .as_str()
+                .is_some_and(|source| source.ends_with(&pinned)),
             "{package} is not taken from retinue at the pinned revision"
         );
     }
@@ -48,6 +51,8 @@ fn the_lockfile_pins_radio_mirror_without_retinue_or_retinue_sim() {
 /// radio-mirror's source directory in Cargo's git checkout.
 fn pinned_radio_mirror_dir() -> PathBuf {
     let output = Command::new(env!("CARGO"))
+        // Resolve the declared pin outside repository-local path redirects.
+        .current_dir(std::env::temp_dir())
         .args(["metadata", "--format-version", "1", "--locked", "--offline"])
         .arg("--manifest-path")
         .arg(manifest_dir().join("Cargo.toml"))

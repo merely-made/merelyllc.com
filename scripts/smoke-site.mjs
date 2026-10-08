@@ -10,6 +10,7 @@ const receiptRoot = path.resolve(
   process.env.MER3LY_RECEIPT_DIR ?? ".tmp/browser-smoke",
 );
 const headless = process.env.MER3LY_HEADLESS !== "false";
+const browserChannel = process.env.MER3LY_BROWSER_CHANNEL ?? "chromium";
 const mimeTypes = {
   ".css": "text/css; charset=utf-8",
   ".html": "text/html; charset=utf-8",
@@ -67,7 +68,7 @@ await new Promise((resolve, reject) => {
 const port = server.address().port;
 const baseUrl = `http://127.0.0.1:${port}`;
 const browser = await chromium.launch({
-  channel: "chromium",
+  channel: browserChannel,
   headless,
   args: headless
     ? ["--enable-unsafe-webgpu", "--use-angle=swiftshader"]
@@ -78,6 +79,7 @@ const receipt = {
   schema: "mer3ly.browser-smoke-receipt/v3",
   source_sha: process.env.GITHUB_SHA ?? "local",
   browser: `Chromium ${browser.version()}`,
+  browser_channel: browserChannel,
   mode: headless ? "headless" : "headed",
   routes: {},
   desktop: {},

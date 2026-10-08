@@ -6,7 +6,7 @@
     "smoke": "node scripts/smoke-site.mjs"
   },
   "devDependencies": {
-    "playwright": "1.62.0"
+    "playwright": "1.64.0"
   },
   "engines": {
     "node": ">=20"
