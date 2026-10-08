@@ -2505,3 +2505,28 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   disclosure validator and the strict `host_dataset` envelope are committed.
   Rulings 128-129 opened the compile path, the viewer input and the practice
   port.
+- 2026-10-07: P2's first replacement, the devices simulator. The work is on
+  branch `devices-radio-mirror`, and Mark approved the push.
+  - **Build crate.** `crates/radio-mirror` is a standalone build crate, like
+    repo-graph, pinning radio-mirror at retinue `6aa78fc`. Its lockfile is
+    checked to carry no `retinue` or `retinue-sim` (Ruling 127).
+  - **Runtime.** `scripts/build-radio-mirror.ps1` builds the runtime, and CI
+    checks it with the build-twice reproducibility step. `radio_mirror_bg.wasm`
+    is 236,797 B raw and 84,358 B gzip.
+  - **Script.** `radio-simulator.js` now drives `RadioMirror`. Its page table
+    and its JS controller are retired. The RNode, Meshtastic and MeshCore
+    handoff panels stay as site HTML, marked as site notes.
+  - **No-JS reader.** 11 V4 OLED screens are rendered at site build time, with
+    radio-face's text projection as alt text. `validate-artifact` re-renders
+    each one and compares it byte for byte. The false "accurate static
+    example" claim is gone.
+  - **Firmware-faithful changes.** The default scenario is "Attached host". The
+    LED shows the idle intent, not a pulse per press. Boot is not shown.
+  - **Gate.** Root 63/0 and crate 6/0. fmt, clippy and `validate-artifact`
+    (62 files, 11 screens) are clean. In a locally served build, the browser
+    walk of press sequences, a held press, handoff and fault states raised no
+    console errors.
+  - **Not run locally:** the .ps1 itself and the headed smoke (no pwsh or Node
+    on this Mac). Both run in the Pages workflow.
+  - **Payload.** The V4 page's first load grows by 93,014 B. The 10 lazy screen
+    images add 19,484 B. The payload budget is still unruled.
