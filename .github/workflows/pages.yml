@@ -11,6 +11,7 @@ on:
       - "CNAME"
       - "assets/**"
       - "content/**"
+      - "crates/radio-mirror/**"
       - "crates/repo-graph/**"
       - "ops/org-migration.toml"
       - "package-lock.json"
@@ -81,10 +82,13 @@ jobs:
           $PSNativeCommandUseErrorActionPreference = $true
           cargo fmt --all -- --check
           cargo fmt --manifest-path crates/repo-graph/Cargo.toml -- --check
+          cargo fmt --manifest-path crates/radio-mirror/Cargo.toml -- --check
           cargo test --locked
           cargo test --manifest-path crates/repo-graph/Cargo.toml --locked
+          cargo test --manifest-path crates/radio-mirror/Cargo.toml --locked
           cargo clippy --locked --all-targets -- -D warnings
           cargo clippy --manifest-path crates/repo-graph/Cargo.toml --locked --all-targets -- -D warnings
+          cargo clippy --manifest-path crates/radio-mirror/Cargo.toml --locked --all-targets -- -D warnings
 
       - name: Build the reproducible pinned Mere graph runtime
         shell: pwsh
@@ -97,6 +101,19 @@ jobs:
           $secondWasm = (Get-FileHash assets/mer3ly_repo_graph_bg.wasm -Algorithm SHA256).Hash
           if ($firstJs -ne $secondJs -or $firstWasm -ne $secondWasm) {
             throw "repository graph output is not reproducible on the deployment host"
+          }
+
+      - name: Build the reproducible pinned radio-mirror runtime
+        shell: pwsh
+        run: |
+          ./scripts/build-radio-mirror.ps1 -KeepTarget
+          $firstJs = (Get-FileHash assets/radio_mirror.js -Algorithm SHA256).Hash
+          $firstWasm = (Get-FileHash assets/radio_mirror_bg.wasm -Algorithm SHA256).Hash
+          ./scripts/build-radio-mirror.ps1
+          $secondJs = (Get-FileHash assets/radio_mirror.js -Algorithm SHA256).Hash
+          $secondWasm = (Get-FileHash assets/radio_mirror_bg.wasm -Algorithm SHA256).Hash
+          if ($firstJs -ne $secondJs -or $firstWasm -ne $secondWasm) {
+            throw "radio-mirror output is not reproducible on the deployment host"
           }
 
       - name: Build and validate the exact Pages artifact
