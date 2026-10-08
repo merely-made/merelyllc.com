@@ -817,6 +817,17 @@ fn validate_projection_page(project: &str, proof: &ProjectionProof, errors: &mut
         errors
             .push("Mere project profile still carries the retired projection artifact".to_owned());
     }
+    // Ruling 140: the reading opens one way without a script and another while
+    // replay waits for a first interaction. Both travel in the markup.
+    let lead = format!(
+        "<span data-projection-reading-lead=\"\" data-scripted-lead=\"{}\">{}</span>",
+        escape_html_text(crate::projection_proof::SCRIPTED_READING_LEAD),
+        escape_html_text(crate::projection_proof::NO_SCRIPT_READING_LEAD),
+    );
+    if !project.contains(&lead) {
+        errors
+            .push("Mere project profile's reading does not carry both of its openings".to_owned());
+    }
     let steps = attribute_values(project, "data-projection-reading-step");
     let expected = (1..=proof.reading.steps.len())
         .map(|step| step.to_string())

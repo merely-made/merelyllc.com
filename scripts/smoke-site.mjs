@@ -845,6 +845,13 @@ try {
         .some((entry) => entry.name.includes("mer3ly_repo_graph")),
     );
   assert.equal(await graphRuntimeFetched(), false, "the graph Wasm loaded before interaction");
+  // With the script running, the reading opens with the scripted line, not
+  // the no-script one.
+  const readingLead = projectionProof.locator("[data-projection-reading-lead]");
+  assert.equal(
+    await readingLead.textContent(),
+    await readingLead.getAttribute("data-scripted-lead"),
+  );
   const sandboxRuntimeVersion = (await (await fetch(`${baseUrl}/repos/`)).text()).match(
     /\/graph-sandbox\.js(\?v=[0-9a-f]+)/,
   )?.[1];

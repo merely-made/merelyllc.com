@@ -30,6 +30,14 @@ use crate::repositories::{Authority, PublicMetadataCache, PublicSiteData};
 use crate::repository_history::RepositoryGraph;
 use crate::site::{SiteView, element, txt};
 
+/// How the build-time reading opens when no script runs.
+pub const NO_SCRIPT_READING_LEAD: &str =
+    "The synchronized scene requires JavaScript. Without it, this";
+
+/// How it opens while the script runs and replay has not loaded yet.
+pub const SCRIPTED_READING_LEAD: &str =
+    "Interact with the scene to load live replay. Until then, this";
+
 /// One captured project, labelled from the host dataset.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct ProofNode {
@@ -258,15 +266,28 @@ impl ProjectionProof {
                 element(
                     "p",
                     &[],
-                    vec![txt(format!(
-                        "The synchronized scene requires JavaScript. Without it, this is the trace read at build time: {} projects and {} relationships captured at revision {}, then {} steps ending at revision {} with {} relationships still in the scene. The relationship lists above carry the same public projects and relationships as ordinary text.",
-                        self.nodes.len(),
-                        self.relations.len(),
-                        receipt.initial_revision,
-                        receipt.trace_steps,
-                        receipt.final_revision,
-                        receipt.active_relations,
-                    ))],
+                    vec![
+                        // Two openings (Ruling 140): without JavaScript the
+                        // scene needs it; with it, replay waits for the first
+                        // interaction, and the script swaps in that wording.
+                        element(
+                            "span",
+                            &[
+                                ("data-projection-reading-lead", ""),
+                                ("data-scripted-lead", SCRIPTED_READING_LEAD),
+                            ],
+                            vec![txt(NO_SCRIPT_READING_LEAD)],
+                        ),
+                        txt(format!(
+                            " is the trace read at build time: {} projects and {} relationships captured at revision {}, then {} steps ending at revision {} with {} relationships still in the scene. The relationship lists above carry the same public projects and relationships as ordinary text.",
+                            self.nodes.len(),
+                            self.relations.len(),
+                            receipt.initial_revision,
+                            receipt.trace_steps,
+                            receipt.final_revision,
+                            receipt.active_relations,
+                        )),
+                    ],
                 ),
                 element("ol", &[("class", "projection-proof-reading")], steps),
             ],
@@ -378,6 +399,11 @@ mod tests {
             proof.reading.steps.len()
         );
         assert!(html.contains("Select the Turnstone host relationship: selects Turnstone"));
+        // Both openings travel: the no-script one as text, the scripted one
+        // for the page to swap in before replay loads.
+        assert!(html.contains(&format!(
+            "<span data-projection-reading-lead=\"\" data-scripted-lead=\"{SCRIPTED_READING_LEAD}\">{NO_SCRIPT_READING_LEAD}</span> is the trace read at build time:"
+        )));
         assert!(html.contains(&format!(
             "revision {}",
             proof.reading.receipt.final_revision
