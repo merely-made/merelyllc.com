@@ -37,12 +37,10 @@ records the commands and each file's SHA-256, and the source is
 <https://github.com/merely-made/retinue/tree/6aa78fc0d0ddd30e94db59470f30f47e669321dc/crates/retinue-sim>.
 The files are generated data, not original site prose, and CC BY 4.0 does not
 apply to them. `retinue-sim` links the `retinue` crate, which is under the
-Reticulum License, but the traces contain no part of that crate's source: they
+Reticulum License. The traces contain no part of that crate's source: they
 hold node names, simulated times, event kinds, frame header facts, hashes the
-run derived, and status counters. The Reticulum License's conditions attach to
-copies or substantial portions of its software and to uses of that software,
-so they apply to whoever runs the generator, not to these committed outputs;
-the site itself builds and runs no Reticulum-licensed code. The lab's screen
+run derived, and status counters. The site itself builds and runs no
+Reticulum-licensed code. The lab's screen
 images, rendered into `radio-mirror/` from these documents, are firmware output
 as above.
 
