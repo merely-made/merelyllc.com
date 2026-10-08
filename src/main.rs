@@ -6,6 +6,7 @@ use mer3ly_site::discovery::{ROBOTS_TXT, sitemap};
 use mer3ly_site::host_dataset::{HOST_DATASET_FILE, repository_host_dataset_json};
 use mer3ly_site::message_path;
 use mer3ly_site::pages::{devices, home, projects, radio, repositories};
+use mer3ly_site::projection_proof::ProjectionProof;
 use mer3ly_site::repositories::PublicSiteData;
 use mer3ly_site::retinue_traces::TraceSet;
 use mer3ly_site::site::{DEVICE_CSS, SITE_CSS};
@@ -102,10 +103,12 @@ fn build_site(output: &Path) -> std::io::Result<()> {
         repository_host_dataset_json(&data.authority, &data.metadata)
             .map_err(std::io::Error::other)?,
     )?;
-    fs::write(
-        output.join("projection-scene.json"),
-        projects::projection_artifact_json(&data),
-    )?;
+    // The projection proof's capture, trace and shelfmark, beside the host
+    // dataset that labels them.
+    let proof = ProjectionProof::build(&data).map_err(std::io::Error::other)?;
+    for (name, bytes) in proof.files() {
+        fs::write(output.join(name), bytes)?;
+    }
     fs::write(output.join("radio-simulator.js"), RADIO_SIMULATOR)?;
     fs::write(output.join("radio_mirror.js"), RADIO_MIRROR_WASM_GLUE)?;
     fs::write(output.join("radio_mirror_bg.wasm"), RADIO_MIRROR_WASM)?;

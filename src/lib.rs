@@ -5,6 +5,7 @@ pub mod firmware_catalog;
 pub mod host_dataset;
 pub mod message_path;
 pub mod pages;
+pub mod projection_proof;
 pub mod repositories;
 pub mod repository_history;
 pub mod retinue_traces;

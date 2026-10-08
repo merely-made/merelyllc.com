@@ -41,7 +41,7 @@ const {
   project_reading: projectReading,
   reading_registry: readingRegistry,
   representation_registry: representationRegistry,
-  portable_projection_with_placement: portableProjectionWithPlacement,
+  projection_capture_with_placement: projectionCaptureWithPlacement,
   project_matrix: projectMatrix,
   compose_matrix_shelfmark: composeMatrixShelfmark,
   resolve_matrix_shelfmark: resolveMatrixShelfmark,
@@ -1576,15 +1576,16 @@ class GraphSandbox {
     announce(this.root, this.shareStatus.textContent);
   }
 
-  // Sharing hands over a citation; this hands over the thing it cites.
+  // Sharing hands over a citation; this hands over the thing it cites: a
+  // chirograph V2 capture of the scene.
   //
   // The score carries the visitor's pins as holds, the solver honors them ahead
-  // of the arrangement, and the artifact only comes back if it consumed
-  // cleanly, so a reported pin count is a checked one rather than a claim.
+  // of the arrangement, and the capture only comes back if every hold landed,
+  // so a reported pin count is a checked one rather than a claim.
   async copyPortableProjection() {
     let artifact;
     try {
-      artifact = portableProjectionWithPlacement(
+      artifact = projectionCaptureWithPlacement(
         JSON.stringify(this.authority),
         JSON.stringify(this.legacySceneState()),
       );
@@ -1603,8 +1604,8 @@ class GraphSandbox {
     }
     const pins = held === 1 ? "1 pin" : `${held} pins`;
     this.exportStatus.textContent = copied
-      ? `portable projection copied, ${pins} honored`
-      : `portable projection built, ${pins} honored, clipboard refused`;
+      ? `projection capture copied, ${pins} honored`
+      : `projection capture built, ${pins} honored, clipboard refused`;
     announce(this.root, this.exportStatus.textContent);
   }
 

@@ -4,7 +4,6 @@ use std::fs;
 use std::net::IpAddr;
 use std::path::{Path, PathBuf};
 
-use mer3ly_repo_graph::consume_portable_projection_json;
 use regex::Regex;
 use serde::Serialize;
 use serde_json::Value;
@@ -15,6 +14,9 @@ use crate::discovery::{ROBOTS_TXT, canonical_urls_from_authority_and_devices};
 use crate::host_dataset::{HOST_DATASET_FILE, validate_repository_host_dataset};
 use crate::message_path;
 use crate::pages::{devices, radio as radio_page};
+use crate::projection_proof::{
+    CAPTURE_FILE, PortableProjection, ProjectionProof, SHELFMARK_FILE, TRACE_FILE,
+};
 use crate::repositories::{Authority, PublicMetadataCache, RepositoryRecord, ShowcaseManifest};
 use crate::retinue_traces::{TRACE_DIRECTORY, TraceSet};
 use crate::site::{
@@ -36,7 +38,9 @@ const BASE_FILES: &[&str] = &[
     "mer3ly_repo_graph_bg.wasm",
     "og.jpg",
     "projection-proof.js",
-    "projection-scene.json",
+    CAPTURE_FILE,
+    SHELFMARK_FILE,
+    TRACE_FILE,
     "radio.html",
     "radio-simulator.js",
     "radio_mirror.js",
@@ -67,6 +71,8 @@ pub struct ArtifactReceipt {
     projection_score_items: usize,
     projection_final_revision: u64,
     projection_active_relations: usize,
+    projection_trace_steps: usize,
+    projection_capture_address: String,
     device_profiles: usize,
     device_structured_records: usize,
     radio_mirror_screens: usize,
@@ -314,7 +320,6 @@ pub fn validate_public_artifact(
     let home = read_text(artifact_root, "index.html", &mut errors);
     let radio = read_text(artifact_root, "radio.html", &mut errors);
     let repositories = read_text(artifact_root, "repos/index.html", &mut errors);
-    let projection_scene = read_text(artifact_root, "projection-scene.json", &mut errors);
     let host_dataset = read_text(artifact_root, HOST_DATASET_FILE, &mut errors);
     if let Err(error) = validate_repository_host_dataset(&host_dataset, authority, metadata) {
         errors.push(error);
@@ -402,13 +407,13 @@ pub fn validate_public_artifact(
     let mut project_relation_ids = Vec::new();
     let mut project_social_previews = 0;
     let mut project_structured_records = 0;
-    let projection_receipt = match consume_portable_projection_json(&projection_scene) {
-        Ok(receipt) => Some(receipt),
-        Err(error) => {
-            errors.push(format!("portable projection artifact is invalid: {error}"));
-            None
-        }
-    };
+    let projection = validate_projection_artifacts(
+        artifact_root,
+        authority,
+        metadata,
+        &host_dataset,
+        &mut errors,
+    );
     for repository in authority
         .repositories
         .repository
@@ -494,13 +499,8 @@ pub fn validate_public_artifact(
                     "Mere project profile is missing its portable projection proof".to_owned(),
                 );
             }
-            match inline_json(&project, "mere-projection-artifact") {
-                Some(embedded) if embedded == projection_scene => {}
-                Some(_) => errors
-                    .push("Mere project profile and public projection artifact differ".to_owned()),
-                None => errors.push(
-                    "Mere project profile is missing its serialized projection artifact".to_owned(),
-                ),
+            if let Some(proof) = &projection {
+                validate_projection_page(&project, proof, &mut errors);
             }
         } else if project.contains("data-projection-proof")
             || project.contains("/projection-proof.js?v=")
@@ -679,15 +679,21 @@ pub fn validate_public_artifact(
             sitemap_urls,
             project_social_previews,
             project_structured_records,
-            projection_score_items: projection_receipt
+            projection_score_items: projection
                 .as_ref()
-                .map_or(0, |receipt| receipt.score_items),
-            projection_final_revision: projection_receipt
+                .map_or(0, |proof| proof.reading.receipt.score_items),
+            projection_final_revision: projection
                 .as_ref()
-                .map_or(0, |receipt| receipt.final_revision),
-            projection_active_relations: projection_receipt
+                .map_or(0, |proof| proof.reading.receipt.final_revision),
+            projection_active_relations: projection
                 .as_ref()
-                .map_or(0, |receipt| receipt.active_relations),
+                .map_or(0, |proof| proof.reading.receipt.active_relations),
+            projection_trace_steps: projection
+                .as_ref()
+                .map_or(0, |proof| proof.reading.receipt.trace_steps),
+            projection_capture_address: projection.as_ref().map_or_else(String::new, |proof| {
+                proof.reading.receipt.capture_address.clone()
+            }),
             device_profiles: device_ids.len(),
             device_structured_records,
             radio_mirror_screens: radio_screens.len(),
@@ -712,6 +718,93 @@ pub fn validate_public_artifact(
         })
     } else {
         Err(errors)
+    }
+}
+
+/// The projection proof's published capture, trace and shelfmark: each must
+/// be byte for byte what the current authority derives, and together with
+/// the published host dataset they must consume and join (Rulings 132-136).
+fn validate_projection_artifacts(
+    artifact_root: &Path,
+    authority: &Authority,
+    metadata: &PublicMetadataCache,
+    host_dataset: &str,
+    errors: &mut Vec<String>,
+) -> Option<ProjectionProof> {
+    let expected = match ProjectionProof::derive(authority, metadata) {
+        Ok(proof) => proof,
+        Err(error) => {
+            errors.push(format!("projection proof could not be derived: {error}"));
+            return None;
+        }
+    };
+    let mut published = Vec::new();
+    for (name, bytes) in expected.files() {
+        match fs::read(artifact_root.join(name)) {
+            Ok(actual) if actual == bytes => published.push(actual),
+            Ok(actual) => {
+                errors.push(format!(
+                    "projection artifact {name} differs from its re-derivation"
+                ));
+                published.push(actual);
+            }
+            Err(error) => {
+                errors.push(format!(
+                    "could not read projection artifact {name}: {error}"
+                ));
+                return None;
+            }
+        }
+    }
+    let [capture, trace, shelfmark] = <[Vec<u8>; 3]>::try_from(published).ok()?;
+    match ProjectionProof::read(
+        PortableProjection {
+            capture,
+            trace,
+            shelfmark,
+        },
+        host_dataset,
+    ) {
+        Ok(proof) => Some(proof),
+        Err(error) => {
+            errors.push(format!("projection artifacts are invalid: {error}"));
+            None
+        }
+    }
+}
+
+/// The Mere profile cites each artifact at its content version, and its
+/// no-script reading states the trace it was built from.
+fn validate_projection_page(project: &str, proof: &ProjectionProof, errors: &mut Vec<String>) {
+    for (attribute, (name, bytes)) in ["data-capture-src", "data-trace-src", "data-shelfmark-src"]
+        .into_iter()
+        .zip(proof.files())
+    {
+        let href = ProjectionProof::href(name, bytes);
+        if !project.contains(&format!("{attribute}=\"{href}\"")) {
+            errors.push(format!(
+                "Mere project profile does not cite projection artifact {href}"
+            ));
+        }
+    }
+    if !project.contains(&format!("data-dataset-src=\"/{HOST_DATASET_FILE}\"")) {
+        errors.push("Mere project profile does not cite the host dataset".to_owned());
+    }
+    if project.contains("mere-projection-artifact") || project.contains("projection-scene") {
+        errors
+            .push("Mere project profile still carries the retired projection artifact".to_owned());
+    }
+    let steps = attribute_values(project, "data-projection-reading-step");
+    let expected = (1..=proof.reading.steps.len())
+        .map(|step| step.to_string())
+        .collect::<Vec<_>>();
+    if steps != expected {
+        errors
+            .push("Mere project profile's static trace reading differs from the trace".to_owned());
+    }
+    if !project.contains(&escape_html_text(&proof.summary())) {
+        errors
+            .push("Mere project profile's projection summary differs from the capture".to_owned());
     }
 }
 

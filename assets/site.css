@@ -2502,6 +2502,26 @@ tbody tr:last-child td {
   color: var(--muted);
 }
 
+.projection-proof-fallback[hidden],
+.projection-proof-notice[hidden] {
+  display: none;
+}
+
+.projection-proof-reading {
+  margin: 14px 0 0;
+  padding-left: 1.4em;
+  font: 500 0.66rem/1.6 var(--font-mono);
+}
+
+.projection-proof-notice {
+  margin-bottom: 16px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--ember);
+  background: var(--cream);
+  color: var(--ink);
+  font: italic 0.78rem/1.45 var(--font-prose);
+}
+
 .projection-proof-controls {
   display: flex;
   align-items: center;
