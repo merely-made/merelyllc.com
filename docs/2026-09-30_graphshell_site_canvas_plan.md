@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-136 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-139 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 P0's viewer review and main integration are complete (Rulings 122-123).
 Mere main is pushed at `ea9e6da7`, with current Genet `965b64e2`. The numerical
 payload cap and initial-site deployment remain open. Plain viewer is selected
@@ -1419,6 +1419,25 @@ the S1 host dataset; cards in the presentation. Mark: "The S1 host dataset
 (Recommended)". What follows: the proof reads its labels from
 `repository-host-dataset.json`. Capture, trace, shelfmark and dataset
 together replace the `mer3ly.*` artifact.
+
+### Rulings 137-139 (2026-10-08): the projection proof's push and its follow-ups
+
+**Ruling 137, push the proof replacement.** Mark: "Push it (Recommended)".
+This also accepts the proof script's size guard rising from 32 to 48 KiB, and
+the `projection-scene=v3` link carrying shelfmark fields in the URL hash.
+
+**Ruling 138, the duplicated replay.** The proof's JS still carries its own
+trace replay, BLAKE3 and lossless JSON. Options: replay in the graph Wasm;
+the Graphshell viewer (about 2.15 MB brotli, unbudgeted); keep the JS for now.
+Mark: "Replay in the graph Wasm (Recommended)". What follows: a follow-up
+exposes scenotime's `snapshot_at`, chirograph's validation and the shelfmark
+check through the site's existing graph Wasm, and the JS copies retire
+(Ruling 1). This adds no payload, so it needs no budget ruling.
+
+**Ruling 139, the sandbox's export.** Options: keep the V2 export; revert
+for now. Mark: "Keep V2 export (Recommended)". What follows: nothing writes
+the retired `mer3ly.portable-projection/v1` any more. The sandbox's full
+replacement still comes last in the order.
 
 ## Findings (2026-09-30)
 
