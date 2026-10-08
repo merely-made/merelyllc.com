@@ -2557,3 +2557,46 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   - The live `repository-host-dataset.json` differs from the pinned copy,
     because the deploy refreshes GitHub metadata before building. Its shape is
     the same.
+- 2026-10-08: P2's second replacement, the message path lab, on branch
+  `message-lab-traces` (not pushed).
+  - **Traces (Ruling 127).** The cold and warm route traces and face tracks
+    are committed under `content/retinue-traces/`, byte-identical to a fresh
+    run at retinue `6aa78fc`. `provenance.toml` records the four commands and
+    each file's sha256. `src/retinue_traces.rs` reads them without linking
+    `retinue` or `retinue-sim`. It checks each hash, each face track's
+    `trace_sha256` against its route trace, one face entry per
+    state-carrying event, and one shared topology. `authority validate` now
+    covers the directory, and `validate-artifact` compares the published
+    copies byte for byte.
+  - **Script.** `message-path-lab.js` steps through a trace's events (cold:
+    79, warm: 171). The selected radio's screen is radio-mirror's TRAFFIC page
+    (Ruling 8) from its latest face entry, reached by pressing the one button.
+    Its host document is re-set at every step, because the channel
+    republishes within its 15 s validity. The authored scripts, the "three
+    relays" text and the ROUTE/DELIVERED, TX QUEUED and RX FRAME screens are
+    gone. Route and delivery are ledger prose generated at build time
+    (`src/message_path.rs`): 13 cold rows and 31 warm rows. Positions are
+    stated as illustrative.
+  - **No-JS reader.** It shows the cold trace's last step: the route sentence
+    from `messages[0].delivered.path` (two relays), the ledger, and the
+    garage's TRAFFIC page as a build-time PNG with its text projection.
+  - **Links.** `message-path=v2` carries the trace hash, scenario, step and
+    node. A v1 link, or one naming an unknown trace, shows a notice and the
+    cold trace (Ruling 21).
+  - **Choices for review.** Play advances one event per 250 ms tick, not
+    simulated time, so the warm trace's quiet 760 s needs no time scale. The
+    ledger buttons and the milestone buttons are how it is read. The send
+    prose quotes `send.hops` as "hop count" without equating it to links:
+    the cold route's hop count is 2 over three links, matching the packet
+    header's forward count.
+  - **Gate.** Root 70/0 and crate 9/0. fmt, clippy (`-D warnings`),
+    `authority validate` and `validate-artifact` (67 files) are clean. In a
+    locally served build, a scripted walk of every cold step for all five
+    radios and every warm step for fire and garage (737 checks) matched each
+    face entry's counters and ticker. v2 restore, the v1 and unknown-trace
+    notices, playback, and the 375 px width raised no console errors.
+  - **Not run locally:** the headed smoke (no Node on this Mac).
+  - **Payload.** Before, the radio page's first load was 98,781 B raw and
+    20,348 B gzip (HTML, CSS, lab script). After, it is 448,162 B raw and
+    119,274 B gzip. Most of the growth is radio-mirror's Wasm (84,358 B gzip),
+    which the V4 page shares. The warm trace adds 6,796 B gzip when chosen.
