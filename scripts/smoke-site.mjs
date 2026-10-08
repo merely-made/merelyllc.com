@@ -834,6 +834,25 @@ try {
     );
   }
   const projectionProof = projectionDesktop.locator("[data-projection-proof]");
+  // Ruling 140: the first load draws the captured scene without the graph
+  // Wasm, which loads on first interaction under the repositories page's
+  // own URLs, so both pages share one cached copy.
+  assert.equal(await projectionProof.getAttribute("data-replay"), "static");
+  const graphRuntimeFetched = () =>
+    projectionDesktop.evaluate(() =>
+      performance
+        .getEntriesByType("resource")
+        .some((entry) => entry.name.includes("mer3ly_repo_graph")),
+    );
+  assert.equal(await graphRuntimeFetched(), false, "the graph Wasm loaded before interaction");
+  const sandboxRuntimeVersion = (await (await fetch(`${baseUrl}/repos/`)).text()).match(
+    /\/graph-sandbox\.js(\?v=[0-9a-f]+)/,
+  )?.[1];
+  assert.ok(sandboxRuntimeVersion, "the repositories page names its graph runtime");
+  assert.equal(
+    await projectionProof.getAttribute("data-graph-runtime"),
+    `/mer3ly_repo_graph.js${sandboxRuntimeVersion}`,
+  );
   const canvasProjection = projectionProof.locator(
     '[data-projection-view="canvas"]',
   );
@@ -874,9 +893,13 @@ try {
   await projectionDesktop.waitForFunction(
     () => {
       const root = document.querySelector("[data-projection-proof]");
-      return root.dataset.cursor === root.dataset.actionCount;
+      return (
+        root.dataset.replay === "ready" &&
+        root.dataset.cursor === root.dataset.actionCount
+      );
     },
   );
+  assert.equal(await graphRuntimeFetched(), true);
   assert.equal(
     await projectionProof.getAttribute("data-cursor"),
     String(projectionSteps),
@@ -1092,7 +1115,15 @@ try {
     "portable scene nodes need 44px mobile targets",
   );
   const mobileSwatchMere = mobileSwatch.locator('[data-projection-node="mere"]');
+  const mobileMereBefore = await mobileSwatchMere.getAttribute("data-x");
   await mobileSwatchMere.press("ArrowRight");
+  await projectionMobile.waitForFunction(
+    () => {
+      const root = document.querySelector("[data-projection-proof]");
+      return root.dataset.replay === "ready" && root.dataset.cursor === "1";
+    },
+  );
+  assert.notEqual(await mobileSwatchMere.getAttribute("data-x"), mobileMereBefore);
   assert.equal(
     await mobileSwatchMere.getAttribute("data-x"),
     await mobileCanvas
@@ -1133,6 +1164,9 @@ try {
   );
   const reducedProof = projectionReduced.locator("[data-projection-proof]");
   await reducedProof.locator('[data-projection-action="replay"]').click();
+  await projectionReduced.waitForFunction(
+    () => document.querySelector("[data-projection-proof]")?.dataset.replay === "ready",
+  );
   assert.equal(
     await reducedProof.getAttribute("data-cursor"),
     await reducedProof.getAttribute("data-action-count"),
@@ -1176,6 +1210,44 @@ try {
   );
   receipt.projects.projection_proof.fallback = "trace-reading-and-semantic-relations-remain";
   await projectionFallback.close();
+
+  // Ruling 140: if the replay cannot load, a polite notice says so and the
+  // build-time reading stays.
+  const projectionNoReplay = await browser.newPage({
+    viewport: { width: 900, height: 900 },
+  });
+  const projectionNoReplayDiagnostics = collectDiagnostics(projectionNoReplay);
+  await projectionNoReplay.goto(`${baseUrl}/projects/mere/?projection=no-replay`, {
+    waitUntil: "networkidle",
+  });
+  await projectionNoReplay.waitForFunction(
+    () => document.querySelector("[data-projection-proof]")?.dataset.ready === "true",
+  );
+  await projectionNoReplay
+    .locator('[data-projection-proof] [data-projection-action="replay"]')
+    .click();
+  await projectionNoReplay.waitForFunction(
+    () => document.querySelector("[data-projection-proof]")?.dataset.replay === "failed",
+  );
+  assert.equal(
+    await projectionNoReplay.locator("[data-projection-notice]").isVisible(),
+    true,
+  );
+  assert.equal(
+    await projectionNoReplay.locator("[data-projection-fallback]").isVisible(),
+    true,
+  );
+  assert.equal(
+    await projectionNoReplay.locator("[data-projection-reading-step]").count(),
+    projectionSteps,
+  );
+  assert.deepEqual(
+    projectionNoReplayDiagnostics,
+    [],
+    "projection replay failure emitted browser errors",
+  );
+  receipt.projects.projection_proof.replay_failure = "notice-and-reading-remain";
+  await projectionNoReplay.close();
 
   // Ruling 21: an old link names a retired format, says so politely, and shows
   // the default trace.
