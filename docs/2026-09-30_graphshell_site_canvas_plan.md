@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-129 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-132 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 P0's viewer review and main integration are complete (Rulings 122-123).
 Mere main is pushed at `ea9e6da7`, with current Genet `965b64e2`. The numerical
 payload cap and initial-site deployment remain open. Plain viewer is selected
@@ -1334,6 +1334,43 @@ Options: as typed values; a product-evidence field. Mark: "As typed values
 (Recommended)". What follows: the evidence travels in ordinary dataset fields,
 and the practice adapter rebuilds the record and re-checks it with
 `parse_woodshed_comparison`. No opaque block enters the envelope.
+
+### Rulings 130-132 (2026-10-08): S4's steps, and S6's identity and trace
+
+These were asked after a read-only assessment against mere `797d63d`. That
+assessment found the following:
+- No `SceneTrace` exists.
+- Cambium's `edit-history` is in-memory document undo, with no base snapshot,
+  no replay, no random-access cursor, no serde and a dropping cap. Ruling 15
+  places the trace in scenotime, so it is not reused.
+- `ProjectionCaptureV1` has no Rust consumer outside its own tests.
+- No lane has commits on scenotime or chirograph since 2026-10-04.
+
+Mark chose the recommended option each time.
+
+**Ruling 130, what a `SceneTrace` step holds.** The projection proof's trace
+interleaves selection-only steps with diffs, and Ruling 15 makes selection
+host policy. Options: optional diff plus host note; diff-only steps. Mark:
+"Optional diff + host note (Recommended)". What follows: a step is a label,
+an optional `SceneDiff`, and an opaque host annotation that scenotime stores
+and never reads. The trace's cursor counts every step, so share links and
+the scrubber keep their step numbers.
+
+**Ruling 131, the capture's authority identity.** Options: in the capture;
+shelfmark only. Mark: "In the capture (Recommended)". What follows:
+`ProjectionCaptureV2` carries an optional authority block (adapter, schema,
+SHA-256, generation), and the generation is checked against the score's. A
+shelfmark addresses a capture and is checked against it.
+
+**Ruling 132, where the default trace travels.** Options: sibling files; an
+optional trace in V2. Mark: "Sibling files (Recommended)". What follows: the
+capture (V2), the scene trace (S4) and the shelfmark ship as separate
+artifacts that reference one another. The capture stays delivery truth, as
+chirograph's own documentation describes it.
+
+Two checks stay host-side without a ruling. `scene.epoch == generation` is the
+site's own convention. Holds are verified by the consumer, as
+`consume_portable_projection` does today.
 
 ## Findings (2026-09-30)
 
