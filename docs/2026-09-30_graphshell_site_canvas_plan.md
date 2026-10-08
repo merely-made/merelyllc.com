@@ -2864,7 +2864,7 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     16-step bound is refused in the session too.
   - **Script.** The replay, BLAKE3, lossless JSON and the `History` mirror
     are deleted. The script keeps rendering, controls, host-dataset labels
-    and the link's wording. It is 36,568 B (was 45,347), and its guard drops
+    and the link's wording. It is 37,065 B (was 45,347), and its guard drops
     from 48 to 40 KiB. The v3 link, all five link notices (retired, stale,
     unreadable or broken chain, over-long, out-of-range position) and the
     announced step-bound refusal are unchanged. The page carries
@@ -2873,35 +2873,69 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     `failed`). The build-time reading now follows the interface in the
     markup, so hiding it once replay is ready never moves a stage under a
     drag. `?projection=no-replay` forces the failure path for the smoke.
+  - **Two openings (Mark: "Two variants").** Without a script the reading
+    still opens "The synchronized scene requires JavaScript". With the script
+    running and replay not yet loaded, it opens "Interact with the scene to
+    load live replay. Until then, this is the trace read at build time", and
+    the status line announces the same. If replay fails it opens "Live replay
+    could not load, so this is". Both build-time openings travel in the
+    markup; `validate-artifact`, a unit test, m7 and the smoke check them.
   - **Tests.** `tests/projection_session.rs` holds the session to the native
     consumer at all 8 positions (snapshots, revisions, identities), plus
     truncation, the bound, restore refusals and shared refusals. The v1
     parity fixture still replays identically at all 8 positions.
-  - **Wasm.** Two clean builds (bash equivalent of
-    `build-repo-graph.ps1`) were byte-identical. The graph Wasm grows from
-    1,297,712 B (437,734 B gzip) to 1,542,736 B (504,966 B gzip); the glue
-    from 25,074 B (4,226 B gzip) to 37,043 B (5,075 B gzip). Most of the
-    growth is deserializing scenes, scores and scene operations, which the
-    module never did before; reading every step through one JSON reader
-    saved about 160 KB raw. This passes m5's 1,350 KiB ceiling, which says
-    another increase needs measurement: **open for Mark**, and the m5 bound
-    test fails until he rules. The repositories page's first load grows by
-    the same 68,081 B gzip.
-  - **Payload.** The Mere page's first load is 140,003 B raw and 21,899 B
-    gzip (was 148,557 B and 24,412 B). The first interaction adds the glue
-    and Wasm, 1,579,779 B raw and 510,041 B gzip, and a visitor who has seen
-    the repositories page already holds both.
+  - **Wasm, measured (Mark: "Measure, but I wouldn't mind some
+    optimization").** Attributed with twiggy (`top`, `diff`) against the
+    `349fcaa` Wasm, built with names kept. Of 246,975 B of new code, about
+    105 KB is serde_json deserializers for sceno (the capture's score and
+    every arrangement), scenotime (snapshots, `SceneOp`'s 21 variants,
+    trace steps), chirograph and incipit; 25 KB is serde_json itself; the
+    rest is `apply_diff`, `Vec<SceneOp>` cloning, blake3, base64 and the
+    session. `cargo tree -d` shows sha2 0.10 and 0.11, but only one reaches
+    the Wasm. Changes, against raw / gzip / brotli (q11):
+
+    | Build | Raw | Gzip | Brotli |
+    |---|---|---|---|
+    | `349fcaa` (s, thin LTO) | 1,297,712 | 437,734 | 331,804 |
+    | session, as first pushed (s, thin) | 1,542,736 | 504,966 | 378,954 |
+    | (already in that push) one JSON reader for every step | about −163 KB before wasm-bindgen | | |
+    | shelfmark read as text (shares incipit's existing reader), steps compared as JSON (no `SceneOp` equality) | 1,530,360 | 503,449 | 378,279 |
+    | errors worded without `Debug` (tried, reverted: +1,144 raw) | 1,531,504 | 503,777 | 378,482 |
+    | opt-level "z", thin LTO | 1,365,034 | 431,394 | 338,130 |
+    | opt-level "s", fat LTO | 1,530,774 | 503,494 | 378,369 |
+    | **opt-level "z", fat LTO (adopted)** | **1,363,161** | **430,962** | **337,563** |
+    | wasm-opt -Os / -Oz on the "z" build (not adopted) | 1,228,684 / 1,211,709 | 468,193 / 469,916 | 361,653 / 363,058 |
+    | `349fcaa` code under "z", thin (reference) | 1,156,983 | 375,641 | 297,667 |
+
+    wasm-opt again shrinks raw bytes and grows both compressed sizes. The
+    profile applies to the whole graph Wasm, so both pages get the same file:
+    the repositories page's first load now carries 6,772 B less gzip Wasm
+    than before the session (430,962 against 437,734). Seiche ticks for the
+    repository graph measured 0.065 ms under "z" against 0.043 ms under "s"
+    in the browser, far inside a frame. Two clean builds under the new
+    profile were byte-identical. The Wasm is now 19,239 B under m5's
+    1,382,400 B ceiling, but the runtime total (loader 68,804 + glue 37,043 +
+    Wasm 1,363,161 = 1,469,008 B) is 35,408 B over its 1,433,600 B ceiling,
+    so m5's bound test still fails: **open for Mark**. The glue grew by
+    11,969 B for the session's wrappers.
+  - **Payload.** The Mere page's first load is 140,669 B raw, 22,080 B gzip
+    and 18,461 B brotli (was 148,557 B and 24,412 B gzip). The first
+    interaction adds the glue and Wasm, 1,400,204 B raw, 436,037 B gzip and
+    341,920 B brotli, which a visitor who has seen the repositories page
+    already holds.
   - **Gate.** fmt and clippy (`-D warnings`, also the wasm32 lib) are clean.
-    Root tests pass except m5's ceiling; repo-graph passes 39/0.
+    Root tests pass except m5's runtime ceiling; repo-graph passes 39/0.
     `authority validate` and `validate-artifact` (69 files) are clean. In a
     local build at 1000x900, all 8 positions read revisions
     [1, 1, 2, 2, 3, 3, 4, 5]. A real pointer drag as the first interaction,
     commit after a move (truncation), v3 restore, all five notices, the
-    16-step refusal, replay, fold, removal, the forced replay failure, the
-    no-scene fallback and 375 px width raised no console errors. The first
-    load fetched no graph runtime, and the repositories page fetched the
-    same two URLs.
+    16-step refusal, replay, the forced replay failure, the no-scene
+    fallback, both reading openings and 375 px width raised no console
+    errors. The first load fetched no graph runtime, and the repositories
+    page fetched the same two URLs.
   - **Not run locally:** the headed smoke and the .ps1 scripts (no Node or
     pwsh on this Mac). The smoke now waits for `data-replay` after first
     interactions, checks that nothing fetched the runtime before them, and
-    covers the replay failure; it parses under JavaScriptCore.
+    covers the replay failure and the scripted opening; it parses under
+    JavaScriptCore. The branch is rebased onto `7a62f2a`, which records
+    Ruling 140.
