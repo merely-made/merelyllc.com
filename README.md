@@ -47,6 +47,7 @@ cargo run --locked --bin site                       # generate the static site
 cargo run --locked --bin authority -- validate      # validate content
 .\scripts\refresh-public-metadata.ps1               # refresh the GitHub metadata cache
 .\scripts\build-repo-graph.ps1                      # rebuild the committed Wasm graph runtime
+.\scripts\build-radio-mirror.ps1                    # rebuild the committed radio-mirror runtime
 ```
 
 Verify with `cargo test --locked` and the browser smoke (`npm ci

@@ -1,0 +1,41 @@
+[workspace]
+resolver = "2"
+
+[package]
+name = "mer3ly-radio-mirror"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.92"
+publish = false
+description = "Mer3ly build crate for retinue's radio-mirror: the devices-page Wasm runtime and its build-time screens."
+repository = "https://github.com/merely-made/merelyllc.com"
+license = "MPL-2.0"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+# radio-mirror is unpublished, so it is taken from retinue at an exact
+# revision. It links radio-face and the vendored embedded-graphics only; the
+# Reticulum-licensed `retinue` and `retinue-sim` crates must never enter this
+# resolve (Ruling 127), which `tests/pin.rs` checks against Cargo.lock.
+[dependencies]
+radio-mirror = { git = "https://github.com/merely-made/retinue.git", rev = "6aa78fc0d0ddd30e94db59470f30f47e669321dc" }
+
+# Build-time PNGs and status documents are native only, so the Wasm runtime
+# carries neither the PNG encoder nor a second JSON stack.
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+radio-mirror = { git = "https://github.com/merely-made/retinue.git", rev = "6aa78fc0d0ddd30e94db59470f30f47e669321dc", features = ["png"] }
+serde_json = "1"
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+all = "warn"
+
+[profile.release]
+codegen-units = 1
+lto = "thin"
+opt-level = "s"
+panic = "abort"
+strip = "symbols"
