@@ -215,9 +215,13 @@ impl ProjectionSession {
     /// The furthest trace's steps as JSON, when they differ from the supplied
     /// trace's; a link carries them only then.
     pub fn shared_steps(&self) -> Option<String> {
-        let furthest = self.furthest();
-        (furthest.steps() != self.default_trace.steps())
-            .then(|| serde_json::to_string(furthest.steps()).expect("trace steps serialize"))
+        // Compared as their JSON, which the link needs anyway, so the Wasm
+        // carries no step equality of its own.
+        let json = |trace: &SceneTrace| {
+            serde_json::to_string(trace.steps()).expect("trace steps serialize")
+        };
+        let furthest = json(&self.furthest());
+        (furthest != json(&self.default_trace)).then_some(furthest)
     }
 
     /// Each step's host annotation along the furthest trace, `null` when a

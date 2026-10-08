@@ -443,7 +443,12 @@ pub(crate) fn open_portable_projection(
     }
     let honored_holds = honored_holds_of(&capture)?;
 
-    let shelfmark: ShelfmarkV1 = serde_json::from_slice(&artifacts.shelfmark)
+    // Read as text: the graph Wasm already reads shelfmarks through
+    // serde_json's text reader, so this adds no second copy of incipit's
+    // deserializer.
+    let shelfmark = std::str::from_utf8(&artifacts.shelfmark)
+        .map_err(|error| format!("invalid shelfmark JSON: {error}"))?;
+    let shelfmark: ShelfmarkV1 = serde_json::from_str(shelfmark)
         .map_err(|error| format!("invalid shelfmark JSON: {error}"))?;
     check_shelfmark(&shelfmark, &artifacts.capture)?;
 
