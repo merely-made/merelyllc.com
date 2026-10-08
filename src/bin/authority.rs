@@ -4,6 +4,7 @@ use std::process::ExitCode;
 
 use mer3ly_site::artifact::validate_public_artifact;
 use mer3ly_site::repositories::{Authority, PublicMetadataCache, PublicSiteData};
+use mer3ly_site::retinue_traces::TraceSet;
 
 fn main() -> ExitCode {
     match run() {
@@ -37,6 +38,10 @@ fn run() -> Result<(), String> {
     authority
         .validate()
         .map_err(|errors| format!("authority validation failed:\n{}", errors.join("\n")))?;
+    // The committed route traces are authority input too: their provenance
+    // records the retinue revision, the commands and every file's hash.
+    let traces = TraceSet::load(&root)
+        .map_err(|errors| format!("retinue trace validation failed:\n{}", errors.join("\n")))?;
 
     match command.as_str() {
         "validate" => {
@@ -46,6 +51,21 @@ fn run() -> Result<(), String> {
                 authority.relations.relation.len(),
                 authority.migration.migration.len(),
                 authority.migration.unresolved_product.len()
+            );
+            println!(
+                "retinue traces valid: {} at retinue {}",
+                traces
+                    .scenarios
+                    .iter()
+                    .map(|scenario| format!(
+                        "{} ({} events, {} face entries)",
+                        scenario.trace.scenario,
+                        scenario.trace.events.len(),
+                        scenario.faces.entries.len()
+                    ))
+                    .collect::<Vec<_>>()
+                    .join(", "),
+                traces.provenance.short_revision()
             );
         }
         "summary" => {

@@ -6,4 +6,5 @@ pub mod host_dataset;
 pub mod pages;
 pub mod repositories;
 pub mod repository_history;
+pub mod retinue_traces;
 pub mod site;
