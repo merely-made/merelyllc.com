@@ -553,8 +553,9 @@ class MessagePathLab {
       edge.setAttribute("x2", x2);
       edge.setAttribute("y2", y2);
     }
-    const event = this.event();
-    if (event.kind === "transmit") {
+    // The stage's observer fires once before the first trace has loaded.
+    const event = this.scenario ? this.event() : null;
+    if (event?.kind === "transmit") {
       const [x, y] = centre(event.node);
       this.packet.setAttribute("cx", x);
       this.packet.setAttribute("cy", y);
