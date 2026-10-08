@@ -58,7 +58,9 @@ artifact and emits a hashed receipt.
 ## License
 
 Source MPL-2.0. Original prose and site artwork CC BY 4.0; imported project
-screenshots retain their source licenses. See [`LICENSE`](LICENSE) and
+screenshots retain their source licenses. The V4 radio bench runs retinue's
+MPL-2.0 `radio-mirror` and `radio-face` at a pinned revision; the source
+pointer is in `CONTENT_LICENSE.md`. See [`LICENSE`](LICENSE) and
 [`CONTENT_LICENSE.md`](CONTENT_LICENSE.md).
 
 ---
