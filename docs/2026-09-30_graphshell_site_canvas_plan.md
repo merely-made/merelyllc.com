@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-139 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-140 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 P0's viewer review and main integration are complete (Rulings 122-123).
 Mere main is pushed at `ea9e6da7`, with current Genet `965b64e2`. The numerical
 payload cap and initial-site deployment remain open. Plain viewer is selected
@@ -1438,6 +1438,34 @@ check through the site's existing graph Wasm, and the JS copies retire
 for now. Mark: "Keep V2 export (Recommended)". What follows: nothing writes
 the retired `mer3ly.portable-projection/v1` any more. The sandbox's full
 replacement still comes last in the order.
+
+### Ruling 140 (2026-10-08): the proof's Wasm loads on first interaction
+
+This amends Ruling 138. Ruling 138 said moving the replay into the graph Wasm
+"adds no payload". That holds only for the repos page. The Mere project page
+loads only `projection-proof.js` today, so the graph Wasm would be new
+weight there:
+- +437,734 B gzip of Wasm and +4,226 B of glue;
+- against a first load of 24,412 B gzip, about 19 times larger.
+The S1 coordinator stated the claim without checking. The follow-up lane
+caught it at its stop condition.
+
+Options:
+- load on first interaction;
+- load it up front;
+- a separate proof-only Wasm (a scratch build was 161,001 B gzip, as a third
+  Wasm build);
+- keep the JS copies.
+
+Mark: "Load on first interaction (Recommended)".
+
+What follows:
+- The page shows the build-time static reading first, so its first load is
+  unchanged.
+- The existing graph Wasm, shared through the repos page's cache, is imported
+  on the first scrub, edit, commit or share-link restore.
+- The JS copies of the replay, BLAKE3, lossless JSON and the history mirror
+  then retire, as Ruling 138 intended.
 
 ## Findings (2026-09-30)
 
