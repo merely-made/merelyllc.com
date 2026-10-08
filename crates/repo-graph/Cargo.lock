@@ -4349,6 +4349,7 @@ name = "mer3ly-repo-graph"
 version = "0.1.0"
 dependencies = [
  "chirograph",
+ "edit-history",
  "euclid",
  "graphshell",
  "graphshell-client",

@@ -17,6 +17,7 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 cartography = { package = "mere-cartography", git = "https://github.com/merely-made/mere.git", rev = "9ccd5f411fd7e8631caceff55dae727c2e35b7a3" }
 chirograph = { git = "https://github.com/merely-made/mere.git", rev = "9ccd5f411fd7e8631caceff55dae727c2e35b7a3" }
+edit-history = { git = "https://github.com/merely-made/mere.git", rev = "9ccd5f411fd7e8631caceff55dae727c2e35b7a3" }
 euclid = { version = "0.22", features = ["serde"] }
 incipit = { git = "https://github.com/merely-made/mere.git", rev = "9ccd5f411fd7e8631caceff55dae727c2e35b7a3" }
 sceno = { git = "https://github.com/merely-made/mere.git", rev = "9ccd5f411fd7e8631caceff55dae727c2e35b7a3" }
