@@ -1,0 +1,38 @@
+# Route traces and face tracks for the community-radio page's message path lab.
+#
+# Generated outside the site, at the retinue revision below, and committed
+# unchanged (Ruling 127). The site build links neither `retinue` nor
+# `retinue-sim`; it only reads these files. Each command runs from the root of
+# a retinue checkout at `revision` and prints one file, which is stored here
+# byte for byte, including its trailing newline. `sha256` covers those bytes.
+# Each face track's own `trace_sha256` covers its route trace's canonical JSON,
+# which is the file without that trailing newline.
+#
+# `authority validate` and the site's tests check every hash and the pairing.
+schema = "mer3ly.retinue-trace-provenance/v1"
+repository = "https://github.com/merely-made/retinue"
+revision = "6aa78fc0d0ddd30e94db59470f30f47e669321dc"
+crate = "retinue-sim"
+crate_license = "MPL-2.0"
+
+[[trace]]
+id = "cold"
+route = "cold.route-trace.json"
+route_schema = "retinue-sim.route-trace/v1"
+route_command = "cargo run -q -p retinue-sim --example lab -- cold"
+route_sha256 = "338a971a0f955a91559cfa551c9e1d7813970e90fa81c2469252e668ee4c80f7"
+face = "cold.face-track.json"
+face_schema = "retinue-sim.face-track/v1"
+face_command = "cargo run -q -p retinue-sim --example lab --features face -- cold --faces"
+face_sha256 = "37f54a6e05a8021715195a6484a81e33c9c48bdc623126336130b8d37c2b4e8c"
+
+[[trace]]
+id = "warm"
+route = "warm.route-trace.json"
+route_schema = "retinue-sim.route-trace/v1"
+route_command = "cargo run -q -p retinue-sim --example lab -- warm"
+route_sha256 = "3e19cf91a228552fa348ca38a61e46f447b357236bf9b12d0118a4cedb6c793b"
+face = "warm.face-track.json"
+face_schema = "retinue-sim.face-track/v1"
+face_command = "cargo run -q -p retinue-sim --example lab --features face -- warm --faces"
+face_sha256 = "7d545cdf5e1609df489ce447b1684c3ff40f794ffe62b8d25003c1f1a2d5284a"
