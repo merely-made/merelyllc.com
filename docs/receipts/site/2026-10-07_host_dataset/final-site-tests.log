@@ -1,0 +1,112 @@
+
+running 27 tests
+test devices::tests::local_receipt_path_is_rejected ... ok
+test devices::tests::sellable_record_requires_purchase_link ... ok
+test discovery::tests::xml_escaping_covers_sitemap_entities ... ok
+test firmware_catalog::tests::tampered_retained_bytes_are_refused_before_site_generation ... ok
+test devices::tests::valid_manifest_parses ... ok
+test devices::tests::development_specimen_rejects_purchase_link ... ok
+test firmware_catalog::tests::retained_index_has_exact_provenance_and_expected_states ... ok
+test repository_history::tests::cursor_ticks_include_earliest_and_live_without_needing_timestamps ... ok
+test site::tests::html_formatter_puts_structural_elements_on_indented_lines ... ok
+test site::tests::metadata_escaping_is_safe ... ok
+test site::tests::structured_data_escaping_closes_no_script_element ... ok
+test repositories::tests::committed_authority_is_valid ... ok
+test repositories::tests::inventory_targets_never_contain_absolute_paths ... ok
+test artifact::tests::public_text_scan_rejects_private_boundaries_without_echoing_values ... ok
+test repositories::tests::live_github_roster_adds_fallbacks_and_removes_stale_relations ... ok
+test artifact::tests::public_text_scan_accepts_approved_github_links ... ok
+test site::tests::stylesheet_href_is_content_addressed ... ok
+test pages::devices::tests::tech_article_does_not_emit_an_offer ... ok
+test host_dataset::tests::changed_live_roster_is_reconciled_before_export ... ok
+test host_dataset::tests::disclosure_preserves_live_authority_occurrences_and_relationships ... ok
+test repository_history::tests::a_cursor_from_another_history_is_rejected_before_git_is_invoked ... ok
+test host_dataset::tests::published_content_and_evidence_change_the_revision ... ok
+test host_dataset::tests::order_and_operational_metadata_do_not_change_the_disclosure ... ok
+test host_dataset::tests::artifact_validation_refuses_a_changed_endpoint_or_revision ... ok
+test repository_history::tests::committed_authority_cursor_replays_the_committed_public_graph ... ok
+test repository_history::tests::sampled_projection_marks_unavailable_authority_without_erasing_it ... ok
+test repository_history::tests::public_projection_keeps_archived_lineage_and_fresh_live_authority ... ok
+
+test result: ok. 27 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.29s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+
+running 7 tests
+test catalog_layout_has_phone_specific_single_column_ledgers ... ok
+test catalog_exposes_two_honest_development_specimens ... ok
+test firmware_recipe_state_is_derived_from_the_retained_retinue_index ... ok
+test index_starts_with_roles_and_distinguishes_the_forms ... ok
+test profiles_render_the_retained_installer_ledger_before_sale ... ok
+test profile_order_puts_purchase_after_the_open_recipe ... ok
+test v4_profile_embeds_the_truth_bounded_radio_bench ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
+
+
+running 4 tests
+test stylesheet_has_responsive_and_accessibility_contracts ... ok
+test radio_lab_preserves_the_mesh_and_pilot_topology ... ok
+test static_baseline_stays_below_the_m3_budget ... ok
+test pages_are_static_genet_documents ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+
+running 4 tests
+test stylesheet_contains_keyboard_and_narrow_filter_contracts ... ok
+test public_metadata_cache_is_reduced_and_bounded ... ok
+test repository_page_projects_the_complete_typed_authority ... ok
+test repository_page_is_static_semantic_and_filterable ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.34s
+
+
+running 4 tests
+test graph_assets_and_responsive_styles_are_bounded ... ok
+test graphshell_sandbox_keeps_truth_face_arrangement_and_motion_distinct ... ok
+test graphshell_is_the_only_live_canvas_and_preserves_the_static_index ... ok
+test graph_and_semantic_index_share_exact_public_ids ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.31s
+
+
+running 7 tests
+test showcase_styles_cover_responsive_images_and_profile_relations ... ok
+test showcase_authority_is_bounded_and_ordered ... ok
+test home_projects_every_showcase_into_a_local_profile ... ok
+test visual_and_text_only_profiles_state_their_evidence_boundary ... ok
+test multi_image_showcases_render_every_capture_in_a_rotation ... ok
+test every_public_repository_has_one_semantic_project_profile ... ok
+test mere_profile_projects_one_authority_into_canvas_and_swatch_views ... ok
+
+test result: ok. 7 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+
+
+running 5 tests
+test robots_policy_names_the_canonical_sitemap ... ok
+test sitemap_projects_exact_canonical_authority_without_fake_freshness ... ok
+test every_html_document_links_the_discovery_identity ... ok
+test project_json_ld_names_the_public_source_and_work_type ... ok
+test project_social_images_follow_showcase_evidence ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.47s
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

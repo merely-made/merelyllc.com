@@ -1,0 +1,270 @@
+{
+  "schema": "mer3ly.public-artifact-receipt/v1",
+  "source_sha": "local",
+  "files": [
+    {
+      "path": "CNAME",
+      "bytes": 14,
+      "sha256": "815fc70b2c193ac98574f93d69b3dccd5454cfa6dfca92aeea6b103351ad2f15"
+    },
+    {
+      "path": "devices/index.html",
+      "bytes": 8522,
+      "sha256": "efa3c9dbbba0403dc53829732f8cc21016beda298004b2871a99c36d8f576c4a"
+    },
+    {
+      "path": "devices/t114-field-radio/index.html",
+      "bytes": 16718,
+      "sha256": "27b258a7bd54ded050aafeef5348b6eac600be6506a7074c196ea44a4f213f65"
+    },
+    {
+      "path": "devices/v4-desktop-radio/index.html",
+      "bytes": 21851,
+      "sha256": "c0b43068e4f1d59000901cabee29b02338d54cef385356fd140b00d2349f4c92"
+    },
+    {
+      "path": "devices.css",
+      "bytes": 14373,
+      "sha256": "6eda7cba827a46844396f7273ae72b53addd32dbcad5e56dbafee04326d0eee7"
+    },
+    {
+      "path": "favicon.svg",
+      "bytes": 331,
+      "sha256": "a119535dddc2aed38f38be5e643793ae8cee9d0c574ef299017b50274afc689d"
+    },
+    {
+      "path": "graph-sandbox.js",
+      "bytes": 68769,
+      "sha256": "66533543e16f038775f11935ec338694b515f40f8c54645818f136b595b1e5a4"
+    },
+    {
+      "path": "index.html",
+      "bytes": 12088,
+      "sha256": "e1357f7cbdabade305d24c8adb86b481118e02930b54dbf8783d6b975623b598"
+    },
+    {
+      "path": "mer3ly_repo_graph.js",
+      "bytes": 25061,
+      "sha256": "83324fe7568368facaabd59fb02b910f13a1d884ecd989f57958b38512501ae5"
+    },
+    {
+      "path": "mer3ly_repo_graph_bg.wasm",
+      "bytes": 1324953,
+      "sha256": "af158c381293654473a3429deeea61680e7b43cf6b722feb9401e9c274960b4c"
+    },
+    {
+      "path": "message-path-lab.js",
+      "bytes": 13484,
+      "sha256": "8ecc62f6618edcd249ad9a8ba6b89d5a9756e9577116b4bc6d1382ddb284a647"
+    },
+    {
+      "path": "og.jpg",
+      "bytes": 177124,
+      "sha256": "b9f429b46ddecba4cc7b8fa7d641045d289d4bc53498254cbe9e86ac6a26b71d"
+    },
+    {
+      "path": "projection-proof.js",
+      "bytes": 30479,
+      "sha256": "59d5d99f92774a75ab11fc34200853d6cb8a7b3c02d177804fe67bfd3d9d2ba7"
+    },
+    {
+      "path": "projection-scene.json",
+      "bytes": 15870,
+      "sha256": "06c45c12f1301bff142f6cb392332ca1843aebf9ef173f4de63e8eeea157217d"
+    },
+    {
+      "path": "projects/cleromancy/index.html",
+      "bytes": 9673,
+      "sha256": "bb6a1f8fde57102a65d3bf6a38449180c4c7c0c92fbd299dcd576e43a8b49629"
+    },
+    {
+      "path": "projects/emblem/index.html",
+      "bytes": 9103,
+      "sha256": "08d2a57c7620cebc541006722ca27dc55b133a8070a18abf354f8326d0bedc50"
+    },
+    {
+      "path": "projects/genet/index.html",
+      "bytes": 14967,
+      "sha256": "a5644d3ae58987f06e6f1467a710b9b163d862ffa26fff5e57402b58429f4cf0"
+    },
+    {
+      "path": "projects/isocosm/index.html",
+      "bytes": 12620,
+      "sha256": "bff0748ef721317e0439639b2296bd6ebaa21f1405a4fb3bdc4a4ce9aa52a5b3"
+    },
+    {
+      "path": "projects/knot-editor/index.html",
+      "bytes": 10300,
+      "sha256": "a0f934874e80b7680a0582960ef73c444595511e1ee40f607125b3bc97abe610"
+    },
+    {
+      "path": "projects/mer3ly/index.html",
+      "bytes": 8986,
+      "sha256": "fae88b97082324d980413569031f95e30eac80c5790eed69ff88cbee289ed303"
+    },
+    {
+      "path": "projects/mere/index.html",
+      "bytes": 33994,
+      "sha256": "fd7d48e5836e7d2a4da19aa0725f9d35d3a804aaef4e3e626656446d55d3dc06"
+    },
+    {
+      "path": "projects/mora/index.html",
+      "bytes": 9101,
+      "sha256": "674f6bb277ceb694099e3c6dd1f8f6fac1a8aa21b5314b06a8f39c35823ed7b3"
+    },
+    {
+      "path": "projects/netrender/index.html",
+      "bytes": 10537,
+      "sha256": "37f4d285addce430f48912c4647598a51d0a59624e3b4c089295b86b53dc963b"
+    },
+    {
+      "path": "projects/org-profile/index.html",
+      "bytes": 8843,
+      "sha256": "d4c85706e05f7c0baf3e1e6ba42594065ee6d9fc511ef4f20fe56ebdf00af036"
+    },
+    {
+      "path": "projects/pipit/index.html",
+      "bytes": 9061,
+      "sha256": "b5b87c12dcd31a21a6ba324e6c9e556f43d9e94e21f8b0fa667617ccd8216570"
+    },
+    {
+      "path": "projects/retinue/index.html",
+      "bytes": 9797,
+      "sha256": "d71467e13cebed0edeff92aeb23989d376c5a899c6fc5e1ed03279c58152a529"
+    },
+    {
+      "path": "projects/smolweb/index.html",
+      "bytes": 9210,
+      "sha256": "c3e7e83e9d89525d974e8fc64317fc7c228cbca7301f63f422a52810dd5d159c"
+    },
+    {
+      "path": "projects/turnstone/index.html",
+      "bytes": 11164,
+      "sha256": "ba956ac3a3bdd7224bf9eda6a4051fa191055dc612ae46076d8e9760c7c0734c"
+    },
+    {
+      "path": "projects/turquet/index.html",
+      "bytes": 9541,
+      "sha256": "00078169b623d8fa48b56955eaf7f663482ec748faf0b8393dff0ff9d952c73a"
+    },
+    {
+      "path": "projects/vano/index.html",
+      "bytes": 9215,
+      "sha256": "ccc1d35b76b9916c05e96043f7e1c05ed88f0ec63a5c2e02691d1188ce4e7d2d"
+    },
+    {
+      "path": "projects/wavicle/index.html",
+      "bytes": 8782,
+      "sha256": "c53c6cbb6019d1a4877b0c4043f657df30a4860a34b16a52e4a53bb5c822dde3"
+    },
+    {
+      "path": "projects/wgpu-graft/index.html",
+      "bytes": 9435,
+      "sha256": "c1adf597d1c1e21d8dbfc64e1830b5fc39b4f0dcfced42e26313b95e4b7080a7"
+    },
+    {
+      "path": "projects/wgpu-scry/index.html",
+      "bytes": 9335,
+      "sha256": "17a92e1c376cba858b478278d678b3a8f6bcb38d655860a8770066f454462846"
+    },
+    {
+      "path": "projects/wgpu-weld/index.html",
+      "bytes": 9325,
+      "sha256": "82461250e5c5ba3ca2239cdb4e01efb1e85fb66b4435372fe35456892c4283e5"
+    },
+    {
+      "path": "projects/woodshed/index.html",
+      "bytes": 10489,
+      "sha256": "d6f86b6d3045334e5c31866161aa69539fea1ec0fedab70d7d017eeaa6caf7e4"
+    },
+    {
+      "path": "radio-simulator.js",
+      "bytes": 9774,
+      "sha256": "0fc89b14bb7bc4512f776b84f5907d22b586c13bcc6aebdd7ecc35c1f574ecac"
+    },
+    {
+      "path": "radio.html",
+      "bytes": 20198,
+      "sha256": "8a561bff99b36d08d50b7f433c32c37cae92a34886c7f7ec679195acd467eedf"
+    },
+    {
+      "path": "repos/index.html",
+      "bytes": 222937,
+      "sha256": "0f786327eb81593f3232d47184d4434796e86fff9fc2a629a4ac97de36990bb7"
+    },
+    {
+      "path": "repository-host-dataset.json",
+      "bytes": 65038,
+      "sha256": "1b16d990958c3fd1fe9cd17a3fa4a98bc62441f28d23fb92ecd7f9d7abf7eca0"
+    },
+    {
+      "path": "robots.txt",
+      "bytes": 66,
+      "sha256": "cad4faaa629dced08a4e3367b9a20610ec6add1e597dd84416cc64ea6115ab30"
+    },
+    {
+      "path": "showcase/genet-2.png",
+      "bytes": 208886,
+      "sha256": "e8d40c3ebdd8ba34c247290443645e6b52f5a3639dae0c4a70b9bd5140988d6a"
+    },
+    {
+      "path": "showcase/genet-3.png",
+      "bytes": 110441,
+      "sha256": "2a4576382f033e0e7a2ec6b4243f7c489375f92369d75cb684c5fabac0aa99c6"
+    },
+    {
+      "path": "showcase/genet.png",
+      "bytes": 385399,
+      "sha256": "e1882a0f7fc61f34bfd19fc34b516a70025e2c38e6e07298bb8297740d36f221"
+    },
+    {
+      "path": "showcase/isocosm.png",
+      "bytes": 481672,
+      "sha256": "b9bd331e044793834db8b16b0b44ae6c3206537611ebbfb7285ad0579456e5cc"
+    },
+    {
+      "path": "showcase/mere.png",
+      "bytes": 166440,
+      "sha256": "aed596c079deb4fa9e49c222430a701c7a6321b62e607ec73639f0e8c8da4efb"
+    },
+    {
+      "path": "showcase/turnstone.png",
+      "bytes": 115641,
+      "sha256": "fe62838200696c98a405ce7d3b2831bda2d7d301b95291362149e9a6b7dca86a"
+    },
+    {
+      "path": "showcase/woodshed.png",
+      "bytes": 288872,
+      "sha256": "4d703d8eb5a5db3fcfebe7fb09b4d7a42b8a31e1a9fa736a80b034700a9ca1dd"
+    },
+    {
+      "path": "site.css",
+      "bytes": 65099,
+      "sha256": "ca11149ab7719ec809aed4a90d17796d5227f991e81213fdee07acce18b631e2"
+    },
+    {
+      "path": "sitemap.xml",
+      "bytes": 1818,
+      "sha256": "f092cfde577654b652081f8f0b3ccd17b37a4573b785503cbe27a801b2d4b160"
+    }
+  ],
+  "total_bytes": 4105396,
+  "repositories": 21,
+  "relation_text_projections": 60,
+  "graph_nodes": 21,
+  "graph_edges": 30,
+  "project_profiles": 21,
+  "project_relation_projections": 60,
+  "showcase_images": 5,
+  "sitemap_urls": 27,
+  "project_social_previews": 21,
+  "project_structured_records": 21,
+  "projection_score_items": 11,
+  "projection_final_revision": 5,
+  "projection_active_relations": 12,
+  "device_profiles": 2,
+  "device_structured_records": 2,
+  "sellable_devices": 0,
+  "metadata_generated_at_utc": "2026-09-24T11:46:10Z",
+  "metadata_sha256": "4d0206de00b8e9ad141a3fecac51adb99f81826ff70694d373cc2d08d2796aaf"
+}
