@@ -2,6 +2,7 @@ use std::collections::{BTreeMap, HashMap, HashSet};
 
 mod arrangement;
 mod portable;
+mod proof_session;
 
 use arrangement::{degree_weights, radial_rings, stack_layers};
 use cartography::{
@@ -33,6 +34,7 @@ pub use portable::{
     check_shelfmark, consume_portable_projection, portable_projection,
     projection_capture_with_placement_json, read_portable_projection,
 };
+pub use proof_session::{ProjectionSession, RestoreRefusal};
 
 const PREFERRED_FOCUS_REPOSITORY: &str = "mere";
 const DEFAULT_ARRANGEMENT: &str = "graph_layout:radial";

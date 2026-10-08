@@ -399,6 +399,20 @@ pub fn consume_portable_projection(
 pub fn read_portable_projection(
     artifacts: &PortableProjection,
 ) -> Result<ProjectionReading, String> {
+    open_portable_projection(artifacts).map(|opened| opened.reading)
+}
+
+/// The checked artifacts: what a build-time reader renders, plus the decoded
+/// capture and trace that the browser session replays.
+pub(crate) struct OpenedProjection {
+    pub(crate) reading: ProjectionReading,
+    pub(crate) trace: SceneTrace,
+}
+
+/// Every check [`read_portable_projection`] makes, keeping the decoded trace.
+pub(crate) fn open_portable_projection(
+    artifacts: &PortableProjection,
+) -> Result<OpenedProjection, String> {
     let capture = ProjectionCaptureV2::decode(&artifacts.capture)
         .map_err(|error| format!("invalid capture: {error}"))?;
     if capture.version != PROJECTION_CAPTURE_V2 {
@@ -501,7 +515,7 @@ pub fn read_portable_projection(
         })
         .collect::<Result<Vec<_>, String>>()?;
 
-    Ok(ProjectionReading {
+    let reading = ProjectionReading {
         receipt: ProjectionReceipt {
             schema: PROJECTION_RECEIPT_SCHEMA.to_owned(),
             capture_address: shelfmark.projection.clone(),
@@ -520,7 +534,8 @@ pub fn read_portable_projection(
         relations,
         steps,
         epoch: scene.epoch.0.to_string(),
-    })
+    };
+    Ok(OpenedProjection { reading, trace })
 }
 
 /// A step's selection annotation: `{"kind": "node" | "edge", "id": ...}`, and
