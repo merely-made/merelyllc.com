@@ -46,10 +46,16 @@ unsafe_code = "forbid"
 [lints.clippy]
 all = "warn"
 
+# Measured 2026-10-08 with the projection session (site canvas plan, Ruling
+# 140): against "s" with thin LTO, "z" with fat LTO cuts the graph Wasm from
+# 1,530,360 B (503,449 B gzip, 378,279 B brotli) to 1,363,161 B (430,962 B gzip,
+# 337,563 B brotli). Seiche ticks measured about 0.065 ms against 0.043 ms in a
+# browser, well inside a frame. wasm-opt shrinks raw bytes but grows both
+# compressed sizes, so it stays out.
 [profile.release]
 codegen-units = 1
-lto = "thin"
-opt-level = "s"
+lto = "fat"
+opt-level = "z"
 panic = "abort"
 strip = "symbols"
 
