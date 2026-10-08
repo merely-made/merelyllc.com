@@ -13,6 +13,7 @@ use sha2::{Digest, Sha256};
 use crate::devices::{DeviceCatalog, DeviceRecord, DeviceStatus};
 use crate::discovery::{ROBOTS_TXT, canonical_urls_from_authority_and_devices};
 use crate::host_dataset::{HOST_DATASET_FILE, validate_repository_host_dataset};
+use crate::pages::devices;
 use crate::repositories::{Authority, PublicMetadataCache, RepositoryRecord, ShowcaseManifest};
 use crate::site::{
     DEFAULT_SOCIAL_IMAGE_ALT, DEFAULT_SOCIAL_IMAGE_URL, ORGANIZATION_ID, WEBSITE_ID,
@@ -36,6 +37,8 @@ const BASE_FILES: &[&str] = &[
     "projection-scene.json",
     "radio.html",
     "radio-simulator.js",
+    "radio_mirror.js",
+    "radio_mirror_bg.wasm",
     HOST_DATASET_FILE,
     "repos/index.html",
     "robots.txt",
@@ -64,6 +67,7 @@ pub struct ArtifactReceipt {
     projection_active_relations: usize,
     device_profiles: usize,
     device_structured_records: usize,
+    radio_mirror_screens: usize,
     sellable_devices: usize,
     metadata_generated_at_utc: String,
     metadata_sha256: String,
@@ -136,6 +140,18 @@ pub fn validate_public_artifact(
     }
     for device in devices.ordered() {
         expected_paths.insert(format!("devices/{}/index.html", device.id));
+    }
+    let radio_screens = match mer3ly_radio_mirror::static_screens() {
+        Ok(screens) => screens,
+        Err(error) => {
+            errors.push(format!(
+                "radio-mirror could not render the V4 screens: {error}"
+            ));
+            Vec::new()
+        }
+    };
+    for screen in &radio_screens {
+        expected_paths.insert(screen.path.clone());
     }
     for showcase in &showcases.showcase {
         expected_paths.insert(showcase.image.clone());
@@ -225,6 +241,32 @@ pub fn validate_public_artifact(
         "radio simulator",
         &mut errors,
     );
+    validate_copied_asset(
+        artifact_root,
+        source_root,
+        "radio_mirror.js",
+        "assets/radio_mirror.js",
+        "radio-mirror runtime glue",
+        &mut errors,
+    );
+    validate_copied_asset(
+        artifact_root,
+        source_root,
+        "radio_mirror_bg.wasm",
+        "assets/radio_mirror_bg.wasm",
+        "radio-mirror runtime",
+        &mut errors,
+    );
+    for screen in &radio_screens {
+        match fs::read(artifact_root.join(&screen.path)) {
+            Ok(bytes) if bytes == screen.png => {}
+            Ok(_) => errors.push(format!(
+                "radio-mirror screen {} differs from its pinned rendering",
+                screen.path
+            )),
+            Err(_) => errors.push(format!("radio-mirror screen {} is missing", screen.path)),
+        }
+    }
 
     let home = read_text(artifact_root, "index.html", &mut errors);
     let radio = read_text(artifact_root, "radio.html", &mut errors);
@@ -438,10 +480,8 @@ pub fn validate_public_artifact(
                 device.id
             ));
         }
-        if device.id == "v4-desktop-radio"
-            && !document.contains("<script type=\"module\" src=\"/radio-simulator.js?v=")
-        {
-            errors.push("V4 device profile is missing its radio simulator module".to_owned());
+        if device.id == "v4-desktop-radio" {
+            validate_radio_bench(&document, &radio_screens, &mut errors);
         }
         if device.id != "v4-desktop-radio" && document.contains("data-radio-simulator") {
             errors.push(format!(
@@ -558,6 +598,11 @@ pub fn validate_public_artifact(
         Ok(_) => errors.push("repository graph Wasm has an invalid magic header".to_owned()),
         Err(error) => errors.push(format!("could not read repository graph Wasm: {error}")),
     }
+    match fs::read(artifact_root.join("radio_mirror_bg.wasm")) {
+        Ok(bytes) if bytes.starts_with(b"\0asm") => {}
+        Ok(_) => errors.push("radio-mirror Wasm has an invalid magic header".to_owned()),
+        Err(error) => errors.push(format!("could not read radio-mirror Wasm: {error}")),
+    }
 
     let metadata_bytes = match fs::read(metadata_path) {
         Ok(bytes) => bytes,
@@ -594,6 +639,7 @@ pub fn validate_public_artifact(
                 .map_or(0, |receipt| receipt.active_relations),
             device_profiles: device_ids.len(),
             device_structured_records,
+            radio_mirror_screens: radio_screens.len(),
             sellable_devices,
             metadata_generated_at_utc: metadata.generated_at_utc.clone(),
             metadata_sha256: sha256(&metadata_bytes),
@@ -753,6 +799,58 @@ fn scan_public_text(
             break;
         }
     }
+}
+
+/// The V4 bench: its module, its status documents, every rendered screen with
+/// its text projection, and the statement of where the screens come from.
+fn validate_radio_bench(
+    document: &str,
+    screens: &[mer3ly_radio_mirror::StaticScreen],
+    errors: &mut Vec<String>,
+) {
+    let module = format!(
+        "<script type=\"module\" src=\"{}\"></script>",
+        devices::radio_simulator_href()
+    );
+    if !document.contains(&module) {
+        errors.push(
+            "V4 device profile is missing its versioned radio-mirror bench module".to_owned(),
+        );
+    }
+    if inline_json(document, devices::RADIO_MIRROR_SCENARIOS_ID)
+        != Some(devices::radio_mirror_scenarios_embedded().as_str())
+    {
+        errors.push(
+            "V4 radio bench scenarios differ from the pinned radio-mirror fixtures".to_owned(),
+        );
+    }
+    let statement = escape_html_text(&devices::radio_mirror_source_statement());
+    if !document.contains(&statement) {
+        errors.push("V4 radio bench does not state where its screens come from".to_owned());
+    }
+    if document.contains("accurate static example") {
+        errors.push("V4 radio bench repeats the retired static-example claim".to_owned());
+    }
+    for screen in screens {
+        let image = format!(
+            "src=\"/{}\" alt=\"{}\"",
+            screen.path,
+            escape_html_attr(&devices::radio_screen_alt(&screen.lines))
+        );
+        if !document.contains(&image) {
+            errors.push(format!(
+                "V4 radio bench is missing {} with its text projection",
+                screen.path
+            ));
+        }
+    }
+}
+
+fn escape_html_text(value: &str) -> String {
+    value
+        .replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
 }
 
 fn validate_cname(root: &Path, relative: &str, errors: &mut Vec<String>) {

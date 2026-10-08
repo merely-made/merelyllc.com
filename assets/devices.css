@@ -328,84 +328,133 @@
 }
 
 .radio-oled {
+  position: relative;
   aspect-ratio: 2 / 1;
   min-height: 0;
-  padding: clamp(10px, 2vw, 18px);
-  display: grid;
-  grid-template-rows: auto 1fr auto;
+  padding: clamp(6px, 1.4vw, 12px);
   overflow: hidden;
   border: 5px solid #3b382f;
   border-radius: 7px;
-  background: #03070b;
-  color: #eaf2ff;
+  background: #000;
   box-shadow:
     inset 0 0 24px rgb(111 168 219 / 12%),
     0 0 0 1px #faf8ef;
-  font: 500 clamp(0.62rem, 1.3vw, 0.92rem)/1.08 var(--font-mono);
-  letter-spacing: 0.035em;
-  text-shadow: 0 0 8px rgb(190 221 255 / 38%);
 }
 
-.radio-oled-header,
-.radio-oled-ticker {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.radio-oled:focus-visible {
+  outline: 3px solid var(--ember);
+  outline-offset: 3px;
 }
 
-.radio-oled-header {
-  padding-bottom: 6px;
-  border-bottom: 2px solid currentColor;
+.radio-oled img,
+.radio-oled canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
-.radio-oled-header span {
-  opacity: 0.72;
+.radio-oled img[hidden],
+.radio-oled canvas[hidden],
+.radio-handoff[hidden],
+.radio-control-help[hidden] {
+  display: none;
 }
 
-.radio-oled-body {
-  min-height: 0;
-  padding: clamp(5px, 1vw, 9px) 0;
+.radio-oled[data-brightness="1"] canvas { opacity: 0.55; }
+.radio-oled[data-brightness="2"] canvas { opacity: 0.72; }
+.radio-oled[data-brightness="4"] canvas,
+.radio-oled[data-brightness="5"] canvas { opacity: 1; }
+.radio-oled[data-brightness="3"] canvas { opacity: 0.9; }
+
+.radio-oled[data-panel-lit="false"] canvas {
+  opacity: 0.18;
+}
+
+.radio-handoff {
+  height: 100%;
+  padding: clamp(4px, 1vw, 10px);
   display: grid;
-  grid-template-rows: repeat(4, minmax(0, 1fr));
-  align-items: center;
+  align-content: center;
+  gap: 6px;
+  color: #eaf2ff;
+  font: 500 clamp(0.6rem, 1.2vw, 0.8rem)/1.35 var(--font-mono);
 }
 
-.radio-oled-row {
-  min-width: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: clip;
+.radio-handoff-kicker {
+  color: #f0a24a;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
-.radio-oled-row.is-selected {
-  background: #eaf2ff;
-  color: #03070b;
-  text-shadow: none;
+.radio-screen-reading {
+  width: min(100%, 680px);
+  margin-top: 18px;
 }
 
-.radio-oled-ticker {
-  padding-top: 5px;
-  border-top: 1px solid rgb(234 242 255 / 45%);
-  opacity: 0.78;
-  font-size: 0.78em;
-  white-space: nowrap;
+.radio-screen-reading-label {
+  color: var(--oxblood);
+  font: 500 0.59rem/1.35 var(--font-mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
 }
 
-.radio-oled[data-screen-mode="fault"] .radio-oled-row:first-child {
-  padding: 2px 4px;
-  background: #eaf2ff;
-  color: #03070b;
-  text-shadow: none;
+.radio-screen-text {
+  margin: 6px 0 0;
+  padding: 10px 12px;
+  list-style: none;
+  border-left: 3px solid var(--lake-edge);
+  background: var(--paper);
+  color: var(--shell);
+  font: 500 0.68rem/1.5 var(--font-mono);
+  overflow-wrap: anywhere;
 }
 
-.radio-oled[data-screen-mode="off"] {
-  color: #68727c;
-  text-shadow: none;
+.radio-screen-gallery {
+  padding: 26px 34px 30px;
+  border-top: 1px solid var(--line-soft);
 }
 
-.radio-oled[data-screen-mode="off"] .radio-oled-header,
-.radio-oled[data-screen-mode="off"] .radio-oled-ticker {
-  border-color: transparent;
+.radio-screen-gallery h4 {
+  color: var(--oxblood);
+  font: 500 0.66rem/1.35 var(--font-mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.radio-screen-gallery > p {
+  max-width: 69ch;
+  margin-top: 8px;
+  color: var(--muted);
+  font: 0.68rem/1.55 var(--font-mono);
+}
+
+.radio-screen-grid {
+  margin: 18px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 14px;
+  list-style: none;
+}
+
+.radio-screen-figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 3px solid #3b382f;
+  border-radius: 4px;
+  background: #000;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.radio-screen-figure figcaption {
+  margin-top: 5px;
+  color: var(--muted);
+  font: 0.6rem/1.3 var(--font-mono);
+  overflow-wrap: anywhere;
 }
 
 .radio-hardware-status {
@@ -429,15 +478,15 @@
   background: #4c2d1e;
 }
 
-.radio-led[data-led-state="activity"] {
+.radio-led[data-led-state="double-pulse"] {
   animation: radio-led-double 0.65s steps(1) 1;
 }
 
-.radio-led[data-led-state="operation"] {
+.radio-led[data-led-state="slow-pulse"] {
   animation: radio-led-slow 1.3s steps(1) infinite;
 }
 
-.radio-led[data-led-state="fault"] {
+.radio-led[data-led-state="fault-triple"] {
   animation: radio-led-fault 1.2s steps(1) infinite;
 }
 
@@ -733,9 +782,17 @@
   }
 
   .radio-oled {
-    padding: 9px;
+    padding: 5px;
     border-width: 4px;
-    font-size: clamp(0.52rem, 2.55vw, 0.68rem);
+  }
+
+  .radio-screen-gallery {
+    padding-right: 20px;
+    padding-left: 20px;
+  }
+
+  .radio-screen-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .radio-control-pad {
@@ -748,9 +805,9 @@
     animation: none;
   }
 
-  .radio-led[data-led-state="activity"],
-  .radio-led[data-led-state="operation"],
-  .radio-led[data-led-state="fault"] {
+  .radio-led[data-led-state="double-pulse"],
+  .radio-led[data-led-state="slow-pulse"],
+  .radio-led[data-led-state="fault-triple"] {
     background: #f0a24a;
   }
 }
