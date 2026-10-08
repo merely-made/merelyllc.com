@@ -317,7 +317,9 @@ try {
     await pathLab.locator('[data-lab-edge="fire-water"]').getAttribute("class"),
     /is-cut.*is-refused|is-refused.*is-cut/,
   );
-  assert.match(await pathStatus.textContent(), /Behind the cut, the water tower does not hear it/);
+  const beforeExpiry = warmPath.milestones.filter((row) => row.event < firstExpiry.event).at(-1);
+  assert.ok((await pathStatus.textContent()).endsWith(beforeExpiry.text));
+  assert.match(await pathStatus.textContent(), /Behind the cut, the \S.* does not hear it/);
 
   await pathLab.locator('[data-path-action="play"]').click();
   assert.equal(await pathLab.getAttribute("data-playing"), "true");
