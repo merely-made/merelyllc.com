@@ -234,6 +234,11 @@ fn mere_profile_projects_one_authority_into_canvas_and_swatch_views() {
     }
     assert!(mere.contains(&format!("data-scene-epoch=\"{epoch}\"")));
     assert!(projection_proof.contains("dataset.sceneEpoch = this.session.epoch()"));
+    // Ruling 140: with the script running, the reading's opening says replay
+    // loads on interaction instead of saying the scene needs JavaScript.
+    assert!(projection_proof.contains("lead.textContent = lead.dataset.scriptedLead"));
+    assert!(mere.contains(mer3ly_site::projection_proof::NO_SCRIPT_READING_LEAD));
+    assert!(mere.contains(mer3ly_site::projection_proof::SCRIPTED_READING_LEAD));
 
     // The no-script reading is the trace, read at build time.
     assert_eq!(

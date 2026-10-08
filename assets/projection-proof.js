@@ -83,6 +83,10 @@ async function startProjectionProof(proofRoot) {
 
   proofRoot.dataset.linkState = link.state;
   if (link.notice) controls.notify(link.notice);
+  // The reading's no-script opening says the scene needs JavaScript; with the
+  // script running, replay is a first interaction away (Ruling 140).
+  const lead = proofRoot.querySelector("[data-projection-reading-lead]");
+  if (!replay.session && lead) lead.textContent = lead.dataset.scriptedLead;
   proofRoot.querySelector("[data-projection-interface]").hidden = false;
   proofRoot.dataset.ready = "true";
   proofRoot.dataset.state = "ready";
@@ -92,7 +96,7 @@ async function startProjectionProof(proofRoot) {
     link.state === "restored"
       ? "Shared scene trace restored. Both projections replay the same capture and trace."
       : (link.notice ??
-          `${proof.nodes.length} projects and ${proof.relations.length} relationships loaded from one Scenograph capture.`),
+          `${proof.nodes.length} projects and ${proof.relations.length} relationships loaded from one Scenograph capture. Interact with the scene to load live replay.`),
   );
 }
 
@@ -268,6 +272,8 @@ class Replay {
       proofRoot.removeAttribute("aria-busy");
       proofRoot.querySelector("[data-projection-interface]").hidden = true;
       proofRoot.querySelector("[data-projection-fallback]").hidden = false;
+      const lead = proofRoot.querySelector("[data-projection-reading-lead]");
+      if (lead) lead.textContent = "Live replay could not load, so this";
       const notice = proofRoot.querySelector("[data-projection-notice]");
       notice.textContent =
         "The scene replay could not load, so the scene cannot change here. The trace reading remains available.";
