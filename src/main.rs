@@ -4,8 +4,10 @@ use std::path::{Path, PathBuf};
 
 use mer3ly_site::discovery::{ROBOTS_TXT, sitemap};
 use mer3ly_site::host_dataset::{HOST_DATASET_FILE, repository_host_dataset_json};
+use mer3ly_site::message_path;
 use mer3ly_site::pages::{devices, home, projects, radio, repositories};
 use mer3ly_site::repositories::PublicSiteData;
+use mer3ly_site::retinue_traces::TraceSet;
 use mer3ly_site::site::{DEVICE_CSS, SITE_CSS};
 
 const FAVICON: &[u8] = include_bytes!("../assets/favicon.svg");
@@ -107,7 +109,22 @@ fn build_site(output: &Path) -> std::io::Result<()> {
     fs::write(output.join("radio-simulator.js"), RADIO_SIMULATOR)?;
     fs::write(output.join("radio_mirror.js"), RADIO_MIRROR_WASM_GLUE)?;
     fs::write(output.join("radio_mirror_bg.wasm"), RADIO_MIRROR_WASM)?;
-    for screen in mer3ly_radio_mirror::static_screens().map_err(std::io::Error::other)? {
+    // The message path lab's committed traces, published unchanged, and its
+    // no-script screen.
+    let traces = TraceSet::embedded().map_err(|errors| std::io::Error::other(errors.join("\n")))?;
+    for (path, bytes) in traces.artifact_files() {
+        let destination = output.join(path);
+        if let Some(parent) = destination.parent() {
+            fs::create_dir_all(parent)?;
+        }
+        fs::write(destination, bytes)?;
+    }
+    let lab_screen = message_path::static_screen(&traces).map_err(std::io::Error::other)?;
+    let screens = mer3ly_radio_mirror::static_screens()
+        .map_err(std::io::Error::other)?
+        .into_iter()
+        .chain([lab_screen]);
+    for screen in screens {
         let destination = output.join(&screen.path);
         if let Some(parent) = destination.parent() {
             fs::create_dir_all(parent)?;

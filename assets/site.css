@@ -1720,21 +1720,41 @@ h1 {
   cursor: ew-resize;
 }
 
-.message-path-toggle {
+.message-path-scenario {
+  min-width: 0;
+  max-width: 100%;
+  flex: 1 1 280px;
   min-height: 44px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
   color: var(--muted);
   font: 500 0.62rem/1.2 var(--font-mono);
-  cursor: pointer;
 }
 
-.message-path-toggle input {
-  width: 18px;
-  height: 18px;
-  margin: 0;
-  accent-color: var(--oxblood);
+.message-path-scenario select {
+  min-width: 0;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--ink);
+  font: 500 0.66rem/1.2 var(--font-mono);
+}
+
+.message-path-notice {
+  margin-top: 16px;
+  padding: 10px 12px;
+  border-left: 3px solid var(--ember);
+  background: var(--cream);
+  color: var(--ink);
+  font: italic 0.78rem/1.45 var(--font-prose);
+}
+
+.message-path-notice[hidden] {
+  display: none;
 }
 
 .message-path-status {
@@ -1784,10 +1804,8 @@ h1 {
     var(--paper);
   background-size: 32px 32px;
   /* The stage yields the vertical scroll so it never becomes a region a
-     phone cannot get past; its nodes carry touch-action: none, which only
-     narrows this, so one-finger node dragging is unchanged. Nothing here
-     scrolls or pans within the stage: node positions are clamped inside
-     it, so there is no off-stage content to reach. */
+     phone cannot get past. Its radios are fixed, illustrative positions
+     and are only pressed, never dragged. */
   touch-action: pan-y;
 }
 
@@ -1826,11 +1844,16 @@ h1 {
   opacity: 1;
 }
 
-.message-path-edge.is-blocked {
+.message-path-edge.is-cut {
   stroke: var(--line);
   stroke-width: 1.5;
   stroke-dasharray: 7 7;
   opacity: 1;
+}
+
+.message-path-edge.is-cut.is-refused {
+  stroke: var(--oxblood);
+  stroke-width: 3;
 }
 
 .message-path-packet {
@@ -1854,8 +1877,7 @@ h1 {
   border: 0;
   background: transparent;
   color: var(--muted);
-  cursor: grab;
-  touch-action: none;
+  cursor: pointer;
 }
 
 .message-path-node-mark {
@@ -1890,6 +1912,26 @@ h1 {
   text-align: center;
 }
 
+.message-path-node-label small {
+  display: block;
+  color: var(--faint);
+  font-size: 0.52rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.message-path-node.is-heard .message-path-node-mark {
+  box-shadow: 0 0 0 8px rgba(41, 72, 107, 0.18);
+}
+
+.message-path-node.is-selected .message-path-node-mark {
+  border-width: 4px;
+}
+
+.message-path-node.is-selected .message-path-node-label {
+  outline: 1px solid var(--oxblood);
+}
+
 .message-path-node:hover .message-path-node-mark,
 .message-path-node:focus-visible .message-path-node-mark,
 .message-path-node.is-active .message-path-node-mark {
@@ -1903,19 +1945,10 @@ h1 {
   outline-offset: 4px;
 }
 
-.message-path-node.is-dragging {
-  cursor: grabbing;
-}
-
-.message-path-help,
-.message-path-fallback {
+.message-path-help {
   margin-top: 12px;
   color: var(--faint);
   font: italic 0.68rem/1.45 var(--font-prose);
-}
-
-[data-message-path-lab][data-ready="true"] .message-path-fallback {
-  display: none;
 }
 
 .message-path-projections {
@@ -1930,40 +1963,50 @@ h1 {
   padding: 14px;
 }
 
-.message-path-led {
+.message-path-page {
   color: var(--oxblood);
 }
 
+/* The radio's 128 x 64 panel, drawn by radio-mirror at whole-pixel scale. */
 .message-path-oled {
-  min-height: 176px;
-  padding: 12px;
-  border: 7px solid var(--shell);
-  border-radius: 8px;
-  background: #b8d6c1;
-  color: #14271e;
-  box-shadow: inset 0 0 18px rgba(20, 39, 30, 0.18);
-  font: 600 0.63rem/1.35 var(--font-mono);
+  aspect-ratio: 2 / 1;
+  overflow: hidden;
+  border: 5px solid var(--shell);
+  border-radius: 7px;
+  background: #000;
 }
 
-.message-path-oled-header,
-.message-path-screen-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 10px;
+.message-path-oled img,
+.message-path-oled canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 
-.message-path-oled-header {
-  margin-bottom: 7px;
-  padding-bottom: 5px;
-  border-bottom: 1px solid rgba(20, 39, 30, 0.4);
+.message-path-oled img[hidden],
+.message-path-oled canvas[hidden] {
+  display: none;
 }
 
-.message-path-screen-row + .message-path-screen-row {
-  margin-top: 4px;
+.message-path-reading-label {
+  margin-top: 10px;
+  color: var(--oxblood);
+  font: 500 0.56rem/1.35 var(--font-mono);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
 }
 
-.message-path-screen-row strong {
-  font: inherit;
+.message-path-screen-text {
+  margin: 4px 0 0;
+  padding: 8px 10px;
+  list-style: none;
+  border-left: 3px solid var(--lake-edge);
+  background: var(--paper);
+  color: var(--shell);
+  font: 500 0.62rem/1.5 var(--font-mono);
+  overflow-wrap: anywhere;
 }
 
 .message-path-radio-note {
@@ -1973,19 +2016,45 @@ h1 {
 }
 
 .message-path-ledger ol {
+  position: relative;
+  max-height: 420px;
+  overflow-y: auto;
   list-style: none;
 }
 
 .message-path-event {
   min-height: 38px;
   display: grid;
-  grid-template-columns: 26px minmax(0, 1fr);
+  grid-template-columns: 58px minmax(0, 1fr);
   align-items: center;
   gap: 8px;
   padding: 6px 4px;
   border-top: 1px solid var(--line-soft);
   color: var(--faint);
   font: 500 0.58rem/1.35 var(--font-mono);
+}
+
+/* With script, each row is a button that jumps to its event. */
+.message-path-event > button {
+  grid-column: 1 / -1;
+  width: 100%;
+  min-height: 38px;
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.message-path-event > button:focus-visible {
+  outline: 3px solid var(--ember);
+  outline-offset: 2px;
 }
 
 .message-path-event::before {
@@ -1995,6 +2064,7 @@ h1 {
 
 .message-path-event-index {
   color: var(--line);
+  white-space: nowrap;
 }
 
 .message-path-event.is-complete {
@@ -3234,8 +3304,9 @@ tbody tr:last-child td {
     flex-basis: 100%;
   }
 
-  .message-path-toggle {
+  .message-path-scenario {
     order: 4;
+    flex-basis: 100%;
   }
 
   .message-path-status {

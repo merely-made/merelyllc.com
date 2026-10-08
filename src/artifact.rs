@@ -13,8 +13,10 @@ use sha2::{Digest, Sha256};
 use crate::devices::{DeviceCatalog, DeviceRecord, DeviceStatus};
 use crate::discovery::{ROBOTS_TXT, canonical_urls_from_authority_and_devices};
 use crate::host_dataset::{HOST_DATASET_FILE, validate_repository_host_dataset};
-use crate::pages::devices;
+use crate::message_path;
+use crate::pages::{devices, radio as radio_page};
 use crate::repositories::{Authority, PublicMetadataCache, RepositoryRecord, ShowcaseManifest};
+use crate::retinue_traces::{TRACE_DIRECTORY, TraceSet};
 use crate::site::{
     DEFAULT_SOCIAL_IMAGE_ALT, DEFAULT_SOCIAL_IMAGE_URL, ORGANIZATION_ID, WEBSITE_ID,
 };
@@ -68,6 +70,9 @@ pub struct ArtifactReceipt {
     device_profiles: usize,
     device_structured_records: usize,
     radio_mirror_screens: usize,
+    message_path_traces: usize,
+    message_path_events: usize,
+    message_path_ledger_rows: usize,
     sellable_devices: usize,
     metadata_generated_at_utc: String,
     metadata_sha256: String,
@@ -151,6 +156,32 @@ pub fn validate_public_artifact(
         }
     };
     for screen in &radio_screens {
+        expected_paths.insert(screen.path.clone());
+    }
+    // The lab's traces are checked from the source tree, against their
+    // provenance, then compared byte for byte with the published copies.
+    let traces = match TraceSet::load(source_root) {
+        Ok(traces) => Some(traces),
+        Err(trace_errors) => {
+            errors.extend(
+                trace_errors
+                    .into_iter()
+                    .map(|error| format!("retinue traces: {error}")),
+            );
+            None
+        }
+    };
+    let lab_screen = traces.as_ref().and_then(|traces| {
+        message_path::static_screen(traces)
+            .map_err(|error| errors.push(format!("message path screen: {error}")))
+            .ok()
+    });
+    if let Some(traces) = &traces {
+        for (path, _) in traces.artifact_files() {
+            expected_paths.insert(path);
+        }
+    }
+    if let Some(screen) = &lab_screen {
         expected_paths.insert(screen.path.clone());
     }
     for showcase in &showcases.showcase {
@@ -257,7 +288,19 @@ pub fn validate_public_artifact(
         "radio-mirror runtime",
         &mut errors,
     );
-    for screen in &radio_screens {
+    if let Some(traces) = &traces {
+        for name in traces.file_names() {
+            validate_copied_asset(
+                artifact_root,
+                source_root,
+                &format!("{}/{name}", crate::retinue_traces::ARTIFACT_DIRECTORY),
+                &format!("{TRACE_DIRECTORY}/{name}"),
+                &format!("retinue trace {name}"),
+                &mut errors,
+            );
+        }
+    }
+    for screen in radio_screens.iter().chain(&lab_screen) {
         match fs::read(artifact_root.join(&screen.path)) {
             Ok(bytes) if bytes == screen.png => {}
             Ok(_) => errors.push(format!(
@@ -298,11 +341,19 @@ pub fn validate_public_artifact(
         DEFAULT_SOCIAL_IMAGE_ALT,
         &mut errors,
     );
-    if !radio.contains("<script type=\"module\" src=\"/message-path-lab.js?v=") {
-        errors.push("community-radio output is missing its message path lab module".to_owned());
+    if !radio.contains(&format!(
+        "<script type=\"module\" src=\"{}\"></script>",
+        radio_page::message_path_lab_href()
+    )) {
+        errors.push(
+            "community-radio output is missing its versioned message path lab module".to_owned(),
+        );
     }
     if !radio.contains("data-message-path-lab") {
         errors.push("community-radio output is missing its message path lab landmark".to_owned());
+    }
+    if let (Some(traces), Some(screen)) = (&traces, &lab_screen) {
+        validate_message_path(&radio, traces, screen, &mut errors);
     }
     validate_fixed_metadata(
         &repositories,
@@ -640,6 +691,21 @@ pub fn validate_public_artifact(
             device_profiles: device_ids.len(),
             device_structured_records,
             radio_mirror_screens: radio_screens.len(),
+            message_path_traces: traces.as_ref().map_or(0, |traces| traces.scenarios.len()),
+            message_path_events: traces.as_ref().map_or(0, |traces| {
+                traces
+                    .scenarios
+                    .iter()
+                    .map(|scenario| scenario.trace.events.len())
+                    .sum()
+            }),
+            message_path_ledger_rows: traces.as_ref().map_or(0, |traces| {
+                traces
+                    .scenarios
+                    .iter()
+                    .map(|scenario| message_path::milestones(scenario).len())
+                    .sum()
+            }),
             sellable_devices,
             metadata_generated_at_utc: metadata.generated_at_utc.clone(),
             metadata_sha256: sha256(&metadata_bytes),
@@ -842,6 +908,67 @@ fn validate_radio_bench(
                 "V4 radio bench is missing {} with its text projection",
                 screen.path
             ));
+        }
+    }
+}
+
+/// The lab's static reading is the cold trace's: its manifest, its route
+/// sentence and ledger, and its screen with radio-face's text projection.
+fn validate_message_path(
+    document: &str,
+    traces: &TraceSet,
+    screen: &mer3ly_radio_mirror::StaticScreen,
+    errors: &mut Vec<String>,
+) {
+    match message_path::manifest_embedded(traces) {
+        Ok(manifest)
+            if inline_json(document, message_path::MANIFEST_ID) == Some(manifest.as_str()) => {}
+        Ok(_) => errors.push("message path manifest differs from the committed traces".to_owned()),
+        Err(error) => errors.push(format!("message path manifest: {error}")),
+    }
+    let Ok(view) = message_path::default_view(traces) else {
+        errors.push("message path has no default view".to_owned());
+        return;
+    };
+    let Some(scenario) = traces.scenario(&view.scenario) else {
+        return;
+    };
+    let route = escape_html_text(&message_path::route_sentence(scenario));
+    if !document.contains(&format!("<p data-path-route=\"\">{route}</p>")) {
+        errors.push("message path route sentence differs from the trace".to_owned());
+    }
+    for row in message_path::milestones(scenario) {
+        let copy = format!(
+            "data-lab-event=\"{}\" data-kind=\"{}\"",
+            row.event, row.kind
+        );
+        if !document.contains(&copy) || !document.contains(&escape_html_text(&row.text)) {
+            errors.push(format!(
+                "message path ledger is missing trace event {}",
+                row.event
+            ));
+        }
+    }
+    if !document.contains(&format!("src=\"/{}\"", screen.path)) {
+        errors.push("message path is missing its rendered screen".to_owned());
+    }
+    for line in &screen.lines {
+        if !document.contains(&format!("<li>{}</li>", escape_html_text(line))) {
+            errors.push("message path screen text differs from its rendering".to_owned());
+        }
+    }
+    if !document.contains(&escape_html_text(&message_path::source_statement(traces))) {
+        errors.push("message path does not state where its traces come from".to_owned());
+    }
+    for retired in [
+        "three relays",
+        "RET · ROUTE",
+        "RET · DELIVERED",
+        "TX QUEUED",
+        "RX FRAME",
+    ] {
+        if document.contains(retired) {
+            errors.push(format!("message path repeats the retired {retired:?}"));
         }
     }
 }

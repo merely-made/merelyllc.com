@@ -1,423 +1,566 @@
+// The message path lab reads retinue-sim's generated route traces (Rulings 7,
+// 9 and 127). Every step is an event in a committed trace; nothing here
+// authors a route, a frame or a delivery. The selected radio's screen is
+// retinue's radio-mirror drawing the firmware's own TRAFFIC page from that
+// radio's face-track documents (Ruling 8). Route and delivery are the site's
+// ledger prose, generated from the trace at build time: firmware has no ROUTE
+// or DELIVERED screen. Radio positions are site layout, not geography.
+
+const runtimeVersion = new URL(import.meta.url).search;
+const MANIFEST_SCHEMA = "mer3ly.message-path-traces/v1";
+const ROUTE_SCHEMA = "retinue-sim.route-trace/v1";
+const FACE_SCHEMA = "retinue-sim.face-track/v1";
+const SHARE_VERSION = "v2";
+const DEFAULT_LOCAL = JSON.stringify({ schema: "radio-mirror.local/v1" });
+const PLAY_INTERVAL_MS = 250;
+const MAX_PRESSES = 8;
+
 const root = document.querySelector("[data-message-path-lab]");
-
 if (root) {
-  const nodeIds = ["fire", "church", "water", "ridge", "garage"];
-  const defaultPositions = {
-    fire: { x: 17, y: 72 },
-    church: { x: 34, y: 24 },
-    water: { x: 57, y: 55 },
-    ridge: { x: 78, y: 20 },
-    garage: { x: 83, y: 76 },
-  };
-  const labels = {
-    fire: "Fire station",
-    church: "Church steeple",
-    water: "Water tower",
-    ridge: "Ridgeline",
-    garage: "County garage",
-  };
-  const routes = {
-    blocked: ["fire-church", "church-water", "water-garage"],
-    direct: ["fire-water", "water-garage"],
-  };
-  const scenarios = {
-    blocked: [
-      {
-        event: "Route selected through church and water",
-        status: "Alternate route selected.",
-        header: "RET · ROUTE",
-        state: "READY",
-        hop: "VIA CHURCH",
-        node: "fire",
-      },
-      {
-        event: "Fire station queues the message",
-        status: "Fire station queued the message.",
-        header: "RET · TRAFFIC",
-        state: "TX QUEUED",
-        hop: "CHURCH",
-        node: "fire",
-      },
-      {
-        event: "Church steeple receives the frame",
-        status: "The church steeple received the frame.",
-        header: "RET · TRAFFIC",
-        state: "RX FRAME",
-        hop: "CHURCH",
-        node: "church",
-        edge: "fire-church",
-      },
-      {
-        event: "Water tower receives the relay",
-        status: "The water tower received the relay.",
-        header: "RET · TRAFFIC",
-        state: "RX FRAME",
-        hop: "WATER",
-        node: "water",
-        edge: "church-water",
-      },
-      {
-        event: "Water tower forwards to the garage",
-        status: "The water tower forwarded toward the garage.",
-        header: "RET · TRAFFIC",
-        state: "TX FRAME",
-        hop: "GARAGE",
-        node: "garage",
-        edge: "water-garage",
-      },
-      {
-        event: "County garage confirms delivery",
-        status: "Message delivered by three relays.",
-        header: "RET · DELIVERED",
-        state: "RX FRAME",
-        hop: "GARAGE",
-        node: "garage",
-      },
-    ],
-    direct: [
-      {
-        event: "Direct route selected through the water tower",
-        status: "Direct route selected.",
-        header: "RET · ROUTE",
-        state: "READY",
-        hop: "VIA WATER",
-        node: "fire",
-      },
-      {
-        event: "Fire station queues the message",
-        status: "Fire station queued the message.",
-        header: "RET · TRAFFIC",
-        state: "TX QUEUED",
-        hop: "WATER",
-        node: "fire",
-      },
-      {
-        event: "Water tower receives the direct frame",
-        status: "The water tower received the direct frame.",
-        header: "RET · TRAFFIC",
-        state: "RX FRAME",
-        hop: "WATER",
-        node: "water",
-        edge: "fire-water",
-      },
-      {
-        event: "Water tower selects the garage link",
-        status: "The water tower selected the garage link.",
-        header: "RET · ROUTE",
-        state: "FORWARD",
-        hop: "GARAGE",
-        node: "water",
-      },
-      {
-        event: "Water tower forwards to the garage",
-        status: "The water tower forwarded toward the garage.",
-        header: "RET · TRAFFIC",
-        state: "TX FRAME",
-        hop: "GARAGE",
-        node: "garage",
-        edge: "water-garage",
-      },
-      {
-        event: "County garage confirms delivery",
-        status: "Message delivered by the direct route.",
-        header: "RET · DELIVERED",
-        state: "RX FRAME",
-        hop: "GARAGE",
-        node: "garage",
-      },
-    ],
-  };
+  start(root).catch((error) => {
+    root.dataset.ready = "unavailable";
+    const status = root.querySelector("[data-path-status]");
+    if (status) {
+      status.textContent =
+        "The trace reader could not start. The cold-start trace's ledger and screen below remain readable.";
+    }
+    console.warn("message path lab unavailable:", error);
+  });
+}
 
-  const stage = root.querySelector("[data-path-stage]");
-  const links = root.querySelector("[data-path-links]");
-  const packet = root.querySelector("[data-path-packet]");
-  const stepInput = root.querySelector("[data-path-step]");
-  const blockedInput = root.querySelector("[data-path-blocked]");
-  const status = root.querySelector("[data-path-status]");
-  const routeLabel = root.querySelector("[data-path-route]");
-  const screenHeader = root.querySelector("[data-path-screen-header]");
-  const screenCount = root.querySelector("[data-path-screen-count]");
-  const screenRows = new Map(
-    [...root.querySelectorAll("[data-path-screen-row]")].map((row) => [
-      row.dataset.pathScreenRow,
-      row,
-    ]),
+async function start(root) {
+  const manifestElement = document.getElementById("message-path-traces");
+  if (!manifestElement) throw new Error("the trace manifest is absent");
+  const manifest = JSON.parse(manifestElement.textContent);
+  if (manifest.schema !== MANIFEST_SCHEMA) {
+    throw new Error(`unsupported trace manifest ${manifest.schema}`);
+  }
+  const { default: initWasm, RadioMirror } = await import(
+    `./radio_mirror.js${runtimeVersion}`
   );
-  const nodes = new Map(
-    [...root.querySelectorAll("[data-lab-node]")].map((node) => [
-      node.dataset.labNode,
-      node,
-    ]),
-  );
-  const edges = new Map(
-    [...root.querySelectorAll("[data-lab-edge]")].map((edge) => [
-      edge.dataset.labEdge,
-      edge,
-    ]),
-  );
-  const eventRows = [...root.querySelectorAll("[data-lab-event]")];
-  const positions = structuredClone(defaultPositions);
-  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-  let blocked = true;
-  let step = 5;
-  let playback = null;
-  let drag = null;
+  await initWasm({
+    module_or_path: new URL(`./radio_mirror_bg.wasm${runtimeVersion}`, import.meta.url),
+  });
+  const lab = new MessagePathLab(root, manifest, RadioMirror);
+  await lab.restore();
+}
 
-  function clamp(value, minimum, maximum) {
-    return Math.min(maximum, Math.max(minimum, value));
-  }
+function seconds(t) {
+  return t % 100 === 0
+    ? `${Math.floor(t / 1000)}.${Math.floor((t % 1000) / 100)} s`
+    : `${Math.floor(t / 1000)}.${String(t % 1000).padStart(3, "0")} s`;
+}
 
-  function stopPlayback() {
-    if (playback !== null) {
-      window.clearInterval(playback);
-      playback = null;
+function listed(items) {
+  if (items.length <= 1) return items.join("");
+  return `${items.slice(0, -1).join(", ")} and ${items.at(-1)}`;
+}
+
+function capitalized(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+async function fetchJson(href) {
+  const response = await fetch(href);
+  if (!response.ok) throw new Error(`${href}: ${response.status}`);
+  return response.json();
+}
+
+// One scenario: its route trace and face track, with each node's faces
+// indexed by event for "latest entry at or before this step".
+class LoadedScenario {
+  constructor(entry, trace, faces) {
+    if (trace.schema !== ROUTE_SCHEMA || trace.scenario !== entry.name) {
+      throw new Error(`${entry.id}: unexpected route trace ${trace.schema} ${trace.scenario}`);
     }
-    root.dataset.playing = "false";
-  }
-
-  function currentScenario() {
-    return blocked ? scenarios.blocked : scenarios.direct;
-  }
-
-  function activeRoute() {
-    return blocked ? routes.blocked : routes.direct;
-  }
-
-  function setNodePosition(id, x, y) {
-    positions[id] = {
-      x: clamp(Number(x), 7, 93),
-      y: clamp(Number(y), 10, 90),
-    };
-    const node = nodes.get(id);
-    node.style.left = `${positions[id].x}%`;
-    node.style.top = `${positions[id].y}%`;
-    node.dataset.x = positions[id].x.toFixed(1);
-    node.dataset.y = positions[id].y.toFixed(1);
-  }
-
-  function updateLinks() {
-    const stageRect = stage.getBoundingClientRect();
-    if (stageRect.width === 0 || stageRect.height === 0) return;
-    links.setAttribute("viewBox", `0 0 ${stageRect.width} ${stageRect.height}`);
-    for (const edge of edges.values()) {
-      const fromRect = nodes.get(edge.dataset.from).getBoundingClientRect();
-      const toRect = nodes.get(edge.dataset.to).getBoundingClientRect();
-      edge.setAttribute("x1", fromRect.left + fromRect.width / 2 - stageRect.left);
-      edge.setAttribute("y1", fromRect.top + fromRect.height / 2 - stageRect.top);
-      edge.setAttribute("x2", toRect.left + toRect.width / 2 - stageRect.left);
-      edge.setAttribute("y2", toRect.top + toRect.height / 2 - stageRect.top);
+    if (
+      faces.schema !== FACE_SCHEMA ||
+      faces.route_trace !== trace.schema ||
+      faces.trace_sha256 !== entry.trace_sha256 ||
+      trace.events.length !== entry.events
+    ) {
+      throw new Error(`${entry.id}: the face track does not pair with its route trace`);
     }
-    const activeEdge = [...edges.values()].find((edge) =>
-      edge.classList.contains("is-active"),
-    );
-    if (activeEdge) {
-      packet.removeAttribute("hidden");
-      packet.setAttribute(
-        "cx",
-        (Number(activeEdge.getAttribute("x1")) +
-          Number(activeEdge.getAttribute("x2"))) /
-          2,
-      );
-      packet.setAttribute(
-        "cy",
-        (Number(activeEdge.getAttribute("y1")) +
-          Number(activeEdge.getAttribute("y2"))) /
-          2,
-      );
-    } else {
-      packet.setAttribute("hidden", "hidden");
+    this.entry = entry;
+    this.trace = trace;
+    this.milestones = entry.milestones;
+    this.milestoneText = new Map(entry.milestones.map((row) => [row.event, row.text]));
+    this.faces = new Map();
+    for (const face of faces.entries) {
+      if (!this.faces.has(face.node)) this.faces.set(face.node, []);
+      this.faces.get(face.node).push(face);
     }
-  }
-
-  function render(announce = true) {
-    const scenario = currentScenario();
-    const event = scenario[step];
-    const route = activeRoute();
-    root.dataset.blocked = String(blocked);
-    root.dataset.step = String(step);
-    blockedInput.checked = blocked;
-    stepInput.value = String(step);
-    root.querySelector("[data-path-step-output]").textContent = `${step + 1} of ${scenario.length}`;
-    routeLabel.textContent = blocked
-      ? "Reroute · fire → church → water → garage"
-      : "Direct · fire → water → garage";
-
-    for (const [id, edge] of edges) {
-      edge.classList.toggle("is-route", route.includes(id));
-      edge.classList.toggle("is-blocked", id === "fire-water" && blocked);
-      edge.classList.toggle("is-active", event.edge === id);
-    }
-    for (const [id, node] of nodes) {
-      node.classList.toggle("is-active", event.node === id);
-      node.setAttribute(
-        "aria-label",
-        `${labels[id]}. Drag or use arrow keys to move this radio.`,
-      );
-    }
-
-    eventRows.forEach((row, index) => {
-      row.querySelector("[data-path-event-copy]").textContent =
-        scenario[index].event;
-      row.classList.toggle("is-current", index === step);
-      row.classList.toggle("is-complete", index < step);
-      if (index === step) row.setAttribute("aria-current", "step");
-      else row.removeAttribute("aria-current");
+    this.frames = new Map();
+    trace.events.forEach((event) => {
+      if (event.kind === "transmit") this.frames.set(event.frame, event);
     });
-
-    screenHeader.textContent = event.header;
-    screenCount.textContent = `${step + 1}/${scenario.length}`;
-    screenRows.get("state").textContent = event.state;
-    screenRows.get("hop").textContent = event.hop;
-    screenRows.get("sequence").textContent = String(step).padStart(2, "0");
-    screenRows.get("host").textContent = "ATTACHED";
-    if (announce) status.textContent = event.status;
-    updateLinks();
   }
 
-  function setStep(nextStep, announce = true) {
-    step = clamp(Math.round(Number(nextStep)), 0, currentScenario().length - 1);
-    render(announce);
+  faceAt(node, step) {
+    let latest = null;
+    for (const face of this.faces.get(node) ?? []) {
+      if (face.event > step) break;
+      latest = face;
+    }
+    return latest;
   }
 
-  function play() {
-    stopPlayback();
-    if (reducedMotion.matches) {
-      setStep(5);
-      status.textContent = `${currentScenario()[5].status} Motion is reduced.`;
+  latestMilestone(step) {
+    let latest = null;
+    for (const row of this.milestones) {
+      if (row.event > step) break;
+      latest = row;
+    }
+    return latest;
+  }
+}
+
+class MessagePathLab {
+  constructor(root, manifest, RadioMirror) {
+    this.root = root;
+    this.manifest = manifest;
+    this.labels = new Map(manifest.nodes.map((node) => [node.name, node.label]));
+    this.loaded = new Map();
+    this.scenario = null;
+    this.step = manifest.default.step;
+    this.node = manifest.default.node;
+    this.playback = null;
+    this.reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    this.select = root.querySelector("[data-path-scenario]");
+    this.stepInput = root.querySelector("[data-path-step]");
+    this.stepOutput = root.querySelector("[data-path-step-output]");
+    this.status = root.querySelector("[data-path-status]");
+    this.notice = root.querySelector("[data-path-notice]");
+    this.route = root.querySelector("[data-path-route]");
+    this.stage = root.querySelector("[data-path-stage]");
+    this.links = root.querySelector("[data-path-links]");
+    this.packet = root.querySelector("[data-path-packet]");
+    this.ledger = root.querySelector("[data-path-ledger]");
+    this.ledgerCount = root.querySelector("[data-path-ledger-count]");
+    this.screenNode = root.querySelector("[data-path-screen-node]");
+    this.screen = root.querySelector("[data-path-screen]");
+    this.staticImage = root.querySelector("[data-path-static]");
+    this.canvas = root.querySelector("[data-path-canvas]");
+    this.context = this.canvas.getContext("2d");
+    this.screenText = root.querySelector("[data-path-screen-text]");
+    this.nodes = new Map(
+      [...root.querySelectorAll("[data-lab-node]")].map((node) => [node.dataset.labNode, node]),
+    );
+    this.edges = [...root.querySelectorAll("[data-lab-edge]")];
+
+    // One radio, its page reached through the firmware's own button logic.
+    this.mirror = new RadioMirror(manifest.surface, "one-button");
+    this.showPage(DEFAULT_LOCAL, undefined);
+
+    this.select.addEventListener("change", () => {
+      this.stopPlayback();
+      this.load(this.select.value, null)
+        .then(() => this.render(true))
+        .catch((error) => {
+          this.status.textContent = "That trace could not be loaded.";
+          console.warn("message path trace unavailable:", error);
+        });
+    });
+    this.stepInput.addEventListener("input", () => {
+      this.stopPlayback();
+      this.setStep(this.stepInput.value);
+    });
+    const actions = {
+      play: () => this.play(),
+      previous: () => this.setStep(this.step - 1),
+      next: () => this.setStep(this.step + 1),
+      "previous-milestone": () => this.jumpMilestone(-1),
+      "next-milestone": () => this.jumpMilestone(1),
+      share: () => this.share(),
+    };
+    for (const button of root.querySelectorAll("[data-path-action]")) {
+      button.addEventListener("click", () => {
+        if (button.dataset.pathAction !== "play") this.stopPlayback();
+        actions[button.dataset.pathAction]?.();
+      });
+    }
+    for (const [name, node] of this.nodes) {
+      node.addEventListener("click", () => {
+        this.stopPlayback();
+        this.node = name;
+        this.render(false);
+        this.status.textContent = `Showing the ${this.label(name)}'s own screen at ${seconds(
+          this.event().t,
+        )}.`;
+      });
+    }
+    window.addEventListener("visibilitychange", () => {
+      if (document.hidden) this.stopPlayback();
+    });
+    new ResizeObserver(() => this.drawLinks()).observe(this.stage);
+  }
+
+  label(name) {
+    return (this.labels.get(name) ?? `${name} radio`).toLowerCase();
+  }
+
+  the(name) {
+    return `the ${this.label(name)}`;
+  }
+
+  event() {
+    return this.scenario.trace.events[this.step];
+  }
+
+  // Presses the radio's one button until the firmware shows the lab's page.
+  showPage(localJson, hostJson) {
+    this.mirror.set_local_json(localJson);
+    this.mirror.set_host_json(hostJson);
+    let presses = 0;
+    while (this.mirror.screen() !== this.manifest.page) {
+      if (presses === MAX_PRESSES) {
+        throw new Error(`the radio did not reach ${this.manifest.page}`);
+      }
+      this.mirror.press("a-short");
+      presses += 1;
+    }
+  }
+
+  async load(id, step) {
+    const entry = this.manifest.scenarios.find((scenario) => scenario.id === id);
+    if (!entry) throw new Error(`unknown scenario ${id}`);
+    if (!this.loaded.has(id)) {
+      const [trace, faces] = await Promise.all([fetchJson(entry.route), fetchJson(entry.face)]);
+      this.loaded.set(id, new LoadedScenario(entry, trace, faces));
+    }
+    this.scenario = this.loaded.get(id);
+    const last = this.scenario.trace.events.length - 1;
+    this.step = step === null ? last : Math.min(Math.max(step, 0), last);
+    this.select.value = id;
+    this.stepInput.max = String(last);
+    this.buildLedger();
+  }
+
+  // Restores a v2 share link, explains an older or unknown one, and
+  // otherwise starts where the static reading stands.
+  async restore() {
+    const params = new URLSearchParams(window.location.hash.slice(1));
+    const version = params.get("message-path");
+    let scenario = this.manifest.default.scenario;
+    let step = this.manifest.default.step;
+    let notice = "";
+    if (version === SHARE_VERSION) {
+      const entry = this.manifest.scenarios.find((item) => item.id === params.get("scenario"));
+      if (entry && entry.trace_sha256.startsWith(params.get("trace") ?? "-")) {
+        scenario = entry.id;
+        const parsed = Number(params.get("step"));
+        step = Number.isInteger(parsed) ? parsed : null;
+        if (this.nodes.has(params.get("node"))) this.node = params.get("node");
+      } else {
+        notice =
+          "This link names a trace this page no longer carries, so it cannot be restored. Showing the cold-start trace.";
+      }
+    } else if (version !== null) {
+      notice =
+        "This link is from an older version of the lab, which played an authored story rather than a generated trace, so it cannot be restored. Showing the cold-start trace.";
+    }
+    await this.load(scenario, step);
+    this.root.dataset.linkState = notice ? (version === SHARE_VERSION ? "unknown-trace" : "retired") : "none";
+    if (notice) {
+      this.notice.textContent = notice;
+      this.notice.hidden = false;
+    }
+    this.staticImage.hidden = true;
+    this.canvas.hidden = false;
+    this.root.dataset.ready = "true";
+    this.root.dataset.playing = "false";
+    this.render(Boolean(notice) || version === SHARE_VERSION);
+  }
+
+  setStep(next, announce = true) {
+    const last = this.scenario.trace.events.length - 1;
+    this.step = Math.min(Math.max(Math.round(Number(next)), 0), last);
+    this.render(announce);
+  }
+
+  jumpMilestone(direction) {
+    const rows = this.scenario.milestones;
+    const target =
+      direction > 0
+        ? rows.find((row) => row.event > this.step)
+        : rows.findLast((row) => row.event < this.step);
+    if (target) this.setStep(target.event);
+  }
+
+  stopPlayback() {
+    if (this.playback !== null) {
+      window.clearInterval(this.playback);
+      this.playback = null;
+    }
+    this.root.dataset.playing = "false";
+  }
+
+  // Plays one trace event per tick, not simulated time: the warm trace spans
+  // 760 s, most of it quiet, so the ledger rows are where it is read.
+  play() {
+    this.stopPlayback();
+    const last = this.scenario.trace.events.length - 1;
+    if (this.reducedMotion.matches) {
+      this.setStep(last);
+      this.status.textContent = `${this.status.textContent} Motion is reduced, so the trace jumps to its end.`;
       return;
     }
-    setStep(0);
-    root.dataset.playing = "true";
-    playback = window.setInterval(() => {
-      if (step >= currentScenario().length - 1) {
-        stopPlayback();
+    this.setStep(0);
+    this.root.dataset.playing = "true";
+    this.playback = window.setInterval(() => {
+      if (this.step >= last) {
+        this.stopPlayback();
         return;
       }
-      setStep(step + 1);
-    }, 650);
+      // While playing, only ledger rows are announced.
+      const next = this.step + 1;
+      this.setStep(next, this.scenario.milestoneText.has(next));
+    }, PLAY_INTERVAL_MS);
   }
 
-  function parseScene() {
+  async share() {
     const params = new URLSearchParams(window.location.hash.slice(1));
-    if (params.get("message-path") !== "v1") return;
-    blocked = params.get("blocked") !== "0";
-    const parsedStep = Number(params.get("step"));
-    if (Number.isInteger(parsedStep)) step = clamp(parsedStep, 0, 5);
-    const serializedPositions = params.get("positions") ?? "";
-    for (const item of serializedPositions.split("|")) {
-      const [id, rawX, rawY] = item.split(",");
-      const x = Number(rawX);
-      const y = Number(rawY);
-      if (nodeIds.includes(id) && Number.isFinite(x) && Number.isFinite(y)) {
-        setNodePosition(id, x, y);
-      }
-    }
-  }
-
-  async function shareScene() {
-    stopPlayback();
-    const params = new URLSearchParams(window.location.hash.slice(1));
-    params.set("message-path", "v1");
-    params.set("blocked", blocked ? "1" : "0");
-    params.set("step", String(step));
-    params.set(
-      "positions",
-      nodeIds
-        .map(
-          (id) =>
-            `${id},${positions[id].x.toFixed(1)},${positions[id].y.toFixed(1)}`,
-        )
-        .join("|"),
-    );
+    for (const key of ["blocked", "positions"]) params.delete(key);
+    params.set("message-path", SHARE_VERSION);
+    params.set("trace", this.scenario.entry.trace_sha256.slice(0, 12));
+    params.set("scenario", this.scenario.entry.id);
+    params.set("step", String(this.step));
+    params.set("node", this.node);
     window.history.replaceState(null, "", `#${params.toString()}`);
     try {
       await navigator.clipboard.writeText(window.location.href);
-      status.textContent = "Scene link copied.";
+      this.status.textContent = "Link to this trace step copied.";
     } catch {
-      status.textContent = "Scene link is ready in the address bar.";
+      this.status.textContent = "Link to this trace step is ready in the address bar.";
     }
   }
 
-  root.querySelector('[data-path-action="send"]').addEventListener("click", play);
-  root
-    .querySelector('[data-path-action="previous"]')
-    .addEventListener("click", () => {
-      stopPlayback();
-      setStep(step - 1);
-    });
-  root.querySelector('[data-path-action="next"]').addEventListener("click", () => {
-    stopPlayback();
-    setStep(step + 1);
-  });
-  root
-    .querySelector('[data-path-action="share"]')
-    .addEventListener("click", shareScene);
-  stepInput.addEventListener("input", () => {
-    stopPlayback();
-    setStep(stepInput.value);
-  });
-  blockedInput.addEventListener("change", () => {
-    stopPlayback();
-    blocked = blockedInput.checked;
-    setStep(0);
-  });
-
-  for (const [id, node] of nodes) {
-    node.addEventListener("pointerdown", (event) => {
-      if (event.button !== 0) return;
-      stopPlayback();
-      event.preventDefault();
-      node.setPointerCapture(event.pointerId);
-      drag = { id, pointerId: event.pointerId };
-      node.classList.add("is-dragging");
-    });
-    node.addEventListener("pointermove", (event) => {
-      if (!drag || drag.id !== id || drag.pointerId !== event.pointerId) return;
-      const rect = stage.getBoundingClientRect();
-      setNodePosition(
-        id,
-        ((event.clientX - rect.left) / rect.width) * 100,
-        ((event.clientY - rect.top) / rect.height) * 100,
-      );
-      updateLinks();
-    });
-    node.addEventListener("pointerup", (event) => {
-      if (!drag || drag.id !== id || drag.pointerId !== event.pointerId) return;
-      node.releasePointerCapture(event.pointerId);
-      node.classList.remove("is-dragging");
-      drag = null;
-      status.textContent = `${labels[id]} moved. Share the scene to preserve it.`;
-    });
-    node.addEventListener("keydown", (event) => {
-      const movement = {
-        ArrowLeft: [-1, 0],
-        ArrowRight: [1, 0],
-        ArrowUp: [0, -1],
-        ArrowDown: [0, 1],
-      }[event.key];
-      if (!movement) return;
-      event.preventDefault();
-      stopPlayback();
-      const distance = event.shiftKey ? 5 : 2;
-      setNodePosition(
-        id,
-        positions[id].x + movement[0] * distance,
-        positions[id].y + movement[1] * distance,
-      );
-      updateLinks();
-      status.textContent = `${labels[id]} moved.`;
-    });
+  buildLedger() {
+    const rows = this.scenario.milestones;
+    this.ledgerCount.textContent = `${rows.length} rows · ${this.scenario.trace.events.length} events`;
+    this.ledger.replaceChildren(
+      ...rows.map((row) => {
+        const item = document.createElement("li");
+        item.className = "message-path-event";
+        item.dataset.labEvent = String(row.event);
+        item.dataset.kind = row.kind;
+        const button = document.createElement("button");
+        button.type = "button";
+        const time = document.createElement("span");
+        time.className = "message-path-event-index";
+        time.textContent = seconds(this.scenario.trace.events[row.event].t);
+        const copy = document.createElement("span");
+        copy.dataset.pathEventCopy = "";
+        copy.textContent = row.text;
+        button.append(time, copy);
+        button.addEventListener("click", () => {
+          this.stopPlayback();
+          this.setStep(row.event);
+        });
+        item.append(button);
+        return item;
+      }),
+    );
   }
 
-  for (const id of nodeIds) {
-    setNodePosition(id, positions[id].x, positions[id].y);
+  // The reading for an event the ledger does not name: an announce on the
+  // air, or a radio hearing a frame.
+  describe(event) {
+    const ledger = this.scenario.milestoneText.get(this.step);
+    if (ledger) return ledger;
+    if (event.kind === "transmit") {
+      const subject = event.packet.destination_node;
+      let text =
+        event.origin === "forward"
+          ? `${this.the(event.node)} relays ${subject ? `${this.the(subject)}'s` : "an"} announce`
+          : `${this.the(event.node)} transmits its own announce`;
+      text += event.heard_by.length
+        ? `. Heard by ${listed(event.heard_by.map((name) => this.the(name)))}.`
+        : ". No radio hears it.";
+      if (event.blocked.length) {
+        text += ` Behind the cut, ${listed(event.blocked.map((name) => this.the(name)))} ${
+          event.blocked.length === 1 ? "does" : "do"
+        } not hear it.`;
+      }
+      return capitalized(text);
+    }
+    if (event.kind === "receive") {
+      const frame = this.scenario.frames.get(event.frame);
+      const what = frame
+        ? `${this.the(frame.node)}'s ${frame.packet.packet_type.replace("_", " ")}`
+        : `frame ${event.frame}`;
+      const effects = event.effects.map((effect) => {
+        switch (effect.effect) {
+          case "learned":
+            return `learns a route to ${this.the(effect.destination)}`;
+          case "link_up":
+            return "brings a link up";
+          case "link_down":
+            return "takes a link down";
+          case "data":
+            return "takes in its data";
+          case "resource":
+            return "takes in a resource";
+          default:
+            return effect.effect.replace("_", " ");
+        }
+      });
+      return capitalized(
+        `${this.the(event.node)} hears ${what}${effects.length ? ` and ${listed(effects)}` : ""}.`,
+      );
+    }
+    return capitalized(event.kind.replaceAll("_", " "));
   }
-  parseScene();
-  root.dataset.ready = "true";
-  root.dataset.playing = "false";
-  render(false);
-  new ResizeObserver(updateLinks).observe(stage);
-  window.addEventListener("visibilitychange", () => {
-    if (document.hidden) stopPlayback();
-  });
+
+  latestDelivery() {
+    const events = this.scenario.trace.events;
+    for (let index = this.step; index >= 0; index -= 1) {
+      if (events[index].kind === "delivered") return { index, event: events[index] };
+    }
+    return null;
+  }
+
+  cutEdges() {
+    const cuts = [];
+    for (const event of this.scenario.trace.events.slice(0, this.step + 1)) {
+      if (event.kind === "cut") cuts.push([event.a, event.b]);
+    }
+    return cuts;
+  }
+
+  render(announce) {
+    const event = this.event();
+    const events = this.scenario.trace.events;
+    this.root.dataset.scenario = this.scenario.entry.id;
+    this.root.dataset.step = String(this.step);
+    this.root.dataset.node = this.node;
+    this.root.dataset.eventKind = event.kind;
+    this.stepInput.value = String(this.step);
+    this.stepOutput.textContent = `${this.step + 1} of ${events.length} · ${seconds(event.t)}`;
+
+    const delivery = this.latestDelivery();
+    if (delivery) {
+      const row = this.scenario.milestoneText.get(delivery.index);
+      this.route.textContent = `Latest delivery, at ${seconds(delivery.event.t)}: ${row}`;
+    } else {
+      this.route.textContent = "No message has been delivered yet at this step.";
+    }
+
+    const path = delivery?.event.path ?? [];
+    const onPath = (a, b) =>
+      path.some((name, index) => {
+        const next = path[index + 1];
+        return (name === a && next === b) || (name === b && next === a);
+      });
+    const cuts = this.cutEdges();
+    const isCut = (a, b) =>
+      cuts.some(([x, y]) => (x === a && y === b) || (x === b && y === a));
+    const transmitting = event.kind === "transmit" ? event : null;
+    for (const edge of this.edges) {
+      const { from, to } = edge.dataset;
+      const touches = (name) =>
+        transmitting &&
+        ((from === transmitting.node && to === name) || (to === transmitting.node && from === name));
+      edge.classList.toggle("is-route", onPath(from, to));
+      edge.classList.toggle("is-cut", isCut(from, to));
+      edge.classList.toggle(
+        "is-active",
+        Boolean(transmitting?.heard_by.some((name) => touches(name))),
+      );
+      edge.classList.toggle(
+        "is-refused",
+        Boolean(transmitting?.blocked.some((name) => touches(name))),
+      );
+    }
+
+    const actor = event.node ?? event.from ?? null;
+    for (const [name, node] of this.nodes) {
+      node.classList.toggle("is-active", name === actor);
+      node.classList.toggle("is-heard", Boolean(transmitting?.heard_by.includes(name)));
+      node.classList.toggle("is-selected", name === this.node);
+      node.setAttribute("aria-pressed", String(name === this.node));
+    }
+
+    const current = this.scenario.latestMilestone(this.step);
+    for (const item of this.ledger.children) {
+      const index = Number(item.dataset.labEvent);
+      const isCurrent = current !== null && index === current.event;
+      item.classList.toggle("is-current", isCurrent);
+      item.classList.toggle("is-complete", current !== null && index < current.event);
+      if (isCurrent) item.setAttribute("aria-current", "step");
+      else item.removeAttribute("aria-current");
+      if (isCurrent) this.keepInView(item);
+    }
+
+    this.drawScreen();
+    if (announce) this.status.textContent = `${seconds(event.t)} · ${this.describe(event)}`;
+    this.drawLinks();
+  }
+
+  // Scrolls the ledger, not the page, to keep its current row in view.
+  keepInView(item) {
+    const top = item.offsetTop;
+    const bottom = top + item.offsetHeight;
+    if (top < this.ledger.scrollTop) this.ledger.scrollTop = top;
+    else if (bottom > this.ledger.scrollTop + this.ledger.clientHeight) {
+      this.ledger.scrollTop = bottom - this.ledger.clientHeight;
+    }
+  }
+
+  // The selected radio's own screen after this step. The channel republishes
+  // its host snapshot on every beat and each document is valid for
+  // `valid_for_secs` (15 s), so the radio re-receives the node's latest
+  // document as simulated time advances: it is re-set at every step rather
+  // than aged out between the trace's sparse state changes.
+  drawScreen() {
+    const face = this.scenario.faceAt(this.node, this.step);
+    this.mirror.set_local_json(face ? JSON.stringify(face.local) : DEFAULT_LOCAL);
+    this.mirror.set_host_json(face ? JSON.stringify(face.host) : undefined);
+    const image = new ImageData(this.mirror.rgba(), this.mirror.width, this.mirror.height);
+    this.context.putImageData(image, 0, 0);
+    this.screen.dataset.screenName = this.mirror.screen();
+    this.screen.dataset.faceEvent = face ? String(face.event) : "none";
+    this.screenNode.textContent = `${this.labels.get(this.node)} · its own screen`;
+    this.screenText.replaceChildren(
+      ...this.mirror
+        .text()
+        .split("\n")
+        .map((line) => {
+          const item = document.createElement("li");
+          item.textContent = line;
+          return item;
+        }),
+    );
+  }
+
+  drawLinks() {
+    const stageRect = this.stage.getBoundingClientRect();
+    if (stageRect.width === 0 || stageRect.height === 0) return;
+    this.links.setAttribute("viewBox", `0 0 ${stageRect.width} ${stageRect.height}`);
+    const centre = (name) => {
+      const rect = this.nodes.get(name).getBoundingClientRect();
+      return [
+        rect.left + rect.width / 2 - stageRect.left,
+        rect.top + rect.height / 2 - stageRect.top,
+      ];
+    };
+    for (const edge of this.edges) {
+      const [x1, y1] = centre(edge.dataset.from);
+      const [x2, y2] = centre(edge.dataset.to);
+      edge.setAttribute("x1", x1);
+      edge.setAttribute("y1", y1);
+      edge.setAttribute("x2", x2);
+      edge.setAttribute("y2", y2);
+    }
+    const event = this.event();
+    if (event.kind === "transmit") {
+      const [x, y] = centre(event.node);
+      this.packet.setAttribute("cx", x);
+      this.packet.setAttribute("cy", y);
+      this.packet.removeAttribute("hidden");
+    } else {
+      this.packet.setAttribute("hidden", "hidden");
+    }
+  }
 }

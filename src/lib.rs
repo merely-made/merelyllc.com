@@ -3,6 +3,7 @@ pub mod devices;
 pub mod discovery;
 pub mod firmware_catalog;
 pub mod host_dataset;
+pub mod message_path;
 pub mod pages;
 pub mod repositories;
 pub mod repository_history;
