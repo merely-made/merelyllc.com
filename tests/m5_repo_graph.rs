@@ -374,31 +374,32 @@ fn graphshell_sandbox_keeps_truth_face_arrangement_and_motion_distinct() {
 fn graph_assets_and_responsive_styles_are_bounded() {
     assert_eq!(&GRAPH_WASM[..4], b"\0asm");
     // The module carries Seiche and Rapier rather than a positional-layout-only
-    // adapter, and since 2026-08-16 the portable projection path as well:
-    // exporting projection_capture_with_placement (portable_projection_with_
-    // placement until 2026-10-08) makes score and scene serde
-    // plus scenomise::solve reachable from the browser, which the live path
-    // alone never needed.
+    // adapter, the portable projection path since 2026-08-16, and since
+    // 2026-10-08 the projection proof's session (Rulings 138 and 140):
+    // chirograph, scenotime and incipit readers instead of JS copies.
     //
-    // That export was measured before it was accepted, because the ceiling is
-    // deliberate and not a formality. Against a 858,444-byte baseline without
-    // it: 932,204 bytes stripped of both the demo trace and the self-consume
-    // check, and 958,016 with them kept. No variant fit under the old 900 KiB
-    // bound, so the choice was to pay for the useful version or drop the
-    // feature. The ceilings below are the paid price, with roughly 65 KiB of
-    // headroom. Wave 1's Matrix capture, coordinated selection, and composed
-    // Shelfmark resolver measured 1,268,979 bytes together. The revised
-    // ceilings keep roughly 110 KiB of Wasm headroom and 80 KiB over the whole
-    // runtime. They remain a bound, and another increase needs measurement.
+    // The ceilings are deliberate, and another increase needs measurement.
+    // Until 2026-10-08 they were raw bytes (1,350 KiB of Wasm, 1,400 KiB of
+    // runtime). At Mark's ruling (Ruling 141) they are gzip bytes, what a
+    // visitor downloads. At the change the module measured 430,936 B gzip
+    // (opt-level "z", fat LTO) and the runtime 452,481 B, against 437,734 B
+    // and about 458,400 B before the session moved in. The bounds keep about
+    // 30 KiB of headroom each.
+    let gzip = |bytes: &[u8]| {
+        use std::io::Write as _;
+        let mut encoder = flate2::write::GzEncoder::new(Vec::new(), flate2::Compression::best());
+        encoder.write_all(bytes).expect("gzip in memory");
+        encoder.finish().expect("gzip in memory").len()
+    };
+    let wasm = gzip(GRAPH_WASM);
+    let runtime = gzip(GRAPH_SANDBOX.as_bytes()) + gzip(GRAPH_GLUE.as_bytes()) + wasm;
     assert!(
-        GRAPH_WASM.len() < 1_350 * 1024,
-        "graph + physics + portable projection Wasm is {} bytes",
-        GRAPH_WASM.len()
+        wasm < 450 * 1024,
+        "graph + physics + portable projection Wasm is {wasm} bytes gzip"
     );
     assert!(
-        GRAPH_SANDBOX.len() + GRAPH_GLUE.len() + GRAPH_WASM.len() < 1_400 * 1024,
-        "graph + physics + portable projection runtime is {} bytes",
-        GRAPH_SANDBOX.len() + GRAPH_GLUE.len() + GRAPH_WASM.len()
+        runtime < 475 * 1024,
+        "graph + physics + portable projection runtime is {runtime} bytes gzip"
     );
 
     for contract in [

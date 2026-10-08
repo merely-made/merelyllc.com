@@ -1725,6 +1725,7 @@ name = "mer3ly-site"
 version = "0.1.0"
 dependencies = [
  "cambium",
+ "flate2",
  "genet-scripted-dom",
  "layout-dom-api",
  "mer3ly-radio-mirror",

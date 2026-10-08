@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-140 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-141 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 P0's viewer review and main integration are complete (Rulings 122-123).
 Mere main is pushed at `ea9e6da7`, with current Genet `965b64e2`. The numerical
 payload cap and initial-site deployment remain open. Plain viewer is selected
@@ -1466,6 +1466,34 @@ What follows:
   on the first scrub, edit, commit or share-link restore.
 - The JS copies of the replay, BLAKE3, lossless JSON and the history mirror
   then retire, as Ruling 138 intended.
+
+### Ruling 141 (2026-10-08): the m5 payload bounds are gzip bytes
+
+The proof session's lane measured the growth with twiggy:
+- about 105 KB of serde_json readers for sceno, scenotime, chirograph and
+  incipit;
+- about 25 KB of serde_json itself.
+It then moved the graph Wasm to opt-level "z" and fat LTO.
+
+The result:
+- The module came to 1,363,161 B raw, 430,962 B gzip and 337,563 B brotli,
+  under its 1,350 KiB raw ceiling and smaller over the wire than before the
+  session (437,734 B gzip).
+- `wasm-opt` again grew both compressed sizes, so it was not adopted.
+- The physics step measured 0.065 ms against 0.043 ms.
+- The raw runtime total (sandbox, glue and Wasm) was still 35,408 B over its
+  1,400 KiB ceiling, mostly from 11,969 B of new glue.
+
+Options: raise the raw ceiling to 1,450 KiB; switch the caps to gzip; trim
+more first. Mark: "Switch caps to gzip".
+
+What follows:
+- `graph_assets_and_responsive_styles_are_bounded` bounds the Wasm at
+  450 KiB gzip and the runtime at 475 KiB gzip, using `flate2` best
+  compression as a dev-dependency. That leaves about 30 KiB of headroom each.
+- At the change, the Wasm measured 430,936 B gzip and the runtime 452,481 B.
+- *Reading, not ruled:* the payload budget, when ruled, is likely stated in
+  compressed bytes too.
 
 ## Findings (2026-09-30)
 
