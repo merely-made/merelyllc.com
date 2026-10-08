@@ -12,6 +12,7 @@ use sha2::{Digest, Sha256};
 
 use crate::devices::{DeviceCatalog, DeviceRecord, DeviceStatus};
 use crate::discovery::{ROBOTS_TXT, canonical_urls_from_authority_and_devices};
+use crate::host_dataset::{HOST_DATASET_FILE, validate_repository_host_dataset};
 use crate::repositories::{Authority, PublicMetadataCache, RepositoryRecord, ShowcaseManifest};
 use crate::site::{
     DEFAULT_SOCIAL_IMAGE_ALT, DEFAULT_SOCIAL_IMAGE_URL, ORGANIZATION_ID, WEBSITE_ID,
@@ -35,6 +36,7 @@ const BASE_FILES: &[&str] = &[
     "projection-scene.json",
     "radio.html",
     "radio-simulator.js",
+    HOST_DATASET_FILE,
     "repos/index.html",
     "robots.txt",
     "sitemap.xml",
@@ -228,6 +230,10 @@ pub fn validate_public_artifact(
     let radio = read_text(artifact_root, "radio.html", &mut errors);
     let repositories = read_text(artifact_root, "repos/index.html", &mut errors);
     let projection_scene = read_text(artifact_root, "projection-scene.json", &mut errors);
+    let host_dataset = read_text(artifact_root, HOST_DATASET_FILE, &mut errors);
+    if let Err(error) = validate_repository_host_dataset(&host_dataset, authority, metadata) {
+        errors.push(error);
+    }
     let device_index = read_text(artifact_root, "devices/index.html", &mut errors);
     let robots = read_text(artifact_root, "robots.txt", &mut errors);
     let sitemap = read_text(artifact_root, "sitemap.xml", &mut errors);

@@ -22,3 +22,13 @@ absolute machine paths.
 - [M7 project showcase](2026-07-30_m7_project_showcase.md)
 - [M8 discovery and sharing](2026-07-30_m8_discovery_and_sharing.md)
 - [M9 authority reconciliation](2026-07-31_m9_authority_reconciliation.md)
+- [S1 repository host dataset, native consumer](2026-10-07_host_dataset/receipt.json):
+  the generated current-only authority preserves 21 occurrence sources and 30
+  typed relationships through the unmerged S1 parser/compiler; three malformed
+  controls refuse. This is native fixture evidence, not browser acceptance.
+  The [public artifact receipt](2026-10-07_host_dataset/public-artifact-receipt.json)
+  checks the same bytes. The tested [instrument](2026-10-07_host_dataset/fixture-main.rs),
+  [manifest](2026-10-07_host_dataset/fixture-Cargo.toml),
+  [lock](2026-10-07_host_dataset/fixture-Cargo.lock) and
+  [site test log](2026-10-07_host_dataset/final-site-tests.log) are preserved;
+  manifest paths identify the local fixture, not production dependencies.

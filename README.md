@@ -29,6 +29,12 @@ and deploys on main pushes, manual dispatch, and a daily schedule.
   its numerical budget remains open. The site still ships its own sandbox;
   P1 export and P2 surface replacement remain ahead. See the
   [integration receipt](docs/handoffs/2026-10-07_viewer_cone/RESUME.md#authorized-integration).
+- The build now emits `repository-host-dataset.json` from the reconciled public
+  authority: 21 projects and 30 explained relationships in the versioned S1
+  envelope. It records scope and a content-derived revision; this is published
+  repository-family context, not a resolved Cargo dependency closure. Native
+  parser/compiler acceptance is [recorded](docs/receipts/site/2026-10-07_host_dataset/receipt.json).
+  Browser loading through S1 and surface replacement remain ahead.
 
 `content/*.toml` is the editorial authority for repository roles, summaries,
 relations, showcases, and the device catalog; the GitHub listing is the live

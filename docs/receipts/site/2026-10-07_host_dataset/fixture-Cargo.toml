@@ -1,0 +1,13 @@
+[package]
+name = "site-host-dataset-receipt"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+# Integration fixture only. Production site dependencies stay on ea9e6da7.
+[dependencies]
+sceno = { path = "/Users/markik/Code/worktrees/mere-s1-host-dataset/crates/cambium/scenes/sceno" }
+scenograph = { path = "/Users/markik/Code/worktrees/mere-s1-host-dataset/crates/cambium/scenes/scenograph" }
+scenomise = { path = "/Users/markik/Code/worktrees/mere-s1-host-dataset/crates/cambium/scenes/scenomise" }
+serde_json = "1"
+sha2 = "0.10"

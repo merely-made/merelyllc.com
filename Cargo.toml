@@ -25,6 +25,9 @@ genet-scripted-dom = "0.1.0"
 layout-dom-api = "0.1.0"
 mer3ly-repo-graph = { path = "crates/repo-graph" }
 regex = "1"
+sceno = { git = "https://github.com/merely-made/mere.git", rev = "ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7" }
+scenograph = { git = "https://github.com/merely-made/mere.git", rev = "ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7" }
+scenomise = { git = "https://github.com/merely-made/mere.git", rev = "ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 sha2 = "0.10"

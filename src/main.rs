@@ -3,6 +3,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use mer3ly_site::discovery::{ROBOTS_TXT, sitemap};
+use mer3ly_site::host_dataset::{HOST_DATASET_FILE, repository_host_dataset_json};
 use mer3ly_site::pages::{devices, home, projects, radio, repositories};
 use mer3ly_site::repositories::PublicSiteData;
 use mer3ly_site::site::{DEVICE_CSS, SITE_CSS};
@@ -92,6 +93,11 @@ fn build_site(output: &Path) -> std::io::Result<()> {
     fs::write(output.join("devices.css"), DEVICE_CSS)?;
     fs::write(output.join("message-path-lab.js"), MESSAGE_PATH_LAB)?;
     fs::write(output.join("projection-proof.js"), PROJECTION_PROOF)?;
+    fs::write(
+        output.join(HOST_DATASET_FILE),
+        repository_host_dataset_json(&data.authority, &data.metadata)
+            .map_err(std::io::Error::other)?,
+    )?;
     fs::write(
         output.join("projection-scene.json"),
         projects::projection_artifact_json(&data),

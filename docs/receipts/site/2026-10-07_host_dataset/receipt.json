@@ -1,0 +1,412 @@
+{
+  "authority_file": "/Users/markik/Code/repos/merelyllc.com/.tmp/pages-artifact/repos/index.html",
+  "authority_occurrences": 21,
+  "authority_relationships": 30,
+  "compiled_items": 21,
+  "compiled_relationships": 30,
+  "controls": {
+    "stale_revision": "refused",
+    "undisclosed_endpoint": "refused",
+    "unknown_nested_key": "refused"
+  },
+  "dataset_bytes": 65038,
+  "dataset_file": "/Users/markik/Code/repos/merelyllc.com/.tmp/pages-artifact/repository-host-dataset.json",
+  "dataset_sha256": "1b16d990958c3fd1fe9cd17a3fa4a98bc62441f28d23fb92ecd7f9d7abf7eca0",
+  "fixture": {
+    "command": [
+      "cargo",
+      "run",
+      "--locked",
+      "--offline",
+      "-j",
+      "2",
+      "--target-dir",
+      "/Users/markik/Code/targets/mere-s1",
+      "--manifest-path",
+      "/Users/markik/Code/output/site-host-dataset-receipt/Cargo.toml",
+      "--",
+      "/Users/markik/Code/repos/merelyllc.com/.tmp/pages-artifact/repository-host-dataset.json",
+      "/Users/markik/Code/repos/merelyllc.com/.tmp/pages-artifact/repos/index.html"
+    ],
+    "mere_revision": "3a09252659f1eb2069dba29ace12ca04e098df78",
+    "native_binary_sha256": "860fcef92285317fdee4c3a56f81192aca01bb6ea01766297136365b496fa843",
+    "production_mere_revision": "ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7",
+    "scope": "Local unmerged S1 integration; copied sources preserve the exact fixture. Paths are fixture inputs, never production dependency declarations.",
+    "source_sha256": {
+      "fixture-Cargo.lock": "f2aa0bfffc3a3cf3cbebe1119045772c5786b8cd8a68e21696a9e32789a06610",
+      "fixture-Cargo.toml": "c0940520b0efee5564b68e5908e59d8cce9ef06d21d6999d6006e05b58b0fb26",
+      "fixture-main.rs": "385b4215dcf90857467f27a1aa91fa15f01a191aca7cca1c93aa1a93de45dd27"
+    },
+    "toolchain": "Rust 1.98.1 from the S1 workspace"
+  },
+  "occurrence_sources": [
+    {
+      "instance": 0,
+      "occurrence": "cleromancy",
+      "source": {
+        "adapter": "mer3ly.repository-graph/v1",
+        "id": "cleromancy"
+      }
+    },
+    {
+      "instance": 1,
+      "occurrence": "emblem",
+      "source": {
+        "adapter": "mer3ly.repository-graph/v1",
+        "id": "emblem"
+      }
+    },
+    {
+      "instance": 2,
+      "occurrence": "genet",
+      "source": {
+        "adapter": "mer3ly.repository-graph/v1",
+        "id": "genet"
+      }
+    },
+    {
+      "instance": 3,
+      "occurrence": "isocosm",
+      "source": {
+        "adapter": "mer3ly.repository-graph/v1",
+        "id": "isocosm"
+      }
+    },
+    {
+      "instance": 4,
+      "occurrence": "knot-editor",
+      "source": {
+        "adapter": "mer3ly.repository-graph/v1",
+        "id": "knot-editor"
+      }
+    },
+    {
+      "instance": 5,
+      "occurrence": "mer3ly",
+      "source": {
+        "adapter": "mer3ly.repository-graph/v1",
+        "id": "mer3ly"
+      }
+    },
+    {
+      "instance": 6,
+      "occurrence": "mere",
+      "source": {
+        "adapter": "mer3ly.repository-graph/v1",
+        "id": "mere"
+      }
+    },
+    {
+      "instance": 7,
+      "occurrence": "mora",
+      "source": {
+        "adapter": "mer3ly.repository-graph/v1",
+        "id": "mora"
+      }
+    },
+    {
+      "instance": 8,
+      "occurrence": "netrender",
+      "source": {
+        "adapter": "mer3ly.repository-graph/v1",
+        "id": "netrender"
+      }
+    },
+    {
+      "instance": 9,
+      "occurrence": "org-profile",
+      "source": {
+        "adapter": "mer3ly.repository-graph/v1",
+        "id": "org-profile"
+      }
+    },
+    {
+      "instance": 10,
+      "occurrence": "pipit",
+      "source": {
+        "adapter": "mer3ly.repository-graph/v1",
+        "id": "pipit"
+      }
+    },
+    {
+      "instance": 11,
+      "occurrence": "retinue",
+      "source": {
+        "adapter": "mer3ly.repository-graph/v1",
+        "id": "retinue"
+      }
+    },
+    {
+      "instance": 12,
+      "occurrence": "smolweb",
+      "source": {
+        "adapter": "mer3ly.repository-graph/v1",
+        "id": "smolweb"
+      }
+    },
+    {
+      "instance": 13,
+      "occurrence": "turnstone",
+      "source": {
+        "adapter": "mer3ly.repository-graph/v1",
+        "id": "turnstone"
+      }
+    },
+    {
+      "instance": 14,
+      "occurrence": "turquet",
+      "source": {
+        "adapter": "mer3ly.repository-graph/v1",
+        "id": "turquet"
+      }
+    },
+    {
+      "instance": 15,
+      "occurrence": "vano",
+      "source": {
+        "adapter": "mer3ly.repository-graph/v1",
+        "id": "vano"
+      }
+    },
+    {
+      "instance": 16,
+      "occurrence": "wavicle",
+      "source": {
+        "adapter": "mer3ly.repository-graph/v1",
+        "id": "wavicle"
+      }
+    },
+    {
+      "instance": 17,
+      "occurrence": "wgpu-graft",
+      "source": {
+        "adapter": "mer3ly.repository-graph/v1",
+        "id": "wgpu-graft"
+      }
+    },
+    {
+      "instance": 18,
+      "occurrence": "wgpu-scry",
+      "source": {
+        "adapter": "mer3ly.repository-graph/v1",
+        "id": "wgpu-scry"
+      }
+    },
+    {
+      "instance": 19,
+      "occurrence": "wgpu-weld",
+      "source": {
+        "adapter": "mer3ly.repository-graph/v1",
+        "id": "wgpu-weld"
+      }
+    },
+    {
+      "instance": 20,
+      "occurrence": "woodshed",
+      "source": {
+        "adapter": "mer3ly.repository-graph/v1",
+        "id": "woodshed"
+      }
+    }
+  ],
+  "occurrence_sources_preserved": true,
+  "qualification": "Native integration fixture over local unmerged S1; no browser or practice acceptance claim",
+  "relationship_endpoints": [
+    {
+      "from": "cleromancy",
+      "id": "cleromancy-depends-on-genet",
+      "kind": "depends_on",
+      "to": "genet"
+    },
+    {
+      "from": "cleromancy",
+      "id": "cleromancy-depends-on-mere",
+      "kind": "depends_on",
+      "to": "mere"
+    },
+    {
+      "from": "cleromancy",
+      "id": "cleromancy-depends-on-turquet",
+      "kind": "depends_on",
+      "to": "turquet"
+    },
+    {
+      "from": "genet",
+      "id": "genet-depends-on-netrender",
+      "kind": "depends_on",
+      "to": "netrender"
+    },
+    {
+      "from": "genet",
+      "id": "genet-depends-on-vano",
+      "kind": "depends_on",
+      "to": "vano"
+    },
+    {
+      "from": "genet",
+      "id": "genet-depends-on-wgpu-scry",
+      "kind": "depends_on",
+      "to": "wgpu-scry"
+    },
+    {
+      "from": "genet",
+      "id": "genet-renders-with-netrender",
+      "kind": "renders_with",
+      "to": "netrender"
+    },
+    {
+      "from": "isocosm",
+      "id": "isocosm-depends-on-genet",
+      "kind": "depends_on",
+      "to": "genet"
+    },
+    {
+      "from": "isocosm",
+      "id": "isocosm-depends-on-mere",
+      "kind": "depends_on",
+      "to": "mere"
+    },
+    {
+      "from": "isocosm",
+      "id": "isocosm-depends-on-netrender",
+      "kind": "depends_on",
+      "to": "netrender"
+    },
+    {
+      "from": "knot-editor",
+      "id": "knot-editor-depends-on-genet",
+      "kind": "depends_on",
+      "to": "genet"
+    },
+    {
+      "from": "knot-editor",
+      "id": "knot-editor-depends-on-mere",
+      "kind": "depends_on",
+      "to": "mere"
+    },
+    {
+      "from": "mere",
+      "id": "mere-depends-on-emblem",
+      "kind": "depends_on",
+      "to": "emblem"
+    },
+    {
+      "from": "mere",
+      "id": "mere-depends-on-genet",
+      "kind": "depends_on",
+      "to": "genet"
+    },
+    {
+      "from": "mere",
+      "id": "mere-depends-on-knot-editor",
+      "kind": "depends_on",
+      "to": "knot-editor"
+    },
+    {
+      "from": "mere",
+      "id": "mere-depends-on-mora",
+      "kind": "depends_on",
+      "to": "mora"
+    },
+    {
+      "from": "mere",
+      "id": "mere-depends-on-netrender",
+      "kind": "depends_on",
+      "to": "netrender"
+    },
+    {
+      "from": "mere",
+      "id": "mere-depends-on-retinue",
+      "kind": "depends_on",
+      "to": "retinue"
+    },
+    {
+      "from": "mere",
+      "id": "mere-renders-with-genet",
+      "kind": "renders_with",
+      "to": "genet"
+    },
+    {
+      "from": "retinue",
+      "id": "retinue-depends-on-pipit",
+      "kind": "depends_on",
+      "to": "pipit"
+    },
+    {
+      "from": "turnstone",
+      "id": "turnstone-depends-on-genet",
+      "kind": "depends_on",
+      "to": "genet"
+    },
+    {
+      "from": "turnstone",
+      "id": "turnstone-depends-on-knot-editor",
+      "kind": "depends_on",
+      "to": "knot-editor"
+    },
+    {
+      "from": "turnstone",
+      "id": "turnstone-depends-on-mere",
+      "kind": "depends_on",
+      "to": "mere"
+    },
+    {
+      "from": "turnstone",
+      "id": "turnstone-depends-on-netrender",
+      "kind": "depends_on",
+      "to": "netrender"
+    },
+    {
+      "from": "turnstone",
+      "id": "turnstone-hosts-mere",
+      "kind": "host_for",
+      "to": "mere"
+    },
+    {
+      "from": "wgpu-scry",
+      "id": "wgpu-scry-depends-on-wgpu-graft",
+      "kind": "depends_on",
+      "to": "wgpu-graft"
+    },
+    {
+      "from": "wgpu-weld",
+      "id": "wgpu-weld-depends-on-wgpu-graft",
+      "kind": "depends_on",
+      "to": "wgpu-graft"
+    },
+    {
+      "from": "woodshed",
+      "id": "woodshed-depends-on-genet",
+      "kind": "depends_on",
+      "to": "genet"
+    },
+    {
+      "from": "woodshed",
+      "id": "woodshed-depends-on-mere",
+      "kind": "depends_on",
+      "to": "mere"
+    },
+    {
+      "from": "woodshed",
+      "id": "woodshed-depends-on-netrender",
+      "kind": "depends_on",
+      "to": "netrender"
+    }
+  ],
+  "revision": "sha256:5eb53ba97d96fbe953e1ed4cf6d51fadfd4e016b296f1f03c643f3f81d6fa641",
+  "schema": "mer3ly.host-dataset-native-integration-receipt/v1",
+  "site_validation": {
+    "browser_smoke": "not run; Node is unavailable, and no page/UI replacement was made",
+    "clippy_all_targets_deny_warnings": "passed",
+    "fmt": "passed",
+    "public_artifact_files": 49,
+    "tests_passed": 58,
+    "toolchain": "Rust 1.97.1"
+  },
+  "source": {
+    "authority": "https://merelyllc.com",
+    "domain": "public-repositories",
+    "resource": "repository-graph"
+  },
+  "typed_relationship_disclosures_preserved": true
+}
