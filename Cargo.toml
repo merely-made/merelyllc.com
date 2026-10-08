@@ -23,6 +23,7 @@ path = "src/main.rs"
 cambium = "0.3.2"
 genet-scripted-dom = "0.1.0"
 layout-dom-api = "0.1.0"
+mer3ly-radio-mirror = { path = "crates/radio-mirror" }
 mer3ly-repo-graph = { path = "crates/repo-graph" }
 regex = "1"
 sceno = { git = "https://github.com/merely-made/mere.git", rev = "ea9e6da74e2a0f13fc83411513b5d5ea871eb6a7" }

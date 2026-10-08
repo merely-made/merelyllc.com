@@ -124,6 +124,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f2032f911046de80f0a198e0901378627c33f59ea0ac00e363d481118bd70a53"
 
 [[package]]
+name = "az"
+version = "1.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "be5eb007b7cacc6c660343e96f650fedf4b5a77512399eb952ca6642cf8d13f7"
+
+[[package]]
 name = "backtrace"
 version = "0.3.76"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -704,6 +710,27 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9e5e8f6c15a24b9a3ee5efec809ccd006d3b30e8b3bb63c39af737c7f87daa1d"
 
 [[package]]
+name = "embedded-graphics"
+version = "0.8.2"
+source = "git+https://github.com/merely-made/retinue.git?rev=6aa78fc0d0ddd30e94db59470f30f47e669321dc#6aa78fc0d0ddd30e94db59470f30f47e669321dc"
+dependencies = [
+ "az",
+ "byteorder",
+ "embedded-graphics-core",
+ "float-cmp",
+ "micromath",
+]
+
+[[package]]
+name = "embedded-graphics-core"
+version = "0.4.1"
+source = "git+https://github.com/merely-made/retinue.git?rev=6aa78fc0d0ddd30e94db59470f30f47e669321dc#6aa78fc0d0ddd30e94db59470f30f47e669321dc"
+dependencies = [
+ "az",
+ "byteorder",
+]
+
+[[package]]
 name = "embedded-io"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -835,6 +862,9 @@ name = "float-cmp"
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "98de4bbd547a563b716d8dfa9aad1cb19bfab00f4fa09a6a4ed21dbcf44ce9c4"
+dependencies = [
+ "num-traits",
+]
 
 [[package]]
 name = "fnv"
@@ -1658,6 +1688,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "mer3ly-radio-mirror"
+version = "0.1.0"
+dependencies = [
+ "radio-mirror",
+ "serde_json",
+]
+
+[[package]]
 name = "mer3ly-repo-graph"
 version = "0.1.0"
 dependencies = [
@@ -1683,6 +1721,7 @@ dependencies = [
  "cambium",
  "genet-scripted-dom",
  "layout-dom-api",
+ "mer3ly-radio-mirror",
  "mer3ly-repo-graph",
  "regex",
  "sceno",
@@ -1752,6 +1791,12 @@ dependencies = [
  "hashbrown 0.17.1",
  "tracing",
 ]
+
+[[package]]
+name = "micromath"
+version = "2.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c3c8dda44ff03a2f238717214da50f65d5a53b45cd213a7370424ffdb6fae815"
 
 [[package]]
 name = "mime"
@@ -2333,6 +2378,27 @@ name = "r-efi"
 version = "6.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f8dcc9c7d52a811697d2151c701e0d08956f92b0e24136cf4cf27b57a6a0d9bf"
+
+[[package]]
+name = "radio-face"
+version = "0.0.1"
+source = "git+https://github.com/merely-made/retinue.git?rev=6aa78fc0d0ddd30e94db59470f30f47e669321dc#6aa78fc0d0ddd30e94db59470f30f47e669321dc"
+dependencies = [
+ "embedded-graphics",
+]
+
+[[package]]
+name = "radio-mirror"
+version = "0.0.1"
+source = "git+https://github.com/merely-made/retinue.git?rev=6aa78fc0d0ddd30e94db59470f30f47e669321dc#6aa78fc0d0ddd30e94db59470f30f47e669321dc"
+dependencies = [
+ "embedded-graphics",
+ "png 0.17.16",
+ "radio-face",
+ "serde",
+ "serde_json",
+ "wasm-bindgen",
+]
 
 [[package]]
 name = "rancor"

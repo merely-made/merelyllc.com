@@ -460,31 +460,94 @@ try {
   await radioBenchDesktop.waitForFunction(
     () => document.querySelector("[data-radio-simulator]")?.dataset.ready === "true",
   );
-  assert.equal(await radioBench.locator("[data-screen-header]").textContent(), "PHY · OK");
-  await radioBench.locator('[data-radio-action="a-short"]').click();
-  assert.equal(await radioBench.locator("[data-screen-header]").textContent(), "PHY · POWER");
+  const radioPress = async (action) => {
+    await radioBench.locator(`[data-radio-action="${action}"]`).click();
+    return radioBenchState(radioBench);
+  };
 
-  await radioBench.locator("[data-radio-scenario]").selectOption("host");
-  await radioBench.locator('[data-radio-action="a-long"]').click();
-  assert.equal(await radioBench.locator("[data-screen-header]").textContent(), "MENU");
-  await radioBench.locator('[data-radio-action="a-short"]').click();
-  await radioBench.locator('[data-radio-action="a-long"]').click();
-  assert.equal(await radioBench.locator("[data-screen-header]").textContent(), "VERIFY · HOST");
+  // Screen names are radio-mirror's screen(); lines are radio-face's text projection.
+  let radioState = await radioBenchState(radioBench);
+  assert.equal(radioState.screen, "status");
+  assert.equal(radioState.lines[0], "STATUS, RAD OK");
+  assert.ok(radioState.lines.includes("BOARD: HELTEC V4"));
+  assert.equal(radioState.staticHidden, true);
+  assert.equal(radioState.canvasHidden, false);
+  assert.ok(radioState.litPixels > 0, "radio-mirror drew nothing onto the canvas");
+  assert.equal(radioState.led, "off");
+
+  radioState = await radioPress("a-short");
+  assert.equal(radioState.screen, "power");
+  assert.match(radioState.lines[0], /^POWER, /);
+
+  // The V4's one button: hold for the menu, tap to move, hold to select.
+  radioState = await radioPress("a-long");
+  assert.equal(radioState.screen, "menu:brightness:0");
+  assert.ok(radioState.lines.includes("BRIGHTNESS (SELECTED)"));
+  await radioPress("a-short");
+  radioState = await radioPress("a-short");
+  assert.equal(radioState.screen, "menu:verify:2");
+  radioState = await radioPress("a-long");
+  assert.equal(radioState.screen, "verify");
+  assert.equal(radioState.lines[0], "VERIFY, HOST");
 
   await radioBench.locator("[data-radio-input]").selectOption("two");
-  await radioBench.locator('[data-radio-action="a-short"]').click();
-  await radioBench.locator('[data-radio-action="chord"]').click();
-  assert.equal(await radioBench.locator("[data-screen-header]").textContent(), "MENU");
   assert.equal(await radioBench.locator('[data-radio-action="chord"]').isVisible(), true);
+  radioState = await radioPress("a-short");
+  assert.equal(radioState.screen, "power", "any press leaves VERIFY");
+  radioState = await radioPress("chord");
+  assert.equal(radioState.screen, "menu:brightness:0");
+  radioState = await radioPress("b-long");
+  assert.equal(radioState.screen, "power");
+  radioState = await radioPress("b-long");
+  assert.equal(radioState.screen, "display-off");
+  assert.equal(radioState.lastAction, "display-turned-off");
+  assert.equal(radioState.panelLit, "false");
 
+  // Raw key edges, classified by the firmware's own press classifier.
+  await radioBench.locator("[data-radio-screen]").focus();
+  await radioBenchDesktop.keyboard.down("a");
+  await radioBenchDesktop.keyboard.up("a");
+  radioState = await radioBenchState(radioBench);
+  assert.equal(radioState.lastEvent, "a-short");
+  assert.equal(radioState.lastAction, "display-woke");
+  assert.equal(radioState.screen, "power");
+  await radioBenchDesktop.keyboard.down("a");
+  await radioBenchDesktop.waitForTimeout(800);
+  await radioBenchDesktop.keyboard.up("a");
+  radioState = await radioBenchState(radioBench);
+  assert.equal(radioState.lastEvent, "a-long");
+  assert.equal(radioState.screen, "verify");
+
+  // Upstream images are site HTML, marked as the site's own boundary note.
   await radioBench.locator("[data-radio-firmware]").selectOption("meshtastic");
-  assert.equal(await radioBench.locator("[data-screen-header]").textContent(), "MST · HANDOFF");
-  assert.match(await radioBench.locator("[data-radio-boundary]").textContent(), /does not counterfeit/);
+  radioState = await radioBenchState(radioBench);
+  assert.equal(radioState.screen, "handoff:meshtastic");
+  assert.equal(radioState.canvasHidden, true);
+  assert.match(radioState.lines[0], /^Site note · not a firmware screen/);
+  assert.match(radioState.lines[0], /does not counterfeit/);
+  assert.equal(
+    await radioBench.locator('[data-radio-handoff="meshtastic"]').isVisible(),
+    true,
+  );
   assert.equal(await radioBench.locator('[data-radio-action="a-short"]').isDisabled(), true);
 
   await radioBench.locator("[data-radio-firmware]").selectOption("retinue");
   await radioBench.locator("[data-radio-scenario]").selectOption("fault");
-  assert.equal(await radioBench.locator("[data-screen-header]").textContent(), "PHY · FAULT");
+  radioState = await radioBenchState(radioBench);
+  assert.equal(radioState.screen, "fault");
+  assert.equal(radioState.lines[0], "FAULT, E01");
+  assert.ok(radioState.lines.includes("SX1262 INIT"));
+  assert.equal(radioState.led, "fault-triple");
+  radioState = await radioPress("a-short");
+  assert.equal(radioState.screen, "fault", "the fault preempts every page");
+
+  // Without a host the controller offers the four local pages.
+  await radioBench.locator("[data-radio-scenario]").selectOption("local");
+  const localScreens = [(await radioBenchState(radioBench)).screen];
+  for (let step = 0; step < 4; step += 1) {
+    localScreens.push((await radioPress("a-short")).screen);
+  }
+  assert.deepEqual(localScreens, ["status", "power", "radio", "traffic", "status"]);
   assert.equal(await horizontalOverflow(radioBenchDesktop), 0);
   assert.deepEqual(
     radioBenchDesktopDiagnostics,
@@ -495,9 +558,23 @@ try {
     path: path.join(receiptRoot, "radio-bench-desktop.png"),
   });
   receipt.radio_bench.desktop = {
+    runtime: "radio-mirror",
     scenarios: 3,
     firmware_images: 4,
     input_faces: 2,
+    screens_reached: [
+      "status",
+      "power",
+      "menu:brightness:0",
+      "menu:verify:2",
+      "verify",
+      "display-off",
+      "handoff:meshtastic",
+      "fault",
+      "radio",
+      "traffic",
+    ],
+    key_edges: "a-short, a-long",
     a_plus_b: "operable-on-two-button-face",
     horizontal_overflow: 0,
   };
@@ -516,7 +593,9 @@ try {
   );
   await mobileBench.locator("[data-radio-input]").selectOption("two");
   await mobileBench.locator('[data-radio-action="chord"]').click();
-  assert.equal(await mobileBench.locator("[data-screen-header]").textContent(), "MENU");
+  const mobileState = await radioBenchState(mobileBench);
+  assert.equal(mobileState.screen, "menu:brightness:0");
+  assert.equal(mobileState.lines[0], "MENU, LOCAL");
   assert.equal(await horizontalOverflow(radioBenchMobile), 0);
   assert.deepEqual(
     radioBenchMobileDiagnostics,
@@ -532,6 +611,64 @@ try {
     horizontal_overflow: 0,
   };
   await radioBenchMobile.close();
+
+  // Without script: the pinned build-time screens, each with its text projection.
+  const radioBenchStatic = await browser.newPage({
+    viewport: { width: 900, height: 900 },
+    javaScriptEnabled: false,
+  });
+  await radioBenchStatic.goto(`${baseUrl}/devices/v4-desktop-radio/`, {
+    waitUntil: "networkidle",
+  });
+  const staticBench = await radioBenchStatic.evaluate(async () => {
+    const root = document.querySelector("[data-radio-simulator]");
+    const images = [...root.querySelectorAll("img")];
+    await Promise.all(images.map((image) => image.decode().catch(() => undefined)));
+    return {
+      ready: root.dataset.ready,
+      fallback: root.querySelector("[data-radio-fallback]").textContent,
+      screen: root.querySelector("[data-radio-screen]").dataset.screenName,
+      reading: [...root.querySelectorAll("[data-radio-text] li")].map((li) => li.textContent),
+      figures: [...root.querySelectorAll("[data-radio-gallery] figure")].map((figure) => ({
+        screen: figure.dataset.screenName,
+        alt: figure.querySelector("img").alt,
+        width: figure.querySelector("img").naturalWidth,
+        height: figure.querySelector("img").naturalHeight,
+      })),
+    };
+  });
+  assert.equal(staticBench.ready, "false");
+  assert.match(staticBench.fallback, /rendered by radio-mirror from Retinue's firmware UI at retinue revision [0-9a-f]{7}/);
+  assert.equal(staticBench.screen, "status");
+  assert.equal(staticBench.reading[0], "STATUS, RAD OK");
+  assert.deepEqual(
+    staticBench.figures.map((figure) => figure.screen),
+    [
+      "status",
+      "power",
+      "radio",
+      "traffic",
+      "identity",
+      "links",
+      "peers",
+      "menu:brightness:0",
+      "verify",
+      "display-off",
+      "fault",
+    ],
+  );
+  for (const figure of staticBench.figures) {
+    assert.equal(figure.width, 128, `${figure.screen} image did not load`);
+    assert.equal(figure.height, 64, `${figure.screen} image did not load`);
+    assert.ok(figure.alt.length > 0, `${figure.screen} has no text projection`);
+  }
+  assert.match(staticBench.figures[0].alt, /^STATUS, RAD OK; BOARD: HELTEC V4/);
+  assert.match(staticBench.figures.at(-1).alt, /^FAULT, E01; SX1262 INIT/);
+  receipt.radio_bench.no_script = {
+    screens: staticBench.figures.length,
+    text_projection: "alt",
+  };
+  await radioBenchStatic.close();
 
   const visualProject = await browser.newPage({
     viewport: { width: 1200, height: 900 },
@@ -1354,6 +1491,31 @@ function collectDiagnostics(page) {
     }
   });
   return diagnostics;
+}
+
+async function radioBenchState(bench) {
+  return bench.evaluate((root) => {
+    const screen = root.querySelector("[data-radio-screen]");
+    const canvas = root.querySelector("[data-radio-canvas]");
+    const pixels = canvas
+      .getContext("2d")
+      .getImageData(0, 0, canvas.width, canvas.height).data;
+    let litPixels = 0;
+    for (let index = 0; index < pixels.length; index += 4) {
+      if (pixels[index] || pixels[index + 1] || pixels[index + 2]) litPixels += 1;
+    }
+    return {
+      screen: screen.dataset.screenName,
+      lines: [...root.querySelectorAll("[data-radio-text] li")].map((li) => li.textContent),
+      led: root.querySelector("[data-radio-led]").dataset.ledState,
+      panelLit: screen.dataset.panelLit,
+      lastAction: root.dataset.lastAction,
+      lastEvent: root.dataset.lastEvent ?? null,
+      staticHidden: root.querySelector("[data-radio-static]").hidden,
+      canvasHidden: canvas.hidden,
+      litPixels,
+    };
+  });
 }
 
 async function horizontalOverflow(page) {

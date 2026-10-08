@@ -14,6 +14,8 @@ const MESSAGE_PATH_LAB: &[u8] = include_bytes!("../assets/message-path-lab.js");
 const OG_IMAGE: &[u8] = include_bytes!("../assets/og.jpg");
 const PROJECTION_PROOF: &[u8] = include_bytes!("../assets/projection-proof.js");
 const RADIO_SIMULATOR: &[u8] = include_bytes!("../assets/radio-simulator.js");
+const RADIO_MIRROR_WASM_GLUE: &[u8] = include_bytes!("../assets/radio_mirror.js");
+const RADIO_MIRROR_WASM: &[u8] = include_bytes!("../assets/radio_mirror_bg.wasm");
 const REPO_GRAPH_WASM_GLUE: &[u8] = include_bytes!("../assets/mer3ly_repo_graph.js");
 const REPO_GRAPH_WASM: &[u8] = include_bytes!("../assets/mer3ly_repo_graph_bg.wasm");
 
@@ -103,6 +105,15 @@ fn build_site(output: &Path) -> std::io::Result<()> {
         projects::projection_artifact_json(&data),
     )?;
     fs::write(output.join("radio-simulator.js"), RADIO_SIMULATOR)?;
+    fs::write(output.join("radio_mirror.js"), RADIO_MIRROR_WASM_GLUE)?;
+    fs::write(output.join("radio_mirror_bg.wasm"), RADIO_MIRROR_WASM)?;
+    for screen in mer3ly_radio_mirror::static_screens().map_err(std::io::Error::other)? {
+        let destination = output.join(&screen.path);
+        if let Some(parent) = destination.parent() {
+            fs::create_dir_all(parent)?;
+        }
+        fs::write(destination, screen.png)?;
+    }
     fs::write(output.join("mer3ly_repo_graph.js"), REPO_GRAPH_WASM_GLUE)?;
     fs::write(output.join("mer3ly_repo_graph_bg.wasm"), REPO_GRAPH_WASM)?;
     fs::write(output.join("og.jpg"), OG_IMAGE)?;

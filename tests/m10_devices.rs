@@ -128,6 +128,8 @@ fn catalog_layout_has_phone_specific_single_column_ledgers() {
         ".purchase-unavailable",
         ".radio-bench-grid",
         ".radio-oled",
+        ".radio-screen-text",
+        ".radio-screen-gallery",
         ".radio-control-button",
         "@media (max-width: 440px)",
         "@media (prefers-reduced-motion: reduce)",
@@ -140,7 +142,7 @@ fn catalog_layout_has_phone_specific_single_column_ledgers() {
 }
 
 #[test]
-fn v4_profile_embeds_the_truth_bounded_radio_bench() {
+fn v4_profile_embeds_the_radio_mirror_bench() {
     let data = PublicSiteData::load(workspace_root()).expect("public site data");
     let v4 = data
         .devices
@@ -151,7 +153,7 @@ fn v4_profile_embeds_the_truth_bounded_radio_bench() {
     for contract in [
         "data-radio-simulator",
         "Try the V4 radio face.",
-        "deterministic controller model",
+        "Retinue firmware UI · radio-mirror",
         "V4 fitted button",
         "Two-button enclosure",
         "A+B hold",
@@ -162,13 +164,19 @@ fn v4_profile_embeds_the_truth_bounded_radio_bench() {
         "RNode",
         "Meshtastic",
         "MeshCore",
-        "src=\"/radio-simulator.js?v=",
+        "data-radio-canvas",
+        "aria-live=\"polite\"",
+        "id=\"radio-mirror-scenarios\" type=\"application/json\"",
     ] {
         assert!(
             document.contains(contract),
             "V4 bench is missing {contract}"
         );
     }
+    assert!(document.contains(&format!(
+        "<script type=\"module\" src=\"{}\"></script>",
+        devices::radio_simulator_href()
+    )));
 
     let t114 = data
         .devices
@@ -177,6 +185,169 @@ fn v4_profile_embeds_the_truth_bounded_radio_bench() {
     let t114_document = devices::document_for(t114, &data.firmware);
     assert!(!t114_document.contains("data-radio-simulator"));
     assert!(!t114_document.contains("radio-simulator.js"));
+    assert!(!t114_document.contains("radio-mirror/"));
+}
+
+#[test]
+fn v4_bench_states_where_its_screens_come_from() {
+    let data = PublicSiteData::load(workspace_root()).expect("public site data");
+    let v4 = data.devices.by_id("v4-desktop-radio").expect("V4 record");
+    let document = devices::document_for(v4, &data.firmware);
+
+    assert!(!document.contains("accurate static example"));
+    assert!(!document.contains("deterministic controller model"));
+    assert!(document.contains(&devices::radio_mirror_source_statement()));
+    assert!(document.contains("at retinue revision 6aa78fc"));
+    assert_eq!(mer3ly_radio_mirror::short_revision(), "6aa78fc");
+    assert!(document.contains(&format!(
+        "https://github.com/merely-made/retinue/tree/{}/crates/radio-mirror",
+        mer3ly_radio_mirror::RETINUE_REVISION
+    )));
+    for firmware in ["RNode", "Meshtastic", "MeshCore"] {
+        assert!(document.contains(&format!(
+            "{firmware} is the selected image. Its upstream firmware owns the screen and controls"
+        )));
+    }
+    assert_eq!(
+        document
+            .matches("Site note · not a firmware screen")
+            .count(),
+        3
+    );
+}
+
+#[test]
+fn v4_bench_shows_every_controller_screen_with_its_text_projection() {
+    let data = PublicSiteData::load(workspace_root()).expect("public site data");
+    let v4 = data.devices.by_id("v4-desktop-radio").expect("V4 record");
+    let document = devices::document_for(v4, &data.firmware);
+    let screens = mer3ly_radio_mirror::static_screens().expect("radio-mirror screens");
+
+    let names = screens
+        .iter()
+        .map(|screen| screen.screen.as_str())
+        .collect::<Vec<_>>();
+    assert_eq!(
+        names,
+        [
+            "status",
+            "power",
+            "radio",
+            "traffic",
+            "identity",
+            "links",
+            "peers",
+            "menu:brightness:0",
+            "verify",
+            "display-off",
+            "fault",
+        ]
+    );
+    for screen in &screens {
+        assert!(
+            document.contains(&format!("data-screen-name=\"{}\"", screen.screen)),
+            "{} is not named in the page",
+            screen.screen
+        );
+        let alt = devices::radio_screen_alt(&screen.lines);
+        assert!(
+            document.contains(&format!("src=\"/{}\" alt=\"{alt}\"", screen.path)),
+            "{} lacks its text projection",
+            screen.screen
+        );
+    }
+
+    // radio-face's text projection, not a site-written mock.
+    let status = &screens[0];
+    assert_eq!(status.lines[0], "STATUS, RAD OK");
+    assert!(status.lines.contains(&"BOARD: HELTEC V4".to_owned()));
+    for line in &status.lines {
+        assert!(document.contains(&format!("<li>{line}</li>")));
+    }
+    let fault = screens.last().expect("fault screen");
+    assert_eq!(fault.lines[0], "FAULT, E01");
+    assert!(fault.lines.contains(&"SX1262 INIT".to_owned()));
+    let peers = screens
+        .iter()
+        .find(|screen| screen.slug == "peers")
+        .unwrap();
+    assert_eq!(peers.lines[0], "PEERS, HOST");
+}
+
+#[test]
+fn v4_bench_scenarios_are_the_pinned_fixtures() {
+    let scenarios: serde_json::Value =
+        serde_json::from_str(&mer3ly_radio_mirror::scenarios_json()).expect("scenario JSON");
+    assert_eq!(scenarios["schema"], "mer3ly.radio-bench-scenarios/v1");
+    assert_eq!(scenarios["surface"], "oled-128x64");
+    assert_eq!(
+        scenarios["source"]["revision"],
+        mer3ly_radio_mirror::RETINUE_REVISION
+    );
+    let local: serde_json::Value =
+        serde_json::from_str(mer3ly_radio_mirror::LOCAL_FIXTURE).expect("local fixture");
+    let host: serde_json::Value =
+        serde_json::from_str(mer3ly_radio_mirror::HOST_FIXTURE).expect("host fixture");
+    assert_eq!(scenarios["scenarios"]["host"]["local"], local);
+    assert_eq!(scenarios["scenarios"]["host"]["host"], host);
+    assert!(scenarios["scenarios"]["local"]["host"].is_null());
+    assert_eq!(scenarios["scenarios"]["local"]["local"]["host"], "detached");
+    assert_eq!(
+        scenarios["scenarios"]["fault"]["local"]["fault"],
+        serde_json::json!({ "code": 1, "message": "SX1262 INIT" })
+    );
+}
+
+#[test]
+fn radio_simulator_drives_radio_mirror_and_keeps_no_page_table() {
+    let script = std::fs::read_to_string(workspace_root().join("assets/radio-simulator.js"))
+        .expect("radio simulator source");
+    for retired in [
+        "PAGE_CONTENT",
+        "LOCAL_PAGES",
+        "HOST_PAGES",
+        "SX1262 READY",
+        "menuItems",
+        "PHY · ",
+        "RET · ",
+    ] {
+        assert!(
+            !script.contains(retired),
+            "radio-simulator.js still carries {retired}"
+        );
+    }
+    for driven in [
+        "RadioMirror",
+        "./radio_mirror.js",
+        "./radio_mirror_bg.wasm",
+        ".press(",
+        ".edge(",
+        ".rgba()",
+        ".text()",
+        ".screen()",
+        ".led(",
+        "set_local_json",
+        "set_host_json",
+    ] {
+        assert!(script.contains(driven), "radio-simulator.js lacks {driven}");
+    }
+}
+
+#[test]
+fn the_site_resolve_holds_no_reticulum_licensed_crate() {
+    for lock in ["Cargo.lock", "crates/radio-mirror/Cargo.lock"] {
+        let text = std::fs::read_to_string(workspace_root().join(lock)).expect("lockfile");
+        for forbidden in ["retinue", "retinue-sim"] {
+            assert!(
+                !text.contains(&format!("name = \"{forbidden}\"\n")),
+                "{lock} resolves {forbidden}"
+            );
+        }
+        assert!(
+            text.contains("name = \"radio-mirror\"\n"),
+            "{lock} lacks radio-mirror"
+        );
+    }
 }
 
 #[test]

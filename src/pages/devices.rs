@@ -14,6 +14,8 @@ use crate::site::{
 };
 
 const RADIO_SIMULATOR: &[u8] = include_bytes!("../../assets/radio-simulator.js");
+const RADIO_MIRROR_WASM_GLUE: &[u8] = include_bytes!("../../assets/radio_mirror.js");
+const RADIO_MIRROR_WASM: &[u8] = include_bytes!("../../assets/radio_mirror_bg.wasm");
 
 pub const INDEX_METADATA: PageMetadata = PageMetadata {
     title: "Radio hardware catalog | Merely",
@@ -81,11 +83,33 @@ pub fn document_for(device: &DeviceRecord, firmware: &FirmwareCatalog) -> String
 }
 
 fn radio_simulator_bootstrap() -> String {
-    let digest = format!("{:x}", Sha256::digest(RADIO_SIMULATOR));
+    let scenarios = radio_mirror_scenarios_embedded();
     format!(
-        "<script type=\"module\" src=\"/radio-simulator.js?v={}\"></script>",
-        &digest[..12]
+        "<script id=\"{RADIO_MIRROR_SCENARIOS_ID}\" type=\"application/json\">{scenarios}</script>\n\
+<script type=\"module\" src=\"{}\"></script>",
+        radio_simulator_href()
     )
+}
+
+/// The id of the inline document holding the bench's status documents.
+pub const RADIO_MIRROR_SCENARIOS_ID: &str = "radio-mirror-scenarios";
+
+/// The scenario documents as embedded in the V4 page.
+pub fn radio_mirror_scenarios_embedded() -> String {
+    mer3ly_radio_mirror::scenarios_json()
+        .replace('<', "\\u003c")
+        .replace('>', "\\u003e")
+        .replace('&', "\\u0026")
+}
+
+/// The bench module's address, versioned by the loader and the Wasm runtime it imports.
+pub fn radio_simulator_href() -> String {
+    let mut digest = Sha256::new();
+    digest.update(RADIO_SIMULATOR);
+    digest.update(RADIO_MIRROR_WASM_GLUE);
+    digest.update(RADIO_MIRROR_WASM);
+    let digest = format!("{:x}", digest.finalize());
+    format!("/radio-simulator.js?v={}", &digest[..12])
 }
 
 fn device_json_ld(device: &DeviceRecord, canonical: &str) -> String {
@@ -377,7 +401,26 @@ fn recipe_section(device: &DeviceRecord) -> SiteView {
     )
 }
 
+/// The firmware images the bench offers that are not Retinue's: their
+/// upstream firmware owns the screen, so the site explains the boundary in its
+/// own HTML instead of drawing a screen.
+const HANDOFF_FIRMWARE: [(&str, &str); 3] = [
+    ("rnode", "RNode"),
+    ("meshtastic", "Meshtastic"),
+    ("meshcore", "MeshCore"),
+];
+
+/// The screen the bench shows before script runs, and on reset.
+const INITIAL_SCREEN: &str = "status";
+
 fn radio_simulator() -> SiteView {
+    let screens = mer3ly_radio_mirror::static_screens()
+        .expect("radio-mirror renders every V4 screen through the firmware controller");
+    let initial = screens
+        .iter()
+        .find(|screen| screen.slug == INITIAL_SCREEN)
+        .expect("radio-mirror renders the STATUS page");
+    let source = radio_mirror_source_statement();
     element(
         "div",
         &[
@@ -395,23 +438,28 @@ fn radio_simulator() -> SiteView {
                     element(
                         "p",
                         &[("class", "eyebrow")],
-                        vec![txt("deterministic controller model")],
+                        vec![txt("Retinue firmware UI · radio-mirror")],
                     ),
                     element("h3", &[], vec![txt("Try the V4 radio face.")]),
                     element(
                         "p",
                         &[],
-                        vec![txt(concat!(
-                            "This is a simulation of Retinue's current 128 × 64 PANEL × LEDGER contract, ",
-                            "using fixed example state. It is not connected to a radio."
-                        ))],
+                        vec![
+                            txt(source.clone()),
+                            txt(" "),
+                            external_link(
+                                &radio_mirror_source_url(),
+                                "Read radio-mirror at that revision.",
+                                "radio-source-link",
+                            ),
+                        ],
                     ),
                 ],
             ),
             element(
                 "div",
                 &[("class", "radio-bench-grid")],
-                vec![radio_hardware(), radio_controls()],
+                vec![radio_hardware(initial), radio_controls()],
             ),
             element(
                 "p",
@@ -419,15 +467,39 @@ fn radio_simulator() -> SiteView {
                     ("class", "radio-bench-fallback"),
                     ("data-radio-fallback", ""),
                 ],
-                vec![txt(
-                    "Enable JavaScript to operate the controls. The displayed STATUS page remains an accurate static example.",
-                )],
+                vec![txt(format!(
+                    "Enable JavaScript to operate the controls. Each screen below was rendered by radio-mirror from Retinue's firmware UI at retinue revision {}.",
+                    mer3ly_radio_mirror::short_revision()
+                ))],
             ),
+            radio_screen_gallery(&screens),
         ],
     )
 }
 
-fn radio_hardware() -> SiteView {
+/// Where the screens come from, as the page states it.
+pub fn radio_mirror_source_statement() -> String {
+    format!(
+        "The screen is drawn by radio-mirror, which runs Retinue's own firmware UI (radio-face's renderer and Controller) at retinue revision {}, compiled to WebAssembly. Its status is retinue's fixed receipt fixtures; it is not connected to a radio.",
+        mer3ly_radio_mirror::short_revision()
+    )
+}
+
+fn radio_mirror_source_url() -> String {
+    format!(
+        "{}/tree/{}/crates/radio-mirror",
+        mer3ly_radio_mirror::RETINUE_REPOSITORY,
+        mer3ly_radio_mirror::RETINUE_REVISION
+    )
+}
+
+/// A screen's text projection as one `alt` string.
+pub fn radio_screen_alt(lines: &[String]) -> String {
+    lines.join("; ")
+}
+
+fn radio_hardware(initial: &mer3ly_radio_mirror::StaticScreen) -> SiteView {
+    let src = format!("/{}", initial.path);
     element(
         "div",
         &[("class", "radio-hardware")],
@@ -442,46 +514,33 @@ fn radio_hardware() -> SiteView {
                         &[
                             ("class", "radio-oled"),
                             ("data-radio-screen", ""),
-                            ("data-screen-mode", "page"),
-                            ("role", "status"),
-                            ("aria-live", "polite"),
-                            (
-                                "aria-label",
-                                "PHY OK. Board Heltec V4. Firmware Retinue. Host unavailable. Radio SX1262 ready. Local modem ready.",
-                            ),
+                            ("data-screen-name", initial.screen.as_str()),
                         ],
                         vec![
+                            // The live text below is the reading; the pixels repeat it.
                             element(
-                                "div",
-                                &[("class", "radio-oled-header")],
-                                vec![
-                                    element(
-                                        "strong",
-                                        &[("data-screen-header", "")],
-                                        vec![txt("PHY · OK")],
-                                    ),
-                                    element(
-                                        "span",
-                                        &[("data-screen-counter", "")],
-                                        vec![txt("1/4")],
-                                    ),
+                                "img",
+                                &[
+                                    ("src", src.as_str()),
+                                    ("alt", ""),
+                                    ("width", "128"),
+                                    ("height", "64"),
+                                    ("data-radio-static", ""),
                                 ],
+                                vec![],
                             ),
                             element(
-                                "div",
-                                &[("class", "radio-oled-body")],
-                                vec![
-                                    screen_row("BOARD  HELTEC V4"),
-                                    screen_row("FW     RETINUE"),
-                                    screen_row("HOST   —"),
-                                    screen_row("RADIO  SX1262 READY"),
+                                "canvas",
+                                &[
+                                    ("width", "128"),
+                                    ("height", "64"),
+                                    ("aria-hidden", "true"),
+                                    ("hidden", ""),
+                                    ("data-radio-canvas", ""),
                                 ],
+                                vec![],
                             ),
-                            element(
-                                "div",
-                                &[("class", "radio-oled-ticker"), ("data-screen-ticker", "")],
-                                vec![txt("LOCAL · MODEM READY")],
-                            ),
+                            radio_handoffs(),
                         ],
                     ),
                     element(
@@ -493,7 +552,7 @@ fn radio_hardware() -> SiteView {
                                 &[
                                     ("class", "radio-led"),
                                     ("data-radio-led", ""),
-                                    ("data-led-state", "idle"),
+                                    ("data-led-state", "off"),
                                     ("aria-hidden", "true"),
                                 ],
                                 vec![],
@@ -503,15 +562,70 @@ fn radio_hardware() -> SiteView {
                     ),
                 ],
             ),
+            element(
+                "div",
+                &[("class", "radio-screen-reading")],
+                vec![
+                    element(
+                        "p",
+                        &[
+                            ("class", "radio-screen-reading-label"),
+                            ("id", "radio-text-label"),
+                        ],
+                        vec![txt("What the screen says")],
+                    ),
+                    element(
+                        "ol",
+                        &[
+                            ("class", "radio-screen-text"),
+                            ("data-radio-text", ""),
+                            ("role", "status"),
+                            ("aria-live", "polite"),
+                            ("aria-labelledby", "radio-text-label"),
+                        ],
+                        initial
+                            .lines
+                            .iter()
+                            .map(|line| element("li", &[], vec![txt(line.as_str())]))
+                            .collect(),
+                    ),
+                ],
+            ),
         ],
     )
 }
 
-fn screen_row(label: &str) -> SiteView {
+fn radio_handoffs() -> SiteView {
     element(
         "div",
-        &[("class", "radio-oled-row"), ("data-screen-row", "")],
-        vec![txt(label)],
+        &[("class", "radio-handoffs")],
+        HANDOFF_FIRMWARE
+            .iter()
+            .map(|(id, name)| {
+                element(
+                    "div",
+                    &[
+                        ("class", "radio-handoff"),
+                        ("data-radio-handoff", id),
+                        ("hidden", ""),
+                    ],
+                    vec![
+                        element(
+                            "p",
+                            &[("class", "radio-handoff-kicker")],
+                            vec![txt("Site note · not a firmware screen")],
+                        ),
+                        element(
+                            "p",
+                            &[],
+                            vec![txt(format!(
+                                "{name} is the selected image. Its upstream firmware owns the screen and controls, so this bench stops at that boundary and does not counterfeit its interface. radio-mirror draws only Retinue's firmware UI."
+                            ))],
+                        ),
+                    ],
+                )
+            })
+            .collect(),
     )
 }
 
@@ -536,8 +650,8 @@ fn radio_controls() -> SiteView {
                 "radio-scenario",
                 "data-radio-scenario",
                 &[
-                    ("local", "Local radio", true),
-                    ("host", "Attached host", false),
+                    ("local", "Local radio", false),
+                    ("host", "Attached host", true),
                     ("fault", "Radio fault", false),
                 ],
             ),
@@ -552,16 +666,28 @@ fn radio_controls() -> SiteView {
             ),
             element(
                 "p",
-                &[("class", "radio-control-help"), ("data-radio-help", "")],
+                &[("class", "radio-control-help"), ("data-radio-help", "one")],
                 vec![txt(
                     "Tap the fitted V4 button to step forward. Hold it for the menu; tap to move and hold to select.",
+                )],
+            ),
+            element(
+                "p",
+                &[
+                    ("class", "radio-control-help"),
+                    ("data-radio-help", "two"),
+                    ("hidden", ""),
+                ],
+                vec![txt(
+                    "A steps forward. B steps back. Hold A+B for the menu; in the menu, A moves, B selects, and holding B leaves.",
                 )],
             ),
             element(
                 "div",
                 &[
                     ("class", "radio-control-pad"),
-                    ("aria-label", "Simulated radio controls"),
+                    ("role", "group"),
+                    ("aria-label", "Radio buttons"),
                 ],
                 vec![
                     radio_button("a-short", "A tap", false),
@@ -573,22 +699,90 @@ fn radio_controls() -> SiteView {
             ),
             element(
                 "p",
+                &[("class", "radio-input-note")],
+                vec![txt(
+                    "With the screen focused, the A and B keys are the radio's buttons: hold them as long as you would the real ones, and the firmware's press classifier decides tap, hold or chord.",
+                )],
+            ),
+            element(
+                "p",
                 &[
                     ("class", "radio-truth-boundary"),
                     ("data-radio-boundary", ""),
                 ],
                 vec![txt(
-                    "Local-radio mode exposes only board, power, radio, traffic, and fault facts the firmware owns.",
+                    "Pages, menu, buttons and LED follow Retinue's firmware Controller. Local radio detaches the host and leaves the four local pages; Attached host adds IDENTITY, LINKS, PEERS and VERIFY from retinue's host fixture; Radio fault is the V4 firmware's SX1262 init fault, which preempts every page.",
                 )],
             ),
             element(
                 "p",
                 &[("class", "radio-input-note")],
                 vec![txt(
-                    "The catalog V4 has one fitted button. The two-button face is a simulated enclosure using the same controller grammar.",
+                    "The catalog V4 has one fitted button. The two-button face is an enclosure the same firmware supports.",
                 )],
             ),
         ],
+    )
+}
+
+fn radio_screen_gallery(screens: &[mer3ly_radio_mirror::StaticScreen]) -> SiteView {
+    element(
+        "div",
+        &[
+            ("class", "radio-screen-gallery"),
+            ("data-radio-gallery", ""),
+        ],
+        vec![
+            element("h4", &[], vec![txt("Every screen the V4's button reaches")]),
+            element(
+                "p",
+                &[],
+                vec![txt(format!(
+                    "Rendered at site build time by radio-mirror from Retinue's firmware UI at retinue revision {}, with retinue's receipt fixtures and the host attached; the fault is the V4 firmware's own radio-init fault. Each image's text is radio-face's text projection of the same screen.",
+                    mer3ly_radio_mirror::short_revision()
+                ))],
+            ),
+            element(
+                "ul",
+                &[("class", "radio-screen-grid")],
+                screens.iter().map(radio_screen_figure).collect(),
+            ),
+        ],
+    )
+}
+
+fn radio_screen_figure(screen: &mer3ly_radio_mirror::StaticScreen) -> SiteView {
+    let src = format!("/{}", screen.path);
+    let alt = radio_screen_alt(&screen.lines);
+    element(
+        "li",
+        &[],
+        vec![element(
+            "figure",
+            &[
+                ("class", "radio-screen-figure"),
+                ("data-screen-name", screen.screen.as_str()),
+            ],
+            vec![
+                element(
+                    "img",
+                    &[
+                        ("src", src.as_str()),
+                        ("alt", alt.as_str()),
+                        ("width", "128"),
+                        ("height", "64"),
+                        ("loading", "lazy"),
+                        ("decoding", "async"),
+                    ],
+                    vec![],
+                ),
+                element(
+                    "figcaption",
+                    &[],
+                    vec![element("code", &[], vec![txt(screen.screen.as_str())])],
+                ),
+            ],
+        )],
     )
 }
 
