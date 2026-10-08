@@ -2730,3 +2730,73 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   - radio-mirror and radio-face are unchanged between the two revisions, so the
     devices runtime stays pinned at `6aa78fc`.
   - The lab's default-step test now derives the delivery index from the trace.
+- 2026-10-08: P2's third replacement, the projection proof, on branch
+  `projection-proof-v2` (not pushed).
+  - **Repin.** The root and `crates/repo-graph` move from mere `ea9e6da7` to
+    `9ccd5f41`. No API adaptation was needed. The repeated `[patch.crates-io]`
+    rows match Mere's root at the new revision, and the lockfiles add only
+    `edit-history` and `serde_path_to_error`.
+  - **Artifacts (P1, Rulings 131-132).** `mer3ly.portable-projection/v1` is
+    retired. The build writes three siblings beside the host dataset:
+    - `projection-capture.json`, chirograph's encoding of a V2 capture with
+      the score and `CaptureAuthorityV1`;
+    - `projection-trace.json`, a `SceneTrace` whose base is the captured scene,
+      with each selection as the host annotation (Ruling 130);
+    - `projection-shelfmark.json`, which cites the capture by content address
+      and expected generation.
+
+    `crates/repo-graph/src/portable.rs` writes and consumes them. It checks
+    the shelfmark against the capture's bytes (Ruling 135, host side) and the
+    site's `epoch == generation` convention. `validate-artifact` re-derives all
+    three byte for byte, consumes them, and joins them to
+    `repository-host-dataset.json` through scenomise's strict S1 reader. Every
+    name, class, status and relationship label comes from that dataset
+    (Ruling 136). A captured relation must match exactly one disclosed
+    relationship by endpoints and kind.
+  - **Parity.** A fixture test freezes the last v1 artifact and its authority
+    (site `9626ffc`). The new trace replays to the same snapshot at all 8
+    positions, with the same labels, diffs and selections.
+  - **Script.** `projection-proof.js` fetches the four files.
+    - It reads integers above 2^53 losslessly: the epoch is
+      2158167204149687473, and the page exposes it as `data-scene-epoch`.
+    - It checks the shelfmark against the capture's BLAKE3 address, computed
+      in the page.
+    - It replays as `snapshot_at` does and refuses a repeated or older diff
+      (Ruling 134).
+    - It moves through the trace as `History<SceneTrace>` does: committing
+      after a move truncates. The 16-step bound is an announced refusal, not
+      a silent cap (Ruling 15).
+    - Its share link is `projection-scene=v3`: the shelfmark's projection and
+      expected generation, the position, and the steps when they differ from
+      the default. A v2 link, a link citing another capture, a broken chain,
+      an over-long trace and an out-of-range position each show a notice and
+      the default trace (Ruling 21).
+  - **No-script reading.** It is derived from the capture and trace at build
+    time: counts, revisions and one line per step. It replaces the figcaption's
+    stale "Eight projects and nine relationships"; the capture holds 11 and
+    13.
+  - **Sandbox.** The sandbox's export now copies a V2 capture
+    (`projection_capture_with_placement`), so nothing writes the v1 schema.
+    The graph Wasm drops from 1,325,984 to 1,297,712 bytes. Two clean builds
+    were byte-identical.
+  - **Choice for review.** The proof keeps the site's lightweight renderer
+    over the shared artifacts. Mounting Graphshell's viewer (about 2.1 MB
+    brotli, with no payload cap ruled) is P2's other reading, and is left to
+    Mark. The script still carries its own replay of the trace's three
+    operations, plus BLAKE3 and lossless JSON. The 32 KiB guard on
+    `projection-proof.js` is raised to 48 KiB; the file is 45,347 B.
+  - **Gate.** Root 73/0, repo-graph 35/0 and radio-mirror 9/0. fmt, clippy
+    (`-D warnings`), `authority validate` and `validate-artifact` (69 files)
+    are clean. In a locally served build at 1000x900, all 8 positions
+    matched the native revisions [1, 1, 2, 2, 3, 3, 4, 5]. A real pointer
+    drag, commit-after-move truncation, v3 restore, all five link notices,
+    the step-bound refusal, replay, the no-scene fallback, the 375 px width
+    and the sandbox export raised no console errors. BLAKE3 matches the
+    official vectors for 0 and 1,024 bytes under JavaScriptCore.
+  - **Not run locally:** the headed smoke and the .ps1 scripts (no Node or
+    pwsh on this Mac). The smoke's proof sections now derive their counts and
+    revisions from the artifacts; it parses under JavaScriptCore.
+  - **Payload.** The Mere profile's first load was 64,473 B raw and
+    13,210 B gzip (HTML with the inline artifact, plus the script). It is now
+    148,557 B raw and 24,412 B gzip: HTML, script, capture, trace, shelfmark,
+    and the 65,038 B host dataset (5,218 B gzip).
