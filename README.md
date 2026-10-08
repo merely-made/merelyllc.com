@@ -65,6 +65,12 @@ cargo run --locked --bin authority -- validate      # validate content
 
 Verify with `cargo test --locked` and the browser smoke (`npm ci
 --ignore-scripts`, `npx playwright install chromium`, `npm run smoke`).
+For installed Microsoft Edge on Windows, set `$env:MER3LY_BROWSER_CHANNEL =
+"msedge"` before `npm run smoke`; the receipt records the selected channel.
+The default and Pages workflow use bundled Chromium. The
+[workspace upstream refresh](docs/2026-10-08_workspace_upstream_refresh.md)
+records dependency qualification and the separate Vello adoption lane.
+
 `authority -- validate-artifact . <artifact-root>` checks an exact Pages
 artifact and emits a hashed receipt.
 

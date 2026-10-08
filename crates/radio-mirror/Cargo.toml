@@ -27,6 +27,9 @@ radio-mirror = { git = "https://github.com/merely-made/retinue.git", rev = "6aa7
 radio-mirror = { git = "https://github.com/merely-made/retinue.git", rev = "6aa78fc0d0ddd30e94db59470f30f47e669321dc", features = ["png"] }
 serde_json = "1"
 
+[dev-dependencies]
+toml = "1.1"
+
 [lints.rust]
 unsafe_code = "forbid"
 

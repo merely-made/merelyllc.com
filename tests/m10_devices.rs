@@ -337,16 +337,17 @@ fn radio_simulator_drives_radio_mirror_and_keeps_no_page_table() {
 fn the_site_resolve_holds_no_reticulum_licensed_crate() {
     for lock in ["Cargo.lock", "crates/radio-mirror/Cargo.lock"] {
         let text = std::fs::read_to_string(workspace_root().join(lock)).expect("lockfile");
+        let parsed: toml::Value = toml::from_str(&text).expect("valid Cargo lockfile");
+        let names: Vec<_> = parsed["package"]
+            .as_array()
+            .expect("Cargo package list")
+            .iter()
+            .map(|package| package["name"].as_str().expect("Cargo package name"))
+            .collect();
         for forbidden in ["retinue", "retinue-sim"] {
-            assert!(
-                !text.contains(&format!("name = \"{forbidden}\"\n")),
-                "{lock} resolves {forbidden}"
-            );
+            assert!(!names.contains(&forbidden), "{lock} resolves {forbidden}");
         }
-        assert!(
-            text.contains("name = \"radio-mirror\"\n"),
-            "{lock} lacks radio-mirror"
-        );
+        assert!(names.contains(&"radio-mirror"), "{lock} lacks radio-mirror");
     }
 }
 
