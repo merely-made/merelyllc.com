@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-123 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-127 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 P0's viewer review and main integration are complete (Rulings 122-123).
 Mere main is pushed at `ea9e6da7`, with current Genet `965b64e2`. The numerical
 payload cap and initial-site deployment remain open. Plain viewer is selected
@@ -1258,6 +1258,48 @@ and cleanup steps. Integrate the verified candidate against current main and
 clean up its disposable outputs, preserving concurrent work and receipts.
 This does not select a numerical payload cap. The completed result is recorded
 in [Authorized integration](handoffs/2026-10-07_viewer_cone/RESUME.md#authorized-integration).
+
+### Rulings 124-127 (2026-10-07): S1's seam, and the radio consumers
+
+Put as four multiple-choice questions after two read-only assessments (S1
+against mere `356a832c`, S7/S8 against retinue `3dd84b1`). Mark chose the
+recommended option each time; the label is quoted as his answer.
+
+**Ruling 124, where S1's seam lands.** Every existing host path into a
+`ProjectionDataset` (`data-practice-source`, `data-projection-dataset`) is
+main-page only, and Ruling 121 puts the site on the viewer, whose `mount_tree`
+reads a Graphshell graph and has no dataset input. Options: viewer and
+practice; practice host only; viewer only. Mark: "Viewer + practice
+(Recommended)". What follows: one shared dataset seam. The viewer gains a host
+input (attribute or `?dataset=`), and the practice proof moves onto the same
+input, its `include_str!` fixture retired.
+
+**Ruling 125, strictness.** `ProjectionDataset` and its parts have no
+`deny_unknown_fields`, and the projection editor saves into the mere session
+(Scenograph editor plan E2b), so strictness everywhere would break stored data.
+Options: versioned host input; strict everywhere. Mark: "Versioned host input
+(Recommended)". What follows: a host-supplied dataset carries a schema tag and
+is checked strictly at the boundary: unknown keys, a stale revision and bad
+relation endpoints are refused. Stored formats load as before. *Reading, not
+ruled:* the envelope wraps the existing `RelationshipDataset` and
+`DisclosedRelationship` (scenomise, from the relationship-recipe lane) rather
+than adding a parallel relation shape, and `ProjectionDataset` itself is
+unchanged, which keeps S1 out of the Scenograph editor's E3/E4 files.
+
+**Ruling 126, radio-mirror's wasm-bindgen.** radio-mirror pins `=0.2.127`
+(Ruling 35); the site and mere are on `=0.2.129`. Options: bump radio-mirror;
+two CLI versions in the site build. Mark: "Bump radio-mirror (Recommended)".
+What follows: radio-mirror, its `web-sys` and retinue's CI wasm job move to
+0.2.129, superseding Ruling 35's pin. Done in a retinue worktree, pushing only
+that work.
+
+**Ruling 127, how the site gets route traces.** retinue-sim links `retinue`,
+under the Reticulum License since 2026-10-05. Options: commit generated
+traces; generate at build time. Mark: "Commit generated traces
+(Recommended)". What follows: the cold and warm traces are generated outside
+the site at a pinned retinue revision and committed with their source and
+revision, and `validate-artifact` hashes them. No Reticulum-licensed code
+enters the site build.
 
 ## Findings (2026-09-30)
 
