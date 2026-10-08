@@ -2600,3 +2600,20 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     20,348 B gzip (HTML, CSS, lab script). After, it is 448,162 B raw and
     119,274 B gzip. Most of the growth is radio-mirror's Wasm (84,358 B gzip),
     which the V4 page shares. The warm trace adds 6,796 B gzip when chosen.
+- 2026-10-08: the message-path lab is live (`273e235`, fixed at `3c48380`).
+  The first deploy failed in headed smoke, and Deploy was skipped, so the live
+  site kept the old lab. A shared v2 link raised two page errors: the stage's
+  `ResizeObserver` fires once on observe, before `restore()` loads a trace,
+  and `drawLinks` read `this.scenario.trace`. The local browser check had
+  missed it because the hidden pane's zero-size stage returned early. With
+  the fix, the links still position and the packet waits for a loaded trace.
+  The second run passed smoke and deployed. At Mark's ruling, the trace
+  provenance in CONTENT_LICENSE is stated as facts only, without an
+  interpretation of where the Reticulum License's conditions attach.
+  - Retinue main moved to `edb7389` (RNS 1.5.7 review, Priority 0). The four
+    outputs regenerated there are byte-identical to the committed `6aa78fc`
+    copies. The site re-pins when retinue's second batch merges (route TTL,
+    path requests, MTU clamping, keepalives); the retinue session will say
+    when.
+  - Flagged to retinue: the cold route's `send.hops` is 2 across three links
+    and two relays. The site says "2 relays" and makes no claim about links.
