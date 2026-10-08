@@ -233,9 +233,19 @@ fn radio_lab_manifest_points_at_the_published_traces() {
             .expect("manifest JSON");
     assert_eq!(manifest["schema"], message_path::MANIFEST_SCHEMA);
     assert_eq!(manifest["page"], "traffic");
+    // The default reading stands at the cold trace's delivery.
+    let cold = std::fs::read_to_string("content/retinue-traces/cold.route-trace.json")
+        .expect("cold route trace");
+    let cold: serde_json::Value = serde_json::from_str(&cold).expect("cold trace JSON");
+    let delivered = cold["events"]
+        .as_array()
+        .expect("events")
+        .iter()
+        .position(|event| event["kind"] == "delivered")
+        .expect("the cold trace delivers");
     assert_eq!(
         manifest["default"],
-        serde_json::json!({ "scenario": "cold", "step": 78, "node": "garage" })
+        serde_json::json!({ "scenario": "cold", "step": delivered, "node": "garage" })
     );
     let scenarios = manifest["scenarios"].as_array().expect("scenarios");
     assert_eq!(scenarios.len(), 2);
