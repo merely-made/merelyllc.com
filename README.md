@@ -5,7 +5,7 @@ small static Rust build (Cambium views serialized to HTML) plus a WebGPU
 repository-graph client, deployed to GitHub Pages. The complete site remains
 readable without JavaScript, WebAssembly, or WebGPU.
 
-## Status (2026-10-07)
+## Status (2026-10-08)
 
 Live and deployed. The pages.yml workflow rebuilds, validates, browser-smokes,
 and deploys on main pushes, manual dispatch, and a daily schedule.
@@ -35,12 +35,16 @@ and deploys on main pushes, manual dispatch, and a daily schedule.
   repository-family context, not a resolved Cargo dependency closure. Native
   parser/compiler acceptance is [recorded](docs/receipts/site/2026-10-07_host_dataset/receipt.json).
   Browser loading through S1 and surface replacement remain ahead.
-- P2 has replaced two surfaces with retinue's own code. The V4 device bench
-  runs radio-mirror (2026-10-07). The community-radio page's message path lab
-  (2026-10-08) reads retinue-sim's generated cold and warm route traces,
-  committed under `content/retinue-traces/` with their provenance, and draws
-  the selected radio's TRAFFIC page through radio-mirror. The site links no
-  Reticulum-licensed crate.
+- P2 has replaced three surfaces. The V4 device bench runs radio-mirror
+  (2026-10-07). The community-radio page's message path lab (2026-10-08) reads
+  retinue-sim's generated cold and warm route traces, committed under
+  `content/retinue-traces/` with their provenance, and draws the selected
+  radio's TRAFFIC page through radio-mirror. The site links no
+  Reticulum-licensed crate. The Mere profile's projection proof (2026-10-08)
+  reads Mere's shared artifacts instead of a site schema: a chirograph V2
+  capture, a scenotime scene trace and an incipit shelfmark citing the
+  capture, labelled from the host dataset. Its renderer is still the site's
+  own lightweight script; the Graphshell viewer is not mounted there.
 
 `content/*.toml` is the editorial authority for repository roles, summaries,
 relations, showcases, and the device catalog; the GitHub listing is the live
