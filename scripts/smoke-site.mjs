@@ -258,69 +258,87 @@ try {
       document.querySelector("[data-message-path-lab]")?.dataset.ready ===
       "true",
   );
+  // Every expectation below comes from the committed traces, through the
+  // page's own inline manifest, not from authored copy.
+  const pathManifest = JSON.parse(
+    await messagePathDesktop.locator("#message-path-traces").textContent(),
+  );
+  const coldPath = pathManifest.scenarios.find((scenario) => scenario.id === "cold");
+  const warmPath = pathManifest.scenarios.find((scenario) => scenario.id === "warm");
   const pathLab = messagePathDesktop.locator("[data-message-path-lab]");
   const pathStep = pathLab.locator("[data-path-step]");
+  const pathStatus = pathLab.locator("[data-path-status]");
+  const pathScreenText = async () =>
+    (await pathLab.locator("[data-path-screen-text] li").allTextContents()).join(" | ");
   assert.equal(await pathLab.locator("[data-lab-node]").count(), 5);
   assert.equal(await pathLab.locator("[data-lab-edge]").count(), 5);
-  assert.equal(await pathLab.locator("[data-lab-event]").count(), 6);
-  assert.equal(await pathLab.getAttribute("data-blocked"), "true");
-
-  await pathLab.locator("[data-path-blocked]").uncheck();
-  assert.equal(await pathLab.getAttribute("data-blocked"), "false");
-  assert.match(await pathLab.locator("[data-path-route]").textContent(), /^Direct/);
-  await pathStep.press("End");
-  assert.equal(await pathLab.getAttribute("data-step"), "5");
-  assert.match(
-    await pathLab.locator("[data-path-status]").textContent(),
-    /direct route/,
+  assert.equal(
+    await pathLab.locator("[data-path-ledger] li").count(),
+    coldPath.milestones.length,
   );
+  assert.equal(await pathLab.getAttribute("data-scenario"), "cold");
+  assert.equal(await pathLab.getAttribute("data-step"), String(coldPath.events - 1));
+  assert.equal(await pathLab.getAttribute("data-node"), "garage");
+  assert.match(
+    await pathLab.locator("[data-path-route]").textContent(),
+    /fire station → church steeple → water tower → county garage, 2 relays/,
+  );
+  assert.equal(
+    await pathLab.locator('[data-lab-edge="fire-water"]').getAttribute("class"),
+    "message-path-edge is-cut",
+  );
+  assert.equal(await pathLab.locator("[data-path-screen]").getAttribute("data-screen-name"), "traffic");
+  assert.match(await pathScreenText(), /TRAFFIC/);
+  assert.equal(await pathLab.locator("[data-path-canvas]").isVisible(), true);
 
-  await pathLab.locator("[data-path-blocked]").check();
-  await pathLab.locator('[data-path-action="send"]').click();
+  // Warm cut: the stale route's sends expire, then the reroute after the announce.
+  await pathLab.locator("[data-path-scenario]").selectOption("warm");
+  await messagePathDesktop.waitForFunction(
+    () => document.querySelector("[data-message-path-lab]").dataset.scenario === "warm",
+  );
+  assert.equal(
+    await pathLab.locator("[data-path-ledger] li").count(),
+    warmPath.milestones.length,
+  );
+  await pathStep.focus();
+  await pathStep.press("End");
+  assert.equal(await pathLab.getAttribute("data-step"), String(warmPath.events - 1));
+  assert.match(await pathStatus.textContent(), /Message 5 reaches the county garage/);
+  const firstExpiry = warmPath.milestones.find((row) => row.kind === "expired");
+  await pathLab.locator(`[data-path-ledger] li[data-lab-event="${firstExpiry.event}"] button`).click();
+  assert.equal(await pathLab.getAttribute("data-step"), String(firstExpiry.event));
+  assert.equal(await pathStatus.textContent(), `200.0 s · ${firstExpiry.text}`);
+  await pathLab.locator('[data-lab-node="fire"]').click();
+  assert.equal(await pathLab.getAttribute("data-node"), "fire");
+  assert.match(await pathScreenText(), /link unanswered/);
+  await pathLab.locator('[data-path-action="previous-milestone"]').click();
+  assert.equal(await pathLab.getAttribute("data-event-kind"), "transmit");
+  assert.match(
+    await pathLab.locator('[data-lab-edge="fire-water"]').getAttribute("class"),
+    /is-cut.*is-refused|is-refused.*is-cut/,
+  );
+  assert.match(await pathStatus.textContent(), /Behind the cut, the water tower does not hear it/);
+
+  await pathLab.locator('[data-path-action="play"]').click();
   assert.equal(await pathLab.getAttribute("data-playing"), "true");
   await messagePathDesktop.waitForFunction(
     () => Number(document.querySelector("[data-message-path-lab]").dataset.step) >= 1,
   );
   await pathStep.press("End");
   assert.equal(await pathLab.getAttribute("data-playing"), "false");
-  assert.match(await pathLab.locator("[data-path-route]").textContent(), /^Reroute/);
 
-  const church = pathLab.locator('[data-lab-node="church"]');
-  const churchBefore = {
-    x: Number(await church.getAttribute("data-x")),
-    y: Number(await church.getAttribute("data-y")),
-  };
-  const churchBox = await church.boundingBox();
-  assert.ok(churchBox, "church radio needs a draggable box");
-  await messagePathDesktop.mouse.move(
-    churchBox.x + churchBox.width / 2,
-    churchBox.y + churchBox.height / 2,
-  );
-  await messagePathDesktop.mouse.down();
-  await messagePathDesktop.mouse.move(
-    churchBox.x + churchBox.width / 2 + 54,
-    churchBox.y + churchBox.height / 2 + 34,
-    { steps: 5 },
-  );
-  await messagePathDesktop.mouse.up();
-  const churchAfter = {
-    x: Number(await church.getAttribute("data-x")),
-    y: Number(await church.getAttribute("data-y")),
-  };
-  assert.ok(
-    Math.hypot(churchAfter.x - churchBefore.x, churchAfter.y - churchBefore.y) > 3,
-    "dragging did not move the church radio",
-  );
-
+  const sharedStep = String(firstExpiry.event);
+  await pathLab.locator(`[data-path-ledger] li[data-lab-event="${sharedStep}"] button`).click();
   await pathLab.locator('[data-path-action="share"]').click();
   const sharedMessagePathUrl = new URL(messagePathDesktop.url());
   const sharedMessagePathParams = new URLSearchParams(
     sharedMessagePathUrl.hash.slice(1),
   );
-  assert.equal(sharedMessagePathParams.get("message-path"), "v1");
-  assert.equal(sharedMessagePathParams.get("blocked"), "1");
-  assert.equal(sharedMessagePathParams.get("step"), "5");
-  assert.match(sharedMessagePathParams.get("positions") ?? "", /church,/);
+  assert.equal(sharedMessagePathParams.get("message-path"), "v2");
+  assert.equal(sharedMessagePathParams.get("trace"), warmPath.trace_sha256.slice(0, 12));
+  assert.equal(sharedMessagePathParams.get("scenario"), "warm");
+  assert.equal(sharedMessagePathParams.get("step"), sharedStep);
+  assert.equal(sharedMessagePathParams.get("node"), "fire");
 
   const sharedMessagePath = await browser.newPage({
     viewport: { width: 1000, height: 900 },
@@ -334,13 +352,30 @@ try {
       document.querySelector("[data-message-path-lab]")?.dataset.ready ===
       "true",
   );
-  assert.equal(
-    await sharedMessagePath
-      .locator('[data-lab-node="church"]')
-      .getAttribute("data-x"),
-    churchAfter.x.toFixed(1),
-  );
+  const sharedLab = sharedMessagePath.locator("[data-message-path-lab]");
+  assert.equal(await sharedLab.getAttribute("data-scenario"), "warm");
+  assert.equal(await sharedLab.getAttribute("data-step"), sharedStep);
+  assert.equal(await sharedLab.getAttribute("data-node"), "fire");
+  assert.equal(await sharedLab.getAttribute("data-link-state"), "none");
   assert.equal(await horizontalOverflow(sharedMessagePath), 0);
+
+  // A link from the authored lab is explained, not misread.
+  await sharedMessagePath.goto(
+    `${baseUrl}/radio.html?legacy#message-path=v1&blocked=1&step=5&positions=church,40.0,30.0`,
+    { waitUntil: "networkidle" },
+  );
+  await sharedMessagePath.waitForFunction(
+    () =>
+      document.querySelector("[data-message-path-lab]")?.dataset.ready ===
+      "true",
+  );
+  assert.equal(await sharedLab.getAttribute("data-link-state"), "retired");
+  assert.equal(await sharedLab.getAttribute("data-scenario"), "cold");
+  assert.equal(await sharedLab.locator("[data-path-notice]").isVisible(), true);
+  assert.match(
+    await sharedLab.locator("[data-path-notice]").textContent(),
+    /older version of the lab/,
+  );
   assert.deepEqual(
     sharedMessagePathDiagnostics,
     [],
@@ -360,9 +395,14 @@ try {
   receipt.message_path_lab.desktop = {
     nodes: 5,
     edges: 5,
-    steps: 6,
-    draggable: true,
-    shared_scene: true,
+    traces: pathManifest.scenarios.map((scenario) => ({
+      id: scenario.id,
+      events: scenario.events,
+      ledger_rows: scenario.milestones.length,
+    })),
+    screen: "traffic",
+    shared_step: true,
+    retired_link_notice: true,
     horizontal_overflow: 0,
   };
   await messagePathDesktop.close();
@@ -405,7 +445,13 @@ try {
     Math.min(...mobileNodeBoxes.map(({ y }) => y));
   assert.ok(mobileXSpan > 140, "mobile topology collapsed into a vertical line");
   assert.ok(mobileYSpan > 160, "mobile topology collapsed into a horizontal line");
-  await assertStageScrollPolicy(messagePathMobile, ".message-path-stage", ".message-path-node", "message path");
+  assert.equal(
+    await mobilePathLab
+      .locator(".message-path-stage")
+      .evaluate((stage) => getComputedStyle(stage).touchAction),
+    "pan-y",
+    "message path stage must yield the page scroll",
+  );
   assert.equal(await horizontalOverflow(messagePathMobile), 0);
   assert.deepEqual(
     messagePathMobileDiagnostics,
@@ -438,15 +484,15 @@ try {
       "true",
   );
   const reducedPathLab = messagePathReduced.locator("[data-message-path-lab]");
-  await reducedPathLab.locator('[data-path-action="send"]').click();
-  assert.equal(await reducedPathLab.getAttribute("data-step"), "5");
+  await reducedPathLab.locator('[data-path-action="play"]').click();
+  assert.equal(await reducedPathLab.getAttribute("data-step"), String(coldPath.events - 1));
   assert.equal(await reducedPathLab.getAttribute("data-playing"), "false");
   assert.deepEqual(
     messagePathReducedDiagnostics,
     [],
     "reduced-motion message path lab emitted browser errors",
   );
-  receipt.message_path_lab.reduced_motion = "jumps-to-complete-state";
+  receipt.message_path_lab.reduced_motion = "jumps-to-trace-end";
   await messagePathReduced.close();
 
   const radioBenchDesktop = await browser.newPage({

@@ -1,5 +1,6 @@
-//! The committed retinue-sim traces (Ruling 127): their provenance, the
-//! pairing of each face track with its route trace, and the site's resolve.
+//! The committed retinue-sim traces (Ruling 127): their provenance and the
+//! pairing of each face track with its route trace. `m10_devices` checks
+//! that the site's resolve holds no Reticulum-licensed crate.
 
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -126,19 +127,4 @@ fn the_scenarios_carry_the_facts_the_lab_states() {
             Some("fire>church>water>garage".to_owned()),
         ]
     );
-}
-
-#[test]
-fn the_site_resolve_holds_no_reticulum_licensed_crate() {
-    let lock = fs::read_to_string(root().join("Cargo.lock")).unwrap();
-    for name in lock
-        .lines()
-        .filter_map(|line| line.strip_prefix("name = \""))
-    {
-        let name = name.trim_end_matches('"');
-        assert!(
-            name != "retinue" && name != "retinue-sim",
-            "{name} entered the site resolve"
-        );
-    }
 }

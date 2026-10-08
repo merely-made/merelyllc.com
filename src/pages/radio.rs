@@ -1,11 +1,17 @@
 use sha2::{Digest, Sha256};
 
+use crate::message_path::{
+    self, DefaultView, MANIFEST_ID, Milestone, NodeLayout, layout, milestones, seconds,
+};
+use crate::retinue_traces::{TraceEvent, TraceScenario, TraceSet};
 use crate::site::{
     ActivePage, PageMetadata, SiteView, element, external_link, render_with_body_end,
     section_heading, shell, txt,
 };
 
 const MESSAGE_PATH_LAB: &[u8] = include_bytes!("../../assets/message-path-lab.js");
+const RADIO_MIRROR_WASM_GLUE: &[u8] = include_bytes!("../../assets/radio_mirror.js");
+const RADIO_MIRROR_WASM: &[u8] = include_bytes!("../../assets/radio_mirror_bg.wasm");
 
 pub const METADATA: PageMetadata = PageMetadata {
     title: "Community radio | Merely",
@@ -13,16 +19,44 @@ pub const METADATA: PageMetadata = PageMetadata {
     canonical_url: "https://merelyllc.com/radio.html",
 };
 
+/// The committed traces, which the build cannot do without.
+fn traces() -> TraceSet {
+    TraceSet::embedded().unwrap_or_else(|errors| {
+        panic!(
+            "the committed retinue traces are invalid:\n{}",
+            errors.join("\n")
+        )
+    })
+}
+
 pub fn document() -> String {
-    let digest = format!("{:x}", Sha256::digest(MESSAGE_PATH_LAB));
+    let traces = traces();
+    let manifest = message_path::manifest_embedded(&traces)
+        .unwrap_or_else(|error| panic!("the message path manifest: {error}"));
     let bootstrap = format!(
-        "<script type=\"module\" src=\"/message-path-lab.js?v={}\"></script>",
-        &digest[..12]
+        "<script id=\"{MANIFEST_ID}\" type=\"application/json\">{manifest}</script>\n\
+<script type=\"module\" src=\"{}\"></script>",
+        message_path_lab_href()
     );
-    render_with_body_end(&METADATA, view, &bootstrap)
+    render_with_body_end(&METADATA, || view_with(&traces), &bootstrap)
+}
+
+/// The lab module's address, versioned by the loader and the radio-mirror
+/// runtime it imports.
+pub fn message_path_lab_href() -> String {
+    let mut digest = Sha256::new();
+    digest.update(MESSAGE_PATH_LAB);
+    digest.update(RADIO_MIRROR_WASM_GLUE);
+    digest.update(RADIO_MIRROR_WASM);
+    let digest = format!("{:x}", digest.finalize());
+    format!("/message-path-lab.js?v={}", &digest[..12])
 }
 
 pub fn view() -> SiteView {
+    view_with(&traces())
+}
+
+fn view_with(traces: &TraceSet) -> SiteView {
     shell(
         ActivePage::Radio,
         element(
@@ -31,7 +65,7 @@ pub fn view() -> SiteView {
             vec![
                 hero(),
                 problem_solution(),
-                mesh(),
+                mesh(traces),
                 pilot(),
                 costs(),
                 partnership(),
@@ -100,7 +134,69 @@ fn numbered_card(number: &str, heading: &str, copy: &str) -> SiteView {
     )
 }
 
-fn mesh() -> SiteView {
+/// What the lab shows before any script runs: the default scenario's last
+/// event, on the default node. The script starts from the same state.
+struct LabState<'a> {
+    traces: &'a TraceSet,
+    scenario: &'a TraceScenario,
+    view: DefaultView,
+    milestones: Vec<Milestone>,
+}
+
+impl<'a> LabState<'a> {
+    fn new(traces: &'a TraceSet) -> Self {
+        message_path::check_layout(traces).unwrap_or_else(|error| panic!("{error}"));
+        let view = message_path::default_view(traces)
+            .unwrap_or_else(|error| panic!("the message path default: {error}"));
+        let scenario = traces
+            .scenario(&view.scenario)
+            .expect("the default scenario is present");
+        Self {
+            traces,
+            scenario,
+            milestones: milestones(scenario),
+            view,
+        }
+    }
+
+    fn event(&self) -> &TraceEvent {
+        &self.scenario.trace.events[self.view.step]
+    }
+
+    /// The milestone at or before the step: the ledger's current row.
+    fn current_milestone(&self) -> Option<&Milestone> {
+        self.milestones
+            .iter()
+            .rev()
+            .find(|row| row.event <= self.view.step)
+    }
+
+    /// The latest delivery at or before the step.
+    fn delivered_path(&self) -> Option<&[String]> {
+        self.scenario.trace.events[..=self.view.step]
+            .iter()
+            .rev()
+            .find_map(|event| match event {
+                TraceEvent::Delivered { path, .. } => Some(path.as_slice()),
+                _ => None,
+            })
+    }
+
+    fn edge_is_cut(&self, a: &str, b: &str) -> bool {
+        self.scenario.trace.events[..=self.view.step]
+            .iter()
+            .any(|event| matches!(event, TraceEvent::Cut { a: x, b: y, .. } if (x == a && y == b) || (x == b && y == a)))
+    }
+}
+
+/// The step reading: the event's time, and its ledger text when it has one.
+pub fn step_reading(row: &Milestone) -> String {
+    format!("{} · {}", seconds(row.t), row.text)
+}
+
+fn mesh(traces: &TraceSet) -> SiteView {
+    let state = LabState::new(traces);
+    let step = state.view.step.to_string();
     element(
         "section",
         &[("class", "content-section")],
@@ -112,23 +208,53 @@ fn mesh() -> SiteView {
                     ("class", "mesh-card message-path-lab"),
                     ("data-message-path-lab", ""),
                     ("data-ready", "false"),
-                    ("data-blocked", "true"),
-                    ("data-step", "5"),
+                    ("data-scenario", state.view.scenario.as_str()),
+                    ("data-step", step.as_str()),
+                    ("data-node", state.view.node.as_str()),
                 ],
                 vec![
                     message_path_header(),
-                    message_path_controls(),
+                    element(
+                        "p",
+                        &[
+                            ("class", "message-path-notice"),
+                            ("data-path-notice", ""),
+                            ("role", "status"),
+                            ("hidden", ""),
+                        ],
+                        vec![],
+                    ),
+                    message_path_controls(&state),
                     element(
                         "div",
                         &[("class", "message-path-workbench")],
-                        vec![message_path_topology(), message_path_projections()],
+                        vec![
+                            message_path_topology(&state),
+                            element(
+                                "aside",
+                                &[
+                                    ("class", "message-path-projections"),
+                                    ("aria-label", "The selected radio and the trace ledger"),
+                                ],
+                                vec![message_path_radio(&state), message_path_ledger(&state)],
+                            ),
+                        ],
                     ),
                     element(
                         "figcaption",
-                        &[],
-                        vec![txt(
-                            "When a direct path is unavailable, a message follows the relays that can still hear one another.",
-                        )],
+                        &[("data-path-source", "")],
+                        vec![
+                            txt(message_path::source_statement(traces)),
+                            txt(" "),
+                            external_link(
+                                &format!(
+                                    "{}/tree/{}/crates/retinue-sim",
+                                    traces.provenance.repository, traces.provenance.revision
+                                ),
+                                "Read retinue-sim at that revision.",
+                                "message-path-source-link",
+                            ),
+                        ],
                     ),
                     element(
                         "p",
@@ -159,13 +285,13 @@ fn message_path_header() -> SiteView {
                     element(
                         "h3",
                         &[("id", "message-path-title")],
-                        vec![txt("Pull the mesh. Follow the message.")],
+                        vec![txt("Cut a link. Follow the trace.")],
                     ),
                     element(
                         "p",
                         &[("id", "message-path-description")],
                         vec![txt(
-                            "Move any radio, change the direct path, then send or scrub through the exchange.",
+                            "Step through what five Retinue radios did: the cut, each send, every frame on the air and who heard it, the requests that expired, and the deliveries.",
                         )],
                     ),
                 ],
@@ -174,50 +300,76 @@ fn message_path_header() -> SiteView {
                 "p",
                 &[("class", "message-path-boundary")],
                 vec![txt(
-                    "Deterministic model · not a live traffic or radio-range receipt",
+                    "Generated route trace · not a live traffic or radio-range receipt",
                 )],
             ),
         ],
     )
 }
 
-fn message_path_controls() -> SiteView {
+fn quiet_button(action: &str, label: &str, aria_label: &str) -> SiteView {
+    element(
+        "button",
+        &[
+            ("class", "button button-quiet"),
+            ("type", "button"),
+            ("data-path-action", action),
+            ("aria-label", aria_label),
+        ],
+        vec![txt(label)],
+    )
+}
+
+fn message_path_controls(state: &LabState<'_>) -> SiteView {
+    let events = state.scenario.trace.events.len();
+    let max = (events - 1).to_string();
+    let value = state.view.step.to_string();
+    let reading = state
+        .current_milestone()
+        .map(step_reading)
+        .unwrap_or_default();
+    let options = state
+        .traces
+        .scenarios
+        .iter()
+        .map(|scenario| {
+            let label = message_path::scenario_label(scenario);
+            let mut attrs = vec![("value", scenario.id.as_str())];
+            if scenario.id == state.view.scenario {
+                attrs.push(("selected", "selected"));
+            }
+            element("option", &attrs, vec![txt(label)])
+        })
+        .collect();
     element(
         "div",
         &[
             ("class", "message-path-controls"),
+            ("role", "group"),
             ("aria-label", "Message path controls"),
         ],
         vec![
+            element(
+                "label",
+                &[("class", "message-path-scenario")],
+                vec![
+                    element("span", &[], vec![txt("Trace")]),
+                    element("select", &[("data-path-scenario", "")], options),
+                ],
+            ),
             element(
                 "button",
                 &[
                     ("class", "button button-primary"),
                     ("type", "button"),
-                    ("data-path-action", "send"),
+                    ("data-path-action", "play"),
                 ],
-                vec![txt("Send message")],
+                vec![txt("Play trace")],
             ),
-            element(
-                "button",
-                &[
-                    ("class", "button button-quiet"),
-                    ("type", "button"),
-                    ("data-path-action", "previous"),
-                    ("aria-label", "Previous exchange step"),
-                ],
-                vec![txt("Previous")],
-            ),
-            element(
-                "button",
-                &[
-                    ("class", "button button-quiet"),
-                    ("type", "button"),
-                    ("data-path-action", "next"),
-                    ("aria-label", "Next exchange step"),
-                ],
-                vec![txt("Next")],
-            ),
+            quiet_button("previous", "Previous", "Previous trace event"),
+            quiet_button("next", "Next", "Next trace event"),
+            quiet_button("previous-milestone", "◀ Ledger", "Previous ledger row"),
+            quiet_button("next-milestone", "Ledger ▶", "Next ledger row"),
             element(
                 "label",
                 &[("class", "message-path-scrubber")],
@@ -226,11 +378,15 @@ fn message_path_controls() -> SiteView {
                         "span",
                         &[],
                         vec![
-                            txt("Exchange step "),
+                            txt("Trace event "),
                             element(
                                 "output",
                                 &[("data-path-step-output", "")],
-                                vec![txt("6 of 6")],
+                                vec![txt(format!(
+                                    "{} of {events} · {}",
+                                    state.view.step + 1,
+                                    seconds(state.event().t())
+                                ))],
                             ),
                         ],
                     ),
@@ -239,55 +395,89 @@ fn message_path_controls() -> SiteView {
                         &[
                             ("type", "range"),
                             ("min", "0"),
-                            ("max", "5"),
+                            ("max", max.as_str()),
                             ("step", "1"),
-                            ("value", "5"),
+                            ("value", value.as_str()),
                             ("data-path-step", ""),
                         ],
                         vec![],
                     ),
                 ],
             ),
+            quiet_button("share", "Share step", "Share this trace step"),
             element(
-                "label",
-                &[("class", "message-path-toggle")],
-                vec![
-                    element(
-                        "input",
-                        &[
-                            ("type", "checkbox"),
-                            ("checked", "checked"),
-                            ("data-path-blocked", ""),
-                        ],
-                        vec![],
-                    ),
-                    element("span", &[], vec![txt("Direct path blocked")]),
-                ],
-            ),
-            element(
-                "button",
-                &[
-                    ("class", "button button-quiet"),
-                    ("type", "button"),
-                    ("data-path-action", "share"),
-                ],
-                vec![txt("Share scene")],
-            ),
-            element(
-                "span",
+                "p",
                 &[
                     ("class", "message-path-status"),
                     ("data-path-status", ""),
                     ("role", "status"),
                     ("aria-live", "polite"),
                 ],
-                vec![txt("Message delivered by three relays.")],
+                vec![txt(reading)],
             ),
         ],
     )
 }
 
-fn message_path_topology() -> SiteView {
+fn message_path_topology(state: &LabState<'_>) -> SiteView {
+    let trace = &state.scenario.trace;
+    let route = state.delivered_path();
+    let on_route = |a: &str, b: &str| {
+        route.is_some_and(|path| {
+            path.windows(2)
+                .any(|pair| (pair[0] == a && pair[1] == b) || (pair[0] == b && pair[1] == a))
+        })
+    };
+    let active = match state.event() {
+        TraceEvent::Transmit { node, .. }
+        | TraceEvent::Receive { node, .. }
+        | TraceEvent::LinkRequestExpired { node, .. }
+        | TraceEvent::Delivered { node, .. } => Some(node.as_str()),
+        TraceEvent::Send { from, .. } | TraceEvent::SendRefused { from, .. } => Some(from.as_str()),
+        TraceEvent::Cut { .. } => None,
+    };
+    let mut drawing = trace
+        .edges
+        .iter()
+        .map(|edge| {
+            let mut class = "message-path-edge".to_owned();
+            if on_route(&edge.a, &edge.b) {
+                class.push_str(" is-route");
+            }
+            if state.edge_is_cut(&edge.a, &edge.b) {
+                class.push_str(" is-cut");
+            }
+            message_path_edge(&edge.a, &edge.b, &class)
+        })
+        .collect::<Vec<_>>();
+    drawing.push(element(
+        "circle",
+        &[
+            ("class", "message-path-packet"),
+            ("r", "6"),
+            ("data-path-packet", ""),
+            ("hidden", "hidden"),
+        ],
+        vec![],
+    ));
+    let mut stage = vec![element(
+        "svg",
+        &[
+            ("class", "message-path-links"),
+            ("aria-hidden", "true"),
+            ("data-path-links", ""),
+        ],
+        drawing,
+    )];
+    for node in &trace.nodes {
+        let layout = layout(&node.name).expect("the layout draws every trace node");
+        stage.push(message_path_node(
+            layout,
+            node.transit,
+            active == Some(layout.name),
+            state.view.node == layout.name,
+        ));
+    }
     element(
         "section",
         &[
@@ -306,119 +496,89 @@ fn message_path_topology() -> SiteView {
                     element(
                         "p",
                         &[("data-path-route", "")],
-                        vec![txt("Reroute · fire → church → water → garage")],
+                        vec![txt(message_path::route_sentence(state.scenario))],
                     ),
                 ],
             ),
             element(
                 "div",
                 &[("class", "message-path-stage"), ("data-path-stage", "")],
-                vec![
-                    element(
-                        "svg",
-                        &[
-                            ("class", "message-path-links"),
-                            ("aria-hidden", "true"),
-                            ("data-path-links", ""),
-                        ],
-                        vec![
-                            message_path_edge("fire-church", "fire", "church", true, false),
-                            message_path_edge("church-water", "church", "water", true, false),
-                            message_path_edge("water-ridge", "water", "ridge", false, false),
-                            message_path_edge("water-garage", "water", "garage", true, false),
-                            message_path_edge("fire-water", "fire", "water", false, true),
-                            element(
-                                "circle",
-                                &[
-                                    ("class", "message-path-packet"),
-                                    ("r", "6"),
-                                    ("data-path-packet", ""),
-                                    ("hidden", "hidden"),
-                                ],
-                                vec![],
-                            ),
-                        ],
-                    ),
-                    message_path_node("fire", "Fire station", "17", "72"),
-                    message_path_node("church", "Church steeple", "34", "24"),
-                    message_path_node("water", "Water tower", "57", "55"),
-                    message_path_node("ridge", "Ridgeline", "78", "20"),
-                    message_path_node("garage", "County garage", "83", "76"),
-                ],
+                stage,
             ),
             element(
                 "p",
                 &[("class", "message-path-help")],
                 vec![txt(
-                    "Drag a radio, or focus it and use the arrow keys. Every edge follows.",
-                )],
-            ),
-            element(
-                "p",
-                &[("class", "message-path-fallback")],
-                vec![txt(
-                    "Static route: fire station → church steeple → water tower → county garage. The direct fire-to-water path is blocked.",
+                    "Choose a radio to see its own screen. Solid lines are links the trace runs over; a dashed line is cut. Positions are illustrative, not geography or radio range.",
                 )],
             ),
         ],
     )
 }
 
-fn message_path_edge(id: &str, from: &str, to: &str, on_route: bool, blocked: bool) -> SiteView {
-    let class = match (on_route, blocked) {
-        (true, false) => "message-path-edge is-route",
-        (false, true) => "message-path-edge is-blocked",
-        _ => "message-path-edge",
-    };
+fn message_path_edge(a: &str, b: &str, class: &str) -> SiteView {
+    let id = format!("{a}-{b}");
     element(
         "line",
         &[
             ("class", class),
-            ("data-lab-edge", id),
-            ("data-from", from),
-            ("data-to", to),
+            ("data-lab-edge", id.as_str()),
+            ("data-from", a),
+            ("data-to", b),
         ],
         vec![],
     )
 }
 
-fn message_path_node(id: &str, label: &str, x: &str, y: &str) -> SiteView {
-    let style = format!("left:{x}%;top:{y}%");
-    let attrs = [
-        ("class", "message-path-node"),
-        ("type", "button"),
-        ("data-lab-node", id),
-        ("data-x", x),
-        ("data-y", y),
-        ("style", style.as_str()),
-        ("aria-label", label),
-    ];
+fn message_path_node(layout: &NodeLayout, transit: bool, active: bool, selected: bool) -> SiteView {
+    let style = format!("left:{}%;top:{}%", layout.x, layout.y);
+    let role = if transit { "relays" } else { "does not relay" };
+    let aria = format!("{}, {role}. Show its screen.", layout.label);
+    let mut class = "message-path-node".to_owned();
+    if active {
+        class.push_str(" is-active");
+    }
+    if selected {
+        class.push_str(" is-selected");
+    }
+    let transit_attr = transit.to_string();
     element(
         "button",
-        &attrs,
+        &[
+            ("class", class.as_str()),
+            ("type", "button"),
+            ("data-lab-node", layout.name),
+            ("data-transit", transit_attr.as_str()),
+            ("style", style.as_str()),
+            ("aria-label", aria.as_str()),
+            ("aria-pressed", if selected { "true" } else { "false" }),
+        ],
         vec![
             element("span", &[("class", "message-path-node-mark")], vec![]),
             element(
                 "span",
                 &[("class", "message-path-node-label")],
-                vec![txt(label)],
+                vec![
+                    txt(layout.label),
+                    element(
+                        "small",
+                        &[],
+                        vec![txt(if transit { "relay" } else { "leaf" })],
+                    ),
+                ],
             ),
         ],
     )
 }
 
-fn message_path_projections() -> SiteView {
-    element(
-        "aside",
-        &[
-            ("class", "message-path-projections"),
-            ("aria-label", "Synchronized message views"),
-        ],
-        vec![message_path_radio(), message_path_ledger()],
-    )
+fn layout_label(name: &str) -> &str {
+    layout(name).map_or(name, |layout| layout.label)
 }
 
-fn message_path_radio() -> SiteView {
+fn message_path_radio(state: &LabState<'_>) -> SiteView {
+    let screen = message_path::static_screen(state.traces)
+        .unwrap_or_else(|error| panic!("the message path screen: {error}"));
+    let src = format!("/{}", screen.path);
     element(
         "section",
         &[("class", "message-path-radio")],
@@ -429,68 +589,87 @@ fn message_path_radio() -> SiteView {
                 vec![
                     element(
                         "p",
-                        &[("class", "eyebrow")],
-                        vec![txt("attached-host radio view")],
+                        &[("class", "eyebrow"), ("data-path-screen-node", "")],
+                        vec![txt(format!(
+                            "{} · its own screen",
+                            layout_label(&state.view.node)
+                        ))],
                     ),
-                    element("p", &[("class", "message-path-led")], vec![txt("TX")]),
+                    element(
+                        "p",
+                        &[("class", "message-path-page")],
+                        vec![txt(screen.screen.to_uppercase())],
+                    ),
                 ],
             ),
             element(
                 "div",
                 &[
                     ("class", "message-path-oled"),
-                    ("aria-label", "Attached host radio screen"),
+                    ("data-path-screen", ""),
+                    ("data-screen-name", screen.screen.as_str()),
                 ],
                 vec![
+                    // The text list below is the reading; the pixels repeat it.
                     element(
-                        "div",
-                        &[("class", "message-path-oled-header")],
-                        vec![
-                            element(
-                                "span",
-                                &[("data-path-screen-header", "")],
-                                vec![txt("RET · DELIVERED")],
-                            ),
-                            element("span", &[("data-path-screen-count", "")], vec![txt("6/6")]),
+                        "img",
+                        &[
+                            ("src", src.as_str()),
+                            ("alt", ""),
+                            ("width", "128"),
+                            ("height", "64"),
+                            ("data-path-static", ""),
                         ],
+                        vec![],
                     ),
-                    message_path_screen_row("STATE", "RX FRAME", "state"),
-                    message_path_screen_row("HOP", "GARAGE", "hop"),
-                    message_path_screen_row("SEQ", "05", "sequence"),
-                    message_path_screen_row("HOST", "ATTACHED", "host"),
+                    element(
+                        "canvas",
+                        &[
+                            ("width", "128"),
+                            ("height", "64"),
+                            ("aria-hidden", "true"),
+                            ("hidden", ""),
+                            ("data-path-canvas", ""),
+                        ],
+                        vec![],
+                    ),
                 ],
+            ),
+            element(
+                "p",
+                &[("class", "message-path-reading-label")],
+                vec![txt("What its screen says")],
+            ),
+            element(
+                "ul",
+                &[
+                    ("class", "message-path-screen-text"),
+                    ("data-path-screen-text", ""),
+                ],
+                screen
+                    .lines
+                    .iter()
+                    .map(|line| element("li", &[], vec![txt(line.as_str())]))
+                    .collect(),
             ),
             element(
                 "p",
                 &[("class", "message-path-radio-note")],
                 vec![txt(
-                    "The host supplies route context; the radio reports frame traffic.",
+                    "radio-mirror draws this radio's own TRAFFIC page from its state at the step. Firmware has no route or delivery screen: a radio knows its next hop, not the whole route, so the route and the deliveries are written in the ledger instead.",
                 )],
             ),
         ],
     )
 }
 
-fn message_path_screen_row(label: &str, value: &str, id: &str) -> SiteView {
-    element(
-        "p",
-        &[("class", "message-path-screen-row")],
-        vec![
-            element("span", &[], vec![txt(label)]),
-            element("strong", &[("data-path-screen-row", id)], vec![txt(value)]),
-        ],
-    )
-}
-
-fn message_path_ledger() -> SiteView {
-    let events = [
-        "Route selected through church and water",
-        "Fire station queues the message",
-        "Church steeple receives the frame",
-        "Water tower receives the relay",
-        "Water tower forwards to the garage",
-        "County garage confirms delivery",
-    ];
+fn message_path_ledger(state: &LabState<'_>) -> SiteView {
+    let current = state.current_milestone().map(|row| row.event);
+    let count = format!(
+        "{} rows · {} events",
+        state.milestones.len(),
+        state.scenario.trace.events.len()
+    );
     element(
         "section",
         &[("class", "message-path-ledger")],
@@ -499,29 +678,33 @@ fn message_path_ledger() -> SiteView {
                 "div",
                 &[("class", "message-path-panel-heading")],
                 vec![
-                    element("p", &[("class", "eyebrow")], vec![txt("event ledger")]),
-                    element(
-                        "p",
-                        &[("data-path-ledger-count", "")],
-                        vec![txt("06 events")],
-                    ),
+                    element("p", &[("class", "eyebrow")], vec![txt("trace ledger")]),
+                    element("p", &[("data-path-ledger-count", "")], vec![txt(count)]),
                 ],
             ),
             element(
                 "ol",
-                &[],
-                events
+                &[("data-path-ledger", "")],
+                state
+                    .milestones
                     .iter()
-                    .enumerate()
-                    .map(|(index, event)| {
-                        let index_text = format!("{index:02}");
-                        let data_index = index.to_string();
-                        let class = if index == 5 {
+                    .map(|row| {
+                        let event = row.event.to_string();
+                        let class = if Some(row.event) == current {
                             "message-path-event is-current"
-                        } else {
+                        } else if Some(row.event) < current {
                             "message-path-event is-complete"
+                        } else {
+                            "message-path-event"
                         };
-                        let attrs = [("class", class), ("data-lab-event", data_index.as_str())];
+                        let mut attrs = vec![
+                            ("class", class),
+                            ("data-lab-event", event.as_str()),
+                            ("data-kind", row.kind),
+                        ];
+                        if Some(row.event) == current {
+                            attrs.push(("aria-current", "step"));
+                        }
                         element(
                             "li",
                             &attrs,
@@ -529,9 +712,13 @@ fn message_path_ledger() -> SiteView {
                                 element(
                                     "span",
                                     &[("class", "message-path-event-index")],
-                                    vec![txt(index_text)],
+                                    vec![txt(seconds(row.t))],
                                 ),
-                                element("span", &[("data-path-event-copy", "")], vec![txt(*event)]),
+                                element(
+                                    "span",
+                                    &[("data-path-event-copy", "")],
+                                    vec![txt(row.text.as_str())],
+                                ),
                             ],
                         )
                     })
