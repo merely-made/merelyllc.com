@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-127 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-129 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 P0's viewer review and main integration are complete (Rulings 122-123).
 Mere main is pushed at `ea9e6da7`, with current Genet `965b64e2`. The numerical
 payload cap and initial-site deployment remain open. Plain viewer is selected
@@ -11,6 +11,14 @@ handoff's authorized integration before continuing Assemble (Ruling 22).
 The site still ships its own sandbox. Rulings 103 and 104 landed the manual-pin
 and legacy-link resolver fixes; P1 export and P2 Graphshell surface replacement
 remain ahead.
+
+**Consumer continuation (2026-10-07):** the site now exports its current
+repository authority through S1's versioned host envelope. The native consumer
+receipt preserves 21 project identities and 30 relationship disclosures against
+the unmerged S1 reader at `3a0925265`; its viewer/practice runtime gate stays
+with the existing S1 owner. This is one exporter slice, not completion of P1
+or P2. Ambiance's relation-lens proposal and Turnstone's browser-sidecar scope
+have their own canonical homes; neither changes the surface order in Ruling 22.
 
 ## Purpose
 
@@ -1301,6 +1309,32 @@ the site at a pinned retinue revision and committed with their source and
 revision, and `validate-artifact` hashes them. No Reticulum-licensed code
 enters the site build.
 
+### Rulings 128-129 (2026-10-07): S1's edges and the practice evidence
+
+The S1 lane (mere branch `s1-host-dataset`) stopped at two forks after the
+strict envelope landed on the branch (`scenomise::host_dataset`, 11 refusal
+tests). Mark chose the recommended option each time.
+
+**Ruling 128, how a host dataset's relations become edges.** scenomise's
+`compile_relationship_snapshot` requires the recipe's three facets
+(`authored_order`, `occurrence_labels`, `explained_relationships`), a single
+row ordered by a disclosed `order` field, and at least one relationship, and
+Ruling 125's reading forbids loosening it. Options: relations on any
+projection; facets declared, recipe path. Mark: "Relations on any projection
+(Recommended)". What follows: a relation-only step in scenomise projects the
+disclosed relationships onto whatever projection the dataset compiled to,
+through the one shared disclosure validator. Edges follow the chosen
+arrangement in the live, static and frozen readers. The relationship recipe is
+unchanged.
+
+**Ruling 129, the practice evidence.** The practice workspace needs the whole
+Woodshed comparison record (pitch sets, result partitions, method and version)
+to reopen, and a dataset carries only text, number and boolean values.
+Options: as typed values; a product-evidence field. Mark: "As typed values
+(Recommended)". What follows: the evidence travels in ordinary dataset fields,
+and the practice adapter rebuilds the record and re-checks it with
+`parse_woodshed_comparison`. No opaque block enters the envelope.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
@@ -2409,3 +2443,65 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     controls) and the Mere proof (11 projects, 13 relationships) matched the
     live site with no console errors. The headed Playwright smoke was not run
     locally (no Node on this machine); it runs in the Pages workflow.
+- 2026-10-07: the site/composition orchestration completed its first bounded
+  consumer slice. Existing S1 implementation was found on `s1-host-dataset`
+  (`3a0925265`, shared validator `90d78e4c2`) and kept with its owner; no second
+  dataset reader or browser loader was introduced.
+  - **Exporter.** `src/host_dataset.rs` consumes the existing Scenomise dataset
+    and relationship types at the unchanged published Mere pin `ea9e6da7`.
+    The build emits `repository-host-dataset.json`; the public artifact gate
+    requires its exact authority-derived bytes and includes it in the hashed
+    49-file receipt. Project identities, labels, summaries and public links,
+    relationship kinds, evidence and verification dates survive. A declared
+    `relationship_scope` field names published public repository-family
+    relationships and excludes a resolved Cargo dependency closure.
+  - **Revision.** Canonical project-id presentation order is an exporter
+    policy, not a dependency metric or historical manifest order. The revision
+    hashes the complete current disclosure before inserting its self-reference.
+    The sequence contains one current revision; historical publications are
+    not invented. Operational migration data and refresh timestamps are absent.
+  - **Qualification.** Final locked/offline site tests pass 58/58, including
+    five exporter tests; fmt, all-target Clippy with `-D warnings` and public
+    artifact validation pass. The native fixture consumes the actual generated
+    site data through the local S1 reader and shared relationship compiler:
+    all 21 occurrence sources and all 30 typed relationship disclosures survive.
+    Unknown nested keys, a stale revision and an undisclosed endpoint refuse.
+    Its local path dependencies qualify this fixture only; production pins
+    are unchanged. No browser/practice runtime result is claimed.
+  - **Artifact.** 65,038 bytes, SHA-256
+    `1b16d990958c3fd1fe9cd17a3fa4a98bc62441f28d23fb92ecd7f9d7abf7eca0`.
+    The source revision is
+    `sha256:5eb53ba97d96fbe953e1ed4cf6d51fadfd4e016b296f1f03c643f3f81d6fa641`.
+    [Native receipt and preserved fixture](receipts/site/2026-10-07_host_dataset/receipt.json)
+    and [public artifact receipt](receipts/site/2026-10-07_host_dataset/public-artifact-receipt.json)
+    agree on its identity.
+  - **Other lanes.** The shared interaction proposal lives in
+    `mere/design_docs/mere_docs/design/2026-09-23_ambiance_design.md` §10;
+    it separates selected subjects, inspected material, view retention,
+    owner saving and held placement. The browser-sidecar proposal lives in
+    `turnstone/design_docs/2026-10-06_unusual_protocols_browser_plan.md` §6;
+    local/attached session authority and PWA/extension capabilities remain
+    independent. Both preserve earlier rulings and label new choices as
+    proposals. Native Turnstone implementation retains its existing owner.
+  - **Next gate.** S1's owner loads this exact export on the plain viewer,
+    checks identities, edges and visible refusals, then preserves the practice
+    receipts through the shared input. Capture, traces, frozen realization and
+    radio work remain in their approved order. This receipt does not close P1,
+    P2, the payload-cap decision or deployment.
+- 2026-10-07: retinue fast-forwarded to `6aa78fc` (from `3dd84b1`), branch
+  `radio-consumers`:
+  - radio-mirror is on wasm-bindgen 0.2.129, with web-sys 0.3.106 and the CI
+    wasm job matching (Ruling 126). The wasm is 368,907 B raw and 96,918 B
+    gzip, with default features.
+  - retinue-sim ships the node-state-to-face mapping behind a `face` feature,
+    with a `retinue-sim.face-track/v1` output (`--faces`). The site needs no
+    copy of the mapping (Ruling 1).
+  - The S7/S8 plans no longer read as unmerged.
+  - Locally: workspace 1186/0, retinue-sim with `face` 11/0, radio-mirror
+    19/0 (24 goldens). The route traces are byte-identical to `3dd84b1`.
+  - Compact traces for Ruling 127: cold 33,724 B (face track 27,015 B), warm
+    74,641 B (59,312 B), each under 5 KB gzip.
+- 2026-10-07: S1 on mere branch `s1-host-dataset`: the shared relationship
+  disclosure validator and the strict `host_dataset` envelope are committed.
+  Rulings 128-129 opened the compile path, the viewer input and the practice
+  port.
