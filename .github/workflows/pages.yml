@@ -129,7 +129,7 @@ jobs:
             throw "public artifact validation failed"
           }
           Set-Content -LiteralPath ".tmp/m9-static-receipt.json" -Value $receipt -Encoding utf8
-          $projectionReceipt = cargo run --quiet --manifest-path crates/repo-graph/Cargo.toml --locked --bin projection-receipt -- "$artifact/projection-scene.json"
+          $projectionReceipt = cargo run --quiet --manifest-path crates/repo-graph/Cargo.toml --locked --bin projection-receipt -- "$artifact"
           if ($LASTEXITCODE -ne 0) {
             throw "native Scenograph projection consumer failed"
           }
