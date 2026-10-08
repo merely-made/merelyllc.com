@@ -2530,3 +2530,30 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     on this Mac). Both run in the Pages workflow.
   - **Payload.** The V4 page's first load grows by 93,014 B. The 10 lazy screen
     images add 19,484 B. The payload budget is still unruled.
+- 2026-10-08: **S1 landed on mere main** at `f67f50807` (a fast-forward from
+  `3ded2cd7c`, 7 commits from `s1-host-dataset`; Mark approved the push).
+  - **scenomise.** The strict `scenomise.host-dataset/v1` envelope (Ruling
+    125). Relationships route onto any compiled projection through the one
+    shared disclosure validator (Ruling 128). The relationship recipe is
+    unchanged.
+  - **Practice.** The Woodshed evidence travels as typed values (Ruling 129).
+    The `include_str!` fixture is retired, with no fallback.
+  - **Viewer.** It mounts a host dataset from `?dataset=` or `data-dataset-src`.
+    Relations are drawn as edges and listed in the semantic tree, and a refusal
+    shows as `role=alert`.
+  - **Tests.** scenograph and scenomise 124/0; graphshell practice 21/0 and
+    host dataset 5/0; wasm32 default and viewer builds clean.
+  - **Scenarios.** The practice scenarios match the receipt's result, step and
+    capture counts (workspace 45/3, reopen 11/1, embedded 14/1), and
+    `practice_relations` passes. `tree_host_dataset` loads this site's export
+    (pinned copy, sha256 `1b16d990…`) with 21 nodes, 30 edges and 30 reader
+    relations. Refusals of a stale revision, an unknown nested key and a 404
+    read as alerts.
+  - **Not done.** No pixel evidence: the macOS pane was hidden, and the capture
+    gates read blank there as they do for the existing `p4_tree_canvas_reader`.
+    That waits for a visible headed run. `practice_workspace_receipt.json`'s
+    SHA pins are stale by construction, and the receipt was not regenerated
+    (no documented generator).
+  - The live `repository-host-dataset.json` differs from the pinned copy,
+    because the deploy refreshes GitHub metadata before building. Its shape is
+    the same.
