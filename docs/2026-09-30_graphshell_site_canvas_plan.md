@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-141 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-145 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 P0's viewer review and main integration are complete (Rulings 122-123).
 Mere main is pushed at `ea9e6da7`, with current Genet `965b64e2`. The numerical
 payload cap and initial-site deployment remain open. Plain viewer is selected
@@ -1494,6 +1494,59 @@ What follows:
 - At the change, the Wasm measured 430,936 B gzip and the runtime 452,481 B.
 - *Reading, not ruled:* the payload budget, when ruled, is likely stated in
   compressed bytes too.
+
+### Rulings 142-145 (2026-10-08): S2's shape and S3's input
+
+These were asked after a read-only assessment against mere `fbc149bd9`, Knot
+`c5bf4ee` and Woodshed `0c86fc8`. The assessment found S2 and S3 not started
+upstream on any branch, and no plan claims them.
+- **S2.** Gazette's `ledger.rs` last changed on 2026-08-27, and `frozen.rs`
+  has no two-axis form.
+- **S3.** `AdjacentRevision` is declared in `cartography/src/reading.rs` and
+  evaluated only in the site (`diff_graphs`). Its test lacks the removed case.
+- **Crate direction.** cartography now depends on scenomise and sceno, so its
+  manifest comment (`Cargo.toml:18`) is stale and Ruling 19's direction no
+  longer holds.
+
+Mark chose the recommended option for 142, 143 and 145.
+
+**Ruling 142, S2's shape.** Options: types in scenomise with a new profile;
+types in cartography, widened. Mark: "Types in scenomise + new profile
+(Recommended)". What follows:
+- The matrix result types and the pure derivation go in a new scenomise
+  module.
+- cartography re-exports them and adds only the reading adapter, as a new
+  file, keeping `lib.rs` and `adapters/mod.rs` edits to one line each (the
+  dynamics lane is active there).
+- A new two-reading matrix profile goes beside the existing one-authority
+  "matrix".
+- This amends Ruling 19's placement, and the stale manifest comment is fixed.
+
+**Ruling 143, Gazette.** The dramatis plan (D7) holds Gazette in mere until
+its domain logic splits from its Cambium projection, and `ledger.rs` is that
+projection half. Options: design for it and retire it later; retire
+`ledger.rs` in S2. Mark: "Design for it, retire later (Recommended)". What
+follows:
+- The shared cell type carries a value-cell kind and contributors.
+- S2 lands with the site and a two-axis frozen table, plus a parity test that
+  reproduces Gazette's three ledger tests.
+- `ledger.rs` retires at the dramatis split, coordinated with that lane.
+
+**Ruling 144, S3's input.** S1's envelope carries revision identities only.
+Options: two envelopes; an envelope v2. Mark: "Envelope v2". What follows:
+- A `scenomise.host-dataset/v2` carries a dataset per revision, so one file
+  holds the history that S3's evaluator classifies.
+- *Reading, not ruled:* v1 stays readable, being the one-revision case, and
+  its consumers (the viewer and the practice proof) keep working. The site's
+  exporter moves to v2 when the sandbox needs checkpoints.
+
+**Ruling 145, what "updated" means.** Options: all fields, host may narrow;
+host-declared only; all fields, always. Mark: "All fields, host may narrow
+(Recommended)". What follows:
+- By default, an occurrence is updated if any disclosed field value or
+  incident relationship differs between revisions.
+- A host may declare a narrower field set. The site uses one (name, class,
+  status, pushed_at) for exact parity with its checkpoint slider.
 
 ## Findings (2026-09-30)
 
