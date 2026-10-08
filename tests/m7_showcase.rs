@@ -178,20 +178,42 @@ fn mere_profile_projects_one_authority_into_canvas_and_swatch_views() {
         "every captured relation has Mere at one end, labelled by the host dataset"
     );
 
-    // The capture is chirograph's V2, and the browser reader recognizes the
-    // same Score wire as the native one.
+    // The capture is chirograph's V2. The browser reads it through the graph
+    // Wasm's ProjectionSession, the native consumer's own code (Ruling 138),
+    // loaded on first interaction under the repositories page's version
+    // query (Ruling 140).
     let capture: serde_json::Value =
         serde_json::from_slice(&proof.artifacts.capture).expect("capture JSON");
     assert_eq!(capture["version"], 2);
     assert_eq!(capture["score"]["version"], sceno::SCORE_VERSION);
     let projection_proof = std::fs::read_to_string(root.join("assets/projection-proof.js"))
         .expect("projection proof runtime");
-    assert!(
-        projection_proof.contains(&format!("const SCORE_VERSION = {};", sceno::SCORE_VERSION)),
-        "the browser consumer must recognize the same Score wire as the native consumer"
-    );
     assert!(projection_proof.contains(&format!("const STEP_BOUND = {PROJECTION_STEP_BOUND};")));
+    assert!(projection_proof.contains("new runtime.ProjectionSession(capture, trace, shelfmark)"));
+    assert!(projection_proof.contains("import(proofRoot.dataset.graphRuntime)"));
     assert!(!projection_proof.contains("mer3ly.portable-projection"));
+    // The JavaScript copies of stack logic are retired.
+    for retired in [
+        "BLAKE3",
+        "blake3",
+        "parseLossless",
+        "BigInt",
+        "snapshotAt(",
+        "TraceHistory",
+    ] {
+        assert!(
+            !projection_proof.contains(retired),
+            "{retired} is back in the script"
+        );
+    }
+    let (graph_runtime, graph_wasm) = mer3ly_site::pages::repositories::graph_runtime_hrefs();
+    assert!(mere.contains(&format!("data-graph-runtime=\"{graph_runtime}\"")));
+    assert!(mere.contains(&format!("data-graph-wasm=\"{graph_wasm}\"")));
+    assert!(mere.contains("data-replay=\"static\""));
+    // The Mere page's first load does not fetch the runtime; only the
+    // proof's first interaction does.
+    assert!(!mere.contains(&format!("src=\"{graph_runtime}\"")));
+    assert!(!mere.contains("modulepreload"));
 
     // The epoch exceeds 2^53. It travels as text in the shelfmark and as exact
     // digits in the capture and trace, and the browser reads those losslessly.
@@ -210,8 +232,8 @@ fn mere_profile_projects_one_authority_into_canvas_and_swatch_views() {
                 .contains(&format!("\"epoch\":{epoch}"))
         );
     }
-    assert!(projection_proof.contains("BigInt(number)"));
-    assert!(projection_proof.contains("dataset.sceneEpoch = proof.epoch"));
+    assert!(mere.contains(&format!("data-scene-epoch=\"{epoch}\"")));
+    assert!(projection_proof.contains("dataset.sceneEpoch = this.session.epoch()"));
 
     // The no-script reading is the trace, read at build time.
     assert_eq!(
@@ -238,7 +260,7 @@ fn mere_profile_projects_one_authority_into_canvas_and_swatch_views() {
             .metadata()
             .expect("projection proof asset")
             .len()
-            < 48 * 1024
+            < 40 * 1024
     );
 }
 

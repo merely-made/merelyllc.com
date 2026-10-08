@@ -1177,12 +1177,29 @@ fn serialize_json_records<T: Serialize>(records: &[T]) -> String {
 }
 
 fn graph_sandbox_runtime_href() -> String {
+    format!("/graph-sandbox.js{}", graph_runtime_version())
+}
+
+/// The version query the graph runtime is fetched under. The sandbox loader
+/// passes its own query on to the glue and the Wasm, and the Mere profile's
+/// projection proof imports them under the same query, so a visitor's cache
+/// holds one copy for both pages (Ruling 140).
+pub fn graph_runtime_version() -> String {
     let mut digest = Sha256::new();
     digest.update(GRAPH_SANDBOX_LOADER);
     digest.update(REPO_GRAPH_WASM_GLUE);
     digest.update(REPO_GRAPH_WASM);
     let digest = format!("{:x}", digest.finalize());
-    format!("/graph-sandbox.js?v={}", &digest[..12])
+    format!("?v={}", &digest[..12])
+}
+
+/// The graph runtime's glue and Wasm, at [`graph_runtime_version`].
+pub fn graph_runtime_hrefs() -> (String, String) {
+    let version = graph_runtime_version();
+    (
+        format!("/mer3ly_repo_graph.js{version}"),
+        format!("/mer3ly_repo_graph_bg.wasm{version}"),
+    )
 }
 
 fn format_timestamp(value: &str) -> String {

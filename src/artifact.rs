@@ -790,6 +790,29 @@ fn validate_projection_page(project: &str, proof: &ProjectionProof, errors: &mut
     if !project.contains(&format!("data-dataset-src=\"/{HOST_DATASET_FILE}\"")) {
         errors.push("Mere project profile does not cite the host dataset".to_owned());
     }
+    // Ruling 140: the proof's replay comes from the graph runtime, under the
+    // repositories page's own version query so both pages share one copy.
+    let (runtime, wasm) = crate::pages::repositories::graph_runtime_hrefs();
+    for (attribute, href) in [("data-graph-runtime", runtime), ("data-graph-wasm", wasm)] {
+        if !project.contains(&format!("{attribute}=\"{href}\"")) {
+            errors.push(format!(
+                "Mere project profile does not cite the graph runtime at {href}"
+            ));
+        }
+    }
+    for (attribute, value) in [
+        (
+            "data-capture-address",
+            &proof.reading.receipt.capture_address,
+        ),
+        ("data-scene-epoch", &proof.reading.epoch),
+    ] {
+        if !project.contains(&format!("{attribute}=\"{value}\"")) {
+            errors.push(format!(
+                "Mere project profile's {attribute} differs from the capture"
+            ));
+        }
+    }
     if project.contains("mere-projection-artifact") || project.contains("projection-scene") {
         errors
             .push("Mere project profile still carries the retired projection artifact".to_owned());
