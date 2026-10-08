@@ -1,19 +1,20 @@
 // The Mere profile's projection proof. It reads four sibling artifacts
 // (site canvas plan, Rulings 130-136): chirograph's V2 capture, scenotime's
 // SceneTrace, the shelfmark that cites the capture, and the S1 host dataset
-// that names everything. It replays the trace as `SceneTrace::snapshot_at`
-// does and moves through it as `edit_history::History<SceneTrace>` does.
+// that names everything.
+//
+// Until the first interaction it draws the captured scene, which needs no
+// replay, beside the build-time reading. The first interaction, or a share
+// link present at load, imports the site's graph Wasm (Rulings 138 and 140).
+// Its ProjectionSession does the stack's work: chirograph's decoding and
+// content address, the shelfmark check, scenotime's chained replay, and
+// edit_history::History<SceneTrace> for position, undo, redo and
+// truncate-on-commit. This script renders, handles controls and words links.
 
 const SHARE_VERSION = "v3";
-// The most steps this page keeps. Host policy (Ruling 15), not trace data.
+// The most steps this page keeps. Host policy (Ruling 15), not trace data;
+// the session refuses the same bound.
 const STEP_BOUND = 16;
-// sceno's Score wire at the site's Mere pin; a newer score is refused.
-const SCORE_VERSION = 5;
-const CAPTURE_VERSION = 2;
-const TRACE_VERSION = 1;
-const SHELFMARK_SCHEMA = "mere.shelfmark/1";
-const AUTHORITY_ROLE = "authority";
-const ADAPTER = "mer3ly.repository-graph/v1";
 const DATASET_SCHEMA = "scenomise.host-dataset/v1";
 const DEFAULT_SELECTION = { kind: "node", id: "mere" };
 
@@ -48,23 +49,17 @@ async function startProjectionProof(proofRoot) {
     if (!response.ok) throw new Error(`could not load ${proofRoot.dataset[attribute]}`);
     return new Uint8Array(await response.arrayBuffer());
   };
-  const [captureBytes, traceBytes, shelfmarkBytes, datasetBytes] = await Promise.all([
+  const [capture, trace, shelfmark, dataset] = await Promise.all([
     fetchBytes("captureSrc"),
     fetchBytes("traceSrc"),
     fetchBytes("shelfmarkSrc"),
     fetchBytes("datasetSrc"),
   ]);
-  const text = (bytes) => new TextDecoder().decode(bytes);
-  const proof = readProof(
-    captureBytes,
-    parseLossless(text(captureBytes)),
-    parseLossless(text(traceBytes)),
-    parseLossless(text(shelfmarkBytes)),
-    parseLossless(text(datasetBytes)),
-  );
+  const text = (bytes) => JSON.parse(new TextDecoder().decode(bytes));
+  const proof = readProof(text(capture), text(trace), text(dataset));
 
-  const link = readSharedLink(proof);
-  const store = new ProofStore(proof, link.trace ?? proof.trace, link.position ?? 0);
+  const replay = new Replay(proofRoot, { capture, trace, shelfmark }, forcedMode === "no-replay");
+  const store = new ProofStore(proof, replay);
   const views = [...proofRoot.querySelectorAll("[data-projection-view]")].map(
     (element) => new ProjectionView(element, proof, store),
   );
@@ -73,12 +68,21 @@ async function startProjectionProof(proofRoot) {
     views.forEach((view) => view.render(state));
     controls.render(state);
   });
+  replay.onReady = () => store.loaded();
 
-  proofRoot.dataset.captureAddress = proof.address;
-  proofRoot.dataset.sceneEpoch = proof.epoch;
+  // A share link counts as an interaction: it needs the trace replayed.
+  let link = { state: "none", notice: null };
+  if (new URLSearchParams(window.location.hash.slice(1)).has("projection-scene")) {
+    try {
+      await replay.ensure();
+    } catch {
+      return;
+    }
+    link = readSharedLink(store);
+  }
+
   proofRoot.dataset.linkState = link.state;
   if (link.notice) controls.notify(link.notice);
-  proofRoot.querySelector("[data-projection-fallback]").hidden = true;
   proofRoot.querySelector("[data-projection-interface]").hidden = false;
   proofRoot.dataset.ready = "true";
   proofRoot.dataset.state = "ready";
@@ -93,56 +97,13 @@ async function startProjectionProof(proofRoot) {
 }
 
 // ---------------------------------------------------------------------------
-// Reading the four artifacts.
+// Reading the artifacts for drawing. Checking them is the session's work.
 
-function readProof(captureBytes, capture, trace, shelfmark, dataset) {
-  if (capture?.version !== CAPTURE_VERSION) throw new Error("not a V2 projection capture");
-  const { score, authority, scene } = capture;
-  if (
-    !score ||
-    !Number.isInteger(score.version) ||
-    score.version > SCORE_VERSION ||
-    !Array.isArray(score.items) ||
-    (score.holds !== undefined && !Array.isArray(score.holds))
-  ) {
-    throw new Error("the capture's score is absent or newer than this reader");
+function readProof(capture, trace, dataset) {
+  const scene = capture?.scene;
+  if (!Array.isArray(scene?.tables?.items) || !Array.isArray(trace?.steps)) {
+    throw new Error("the capture or trace is not readable");
   }
-  if (authority?.adapter !== ADAPTER || !String(authority.sha256).startsWith("ni:///sha-256;")) {
-    throw new Error("the capture names an unknown authority");
-  }
-  // chirograph's check, then the site's convention (Ruling 132).
-  if (!sameInteger(score.generation, authority.generation)) {
-    throw new Error("the capture's score and authority disagree about the generation");
-  }
-  if (!sameInteger(scene?.epoch, authority.generation)) {
-    throw new Error("the captured scene's epoch is not the authority generation");
-  }
-  validateSnapshot(scene);
-
-  // Ruling 135: the shelfmark cites these bytes, this authority and this
-  // generation.
-  const address = blake3Hex(captureBytes);
-  const input = shelfmark?.inputs?.[AUTHORITY_ROLE];
-  if (
-    shelfmark?.schema !== SHELFMARK_SCHEMA ||
-    shelfmark.projection !== address ||
-    input?.authority?.adapter !== authority.adapter ||
-    input.authority.record !== authority.sha256 ||
-    input.reading !== authority.schema ||
-    input.expects_generation !== String(authority.generation)
-  ) {
-    throw new Error("the shelfmark does not cite this capture");
-  }
-
-  if (
-    trace?.version !== TRACE_VERSION ||
-    Object.keys(trace).some((key) => !["version", "base", "steps"].includes(key)) ||
-    stringifyLossless(trace.base) !== stringifyLossless(scene)
-  ) {
-    throw new Error("the scene trace does not start from the captured scene");
-  }
-  const defaultTrace = new SceneTrace(scene, trace.steps ?? []);
-
   if (dataset?.schema !== DATASET_SCHEMA) throw new Error("unknown host dataset");
   const occurrences = new Map(
     dataset.dataset.occurrences.map((occurrence) => [occurrence.occurrence_id, occurrence]),
@@ -176,27 +137,19 @@ function readProof(captureBytes, capture, trace, shelfmark, dataset) {
     if (matches.length !== 1) throw new Error(`relation ${index} is not disclosed exactly once`);
     return { index, id: matches[0].id, label: matches[0].label, source, target };
   });
-
-  const proof = {
-    address,
-    epoch: String(authority.generation),
-    scene,
-    shelfmark,
-    trace: defaultTrace,
-    nodes,
-    relations,
-  };
-  defaultTrace.steps.forEach((step, index) => {
-    if (step.annotation !== undefined) readSelection(proof, step.annotation, index);
-  });
-  return proof;
+  // The epoch in `scene` is rounded by JSON.parse. Nothing here reads it: the
+  // session supplies every diff's epoch, and the page shows the session's.
+  return { scene, stepCount: trace.steps.length, nodes, relations };
 }
 
 // Restores a v3 link, and explains a retired, stale or broken one politely.
-function readSharedLink(proof) {
+function readSharedLink(store) {
+  const session = store.session;
   const params = new URLSearchParams(window.location.hash.slice(1));
   const version = params.get("projection-scene");
-  const fallback = (state, notice) => ({ state, notice, trace: null, position: null });
+  const fallback = (state, notice) => ({ state, notice });
+  const broken = (why) =>
+    fallback("broken", `This link's trace ${why}, so it cannot be restored. Showing the default trace.`);
   if (version === null) return fallback("none", null);
   if (version !== SHARE_VERSION) {
     return fallback(
@@ -204,54 +157,63 @@ function readSharedLink(proof) {
       "This link uses a retired scene format, so it cannot be restored. Showing the default trace.",
     );
   }
-  const input = proof.shelfmark.inputs[AUTHORITY_ROLE];
   if (
-    params.get("projection") !== proof.shelfmark.projection ||
-    params.get("expects-generation") !== input.expects_generation
+    params.get("projection") !== session.captureAddress() ||
+    params.get("expects-generation") !== session.generation()
   ) {
     return fallback(
       "stale",
       "This link cites an earlier capture of the scene, which this page no longer carries, so it cannot be restored. Showing the default trace.",
     );
   }
-  let trace = proof.trace;
+  let steps;
   if (params.has("trace")) {
-    let steps;
     try {
       steps = decodeSteps(params.get("trace"));
     } catch {
-      return fallback(
-        "broken",
-        "This link's trace cannot be read, so it cannot be restored. Showing the default trace.",
-      );
+      return broken("cannot be read");
     }
-    if (!Array.isArray(steps) || steps.length > STEP_BOUND) {
+  }
+  try {
+    session.restore(steps, Number(params.get("position")));
+  } catch (error) {
+    let refusal = {};
+    try {
+      refusal = JSON.parse(error);
+    } catch {
+      throw error;
+    }
+    if (refusal.refusal === "unreadable") return broken("cannot be read");
+    if (refusal.refusal === "too-long") {
       return fallback(
         "refused",
         `This link's trace is longer than the ${STEP_BOUND} steps this page keeps, so it cannot be restored. Showing the default trace.`,
       );
     }
-    try {
-      trace = new SceneTrace(proof.scene, steps);
-      trace.steps.forEach((step, index) => {
-        if (step.annotation !== undefined) readSelection(proof, step.annotation, index);
-      });
-    } catch (error) {
-      const where = error instanceof TraceError ? ` at step ${error.index + 1}` : "";
-      return fallback(
-        "broken",
-        `This link's trace breaks its chain${where}, so it cannot be restored. Showing the default trace.`,
-      );
-    }
-  }
-  const position = Number(params.get("position"));
-  if (!Number.isInteger(position) || position < 0 || position > trace.length) {
+    if (refusal.refusal === "broken") return broken(`breaks its chain at step ${refusal.step}`);
     return fallback(
       "broken",
       "This link names a step its trace does not have, so it cannot be restored. Showing the default trace.",
     );
   }
-  return { state: "restored", notice: null, trace, position };
+  store.refresh();
+  try {
+    store.annotations.forEach((annotation, index) => {
+      if (annotation !== null) readSelection(store.proof, annotation, index);
+    });
+  } catch (error) {
+    session.reset();
+    store.refresh();
+    return broken(`breaks its chain at step ${error.index + 1}`);
+  }
+  return { state: "restored", notice: null };
+}
+
+class SelectionError extends Error {
+  constructor(index) {
+    super(`step ${index}: the step selects nothing this scene carries`);
+    this.index = index;
+  }
 }
 
 function readSelection(proof, annotation, index) {
@@ -260,140 +222,112 @@ function readSelection(proof, annotation, index) {
     keys.length === 2 &&
     ((annotation.kind === "node" && proof.nodes.some(({ id }) => id === annotation.id)) ||
       (annotation.kind === "edge" && proof.relations.some(({ id }) => id === annotation.id)));
-  if (!known) throw new TraceError(index, "the step selects nothing this scene carries");
+  if (!known) throw new SelectionError(index);
   return { kind: annotation.kind, id: annotation.id };
 }
 
 // ---------------------------------------------------------------------------
-// The trace and its history.
+// The graph Wasm, loaded once, on first interaction (Ruling 140).
 
-class TraceError extends Error {
-  constructor(index, reason) {
-    super(`step ${index}: ${reason}`);
-    this.index = index;
-  }
-}
-
-// scenotime's SceneTrace: a base and steps, validated as a chain when built,
-// replayed from the base on request. It keeps no cursor.
-class SceneTrace {
-  constructor(base, steps) {
-    if (!Array.isArray(steps)) throw new TraceError(0, "steps are not a list");
-    this.base = base;
-    this.steps = steps;
-    const head = clone(base);
-    steps.forEach((step, index) => advance(head, index, step));
+class Replay {
+  constructor(proofRoot, artifacts, forceFailure) {
+    this.root = proofRoot;
+    this.artifacts = artifacts;
+    this.forceFailure = forceFailure;
+    this.session = null;
+    this.loading = null;
+    this.onReady = null;
   }
 
-  get length() {
-    return this.steps.length;
+  ensure() {
+    this.loading ??= this.load();
+    return this.loading;
   }
 
-  snapshotAt(position) {
-    if (!Number.isInteger(position) || position < 0 || position > this.steps.length) {
-      throw new Error(`position ${position} is out of range`);
+  async load() {
+    const proofRoot = this.root;
+    proofRoot.dataset.replay = "loading";
+    proofRoot.setAttribute("aria-busy", "true");
+    announce(proofRoot, "Loading the scene replay.");
+    try {
+      if (this.forceFailure) throw new Error("forced replay failure");
+      const runtime = await import(proofRoot.dataset.graphRuntime);
+      await runtime.default({
+        module_or_path: new URL(proofRoot.dataset.graphWasm, window.location.href),
+      });
+      const { capture, trace, shelfmark } = this.artifacts;
+      const session = new runtime.ProjectionSession(capture, trace, shelfmark);
+      if (session.stepBound() !== STEP_BOUND) throw new Error("the step bounds disagree");
+      this.session = session;
+      this.onReady?.();
+    } catch (error) {
+      this.session = null;
+      proofRoot.dataset.replay = "failed";
+      proofRoot.dataset.state = "unavailable";
+      proofRoot.dataset.ready = "false";
+      proofRoot.removeAttribute("aria-busy");
+      proofRoot.querySelector("[data-projection-interface]").hidden = true;
+      proofRoot.querySelector("[data-projection-fallback]").hidden = false;
+      const notice = proofRoot.querySelector("[data-projection-notice]");
+      notice.textContent =
+        "The scene replay could not load, so the scene cannot change here. The trace reading remains available.";
+      notice.hidden = false;
+      announce(proofRoot, notice.textContent);
+      if (!this.forceFailure) console.warn("Projection replay unavailable:", error);
+      throw error;
     }
-    const head = clone(this.base);
-    this.steps.slice(0, position).forEach((step, index) => advance(head, index, step));
-    return head;
-  }
-
-  appended(step) {
-    advance(this.snapshotAt(this.steps.length), this.steps.length, step);
-    return new SceneTrace(this.base, [...this.steps, step]);
+    proofRoot.dataset.captureAddress = this.session.captureAddress();
+    proofRoot.dataset.sceneEpoch = this.session.epoch();
+    proofRoot.dataset.replay = "ready";
+    proofRoot.removeAttribute("aria-busy");
+    proofRoot.querySelector("[data-projection-fallback]").hidden = true;
+    announce(proofRoot, "Scene replay ready.");
   }
 }
 
-// One step, refused unless it chains: a repeated or older diff is a broken
-// chain here (Ruling 134), not the no-op it is on a live wire.
-function advance(head, index, step) {
-  if (
-    !step ||
-    typeof step !== "object" ||
-    typeof step.label !== "string" ||
-    Object.keys(step).some((key) => !["label", "diff", "annotation"].includes(key))
-  ) {
-    throw new TraceError(index, "not a trace step");
-  }
-  const diff = step.diff;
-  if (diff === undefined || diff === null) return;
-  if (!sameInteger(diff.epoch, head.epoch)) throw new TraceError(index, "wrong epoch");
-  if (diff.base !== head.revision) throw new TraceError(index, "missing base");
-  if (!Number.isSafeInteger(diff.revision) || diff.revision <= diff.base) {
-    throw new TraceError(index, "invalid revision");
-  }
-  if (!Array.isArray(diff.operations)) throw new TraceError(index, "no operations");
-  try {
-    for (const operation of diff.operations) {
-      if (operation.UpdateItem) {
-        const { index: slot, value } = operation.UpdateItem;
-        requireActive(head.tables.items, slot, "item");
-        head.tables.items[slot] = clone(value);
-      } else if (operation.UpdateRelation) {
-        const { index: slot, value } = operation.UpdateRelation;
-        requireActive(head.tables.relations, slot, "relation");
-        head.tables.relations[slot] = clone(value);
-      } else if (operation.TombstoneRelation) {
-        const { index: slot } = operation.TombstoneRelation;
-        requireActive(head.tables.relations, slot, "relation");
-        head.tables.relations[slot] = null;
-      } else {
-        throw new Error("unsupported scene operation");
-      }
-    }
-    head.revision = diff.revision;
-    validateSnapshot(head);
-  } catch (error) {
-    throw new TraceError(index, error.message);
-  }
-}
-
-// edit_history::History<SceneTrace>, kept as the longest trace and a
-// position: moving back or forward is undo and redo, and committing after a
-// move truncates there, clearing redo. Nothing falls off silently; the step
-// bound is refused with a message instead.
-class TraceHistory {
-  constructor(trace, position) {
-    this.trace = trace;
-    this.position = position;
-  }
-
-  get current() {
-    return new SceneTrace(this.trace.base, this.trace.steps.slice(0, this.position));
-  }
-
-  moveTo(position) {
-    this.position = clamp(Math.round(position), 0, this.trace.length);
-  }
-
-  commit(step) {
-    if (this.position + 1 > STEP_BOUND) return false;
-    this.trace = this.current.appended(step);
-    this.position = this.trace.length;
-    return true;
-  }
-}
-
+// What both views draw: the captured scene before replay loads, then the
+// session's scene where the page stands, plus a drag's preview.
 class ProofStore {
-  constructor(proof, trace, position) {
+  constructor(proof, replay) {
     this.proof = proof;
-    this.history = new TraceHistory(trace, position);
-    this.transientStep = null;
+    this.replay = replay;
+    this.annotations = [];
+    this.transient = null;
     this.listeners = new Set();
     this.beforeDispatch = null;
     this.onRefused = null;
   }
 
+  get session() {
+    return this.replay.session;
+  }
+
   get cursor() {
-    return this.history.position;
+    return this.session ? this.session.position() : 0;
   }
 
   get length() {
-    return this.history.trace.length;
+    return this.session ? this.session.length() : this.proof.stepCount;
   }
 
-  get steps() {
-    return this.history.trace.steps;
+  // Run an interaction now, or once the replay has loaded.
+  act(action) {
+    if (this.session) {
+      action();
+      return;
+    }
+    this.replay.ensure().then(action, () => {});
+  }
+
+  loaded() {
+    this.refresh();
+    this.annotations.forEach((annotation, index) => {
+      if (annotation !== null) readSelection(this.proof, annotation, index);
+    });
+  }
+
+  refresh() {
+    this.annotations = JSON.parse(this.session.annotations());
   }
 
   subscribe(listener) {
@@ -401,20 +335,21 @@ class ProofStore {
   }
 
   committedSnapshot() {
-    const snapshot = this.history.trace.snapshotAt(this.cursor);
+    if (!this.session) return { snapshot: this.proof.scene, selection: DEFAULT_SELECTION };
+    const snapshot = JSON.parse(this.session.snapshot());
     let selection = DEFAULT_SELECTION;
-    this.steps.slice(0, this.cursor).forEach((step, index) => {
-      if (step.annotation !== undefined) selection = readSelection(this.proof, step.annotation, index);
+    this.annotations.slice(0, this.cursor).forEach((annotation, index) => {
+      if (annotation !== null) selection = readSelection(this.proof, annotation, index);
     });
     return { snapshot, selection };
   }
 
   snapshot() {
     const state = this.committedSnapshot();
-    if (this.transientStep) {
-      advance(state.snapshot, this.cursor, this.transientStep);
-      if (this.transientStep.annotation !== undefined) {
-        state.selection = readSelection(this.proof, this.transientStep.annotation, this.cursor);
+    if (this.transient) {
+      state.snapshot = this.transient.snapshot;
+      if (this.transient.step.annotation !== undefined) {
+        state.selection = readSelection(this.proof, this.transient.step.annotation, this.cursor);
       }
     }
     return state;
@@ -427,44 +362,45 @@ class ProofStore {
 
   dispatch(step) {
     this.beforeDispatch?.();
-    this.transientStep = null;
-    if (!this.history.commit(step)) {
+    this.transient = null;
+    if (!this.session.record(JSON.stringify(step))) {
       this.onRefused?.();
       this.notify();
       return false;
     }
+    this.refresh();
     this.notify();
     return true;
   }
 
   setCursor(cursor) {
-    this.transientStep = null;
-    this.history.moveTo(cursor);
+    this.transient = null;
+    this.session.moveTo(clamp(Math.round(cursor), 0, this.length));
     this.notify();
   }
 
   preview(step) {
-    advance(this.committedSnapshot().snapshot, this.cursor, step);
-    this.transientStep = step;
+    this.transient = { step, snapshot: JSON.parse(this.session.preview(JSON.stringify(step))) };
     this.notify();
   }
 
   commitPreview() {
-    if (!this.transientStep) return;
-    const step = this.transientStep;
-    this.transientStep = null;
+    if (!this.transient) return;
+    const { step } = this.transient;
+    this.transient = null;
     this.dispatch(step);
   }
 
   clearPreview() {
-    this.transientStep = null;
+    this.transient = null;
     this.notify();
   }
 
   reset() {
     this.beforeDispatch?.();
-    this.history = new TraceHistory(this.proof.trace, 0);
-    this.transientStep = null;
+    this.session.reset();
+    this.refresh();
+    this.transient = null;
     this.notify();
   }
 }
@@ -509,7 +445,9 @@ class ProjectionView {
       button.querySelector(".projection-proof-node-label").textContent = node.name;
       button.addEventListener("click", (event) => {
         if (event.detail === 0) {
-          this.store.dispatch(selectionStep("node", node.id, `Select ${node.name}`));
+          this.store.act(() =>
+            this.store.dispatch(selectionStep("node", node.id, `Select ${node.name}`)),
+          );
         }
       });
       this.installNodeDrag(button, node);
@@ -534,7 +472,9 @@ class ProjectionView {
       button.dataset.projectionKind = this.kind;
       button.innerHTML = '<span aria-hidden="true"></span>';
       button.addEventListener("click", () => {
-        this.store.dispatch(selectionStep("edge", relation.id, `Select ${relation.label}`));
+        this.store.act(() =>
+          this.store.dispatch(selectionStep("edge", relation.id, `Select ${relation.label}`)),
+        );
       });
       this.edgeControls.append(button);
       this.edgeButtons.set(relation.id, button);
@@ -543,40 +483,54 @@ class ProjectionView {
 
   installNodeDrag(button, node) {
     let drag = null;
+    const pointAt = (event) => {
+      const rect = this.stage.getBoundingClientRect();
+      return {
+        x: (event.clientX - rect.left) / rect.width,
+        y: (event.clientY - rect.top) / rect.height,
+      };
+    };
     button.addEventListener("pointerdown", (event) => {
       if (event.button !== 0) return;
       event.preventDefault();
-      this.store.dispatch(selectionStep("node", node.id, `Select ${node.name}`));
+      this.store.act(() =>
+        this.store.dispatch(selectionStep("node", node.id, `Select ${node.name}`)),
+      );
       button.setPointerCapture(event.pointerId);
-      drag = { pointerId: event.pointerId, moved: false };
+      drag = { pointerId: event.pointerId, moved: false, last: null };
       button.classList.add("is-dragging");
     });
     button.addEventListener("pointermove", (event) => {
       if (!drag || drag.pointerId !== event.pointerId) return;
-      const rect = this.stage.getBoundingClientRect();
       drag.moved = true;
+      drag.last = pointAt(event);
+      // Until the replay loads, the drag is remembered and committed on release.
+      if (!this.store.session) return;
       const current = this.store.committedSnapshot().snapshot;
-      this.store.preview(
-        moveStep(
-          current,
-          node,
-          (event.clientX - rect.left) / rect.width,
-          (event.clientY - rect.top) / rect.height,
-          this.proof,
-        ),
-      );
+      this.store.preview(moveStep(current, node, drag.last.x, drag.last.y, this.proof));
     });
     button.addEventListener("pointerup", (event) => {
       if (!drag || drag.pointerId !== event.pointerId) return;
       button.releasePointerCapture(event.pointerId);
       button.classList.remove("is-dragging");
-      if (drag.moved) this.store.commitPreview();
-      else this.store.clearPreview();
+      const finished = drag;
       drag = null;
+      if (!finished.moved) {
+        if (this.store.session) this.store.clearPreview();
+        return;
+      }
+      this.store.act(() => {
+        if (this.store.transient) {
+          this.store.commitPreview();
+          return;
+        }
+        const current = this.store.committedSnapshot().snapshot;
+        this.store.dispatch(moveStep(current, node, finished.last.x, finished.last.y, this.proof));
+      });
     });
     button.addEventListener("pointercancel", () => {
       button.classList.remove("is-dragging");
-      this.store.clearPreview();
+      if (this.store.session) this.store.clearPreview();
       drag = null;
     });
     button.addEventListener("keydown", (event) => {
@@ -588,19 +542,22 @@ class ProjectionView {
       }[event.key];
       if (!movement || !this.state) return;
       event.preventDefault();
-      const item = itemForSource(this.state.snapshot, node.id);
-      if (!item) return;
-      const position = normalizedPosition(this.proof.scene, item);
       const distance = event.shiftKey ? 0.08 : 0.035;
-      this.store.dispatch(
-        moveStep(
-          this.state.snapshot,
-          node,
-          clamp(position.x + movement[0] * distance, 0.08, 0.92),
-          clamp(position.y + movement[1] * distance, 0.1, 0.9),
-          this.proof,
-        ),
-      );
+      this.store.act(() => {
+        const { snapshot } = this.store.snapshot();
+        const item = itemForSource(snapshot, node.id);
+        if (!item) return;
+        const position = normalizedPosition(this.proof.scene, item);
+        this.store.dispatch(
+          moveStep(
+            snapshot,
+            node,
+            clamp(position.x + movement[0] * distance, 0.08, 0.92),
+            clamp(position.y + movement[1] * distance, 0.1, 0.9),
+            this.proof,
+          ),
+        );
+      });
     });
   }
 
@@ -706,35 +663,43 @@ class ProjectionControls {
   }
 
   install() {
-    this.replayButton.addEventListener("click", () => this.replay());
-    this.foldButton.addEventListener("click", () => {
-      const state = this.store.snapshot();
-      if (state.selection.kind !== "node") return;
-      const node = this.proof.nodes.find(({ id }) => id === state.selection.id);
-      if (this.store.dispatch(foldStep(state.snapshot, node, this.proof))) {
-        announce(this.root, "Scenotime applied the folded-scope scene diff.");
-      }
-    });
-    this.edgeButton.addEventListener("click", () => {
-      const state = this.store.snapshot();
-      if (state.selection.kind !== "edge") return;
-      const metadata = relationMetadata(this.proof, state.selection.id);
-      if (!metadata || !activeRelation(state.snapshot, metadata.index)) return;
-      if (this.store.dispatch(removeRelationStep(state.snapshot, metadata))) {
-        announce(this.root, "Scenotime tombstoned the relationship in both projections.");
-      }
-    });
-    this.resetButton.addEventListener("click", () => {
-      this.stopReplay();
-      this.store.reset();
-      announce(
-        this.root,
-        `Scene returned to revision ${this.proof.scene.revision} and the start of its supplied trace.`,
-      );
-    });
+    const act = (action) => this.store.act(action);
+    this.replayButton.addEventListener("click", () => act(() => this.replay()));
+    this.foldButton.addEventListener("click", () =>
+      act(() => {
+        const state = this.store.snapshot();
+        if (state.selection.kind !== "node") return;
+        const node = this.proof.nodes.find(({ id }) => id === state.selection.id);
+        if (this.store.dispatch(foldStep(state.snapshot, node, this.proof))) {
+          announce(this.root, "Scenotime applied the folded-scope scene diff.");
+        }
+      }),
+    );
+    this.edgeButton.addEventListener("click", () =>
+      act(() => {
+        const state = this.store.snapshot();
+        if (state.selection.kind !== "edge") return;
+        const metadata = relationMetadata(this.proof, state.selection.id);
+        if (!metadata || !activeRelation(state.snapshot, metadata.index)) return;
+        if (this.store.dispatch(removeRelationStep(metadata))) {
+          announce(this.root, "Scenotime tombstoned the relationship in both projections.");
+        }
+      }),
+    );
+    this.resetButton.addEventListener("click", () =>
+      act(() => {
+        this.stopReplay();
+        this.store.reset();
+        announce(
+          this.root,
+          `Scene returned to revision ${this.proof.scene.revision} and the start of its supplied trace.`,
+        );
+      }),
+    );
     this.cursor.addEventListener("input", () => {
       this.stopReplay();
-      this.store.setCursor(Number(this.cursor.value));
+      const value = Number(this.cursor.value);
+      act(() => this.store.setCursor(value));
     });
     this.cursor.addEventListener("keydown", (event) => {
       const value = Number(this.cursor.value);
@@ -749,9 +714,9 @@ class ProjectionControls {
       if (next === undefined) return;
       event.preventDefault();
       this.stopReplay();
-      this.store.setCursor(next);
+      act(() => this.store.setCursor(next));
     });
-    this.shareButton.addEventListener("click", () => this.share());
+    this.shareButton.addEventListener("click", () => act(() => this.share()));
   }
 
   render(state) {
@@ -821,18 +786,14 @@ class ProjectionControls {
   // differ from the supplied trace.
   async share() {
     this.stopReplay();
+    const session = this.store.session;
     const params = new URLSearchParams();
     params.set("projection-scene", SHARE_VERSION);
-    params.set("projection", this.proof.shelfmark.projection);
-    params.set(
-      "expects-generation",
-      this.proof.shelfmark.inputs[AUTHORITY_ROLE].expects_generation,
-    );
+    params.set("projection", session.captureAddress());
+    params.set("expects-generation", session.generation());
     params.set("position", String(this.store.cursor));
-    const steps = stringifyLossless(this.store.steps);
-    if (steps !== stringifyLossless(this.proof.trace.steps)) {
-      params.set("trace", encodeSteps(steps));
-    }
+    const steps = session.sharedSteps();
+    if (steps != null) params.set("trace", encodeSteps(steps));
     const url = new URL(window.location.href);
     url.hash = params.toString();
     window.history.replaceState(null, "", url);
@@ -847,7 +808,8 @@ class ProjectionControls {
 }
 
 // ---------------------------------------------------------------------------
-// Steps the page records.
+// Steps the page records. A scene change names its operations only: the
+// session builds the diff from the scene it is recorded onto.
 
 function selectionStep(kind, id, label) {
   return { label, annotation: { kind, id } };
@@ -872,7 +834,7 @@ function moveStep(snapshot, node, x, y, proof) {
     ];
     operations.push({ UpdateRelation: { index, value: updated } });
   });
-  return { label: `Move ${node.name}`, diff: nextDiff(snapshot, operations) };
+  return { label: `Move ${node.name}`, operations };
 }
 
 function foldStep(snapshot, node, proof) {
@@ -890,60 +852,18 @@ function foldStep(snapshot, node, proof) {
     item.visible = folded;
     operations.push({ UpdateItem: { index: child, value: item } });
   }
-  return {
-    label: `${folded ? "Expand" : "Fold"} ${node.name} dependencies`,
-    diff: nextDiff(snapshot, operations),
-  };
+  return { label: `${folded ? "Expand" : "Fold"} ${node.name} dependencies`, operations };
 }
 
-function removeRelationStep(snapshot, metadata) {
+function removeRelationStep(metadata) {
   return {
     label: `Remove ${metadata.label} from the scene`,
-    diff: nextDiff(snapshot, [{ TombstoneRelation: { index: metadata.index } }]),
+    operations: [{ TombstoneRelation: { index: metadata.index } }],
   };
 }
 
-function nextDiff(snapshot, operations) {
-  return {
-    epoch: snapshot.epoch,
-    base: snapshot.revision,
-    revision: snapshot.revision + 1,
-    operations,
-  };
-}
-
-function validateSnapshot(snapshot) {
-  const tables = snapshot?.tables;
-  if (
-    !isInteger(snapshot?.epoch) ||
-    !Number.isSafeInteger(snapshot?.revision) ||
-    !Array.isArray(tables?.sources) ||
-    !Array.isArray(tables?.spaces) ||
-    !Array.isArray(tables?.items) ||
-    !Array.isArray(tables?.item_order) ||
-    !Array.isArray(tables?.relations) ||
-    tables.items.length !== tables.item_order.length ||
-    !tables.spaces[0]
-  ) {
-    throw new Error("invalid scene snapshot");
-  }
-  for (const item of tables.items.filter(Boolean)) {
-    requireActive(tables.sources, item.source, "source");
-    requireActive(tables.spaces, item.space, "space");
-  }
-  for (const relation of tables.relations.filter(Boolean)) {
-    requireActive(tables.items, relation.from, "relation start");
-    requireActive(tables.items, relation.to, "relation end");
-    requireActive(tables.spaces, relation.space, "relation space");
-  }
-}
-
-function requireActive(table, index, label) {
-  if (!Number.isInteger(index) || index < 0 || index >= table.length || !table[index]) {
-    throw new Error(`${label} slot is absent`);
-  }
-}
-
+// The steps travel as the session's own JSON, base64url-encoded, so the
+// epoch's digits are never read as a JavaScript number.
 function encodeSteps(json) {
   const bytes = new TextEncoder().encode(json);
   let binary = "";
@@ -958,198 +878,7 @@ function decodeSteps(value) {
     .replaceAll("_", "/")
     .padEnd(Math.ceil(value.length / 4) * 4, "=");
   const bytes = Uint8Array.from(atob(padded), (character) => character.charCodeAt(0));
-  return parseLossless(new TextDecoder().decode(bytes));
-}
-
-// ---------------------------------------------------------------------------
-// Lossless JSON: the scene epoch and the generation exceed 2^53, so an
-// integer a JavaScript number cannot hold exactly is read as a BigInt and
-// written back as the same digits.
-
-function parseLossless(text) {
-  let at = 0;
-  const fail = () => {
-    throw new SyntaxError(`invalid JSON at ${at}`);
-  };
-  const space = () => {
-    while (" \t\n\r".includes(text[at]) && at < text.length) at += 1;
-  };
-  const token = (pattern) => {
-    pattern.lastIndex = at;
-    const match = pattern.exec(text);
-    if (!match) fail();
-    at = pattern.lastIndex;
-    return match;
-  };
-  const string = () => JSON.parse(token(/"(?:[^\x00-\x1f"\\]|\\(?:["\\/bfnrt]|u[0-9a-fA-F]{4}))*"/y)[0]);
-  const value = () => {
-    space();
-    const next = text[at];
-    if (next === "{") {
-      at += 1;
-      const object = {};
-      space();
-      if (text[at] === "}") return (at += 1), object;
-      for (;;) {
-        space();
-        const key = string();
-        space();
-        if (text[at++] !== ":") fail();
-        Object.defineProperty(object, key, {
-          value: value(),
-          enumerable: true,
-          writable: true,
-          configurable: true,
-        });
-        space();
-        const end = text[at++];
-        if (end === "}") return object;
-        if (end !== ",") fail();
-      }
-    }
-    if (next === "[") {
-      at += 1;
-      const array = [];
-      space();
-      if (text[at] === "]") return (at += 1), array;
-      for (;;) {
-        array.push(value());
-        space();
-        const end = text[at++];
-        if (end === "]") return array;
-        if (end !== ",") fail();
-      }
-    }
-    if (next === '"') return string();
-    for (const [word, literal] of [["true", true], ["false", false], ["null", null]]) {
-      if (text.startsWith(word, at)) return (at += word.length), literal;
-    }
-    const [number, fraction, exponent] = token(/-?(?:0|[1-9]\d*)(\.\d+)?([eE][+-]?\d+)?/y);
-    if (fraction || exponent) return Number(number);
-    return Number.isSafeInteger(Number(number)) ? Number(number) : BigInt(number);
-  };
-  const result = value();
-  space();
-  if (at !== text.length) fail();
-  return result;
-}
-
-function stringifyLossless(value) {
-  if (typeof value === "bigint") return value.toString();
-  if (value === null || typeof value !== "object") return JSON.stringify(value);
-  if (Array.isArray(value)) return `[${value.map(stringifyLossless).join(",")}]`;
-  return `{${Object.entries(value)
-    .filter(([, entry]) => entry !== undefined)
-    .map(([key, entry]) => `${JSON.stringify(key)}:${stringifyLossless(entry)}`)
-    .join(",")}}`;
-}
-
-function isInteger(value) {
-  return typeof value === "bigint" || Number.isSafeInteger(value);
-}
-
-function sameInteger(left, right) {
-  return isInteger(left) && isInteger(right) && BigInt(left) === BigInt(right);
-}
-
-// ---------------------------------------------------------------------------
-// BLAKE3, for the capture's content address (chirograph's ContentHash).
-
-const BLAKE3_IV = Uint32Array.of(
-  0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19,
-);
-const BLAKE3_PERMUTATION = [2, 6, 3, 10, 7, 0, 4, 13, 1, 11, 12, 5, 9, 14, 15, 8];
-
-function blake3Compress(cv, block, counter, length, flags) {
-  const s = new Uint32Array(16);
-  s.set(cv, 0);
-  s.set(BLAKE3_IV.subarray(0, 4), 8);
-  s[12] = counter;
-  s[13] = Math.floor(counter / 0x100000000);
-  s[14] = length;
-  s[15] = flags;
-  const rotate = (x, n) => (x >>> n) | (x << (32 - n));
-  const g = (a, b, c, d, x, y) => {
-    s[a] = s[a] + s[b] + x;
-    s[d] = rotate(s[d] ^ s[a], 16);
-    s[c] = s[c] + s[d];
-    s[b] = rotate(s[b] ^ s[c], 12);
-    s[a] = s[a] + s[b] + y;
-    s[d] = rotate(s[d] ^ s[a], 8);
-    s[c] = s[c] + s[d];
-    s[b] = rotate(s[b] ^ s[c], 7);
-  };
-  let m = block;
-  for (let round = 0; round < 7; round += 1) {
-    g(0, 4, 8, 12, m[0], m[1]);
-    g(1, 5, 9, 13, m[2], m[3]);
-    g(2, 6, 10, 14, m[4], m[5]);
-    g(3, 7, 11, 15, m[6], m[7]);
-    g(0, 5, 10, 15, m[8], m[9]);
-    g(1, 6, 11, 12, m[10], m[11]);
-    g(2, 7, 8, 13, m[12], m[13]);
-    g(3, 4, 9, 14, m[14], m[15]);
-    const permuted = m;
-    m = Uint32Array.from(BLAKE3_PERMUTATION, (index) => permuted[index]);
-  }
-  for (let index = 0; index < 8; index += 1) {
-    s[index] ^= s[index + 8];
-    s[index + 8] ^= cv[index];
-  }
-  return s;
-}
-
-function blake3Hex(bytes) {
-  const [CHUNK_START, CHUNK_END, PARENT, ROOT] = [1, 2, 4, 8];
-  const words = (offset, length) => {
-    const block = new Uint32Array(16);
-    for (let index = 0; index < length; index += 1) {
-      block[index >> 2] |= bytes[offset + index] << (8 * (index & 3));
-    }
-    return block;
-  };
-  const chain = (output) =>
-    blake3Compress(output.cv, output.block, output.counter, output.length, output.flags).slice(0, 8);
-  const chunkOutput = (chunk) => {
-    const start = chunk * 1024;
-    const end = Math.min(bytes.length, start + 1024);
-    const blocks = Math.max(1, Math.ceil((end - start) / 64));
-    let cv = BLAKE3_IV;
-    for (let index = 0; ; index += 1) {
-      const offset = start + index * 64;
-      const length = Math.min(64, end - offset);
-      const output = {
-        cv,
-        block: words(offset, length),
-        counter: chunk,
-        length,
-        flags: (index === 0 ? CHUNK_START : 0) | (index === blocks - 1 ? CHUNK_END : 0),
-      };
-      if (index === blocks - 1) return output;
-      cv = chain(output);
-    }
-  };
-  const parent = (left, right) => {
-    const block = new Uint32Array(16);
-    block.set(left, 0);
-    block.set(right, 8);
-    return { cv: BLAKE3_IV, block, counter: 0, length: 64, flags: PARENT };
-  };
-  const chunks = Math.max(1, Math.ceil(bytes.length / 1024));
-  const stack = [];
-  for (let chunk = 0; chunk < chunks - 1; chunk += 1) {
-    let cv = chain(chunkOutput(chunk));
-    for (let total = chunk + 1; (total & 1) === 0; total >>= 1) cv = chain(parent(stack.pop(), cv));
-    stack.push(cv);
-  }
-  let output = chunkOutput(chunks - 1);
-  while (stack.length) output = parent(stack.pop(), chain(output));
-  const digest = blake3Compress(output.cv, output.block, output.counter, output.length, output.flags | ROOT);
-  let hex = "";
-  for (let index = 0; index < 32; index += 1) {
-    hex += ((digest[index >> 2] >>> (8 * (index & 3))) & 0xff).toString(16).padStart(2, "0");
-  }
-  return hex;
+  return new TextDecoder("utf-8", { fatal: true }).decode(bytes);
 }
 
 // ---------------------------------------------------------------------------

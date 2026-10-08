@@ -208,6 +208,8 @@ fn projection_proof_section(proof: &ProjectionProof) -> SiteView {
     let [capture, trace, shelfmark] = proof
         .files()
         .map(|(name, bytes)| ProjectionProof::href(name, bytes));
+    let (graph_runtime, graph_wasm) = super::repositories::graph_runtime_hrefs();
+    let receipt = &proof.reading.receipt;
     element(
         "section",
         &[
@@ -259,9 +261,15 @@ fn projection_proof_section(proof: &ProjectionProof) -> SiteView {
                     ("data-trace-src", &trace),
                     ("data-shelfmark-src", &shelfmark),
                     ("data-dataset-src", &format!("/{HOST_DATASET_FILE}")),
+                    // Ruling 140: replay loads on first interaction, from the
+                    // graph runtime the repositories page already caches.
+                    ("data-replay", "static"),
+                    ("data-graph-runtime", &graph_runtime),
+                    ("data-graph-wasm", &graph_wasm),
+                    ("data-capture-address", &receipt.capture_address),
+                    ("data-scene-epoch", &proof.reading.epoch),
                 ],
                 vec![
-                    proof.static_reading(),
                     element(
                         "p",
                         &[
@@ -300,6 +308,9 @@ fn projection_proof_section(proof: &ProjectionProof) -> SiteView {
                             element("figcaption", &[], vec![txt(proof.summary())]),
                         ],
                     ),
+                    // After the interface, so hiding it once replay is ready
+                    // never moves a stage under the visitor's pointer.
+                    proof.static_reading(),
                     element(
                         "p",
                         &[
