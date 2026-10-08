@@ -135,7 +135,9 @@ remains pending because incoming `text.rs` changes overlap that unfinished work.
 Under the subsequent removal authorization, three more clean worktrees whose
 heads are contained in published main were removed: `mere-l3`,
 `mere-sceno-editor`, and `netrender-deps`. Their ignored configuration, locks,
-and generated files were archived and hash-verified before removal. Active
+and generated files were archived and hash-verified before removal. The next
+dependency stage subsequently recreated `netrender-deps` and started new sha2
+and replay edits there; that new active worktree is retained under its owner. Active
 worktrees, unpublished commits, and Woodshed source work remain preserved.
 The unregistered `mere-proof42` directory is empty; automatic approval review
 also rejected its removal with "blocked by policy".
