@@ -771,15 +771,45 @@ try {
   };
   await visualProject.close();
 
-  const projectionArtifactResponse = await fetch(`${baseUrl}/projection-scene.json`);
-  assert.equal(projectionArtifactResponse.status, 200);
-  const projectionArtifact = await projectionArtifactResponse.json();
-  assert.equal(projectionArtifact.schema, "mer3ly.portable-projection/v1");
-  assert.equal(projectionArtifact.adapter, "mer3ly.repository-graph/v1");
-  assert.equal(projectionArtifact.score.items.length, 11);
-  assert.equal(projectionArtifact.snapshot.tables.items.length, 11);
-  assert.equal(projectionArtifact.snapshot.tables.relations.length, 13);
-  assert.equal(projectionArtifact.default_trace.length, 7);
+  // The proof's four sibling artifacts (site canvas plan, Rulings 132-136).
+  // Expectations below are derived from them, not pinned.
+  const projectionMereHtml = await (await fetch(`${baseUrl}/projects/mere/`)).text();
+  const projectionSrc = (attribute) => {
+    const match = projectionMereHtml.match(new RegExp(`${attribute}="([^"]+)"`));
+    assert.ok(match, `Mere profile is missing ${attribute}`);
+    return match[1].replaceAll("&amp;", "&");
+  };
+  const fetchProjectionText = async (attribute) => {
+    const response = await fetch(`${baseUrl}${projectionSrc(attribute)}`);
+    assert.equal(response.status, 200, `${attribute} did not load`);
+    return response.text();
+  };
+  const projectionCaptureText = await fetchProjectionText("data-capture-src");
+  const projectionCapture = JSON.parse(projectionCaptureText);
+  const projectionTrace = JSON.parse(await fetchProjectionText("data-trace-src"));
+  const projectionShelfmark = JSON.parse(await fetchProjectionText("data-shelfmark-src"));
+  assert.equal(projectionSrc("data-dataset-src"), "/repository-host-dataset.json");
+  assert.equal(projectionCapture.version, 2);
+  assert.equal(projectionCapture.authority.adapter, "mer3ly.repository-graph/v1");
+  assert.equal(projectionTrace.version, 1);
+  assert.equal(projectionShelfmark.schema, "mere.shelfmark/1");
+  const projectionGeneration =
+    projectionShelfmark.inputs.authority.expects_generation;
+  // The epoch is above 2^53: the capture's bytes carry its exact digits.
+  assert.ok(BigInt(projectionGeneration) > 2n ** 53n);
+  assert.ok(projectionCaptureText.includes(`"epoch":${projectionGeneration}`));
+  const projectionNodeCount = projectionCapture.scene.tables.items.filter(Boolean).length;
+  const projectionEdgeCount = projectionCapture.scene.tables.relations.length;
+  const projectionSteps = projectionTrace.steps.length;
+  const projectionFinalRevision = projectionTrace.steps.reduce(
+    (revision, step) => step.diff?.revision ?? revision,
+    projectionCapture.scene.revision,
+  );
+  assert.equal(projectionCapture.score.items.length, projectionNodeCount);
+  assert.ok(projectionSteps > 0 && projectionSteps <= 16);
+  for (const retired of ["projection-scene.json"]) {
+    assert.equal((await fetch(`${baseUrl}/${retired}`)).status, 404, `${retired} still ships`);
+  }
 
   const projectionDesktop = await browser.newPage({
     viewport: { width: 1440, height: 1000 },
@@ -810,10 +840,27 @@ try {
   const swatchProjection = projectionProof.locator(
     '[data-projection-view="swatch"]',
   );
-  assert.equal(await canvasProjection.locator("[data-projection-node]").count(), 11);
-  assert.equal(await swatchProjection.locator("[data-projection-node]").count(), 11);
-  assert.equal(await canvasProjection.locator("[data-projection-edge]").count(), 13);
-  assert.equal(await swatchProjection.locator("[data-projection-edge]").count(), 13);
+  assert.equal(
+    await canvasProjection.locator("[data-projection-node]").count(),
+    projectionNodeCount,
+  );
+  assert.equal(
+    await swatchProjection.locator("[data-projection-node]").count(),
+    projectionNodeCount,
+  );
+  assert.equal(
+    await canvasProjection.locator("[data-projection-edge]").count(),
+    projectionEdgeCount,
+  );
+  assert.equal(
+    await swatchProjection.locator("[data-projection-edge]").count(),
+    projectionEdgeCount,
+  );
+  assert.equal(await projectionProof.getAttribute("data-scene-epoch"), projectionGeneration);
+  assert.equal(
+    await projectionProof.getAttribute("data-capture-address"),
+    projectionShelfmark.projection,
+  );
   assert.equal(
     await canvasProjection
       .locator('[data-projection-node="mere"]')
@@ -830,11 +877,20 @@ try {
       return root.dataset.cursor === root.dataset.actionCount;
     },
   );
-  assert.equal(await projectionProof.getAttribute("data-cursor"), "7");
-  assert.equal(await projectionProof.getAttribute("data-scene-revision"), "5");
+  assert.equal(
+    await projectionProof.getAttribute("data-cursor"),
+    String(projectionSteps),
+  );
+  assert.equal(
+    await projectionProof.getAttribute("data-scene-revision"),
+    String(projectionFinalRevision),
+  );
   await projectionProof.locator('[data-projection-action="reset"]').click();
   assert.equal(await projectionProof.getAttribute("data-cursor"), "0");
-  assert.equal(await projectionProof.getAttribute("data-scene-revision"), "1");
+  assert.equal(
+    await projectionProof.getAttribute("data-scene-revision"),
+    String(projectionCapture.scene.revision),
+  );
 
   const canvasTurnstone = canvasProjection.locator(
     '[data-projection-node="turnstone"]',
@@ -919,10 +975,18 @@ try {
   const sharedProjectionParams = new URLSearchParams(
     sharedProjectionUrl.hash.slice(1),
   );
-  assert.equal(sharedProjectionParams.get("projection-scene"), "v2");
+  assert.equal(sharedProjectionParams.get("projection-scene"), "v3");
   assert.equal(
-    sharedProjectionParams.get("authority"),
-    projectionArtifact.authority_sha256,
+    sharedProjectionParams.get("projection"),
+    projectionShelfmark.projection,
+  );
+  assert.equal(
+    sharedProjectionParams.get("expects-generation"),
+    projectionGeneration,
+  );
+  assert.equal(
+    sharedProjectionParams.get("position"),
+    await projectionProof.getAttribute("data-cursor"),
   );
   assert.ok((sharedProjectionParams.get("trace") ?? "").length > 20);
   const sharedProjectionActions = Number(
@@ -954,6 +1018,7 @@ try {
     sharedProjectionCursor,
   );
   assert.equal(await receivedProof.getAttribute("data-folded"), "mere");
+  assert.equal(await receivedProof.getAttribute("data-link-state"), "restored");
   const receivedCursor = receivedProof.locator("[data-projection-cursor]");
   await receivedCursor.press("Home");
   assert.equal(await receivedProof.getAttribute("data-cursor"), "0");
@@ -985,12 +1050,13 @@ try {
     path: path.join(receiptRoot, "mere-projection-proof-desktop.png"),
   });
   receipt.projects.projection_proof = {
-    nodes: 8,
-    edges: 10,
+    nodes: projectionNodeCount,
+    edges: projectionEdgeCount,
     projections: 2,
-    contract: "sceno-score-scene-scenotime-diff",
-    initial_revision: projectionArtifact.snapshot.revision,
-    supplied_trace_steps: projectionArtifact.default_trace.length,
+    contract: "chirograph-capture-v2-scenotime-trace-incipit-shelfmark",
+    capture_address: projectionShelfmark.projection,
+    initial_revision: projectionCapture.scene.revision,
+    supplied_trace_steps: projectionSteps,
     shared_state: true,
     shared_trace: true,
     horizontal_overflow: 0,
@@ -1104,8 +1170,45 @@ try {
     [],
     "portable scene fallback emitted browser errors",
   );
-  receipt.projects.projection_proof.fallback = "semantic-relations-remain";
+  assert.equal(
+    await projectionFallback.locator("[data-projection-reading-step]").count(),
+    projectionSteps,
+  );
+  receipt.projects.projection_proof.fallback = "trace-reading-and-semantic-relations-remain";
   await projectionFallback.close();
+
+  // Ruling 21: an old link names a retired format, says so politely, and shows
+  // the default trace.
+  const projectionRetired = await browser.newPage({
+    viewport: { width: 900, height: 900 },
+  });
+  const projectionRetiredDiagnostics = collectDiagnostics(projectionRetired);
+  await projectionRetired.goto(
+    `${baseUrl}/projects/mere/#projection-scene=v2&authority=retired&trace=e30&cursor=1`,
+    { waitUntil: "networkidle" },
+  );
+  await projectionRetired.waitForFunction(
+    () =>
+      document.querySelector("[data-projection-proof]")?.dataset.ready === "true",
+  );
+  const retiredProof = projectionRetired.locator("[data-projection-proof]");
+  assert.equal(await retiredProof.getAttribute("data-link-state"), "retired");
+  assert.equal(await retiredProof.getAttribute("data-cursor"), "0");
+  assert.equal(
+    await retiredProof.getAttribute("data-action-count"),
+    String(projectionSteps),
+  );
+  assert.equal(
+    await projectionRetired.locator("[data-projection-notice]").isVisible(),
+    true,
+  );
+  assert.deepEqual(
+    projectionRetiredDiagnostics,
+    [],
+    "retired projection link emitted browser errors",
+  );
+  receipt.projects.projection_proof.retired_link = "notice-and-default-trace";
+  await projectionRetired.close();
 
   const textProject = await browser.newPage({
     viewport: { width: 375, height: 812 },
