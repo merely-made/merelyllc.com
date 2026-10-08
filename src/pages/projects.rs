@@ -4,11 +4,12 @@ use std::path::Path;
 use serde_json::{Map, Value, json};
 use sha2::{Digest, Sha256};
 
+use crate::host_dataset::HOST_DATASET_FILE;
+use crate::projection_proof::ProjectionProof;
 use crate::repositories::{
     AuthorityError, PublicRepositoryMetadata, PublicSiteData, RelationRecord, RepositoryRecord,
     ShowcaseRecord,
 };
-use crate::repository_history::RepositoryGraph;
 use crate::site::{
     ActivePage, DEFAULT_SOCIAL_IMAGE_ALT, DEFAULT_SOCIAL_IMAGE_URL, DocumentMetadata,
     ORGANIZATION_ID, SiteView, SocialImage, WEBSITE_ID, base_schema_graph, element, external_link,
@@ -74,12 +75,13 @@ pub fn document_for(data: &PublicSiteData, repository: &RepositoryRecord) -> Str
         },
         json_ld: &json_ld,
     };
-    let bootstrap = if repository.id == "mere" {
-        projection_bootstrap(data)
-    } else {
-        String::new()
-    };
-    render_with_dynamic_and_body_end(&metadata, || view(data, repository), &bootstrap)
+    let proof = proof_for(data, repository);
+    let bootstrap = proof.as_ref().map(projection_bootstrap).unwrap_or_default();
+    render_with_dynamic_and_body_end(
+        &metadata,
+        || view_with(data, repository, proof.as_ref()),
+        &bootstrap,
+    )
 }
 
 fn project_json_ld(
@@ -150,7 +152,22 @@ fn project_json_ld(
     }))
 }
 
+/// The projection proof's artifacts, on the Mere profile only.
+fn proof_for(data: &PublicSiteData, repository: &RepositoryRecord) -> Option<ProjectionProof> {
+    (repository.id == "mere").then(|| {
+        ProjectionProof::build(data).expect("validated Mere authority projects through Scenograph")
+    })
+}
+
 pub fn view(data: &PublicSiteData, repository: &RepositoryRecord) -> SiteView {
+    view_with(data, repository, proof_for(data, repository).as_ref())
+}
+
+fn view_with(
+    data: &PublicSiteData,
+    repository: &RepositoryRecord,
+    proof: Option<&ProjectionProof>,
+) -> SiteView {
     let metadata = data
         .metadata
         .repository
@@ -163,8 +180,8 @@ pub fn view(data: &PublicSiteData, repository: &RepositoryRecord) -> SiteView {
         showcase_section(showcase),
         place_in_family(data, repository),
     ];
-    if repository.id == "mere" {
-        sections.push(projection_proof_section());
+    if let Some(proof) = proof {
+        sections.push(projection_proof_section(proof));
     }
     sections.push(project_facts(
         if repository.id == "mere" { "04" } else { "03" },
@@ -187,7 +204,10 @@ pub fn view(data: &PublicSiteData, repository: &RepositoryRecord) -> SiteView {
     )
 }
 
-fn projection_proof_section() -> SiteView {
+fn projection_proof_section(proof: &ProjectionProof) -> SiteView {
+    let [capture, trace, shelfmark] = proof
+        .files()
+        .map(|(name, bytes)| ProjectionProof::href(name, bytes));
     element(
         "section",
         &[
@@ -235,17 +255,22 @@ fn projection_proof_section() -> SiteView {
                     ("data-ready", "false"),
                     ("data-state", "pending"),
                     ("data-cursor", "0"),
+                    ("data-capture-src", &capture),
+                    ("data-trace-src", &trace),
+                    ("data-shelfmark-src", &shelfmark),
+                    ("data-dataset-src", &format!("/{HOST_DATASET_FILE}")),
                 ],
                 vec![
+                    proof.static_reading(),
                     element(
                         "p",
                         &[
-                            ("class", "projection-proof-fallback"),
-                            ("data-projection-fallback", ""),
+                            ("class", "projection-proof-notice"),
+                            ("data-projection-notice", ""),
+                            ("role", "status"),
+                            ("hidden", ""),
                         ],
-                        vec![txt(
-                            "The synchronized scene requires JavaScript. The relationship lists above preserve the same public nodes and edges as ordinary text.",
-                        )],
+                        vec![],
                     ),
                     element(
                         "div",
@@ -272,13 +297,7 @@ fn projection_proof_section() -> SiteView {
                                     ),
                                 ],
                             ),
-                            element(
-                                "figcaption",
-                                &[],
-                                vec![txt(
-                                    "Eight public projects and nine validated relationships enter one serialized Scenograph score and scene snapshot. A native receipt and both page projections consume the same artifact and revisioned trace.",
-                                )],
-                            ),
+                            element("figcaption", &[], vec![txt(proof.summary())]),
                         ],
                     ),
                     element(
@@ -878,51 +897,15 @@ fn format_date(timestamp: &str) -> String {
     timestamp.get(..10).unwrap_or(timestamp).to_owned()
 }
 
-pub fn projection_artifact_json(data: &PublicSiteData) -> String {
-    let authority = RepositoryGraph::from_parts(
-        &data.authority.repositories,
-        &data.authority.relations,
-        &data.metadata,
-    )
-    .expect("validated public site data projects a repository graph");
-    let edges = authority
-        .edges
-        .into_iter()
-        .filter(|edge| edge.source == "mere" || edge.target == "mere")
-        .collect::<Vec<_>>();
-    let node_ids = edges
-        .iter()
-        .flat_map(|edge| [edge.source.clone(), edge.target.clone()])
-        .collect::<std::collections::BTreeSet<_>>();
-    let nodes = authority
-        .nodes
-        .into_iter()
-        .filter(|node| node_ids.contains(&node.id))
-        .collect::<Vec<_>>();
-    let graph = RepositoryGraph {
-        schema: authority.schema,
-        nodes,
-        edges,
-    };
-    let graph_json =
-        serde_json::to_string(&graph).expect("Mere projection proof authority is serializable");
-    mer3ly_repo_graph::portable_projection_json(&graph_json)
-        .expect("validated Mere authority projects through Scenograph")
-}
-
-fn projection_bootstrap(data: &PublicSiteData) -> String {
-    let artifact = projection_artifact_json(data);
-    let embedded = artifact
-        .replace('<', "\\u003c")
-        .replace('>', "\\u003e")
-        .replace('&', "\\u0026");
+fn projection_bootstrap(proof: &ProjectionProof) -> String {
     let mut digest = Sha256::new();
     digest.update(PROJECTION_PROOF);
-    digest.update(artifact.as_bytes());
+    for (_, bytes) in proof.files() {
+        digest.update(bytes);
+    }
     let digest = format!("{:x}", digest.finalize());
     format!(
-        "<script id=\"mere-projection-artifact\" type=\"application/json\">{embedded}</script>\n\
-<script type=\"module\" src=\"/projection-proof.js?v={}\"></script>",
+        "<script type=\"module\" src=\"/projection-proof.js?v={}\"></script>",
         &digest[..12]
     )
 }

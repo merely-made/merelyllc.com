@@ -1,6 +1,7 @@
 use std::collections::{BTreeMap, HashMap, HashSet};
 
 mod arrangement;
+mod portable;
 
 use arrangement::{degree_weights, radial_rings, stack_layers};
 use cartography::{
@@ -26,6 +27,13 @@ use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use wasm_bindgen::prelude::*;
 
+pub use portable::{
+    CAPTURE_FILE, CapturedRelation, PROJECTION_STEP_BOUND, PortableProjection, ProjectionReading,
+    ProjectionReceipt, ReadingStep, SHELFMARK_AUTHORITY_ROLE, SHELFMARK_FILE, TRACE_FILE,
+    check_shelfmark, consume_portable_projection, portable_projection,
+    projection_capture_with_placement_json, read_portable_projection,
+};
+
 const PREFERRED_FOCUS_REPOSITORY: &str = "mere";
 const DEFAULT_ARRANGEMENT: &str = "graph_layout:radial";
 const TIMELINE_AXIS_LENGTH: f32 = 620.0;
@@ -46,7 +54,6 @@ const UNAVAILABLE_ARRANGEMENTS: &[(&str, &str)] = &[(
     "graph_layout:semantic_embedding",
     "This site does not yet publish semantic coordinates.",
 )];
-const PORTABLE_PROJECTION_SCHEMA: &str = "mer3ly.portable-projection/v1";
 const PROJECTION_ADAPTER: &str = "mer3ly.repository-graph/v1";
 const MATRIX_PROJECTION_SCHEMA: &str = "mer3ly.two-reading-matrix/v1";
 const MATRIX_RELATION_ADAPTER: &str = "mer3ly.repository-relation/v1";
@@ -566,19 +573,19 @@ pub fn authority_generation(graph: &str) -> Result<String, JsValue> {
     Ok(generation.to_string())
 }
 
-/// Turn a shared scene state into a portable projection that keeps its pins.
+/// Turn a shared scene state into a projection capture that keeps its pins.
 ///
 /// The sandbox hands over the graph authority and its own scene state; what
-/// comes back is a Scenograph artifact whose score holds the visitor's
-/// placement. Distinct from sharing a scene: a share is a citation, small
-/// enough for a URL fragment, and this is the realized thing it cites.
+/// comes back is chirograph's encoding of a V2 capture whose score holds the
+/// visitor's placement. Distinct from sharing a scene: a share is a citation,
+/// small enough for a URL fragment, and this is the realized thing it cites.
 ///
 /// This export is why the module's size ceiling is what it is. Reaching it
 /// pulls the whole portable path into the browser, score and scene serde plus
 /// `scenomise::solve`, which the live path alone never needed.
 #[wasm_bindgen]
-pub fn portable_projection_with_placement(graph: &str, placement: &str) -> Result<String, JsValue> {
-    portable_projection_with_placement_json(graph, placement)
+pub fn projection_capture_with_placement(graph: &str, placement: &str) -> Result<String, JsValue> {
+    projection_capture_with_placement_json(graph, placement)
         .map_err(|error| JsValue::from_str(&error))
 }
 
@@ -1809,43 +1816,6 @@ fn physics_prop(position: Point2D<f32>, rotation: f32, collider: NodeCollider) -
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct PortableProjectionArtifact {
-    pub schema: String,
-    pub adapter: String,
-    pub authority_schema: String,
-    pub authority_sha256: String,
-    pub score: Score,
-    pub snapshot: SceneSnapshot,
-    pub nodes: Vec<ProjectionNodeMetadata>,
-    pub relations: Vec<ProjectionRelationMetadata>,
-    pub default_trace: Vec<ProjectionStep>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct ProjectionNodeMetadata {
-    pub id: String,
-    pub name: String,
-    pub class: String,
-    pub status: String,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct ProjectionRelationMetadata {
-    pub index: RelationId,
-    pub id: String,
-    pub source: String,
-    pub target: String,
-    pub kind: String,
-    pub provenance: String,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct ProjectionSelection {
-    pub kind: String,
-    pub id: String,
-}
-
 /// One visitor-placed node, in the shape the sandbox already shares.
 ///
 /// This is the wire's `pins` entry verbatim, so the seam reads the record the
@@ -1894,61 +1864,6 @@ impl PlacementDelta {
     }
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct ProjectionStep {
-    pub label: String,
-    pub selection: Option<ProjectionSelection>,
-    pub diff: Option<SceneDiff>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct ProjectionReceipt {
-    pub schema: String,
-    pub authority_sha256: String,
-    pub score_items: usize,
-    pub initial_revision: u64,
-    pub final_revision: u64,
-    pub active_items: usize,
-    pub active_relations: usize,
-    pub picked_source: String,
-    pub trace_steps: usize,
-    /// How many authored holds the realized scene actually honored.
-    ///
-    /// Equal to the score's hold count on a sound artifact. Consuming checks
-    /// it rather than trusting it, because a citation that says "pinned here"
-    /// and reconstitutes elsewhere is the exact failure the seam exists to
-    /// close.
-    pub honored_holds: usize,
-}
-
-pub fn portable_projection_json(input: &str) -> Result<String, String> {
-    let artifact = portable_projection(input)?;
-    serde_json::to_string(&artifact)
-        .map_err(|error| format!("could not serialize portable projection: {error}"))
-}
-
-/// The seam: a live arrangement's placement reaching a portable score.
-///
-/// `placement` is the sandbox's own scene state (or just its placement half).
-/// The pins it carries become [`Score::holds`], the solver honors them ahead of
-/// the arrangement, and [`consume_portable_projection`] proves afterwards that
-/// each one landed where the visitor put it. Before this, a pinned arrangement
-/// could only travel as site-local JSON that no score could express.
-pub fn portable_projection_with_placement_json(
-    input: &str,
-    placement: &str,
-) -> Result<String, String> {
-    let delta: PlacementDelta = serde_json::from_str(placement)
-        .map_err(|error| format!("invalid placement delta: {error}"))?;
-    let artifact = portable_projection_holding(input, &delta)?;
-    serde_json::to_string(&artifact)
-        .map_err(|error| format!("could not serialize portable projection: {error}"))
-}
-
-pub fn portable_projection(input: &str) -> Result<PortableProjectionArtifact, String> {
-    portable_projection_holding(input, &PlacementDelta::default())
-}
-
 /// The authority's content identity: its SHA-256 and the score generation
 /// derived from that digest's first eight bytes.
 ///
@@ -1966,300 +1881,6 @@ fn authority_identity(input: &GraphInput) -> Result<(String, u64), String> {
             .expect("SHA-256 prefix is eight bytes"),
     );
     Ok((format!("{digest:x}"), generation))
-}
-
-pub fn portable_projection_holding(
-    input: &str,
-    placement: &PlacementDelta,
-) -> Result<PortableProjectionArtifact, String> {
-    let input: GraphInput =
-        serde_json::from_str(input).map_err(|error| format!("invalid graph JSON: {error}"))?;
-    validate(&input)?;
-
-    let (authority_sha256, generation) = authority_identity(&input)?;
-
-    let mut score = Score::new(SceneArrangement::Spiral(Spiral::default()));
-    score.generation = generation;
-    // A pin naming a node this authority does not contain is a broken citation,
-    // not a placement. Say so rather than solving a scene that quietly omits it.
-    for pin in &placement.pins {
-        if !input.nodes.iter().any(|node| node.id == pin.id) {
-            return Err(format!("placement pins unknown node {}", pin.id));
-        }
-    }
-    score.holds = placement.holds();
-    let mut ordered_nodes = input.nodes.iter().enumerate().collect::<Vec<_>>();
-    ordered_nodes.sort_by_key(|(index, node)| (node.id != PREFERRED_FOCUS_REPOSITORY, *index));
-    for (ordinal, (_, node)) in ordered_nodes.into_iter().enumerate() {
-        score.items.push(ScoreItem {
-            source: SourceRef::new(PROJECTION_ADAPTER, &node.id),
-            ordinal: ordinal as u32,
-            footprint: Footprint::Circle { radius: 28.0 },
-            representation: Representation::Glyph,
-            placement: Placement::Ordinal,
-            layer: 0,
-            visible: true,
-            // A spiral places by ordinal alone, and this projection's ordinal
-            // already carries the focus-first ordering it wants.
-            axis: None,
-            embedding: None,
-            weight: None,
-        });
-    }
-
-    let mut scene = scenomise::solve(&score);
-    let instance_by_source = scene
-        .items
-        .iter()
-        .enumerate()
-        .map(|(index, item)| {
-            let source = &scene.sources[item.source.0 as usize];
-            (source.id.as_str(), sceno::InstanceId(index as u32))
-        })
-        .collect::<HashMap<_, _>>();
-    let mut relations = Vec::with_capacity(input.edges.len());
-    for edge in &input.edges {
-        let from = *instance_by_source
-            .get(edge.source.as_str())
-            .ok_or_else(|| format!("projection lost relation source {}", edge.source))?;
-        let to = *instance_by_source
-            .get(edge.target.as_str())
-            .ok_or_else(|| format!("projection lost relation target {}", edge.target))?;
-        let from_point = scene.items[from.0 as usize].transform.translate;
-        let to_point = scene.items[to.0 as usize].transform.translate;
-        let index = RelationId(scene.relations.len() as u32);
-        scene.relations.push(RoutedRelation {
-            from,
-            to,
-            space: sceno::Scene::WORLD,
-            points: vec![from_point, to_point],
-            kind: Some(edge.kind.clone()),
-            weight: Some(1.0),
-        });
-        relations.push(ProjectionRelationMetadata {
-            index,
-            id: edge.id.clone(),
-            source: edge.source.clone(),
-            target: edge.target.clone(),
-            kind: edge.kind.clone(),
-            provenance: edge.provenance.clone(),
-        });
-    }
-
-    let snapshot = SceneSnapshot::from_dense(SceneEpoch(generation), Revision(1), scene)
-        .map_err(|error| format!("Scenograph rejected the solved scene: {error:?}"))?;
-    let default_trace = default_projection_trace(&input, &relations, &snapshot)?;
-    let artifact = PortableProjectionArtifact {
-        schema: PORTABLE_PROJECTION_SCHEMA.to_owned(),
-        adapter: PROJECTION_ADAPTER.to_owned(),
-        authority_schema: input.schema.clone(),
-        authority_sha256,
-        score,
-        snapshot,
-        nodes: input
-            .nodes
-            .iter()
-            .map(|node| ProjectionNodeMetadata {
-                id: node.id.clone(),
-                name: node.name.clone(),
-                class: node.class.clone(),
-                status: node.status.clone(),
-            })
-            .collect(),
-        relations,
-        default_trace,
-    };
-    consume_portable_projection(&artifact)?;
-    Ok(artifact)
-}
-
-pub fn consume_portable_projection_json(input: &str) -> Result<ProjectionReceipt, String> {
-    let artifact: PortableProjectionArtifact = serde_json::from_str(input)
-        .map_err(|error| format!("invalid portable projection JSON: {error}"))?;
-    consume_portable_projection(&artifact)
-}
-
-pub fn consume_portable_projection(
-    artifact: &PortableProjectionArtifact,
-) -> Result<ProjectionReceipt, String> {
-    if artifact.schema != PORTABLE_PROJECTION_SCHEMA {
-        return Err(format!(
-            "unsupported portable projection schema {}",
-            artifact.schema
-        ));
-    }
-    if artifact.adapter != PROJECTION_ADAPTER {
-        return Err(format!(
-            "unsupported projection adapter {}",
-            artifact.adapter
-        ));
-    }
-    artifact
-        .snapshot
-        .validate()
-        .map_err(|error| format!("invalid initial scene snapshot: {error:?}"))?;
-    if artifact.score.items.len() != artifact.nodes.len()
-        || artifact.snapshot.active_item_count() != artifact.nodes.len()
-    {
-        return Err("score, scene, and node metadata counts diverge".to_owned());
-    }
-    if artifact.snapshot.tables.relations.len() != artifact.relations.len() {
-        return Err("scene and relation metadata counts diverge".to_owned());
-    }
-
-    // Holds are checked against the scene as solved, not the scene after the
-    // trace: the trace deliberately moves things, and an authored move later is
-    // not a broken pin. What must hold is that the solver placed each held
-    // source where the citation said.
-    let mut honored_holds = 0usize;
-    for held in &artifact.score.holds {
-        let instance = instance_for_source(&artifact.snapshot, &held.source.id)
-            .ok_or_else(|| format!("held source {} is absent from the scene", held.source.id))?;
-        let item = artifact
-            .snapshot
-            .active_item(instance)
-            .ok_or_else(|| format!("held source {} is tombstoned", held.source.id))?;
-        let at = item.transform.translate;
-        if at.x != held.at.x || at.y != held.at.y {
-            return Err(format!(
-                "hold on {} was not honored: asked ({}, {}), realized ({}, {})",
-                held.source.id, held.at.x, held.at.y, at.x, at.y
-            ));
-        }
-        honored_holds += 1;
-    }
-
-    let initial_revision = artifact.snapshot.revision.0;
-    let mut snapshot = artifact.snapshot.clone();
-    for step in &artifact.default_trace {
-        if let Some(diff) = &step.diff {
-            snapshot
-                .apply_diff(diff)
-                .map_err(|error| format!("portable trace step {} failed: {error:?}", step.label))?;
-        }
-    }
-    snapshot
-        .validate()
-        .map_err(|error| format!("invalid final scene snapshot: {error:?}"))?;
-
-    let mere = instance_for_source(&snapshot, PREFERRED_FOCUS_REPOSITORY)
-        .ok_or_else(|| "portable scene lost Mere".to_owned())?;
-    let mere_item = snapshot
-        .active_item(mere)
-        .ok_or_else(|| "portable scene tombstoned Mere".to_owned())?;
-    let picked = snapshot
-        .pick(mere_item.transform.translate)
-        .ok_or_else(|| "native Scenotime consumer could not pick Mere".to_owned())?;
-    let picked_item = snapshot
-        .active_item(picked)
-        .ok_or_else(|| "native Scenotime consumer picked a tombstone".to_owned())?;
-    let picked_source = snapshot.tables.sources[picked_item.source.0 as usize]
-        .as_ref()
-        .ok_or_else(|| "picked item has no source".to_owned())?
-        .id
-        .clone();
-    if picked_source != PREFERRED_FOCUS_REPOSITORY {
-        return Err(format!(
-            "native Scenotime consumer picked {picked_source}, not Mere"
-        ));
-    }
-
-    Ok(ProjectionReceipt {
-        schema: "mer3ly.portable-projection-receipt/v1".to_owned(),
-        authority_sha256: artifact.authority_sha256.clone(),
-        score_items: artifact.score.items.len(),
-        initial_revision,
-        final_revision: snapshot.revision.0,
-        active_items: snapshot.active_item_count(),
-        active_relations: snapshot.tables.relations.iter().flatten().count(),
-        picked_source,
-        trace_steps: artifact.default_trace.len(),
-        honored_holds,
-    })
-}
-
-fn default_projection_trace(
-    input: &GraphInput,
-    relations: &[ProjectionRelationMetadata],
-    snapshot: &SceneSnapshot,
-) -> Result<Vec<ProjectionStep>, String> {
-    let mut trace = Vec::new();
-    let mut current = snapshot.clone();
-
-    if let Some(turnstone) = instance_for_source(&current, "turnstone") {
-        trace.push(selection_step("Select Turnstone", "node", "turnstone"));
-        let diff = move_diff(&current, turnstone, Vec2::new(48.0, 24.0))?;
-        current
-            .apply_diff(&diff)
-            .map_err(|error| format!("default move diff failed: {error:?}"))?;
-        trace.push(diff_step("Move Turnstone", diff));
-    }
-
-    if let Some(relation) = relations
-        .iter()
-        .find(|relation| relation.id == "turnstone-hosts-mere")
-    {
-        trace.push(selection_step(
-            "Select the Turnstone host relationship",
-            "edge",
-            &relation.id,
-        ));
-        let diff = next_diff(
-            &current,
-            vec![SceneOp::TombstoneRelation {
-                index: relation.index,
-            }],
-        );
-        current
-            .apply_diff(&diff)
-            .map_err(|error| format!("default relation diff failed: {error:?}"))?;
-        trace.push(diff_step("Remove the relationship from the scene", diff));
-    }
-
-    trace.push(selection_step(
-        "Select Mere",
-        "node",
-        PREFERRED_FOCUS_REPOSITORY,
-    ));
-    let dependencies = input
-        .edges
-        .iter()
-        .filter(|edge| edge.source == PREFERRED_FOCUS_REPOSITORY)
-        .filter_map(|edge| instance_for_source(&current, &edge.target))
-        .collect::<Vec<_>>();
-    if !dependencies.is_empty() {
-        let fold = visibility_diff(&current, PREFERRED_FOCUS_REPOSITORY, &dependencies, false)?;
-        current
-            .apply_diff(&fold)
-            .map_err(|error| format!("default fold diff failed: {error:?}"))?;
-        trace.push(diff_step("Fold Mere dependencies", fold));
-        let expand = visibility_diff(&current, PREFERRED_FOCUS_REPOSITORY, &dependencies, true)?;
-        current
-            .apply_diff(&expand)
-            .map_err(|error| format!("default expand diff failed: {error:?}"))?;
-        trace.push(diff_step("Expand Mere dependencies", expand));
-    }
-
-    Ok(trace)
-}
-
-fn selection_step(label: &str, kind: &str, id: &str) -> ProjectionStep {
-    ProjectionStep {
-        label: label.to_owned(),
-        selection: Some(ProjectionSelection {
-            kind: kind.to_owned(),
-            id: id.to_owned(),
-        }),
-        diff: None,
-    }
-}
-
-fn diff_step(label: &str, diff: SceneDiff) -> ProjectionStep {
-    ProjectionStep {
-        label: label.to_owned(),
-        selection: None,
-        diff: Some(diff),
-    }
 }
 
 fn next_diff(snapshot: &SceneSnapshot, operations: Vec<SceneOp>) -> SceneDiff {
@@ -2950,26 +2571,136 @@ mod tests {
         assert_eq!(after - before, 2.0);
     }
 
-    #[test]
-    fn portable_projection_is_a_real_scenograph_score_scene_and_trace() {
-        let json = portable_projection_json(SAMPLE).expect("portable projection");
-        let artifact: PortableProjectionArtifact =
-            serde_json::from_str(&json).expect("portable projection JSON");
-        assert_eq!(artifact.schema, PORTABLE_PROJECTION_SCHEMA);
-        assert_eq!(artifact.score.items.len(), 3);
-        assert_eq!(artifact.snapshot.active_item_count(), 3);
-        assert_eq!(artifact.snapshot.tables.relations.len(), 2);
-        assert_eq!(artifact.default_trace.len(), 7);
-        assert_eq!(artifact.default_trace[1].label, "Move Turnstone");
-        assert!(artifact.default_trace[1].diff.is_some());
+    fn capture_of(json: &str) -> chirograph::ProjectionCaptureV2 {
+        chirograph::ProjectionCaptureV2::decode(json.as_bytes()).expect("a V2 capture")
+    }
 
-        let receipt = consume_portable_projection_json(&json).expect("native receipt");
+    #[test]
+    fn the_portable_projection_is_a_capture_a_trace_and_a_shelfmark() {
+        let artifacts = portable_projection(SAMPLE).expect("portable projection");
+        let capture = chirograph::ProjectionCaptureV2::decode(&artifacts.capture)
+            .expect("the capture decodes without the compiler");
+        assert_eq!(capture.version, chirograph::PROJECTION_CAPTURE_V2);
+        let score = capture.score.as_ref().expect("score");
+        let authority = capture.authority.as_ref().expect("authority");
+        assert_eq!(score.items.len(), 3);
+        assert_eq!(capture.scene.active_item_count(), 3);
+        assert_eq!(capture.scene.tables.relations.len(), 2);
+        assert_eq!(authority.adapter, PROJECTION_ADAPTER);
+        assert_eq!(authority.schema, "mer3ly.repo-graph/v1");
+        assert!(authority.sha256.to_string().starts_with("ni:///sha-256;"));
+        assert_eq!(authority.generation, score.generation);
+        assert_eq!(capture.scene.epoch.0, authority.generation);
+
+        let trace: scenotime::SceneTrace =
+            serde_json::from_slice(&artifacts.trace).expect("the trace chains");
+        assert_eq!(trace.base(), &capture.scene);
+        assert_eq!(trace.len(), 7);
+        assert_eq!(trace.steps()[1].label, "Move Turnstone");
+        assert!(trace.steps()[1].diff.is_some());
+        assert_eq!(
+            trace.steps()[0].annotation,
+            Some(serde_json::json!({"kind": "node", "id": "turnstone"}))
+        );
+
+        let shelfmark: ShelfmarkV1 =
+            serde_json::from_slice(&artifacts.shelfmark).expect("shelfmark");
+        assert_eq!(
+            shelfmark.projection,
+            chirograph::ContentHash::of(&artifacts.capture).to_string()
+        );
+        assert_eq!(
+            shelfmark.inputs[SHELFMARK_AUTHORITY_ROLE].expects_generation,
+            authority.generation.to_string()
+        );
+
+        let receipt = consume_portable_projection(&artifacts).expect("native receipt");
         assert_eq!(receipt.initial_revision, 1);
         assert_eq!(receipt.final_revision, 5);
         assert_eq!(receipt.active_items, 3);
         assert_eq!(receipt.active_relations, 1);
         assert_eq!(receipt.picked_source, "mere");
         assert_eq!(receipt.honored_holds, 0);
+        assert_eq!(receipt.trace_steps, 7);
+    }
+
+    #[test]
+    fn the_shelfmark_is_checked_against_the_capture_bytes() {
+        let artifacts = portable_projection(SAMPLE).expect("portable projection");
+        let shelfmark: ShelfmarkV1 = serde_json::from_slice(&artifacts.shelfmark).unwrap();
+        assert_eq!(check_shelfmark(&shelfmark, &artifacts.capture), Ok(()));
+
+        // Another capture: the same scene one revision later.
+        let mut moved = chirograph::ProjectionCaptureV2::decode(&artifacts.capture).unwrap();
+        moved.scene.revision.0 += 1;
+        let refused = check_shelfmark(&shelfmark, &moved.encode().unwrap()).unwrap_err();
+        assert!(refused.contains("cites capture"), "{refused}");
+
+        // The same capture, expecting another generation.
+        let mut stale = shelfmark.clone();
+        stale
+            .inputs
+            .get_mut(SHELFMARK_AUTHORITY_ROLE)
+            .unwrap()
+            .expects_generation = "1".to_owned();
+        let refused = check_shelfmark(&stale, &artifacts.capture).unwrap_err();
+        assert!(refused.contains("expects generation"), "{refused}");
+
+        // The same capture, citing another authority record.
+        let mut foreign = shelfmark.clone();
+        foreign
+            .inputs
+            .get_mut(SHELFMARK_AUTHORITY_ROLE)
+            .unwrap()
+            .authority
+            .record = chirograph::Sha256NamedInformation::of(b"other").to_string();
+        let refused = check_shelfmark(&foreign, &artifacts.capture).unwrap_err();
+        assert!(refused.contains("different authority"), "{refused}");
+
+        // And consumption refuses a mismatched shelfmark too.
+        let mut forged = artifacts.clone();
+        forged.shelfmark = serde_json::to_vec(&stale).unwrap();
+        assert!(consume_portable_projection(&forged).is_err());
+    }
+
+    #[test]
+    fn a_trace_off_the_captured_scene_or_past_the_bound_is_refused() {
+        let artifacts = portable_projection(SAMPLE).expect("portable projection");
+        let trace: scenotime::SceneTrace = serde_json::from_slice(&artifacts.trace).unwrap();
+
+        // A repeated diff is a broken chain in a trace (Ruling 134).
+        let mut wire: serde_json::Value = serde_json::from_slice(&artifacts.trace).unwrap();
+        let repeated = wire["steps"][1].clone();
+        wire["steps"].as_array_mut().unwrap().insert(2, repeated);
+        let mut forged = artifacts.clone();
+        forged.trace = serde_json::to_vec(&wire).unwrap();
+        let refused = consume_portable_projection(&forged).unwrap_err();
+        assert!(refused.contains("MissingBase"), "{refused}");
+
+        // A trace whose base is not the captured scene.
+        let mut base = trace.base().clone();
+        base.revision.0 = 9;
+        let elsewhere = scenotime::SceneTrace::new(base).unwrap();
+        let mut forged = artifacts.clone();
+        forged.trace = serde_json::to_vec(&elsewhere).unwrap();
+        let refused = consume_portable_projection(&forged).unwrap_err();
+        assert!(refused.contains("not the captured scene"), "{refused}");
+
+        // The step bound is the host's (Ruling 15): a longer trace is a valid
+        // trace that this proof refuses to carry.
+        let mut long = trace.clone();
+        while long.len() <= PROJECTION_STEP_BOUND {
+            long = long
+                .appended(
+                    scenotime::TraceStep::mark("Select Mere")
+                        .with_annotation(serde_json::json!({"kind": "node", "id": "mere"})),
+                )
+                .unwrap();
+        }
+        let mut forged = artifacts.clone();
+        forged.trace = serde_json::to_vec(&long).unwrap();
+        let refused = consume_portable_projection(&forged).unwrap_err();
+        assert!(refused.contains("bound"), "{refused}");
     }
 
     /// The sandbox's own shared-scene shape, extra fields and all, so the test
@@ -2993,8 +2724,8 @@ mod tests {
         // expects.generation must be what the solved score stamps, or the
         // check reports drift on every link ever written.
         let expected = authority_generation(SAMPLE).expect("generation");
-        let artifact = portable_projection(SAMPLE).expect("portable projection");
-        assert_eq!(expected, artifact.score.generation.to_string());
+        let capture = capture_of(&projection_capture_with_placement_json(SAMPLE, "{}").unwrap());
+        assert_eq!(expected, capture.score.unwrap().generation.to_string());
         // And it moves when the authority moves, or it checks nothing.
         let altered = SAMPLE.replace("Turnstone", "Ternstone");
         assert_ne!(
@@ -3005,41 +2736,36 @@ mod tests {
 
     #[test]
     fn a_visitor_pin_reaches_the_score_and_the_solver_honors_it() {
-        let json = portable_projection_with_placement_json(SAMPLE, SHARED_SCENE)
-            .expect("portable projection with placement");
-        let artifact: PortableProjectionArtifact = serde_json::from_str(&json).unwrap();
-
-        assert_eq!(artifact.score.holds.len(), 1, "the pin reached the score");
-        let held = &artifact.score.holds[0];
+        let capture = capture_of(
+            &projection_capture_with_placement_json(SAMPLE, SHARED_SCENE)
+                .expect("capture with placement"),
+        );
+        let score = capture.score.as_ref().unwrap();
+        assert_eq!(score.holds.len(), 1, "the pin reached the score");
+        let held = &score.holds[0];
         assert_eq!(held.source.id, "genet");
         assert_eq!(held.hold, Hold::Pinned);
 
         // Spiral is the arrangement, and Spiral is exactly the family that used
         // to discard an authored coordinate without saying so.
-        let instance = instance_for_source(&artifact.snapshot, "genet").expect("genet is placed");
-        let at = artifact
-            .snapshot
+        let instance = instance_for_source(&capture.scene, "genet").expect("genet is placed");
+        let at = capture
+            .scene
             .active_item(instance)
             .unwrap()
             .transform
             .translate;
         assert_eq!((at.x, at.y), (-120.5, 64.25));
-
-        let receipt = consume_portable_projection_json(&json).expect("receipt");
-        assert_eq!(receipt.honored_holds, 1);
     }
 
     #[test]
     fn a_pin_is_pinned_in_either_motion() {
         let anchored = SHARED_SCENE.replace(r#""motion": "free""#, r#""motion": "anchored""#);
         assert_ne!(anchored, SHARED_SCENE, "the fixture must change motion");
-        let json = portable_projection_with_placement_json(SAMPLE, &anchored)
-            .expect("anchored projection");
-        let artifact: PortableProjectionArtifact = serde_json::from_str(&json).unwrap();
-        assert_eq!(artifact.score.holds[0].hold, Hold::Pinned);
-
-        let receipt = consume_portable_projection_json(&json).expect("receipt");
-        assert_eq!(receipt.honored_holds, 1);
+        let capture = capture_of(
+            &projection_capture_with_placement_json(SAMPLE, &anchored).expect("anchored capture"),
+        );
+        assert_eq!(capture.score.unwrap().holds[0].hold, Hold::Pinned);
     }
 
     #[test]
@@ -3061,33 +2787,36 @@ mod tests {
     }
 
     #[test]
-    fn an_unpinned_share_projects_exactly_as_the_plain_path() {
+    fn an_unpinned_share_captures_exactly_as_the_plain_path() {
         let no_pins = SHARED_SCENE.replace(
             r#""pins": [{"id":"genet","x":-120.5,"y":64.25}]"#,
             r#""pins": []"#,
         );
-        let held = portable_projection_with_placement_json(SAMPLE, &no_pins).unwrap();
-        let plain = portable_projection_json(SAMPLE).unwrap();
-        assert_eq!(held, plain, "an empty delta must not perturb the receipt");
+        let held = projection_capture_with_placement_json(SAMPLE, &no_pins).unwrap();
+        let plain = portable_projection(SAMPLE).unwrap();
+        assert_eq!(
+            held.as_bytes(),
+            plain.capture,
+            "an empty delta must not perturb the capture"
+        );
     }
 
     #[test]
     fn a_pin_naming_an_unknown_node_is_refused() {
         let ghost = SHARED_SCENE.replace(r#""id":"genet""#, r#""id":"no-such-repo""#);
-        let error = portable_projection_with_placement_json(SAMPLE, &ghost)
+        let error = projection_capture_with_placement_json(SAMPLE, &ghost)
             .expect_err("a pin on a node the authority lacks is a broken citation");
         assert!(error.contains("no-such-repo"), "{error}");
     }
 
     #[test]
     fn consuming_catches_a_hold_the_scene_did_not_honor() {
-        // Forge the failure the seam exists to make impossible: an artifact
+        // Forge the failure the seam exists to make impossible: a capture
         // claiming a pin the scene does not actually satisfy.
-        let json = portable_projection_with_placement_json(SAMPLE, SHARED_SCENE).unwrap();
-        let mut artifact: PortableProjectionArtifact = serde_json::from_str(&json).unwrap();
-        artifact.score.holds[0].at = Vec2::new(999.0, 999.0);
-        let forged = serde_json::to_string(&artifact).unwrap();
-        let error = consume_portable_projection_json(&forged)
+        let mut capture =
+            capture_of(&projection_capture_with_placement_json(SAMPLE, SHARED_SCENE).unwrap());
+        capture.score.as_mut().unwrap().holds[0].at = Vec2::new(999.0, 999.0);
+        let error = portable::honored_holds_of(&capture)
             .expect_err("an unhonored hold must not pass consumption");
         assert!(error.contains("was not honored"), "{error}");
     }

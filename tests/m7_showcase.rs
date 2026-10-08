@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 use genet_scripted_dom::ScriptedDom;
 use layout_dom_api::LayoutDom;
 use mer3ly_site::pages::{home, projects};
+use mer3ly_site::projection_proof::{PROJECTION_STEP_BOUND, ProjectionProof};
 use mer3ly_site::repositories::PublicSiteData;
 use mer3ly_site::site::SITE_CSS;
 
@@ -139,70 +140,87 @@ fn mere_profile_projects_one_authority_into_canvas_and_swatch_views() {
     assert!(mere.contains("portable scene"));
     assert!(mere.contains("project facts"));
 
-    let marker = "<script id=\"mere-projection-artifact\" type=\"application/json\">";
-    let start = mere.find(marker).expect("Mere projection artifact") + marker.len();
-    let end = mere[start..]
-        .find("</script>")
-        .map(|offset| start + offset)
-        .expect("Mere projection artifact terminator");
-    let artifact_json = projects::projection_artifact_json(&data);
-    assert_eq!(&mere[start..end], artifact_json);
-    let native_receipt = mer3ly_repo_graph::consume_portable_projection_json(&artifact_json)
-        .expect("native Scenotime consumer accepts the exact page artifact");
-    assert_eq!(native_receipt.score_items, 11);
-    assert_eq!(native_receipt.initial_revision, 1);
-    assert_eq!(native_receipt.final_revision, 5);
-    assert_eq!(native_receipt.active_items, 11);
-    assert_eq!(native_receipt.active_relations, 12);
-    assert_eq!(native_receipt.picked_source, "mere");
-    let artifact: serde_json::Value =
-        serde_json::from_str(&mere[start..end]).expect("valid portable projection JSON");
-    assert_eq!(artifact["schema"], "mer3ly.portable-projection/v1");
-    assert_eq!(artifact["adapter"], "mer3ly.repository-graph/v1");
-    // The score wire version moves when the contract does (2 added holds,
-    // 3 renamed Board to Grid, 4 added the arrangement catalog and its item
-    // disclosures, 5 gave the holds their three arrangement roles), and this
-    // assertion moving with it is the consumer noticing rather than silently
-    // accepting a shape it never knew.
-    assert_eq!(artifact["score"]["version"], 5);
+    // Four sibling artifacts replace the retired `mer3ly.*` one (Rulings
+    // 132 and 136): the page cites each at its content version.
+    let proof = ProjectionProof::build(&data).expect("the proof's artifacts consume and join");
+    for ((name, bytes), attribute) in
+        proof
+            .files()
+            .into_iter()
+            .zip(["data-capture-src", "data-trace-src", "data-shelfmark-src"])
+    {
+        let href = ProjectionProof::href(name, bytes);
+        assert!(
+            mere.contains(&format!("{attribute}=\"{href}\"")),
+            "{attribute}"
+        );
+    }
+    assert!(mere.contains("data-dataset-src=\"/repository-host-dataset.json\""));
+    assert!(!mere.contains("mere-projection-artifact"));
+    assert!(!mere.contains("mer3ly.portable-projection"));
+
+    let receipt = &proof.reading.receipt;
+    assert_eq!(receipt.score_items, proof.nodes.len());
+    assert_eq!(receipt.active_items, proof.nodes.len());
+    assert_eq!(receipt.initial_revision, 1);
+    assert_eq!(receipt.picked_source, "mere");
+    assert_eq!(receipt.trace_steps, proof.reading.steps.len());
+    assert!(receipt.trace_steps <= PROJECTION_STEP_BOUND);
+    assert_eq!(
+        proof.reading.steps.last().map(|step| step.revision),
+        Some(receipt.final_revision)
+    );
+    assert!(
+        proof
+            .relations
+            .iter()
+            .all(|relation| relation.label.contains("Mere")),
+        "every captured relation has Mere at one end, labelled by the host dataset"
+    );
+
+    // The capture is chirograph's V2, and the browser reader recognizes the
+    // same Score wire as the native one.
+    let capture: serde_json::Value =
+        serde_json::from_slice(&proof.artifacts.capture).expect("capture JSON");
+    assert_eq!(capture["version"], 2);
+    assert_eq!(capture["score"]["version"], sceno::SCORE_VERSION);
     let projection_proof = std::fs::read_to_string(root.join("assets/projection-proof.js"))
         .expect("projection proof runtime");
     assert!(
-        projection_proof.contains("artifact?.score?.version !== 5"),
+        projection_proof.contains(&format!("const SCORE_VERSION = {};", sceno::SCORE_VERSION)),
         "the browser consumer must recognize the same Score wire as the native consumer"
     );
+    assert!(projection_proof.contains(&format!("const STEP_BOUND = {PROJECTION_STEP_BOUND};")));
+    assert!(!projection_proof.contains("mer3ly.portable-projection"));
+
+    // The epoch exceeds 2^53. It travels as text in the shelfmark and as exact
+    // digits in the capture and trace, and the browser reads those losslessly.
+    let epoch: u64 = proof.reading.epoch.parse().expect("decimal epoch");
+    assert!(epoch > 1 << 53, "epoch {epoch} would prove nothing");
+    let shelfmark: serde_json::Value =
+        serde_json::from_slice(&proof.artifacts.shelfmark).expect("shelfmark JSON");
     assert_eq!(
-        artifact["score"]["items"]
-            .as_array()
-            .expect("score items")
-            .len(),
-        11
+        shelfmark["inputs"]["authority"]["expects_generation"],
+        proof.reading.epoch
     );
+    for bytes in [&proof.artifacts.capture, &proof.artifacts.trace] {
+        assert!(
+            std::str::from_utf8(bytes)
+                .expect("UTF-8")
+                .contains(&format!("\"epoch\":{epoch}"))
+        );
+    }
+    assert!(projection_proof.contains("BigInt(number)"));
+    assert!(projection_proof.contains("dataset.sceneEpoch = proof.epoch"));
+
+    // The no-script reading is the trace, read at build time.
     assert_eq!(
-        artifact["snapshot"]["tables"]["items"]
-            .as_array()
-            .expect("scene items")
-            .len(),
-        11
+        mere.matches("data-projection-reading-step=").count(),
+        receipt.trace_steps
     );
-    assert_eq!(
-        artifact["relations"].as_array().expect("relations").len(),
-        13
-    );
-    assert_eq!(
-        artifact["default_trace"]
-            .as_array()
-            .expect("revision trace")
-            .len(),
-        7
-    );
-    assert!(
-        artifact["relations"]
-            .as_array()
-            .expect("relations")
-            .iter()
-            .all(|relation| relation["source"] == "mere" || relation["target"] == "mere")
-    );
+    for step in &proof.reading.steps {
+        assert!(mere.contains(&step.label), "{}", step.label);
+    }
 
     for repository in data
         .authority
@@ -220,7 +238,7 @@ fn mere_profile_projects_one_authority_into_canvas_and_swatch_views() {
             .metadata()
             .expect("projection proof asset")
             .len()
-            < 32 * 1024
+            < 48 * 1024
     );
 }
 

@@ -375,7 +375,8 @@ fn graph_assets_and_responsive_styles_are_bounded() {
     assert_eq!(&GRAPH_WASM[..4], b"\0asm");
     // The module carries Seiche and Rapier rather than a positional-layout-only
     // adapter, and since 2026-08-16 the portable projection path as well:
-    // exporting portable_projection_with_placement makes score and scene serde
+    // exporting projection_capture_with_placement (portable_projection_with_
+    // placement until 2026-10-08) makes score and scene serde
     // plus scenomise::solve reachable from the browser, which the live path
     // alone never needed.
     //
