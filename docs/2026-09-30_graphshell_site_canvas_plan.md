@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-133 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-136 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 P0's viewer review and main integration are complete (Rulings 122-123).
 Mere main is pushed at `ea9e6da7`, with current Genet `965b64e2`. The numerical
 payload cap and initial-site deployment remain open. Plain viewer is selected
@@ -1395,6 +1395,31 @@ cursor and no undo machinery. Cursor movement and truncate-on-commit are
 data. This amends S4's done-condition: "replay" stays the trace's, and
 "cursor movement and truncate-on-commit" are met through Cambium's history.
 
+### Rulings 134-136 (2026-10-08): S4/S6's remaining forks
+
+These were put as multiple-choice questions after the S4/S6 lane reported.
+
+**Ruling 134, repeated diffs.** `SceneTrace` refuses a repeated or older
+diff as a broken chain. The site's JS store and `apply_diff` treat one as a
+no-op. Options: refuse; skip like `apply_diff`. Mark: "Refuse
+(Recommended)". What follows: the trace stays strict, as Ruling 125 is. When
+the site moves onto `SceneTrace`, its JS refuses the same way, with a polite
+notice that the link cannot be restored.
+
+**Ruling 135, the shelfmark-to-capture check.** incipit's docs rule out a
+chirograph dependency. Options: host-side; a graphshell-client test
+dependency. Mark: "2, then 1?". What follows: a typed test first, in
+graphshell-client with incipit as a dev-dependency only (landed, `602019b9`
+before the rebase). Then a host-side check when the site moves over. No
+shipped API carries the edge.
+
+**Ruling 136, node and relation metadata.** Names, classes, statuses and
+relation provenance have no home in V2, the trace or the shelfmark. Options:
+the S1 host dataset; cards in the presentation. Mark: "The S1 host dataset
+(Recommended)". What follows: the proof reads its labels from
+`repository-host-dataset.json`. Capture, trace, shelfmark and dataset
+together replace the `mer3ly.*` artifact.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
@@ -2677,3 +2702,31 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     when.
   - Flagged to retinue: the cold route's `send.hops` is 2 across three links
     and two relays. The site says "2 relays" and makes no claim about links.
+- 2026-10-08: **S4 and S6 landed on mere main**, 7 commits ending at
+  `a6014bcbe` (rebased past 40 commits that touched none of these crates;
+  Mark approved the push).
+  - **S4.** scenotime `trace.rs` `SceneTrace` (version 1) is a record (Rulings
+    130 and 133). `edit_history::History<SceneTrace>` supplies the cursor and
+    truncate-on-commit. The site's projection-proof trace replays exactly at
+    all 8 positions (fixture from site `00b3997`).
+  - **S6.** chirograph `capture.rs` `ProjectionCaptureV2` carries an optional
+    score and `CaptureAuthorityV1` (Ruling 131). V1 is unchanged and lifts into
+    V2. The site artifact decomposes into V2 plus a sibling `SceneTrace`
+    (Ruling 132), both freeze without the compiler, and a shelfmark cites the
+    capture (Ruling 135).
+  - **Tests.** scenotime, chirograph and graphshell-client pass 154/0.
+  - The Scenograph editor lane added the dated pointer under adoption plan A4
+    (mere `19de6eab`).
+  - Open for the site (P1/P2): the JS store reads `scene.epoch`
+    (2158167204149687473, above 2^53) rounded. It matches only because both
+    sides round the same way, so it must travel as a string or BigInt when the
+    proof moves over.
+- 2026-10-08: the traces re-pinned at retinue `0731bd8` (RNS 1.5.7 review,
+  Priority 1, CI green).
+  - Cold has 88 events (was 79) and warm 200 (was 171): more transmits and
+    receives.
+  - The outcomes are unchanged: both deliveries take the same paths, and the
+    three lost sends still expire.
+  - radio-mirror and radio-face are unchanged between the two revisions, so the
+    devices runtime stays pinned at `6aa78fc`.
+  - The lab's default-step test now derives the delivery index from the trace.
