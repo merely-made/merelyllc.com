@@ -2847,3 +2847,61 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     13,210 B gzip (HTML with the inline artifact, plus the script). It is now
     148,557 B raw and 24,412 B gzip: HTML, script, capture, trace, shelfmark,
     and the 65,038 B host dataset (5,218 B gzip).
+- 2026-10-08: the proof's replay moves into the graph Wasm (Rulings 138 and
+  140), on branch `proof-replay-wasm` (not pushed).
+  - **Session.** `crates/repo-graph/src/proof_session.rs` exports
+    `ProjectionSession` through wasm-bindgen. Opening runs the native
+    consumer's own checks (`portable.rs`, now through a shared
+    `open_portable_projection`): chirograph's V2 decode and validation, the
+    shelfmark against chirograph's content address of the capture's bytes,
+    `epoch == generation`, and scenotime's `SceneTrace` with its chain
+    checked. `snapshot_at` is scenotime's. Position, undo, redo and
+    truncate-on-commit are `edit_history::History<SceneTrace>`, held in the
+    struct; the end of redo is read by walking a copy of the history. The
+    epoch and generation leave as strings. The page sends a step's label,
+    operations and annotation, and the session builds each diff's epoch and
+    revisions, so the epoch never passes through a JavaScript number. The
+    16-step bound is refused in the session too.
+  - **Script.** The replay, BLAKE3, lossless JSON and the `History` mirror
+    are deleted. The script keeps rendering, controls, host-dataset labels
+    and the link's wording. It is 36,568 B (was 45,347), and its guard drops
+    from 48 to 40 KiB. The v3 link, all five link notices (retired, stale,
+    unreadable or broken chain, over-long, out-of-range position) and the
+    announced step-bound refusal are unchanged. The page carries
+    `data-capture-address`, `data-scene-epoch` and the runtime's URLs from the
+    build, and a new `data-replay` hook (`static`, `loading`, `ready`,
+    `failed`). The build-time reading now follows the interface in the
+    markup, so hiding it once replay is ready never moves a stage under a
+    drag. `?projection=no-replay` forces the failure path for the smoke.
+  - **Tests.** `tests/projection_session.rs` holds the session to the native
+    consumer at all 8 positions (snapshots, revisions, identities), plus
+    truncation, the bound, restore refusals and shared refusals. The v1
+    parity fixture still replays identically at all 8 positions.
+  - **Wasm.** Two clean builds (bash equivalent of
+    `build-repo-graph.ps1`) were byte-identical. The graph Wasm grows from
+    1,297,712 B (437,734 B gzip) to 1,542,736 B (504,966 B gzip); the glue
+    from 25,074 B (4,226 B gzip) to 37,043 B (5,075 B gzip). Most of the
+    growth is deserializing scenes, scores and scene operations, which the
+    module never did before; reading every step through one JSON reader
+    saved about 160 KB raw. This passes m5's 1,350 KiB ceiling, which says
+    another increase needs measurement: **open for Mark**, and the m5 bound
+    test fails until he rules. The repositories page's first load grows by
+    the same 68,081 B gzip.
+  - **Payload.** The Mere page's first load is 140,003 B raw and 21,899 B
+    gzip (was 148,557 B and 24,412 B). The first interaction adds the glue
+    and Wasm, 1,579,779 B raw and 510,041 B gzip, and a visitor who has seen
+    the repositories page already holds both.
+  - **Gate.** fmt and clippy (`-D warnings`, also the wasm32 lib) are clean.
+    Root tests pass except m5's ceiling; repo-graph passes 39/0.
+    `authority validate` and `validate-artifact` (69 files) are clean. In a
+    local build at 1000x900, all 8 positions read revisions
+    [1, 1, 2, 2, 3, 3, 4, 5]. A real pointer drag as the first interaction,
+    commit after a move (truncation), v3 restore, all five notices, the
+    16-step refusal, replay, fold, removal, the forced replay failure, the
+    no-scene fallback and 375 px width raised no console errors. The first
+    load fetched no graph runtime, and the repositories page fetched the
+    same two URLs.
+  - **Not run locally:** the headed smoke and the .ps1 scripts (no Node or
+    pwsh on this Mac). The smoke now waits for `data-replay` after first
+    interactions, checks that nothing fetched the runtime before them, and
+    covers the replay failure; it parses under JavaScriptCore.
