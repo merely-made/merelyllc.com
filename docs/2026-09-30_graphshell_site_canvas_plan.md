@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-132 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-133 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 P0's viewer review and main integration are complete (Rulings 122-123).
 Mere main is pushed at `ea9e6da7`, with current Genet `965b64e2`. The numerical
 payload cap and initial-site deployment remain open. Plain viewer is selected
@@ -1371,6 +1371,29 @@ chirograph's own documentation describes it.
 Two checks stay host-side without a ruling. `scene.epoch == generation` is the
 site's own convention. Holds are verified by the consumer, as
 `consume_portable_projection` does today.
+
+### Ruling 133 (2026-10-08): the trace is a record, and history is Cambium's
+
+The physics coordinator pointed out an overlap. As first described, a
+`SceneTrace` with a cursor and truncate-on-commit is an undo history, and the
+balaur review's Fork A ruled "Generic, in Cambium (Recommended)": one history
+over any document, "so no editor builds its own". Cambium's `edit-history`
+(Scenograph editor plan E1) is that history. It holds in-memory snapshots,
+with no serde and no replay.
+
+Options:
+- a record in scenotime, with edits through Cambium;
+- `SceneTrace` keeping its own editing;
+- growing `edit-history` instead.
+
+Mark: "Record in scenotime, edits via Cambium (Recommended)".
+
+What follows: `SceneTrace` is a pure, serializable record. It holds a base and
+steps (Ruling 130), validates the chain, and replays to any step. It has no
+cursor and no undo machinery. Cursor movement and truncate-on-commit are
+`edit_history::History` over a `SceneTrace`. The share-link position is host
+data. This amends S4's done-condition: "replay" stays the trace's, and
+"cursor movement and truncate-on-commit" are met through Cambium's history.
 
 ## Findings (2026-09-30)
 
