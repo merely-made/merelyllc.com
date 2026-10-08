@@ -4,7 +4,8 @@
 //!   (`RadioMirror`, `render_screen`, `screen_text`) become the devices page's
 //!   runtime. Nothing here reimplements a page, a button or a screen.
 //! - Natively it renders the no-script screens and the bench's status
-//!   documents at site build time, from the same pinned revision.
+//!   documents at site build time, from the same pinned revision, and the
+//!   message path lab's no-script screen from a node's face-track documents.
 //!
 //! The status documents are retinue's receipt fixtures at that revision,
 //! copied byte for byte into `fixtures/` (checked by `tests/pin.rs`).
@@ -17,10 +18,14 @@ use radio_mirror as _;
 #[cfg(not(target_arch = "wasm32"))]
 mod bench;
 #[cfg(not(target_arch = "wasm32"))]
+mod lab;
+#[cfg(not(target_arch = "wasm32"))]
 pub use bench::{
     SCENARIOS_SCHEMA, Scenario, ScenarioDocuments, StaticScreen, scenario_documents,
     scenarios_json, static_screens,
 };
+#[cfg(not(target_arch = "wasm32"))]
+pub use lab::{LAB_PAGE, lab_screen};
 
 /// Where radio-mirror and radio-face come from.
 pub const RETINUE_REPOSITORY: &str = "https://github.com/merely-made/retinue";
