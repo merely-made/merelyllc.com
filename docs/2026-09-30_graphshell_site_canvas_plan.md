@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status (2026-10-08):** active; Rulings 1-156 recorded. P0's viewer review
+**Status (2026-10-08):** active; Rulings 1-160 recorded. P0's viewer review
 and provider integration are complete. Three P2 surfaces are deployed: devices,
 message-path lab, and projection proof. The latest accepted site code is
 `f151b45`; [headed Chromium smoke and deployment passed](https://github.com/merely-made/merelyllc.com/actions/runs/37858985653).
@@ -1708,6 +1708,59 @@ as a sixth option, without errors. Options: keep it; filter it out (a
 site-side exception). Mark: "Keep it (Recommended)". What follows: the
 sandbox offers every reading the stack registers (Ruling 1). Its registry
 test expects six profiles.
+
+### Rulings 157-160 (2026-10-09): the sandbox replacement's budget and scope
+
+These were asked after a read-only assessment against mere `f553420b5` and
+site `3d6639c`. It found no upstream progress on a site viewer mount: the
+viewer consumes S1 only, and S2, S3 and S5 are provider crates no viewer
+calls. It measured fresh, in gzip on the wire (GitHub Pages serves gzip
+only):
+- **Today's /repos/ first load:** 503,838 B (graph Wasm 451,976 B).
+- **The plain viewer's fetched set:** 3,136,514 B gzip (2,175,522 B brotli;
+  RESUME's six-asset figure counts the embedded font twice).
+- **Viewer + `canvas-gpu`:** about 4.5 MB gzip.
+- **An eager swap:** about 3.21 MB gzip, 6.5 times today.
+- **The viewer requires WebGPU** (no WebGL backend).
+
+**Ruling 157, the payload budget.** Options: a frozen first view with the
+viewer loaded on use; an eager whole-page cap; per-asset caps only. Mark:
+"Frozen first, viewer on use (Recommended)". What follows:
+- **First view:** /repos/ opens on a static, frozen first view (the frozen
+  scene, a `FrozenGrid` matrix, the history as text), Ruling 3's static
+  reading.
+- **On interaction:** the interactive canvas loads on first interaction, as
+  Ruling 140 does for the proof.
+- **Caps:** the first load is at most 64 KiB gzip. The interaction tier is
+  capped per asset: viewer Wasm at most 3.25 MiB gzip, glue at most 20 KiB,
+  mount script at most 8 KiB, v2 history at most 128 KiB.
+- **m5's gzip caps (Ruling 141)** keep bounding the graph Wasm while it lives.
+- **Mobile and browsers without WebGPU** keep the frozen view.
+
+**Ruling 158, features with no stack home.** Scatter, deck, facets and the
+field/tangible backdrops. Options: promote them where a home exists; drop
+them; keep the sandbox longer. Mark: "Promote where a home exists
+(Recommended)". What follows:
+- Scatter, deck and facets map onto Scenograph's swatch grid ("facet" now
+  means that grid, SE71). Backdrops map onto Scenograph's L2 backdrops.
+- Each becomes a stack capability owned by the editor lane (Ruling 1).
+- The sandbox keeps them until they land. Anything still without a home
+  then is dropped.
+
+**Ruling 159, the graph Wasm.** Options: the viewer absorbs it later; keep
+both. Mark: "Viewer absorbs it, later (Recommended)". What follows:
+- The viewer gains the matrix, history and proof-session consumers (S2-S4).
+- The graph Wasm retires at P3, and until then stays for the Mere page's
+  proof.
+- The Mere page then lazy-loads the viewer instead.
+
+**Ruling 160, `codex/nested-graph-view`'s grouping.** The unmerged branch
+adds `scenomise::grouping` (expandable host-dataset groups) to the viewer,
+a second grouping concept beside S5's `sceno::Fold`. Options: fold it into
+`sceno::Fold`; keep it separate; decide later. Mark: "Decide later". What
+follows: no action until that branch is ready to land. Mere-side viewer
+work in the files it touches (`web_tree*`, `host_dataset_view.rs`) waits
+for it, or for Mark's word.
 
 ## Findings (2026-09-30)
 
