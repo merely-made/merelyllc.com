@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status (2026-10-08):** active; Rulings 1-155 recorded. P0's viewer review
+**Status (2026-10-08):** active; Rulings 1-156 recorded. P0's viewer review
 and provider integration are complete. Three P2 surfaces are deployed: devices,
 message-path lab, and projection proof. The latest accepted site code is
 `f151b45`; [headed Chromium smoke and deployment passed](https://github.com/merely-made/merelyllc.com/actions/runs/37858985653).
@@ -1700,6 +1700,15 @@ follows: `Fold` gains an optional host-supplied label (e.g. "Mere's
 dependencies") that every reader uses, with the generic wording as the
 fallback.
 
+### Ruling 156 (2026-10-09): the sandbox offers the new matrix reading
+
+Repinning mere for the fold fact brings in S2's `two-reading-matrix` reading
+profile (mere `fc87c3e81`), so the /repos/ sandbox's reading cycle offers it
+as a sixth option, without errors. Options: keep it; filter it out (a
+site-side exception). Mark: "Keep it (Recommended)". What follows: the
+sandbox offers every reading the stack registers (Ruling 1). Its registry
+test expects six profiles.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
@@ -3285,3 +3294,19 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     restored, an old visible-diff link retired, no console errors.
   - **Open:** the repin adds S2's `two-reading-matrix` profile to the
     sandbox's reading cycle on `/repos/`.
+- 2026-10-09: the fold label landed on mere main as `17519aa4b` (Ruling 155;
+  rebased from the lane's `39aebbd6`, which was never pushed). The site is
+  repinned there.
+  - The projection proof folds through the S5 fact. Its members are the
+    transitive `depends_on` descendants (Ruling 154), labelled "Mere's
+    dependencies".
+  - The site's fold copies are retired: `visibility_diff`, the
+    `["fold",1]` channel, and the JS "+N" and fold step.
+  - The no-JS reading lists the frozen fold group.
+  - Old v3 links restore where possible. Links that carry the old fold
+    channel get the retired notice.
+  - **Gate.** Root 74/0, repo-graph 43/0; the Wasm (443,530 B gzip, under
+    the 450 KiB cap) was rebuilt twice to identical bytes; `validate-artifact`
+    is clean.
+  - The intermediate branch commits pinned the unpushed `39aebbd6`. The final
+    commit repins to the real rev.
