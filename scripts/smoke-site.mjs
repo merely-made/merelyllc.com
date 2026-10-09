@@ -788,7 +788,8 @@ try {
   };
   const projectionCaptureText = await fetchProjectionText("data-capture-src");
   const projectionCapture = JSON.parse(projectionCaptureText);
-  const projectionTrace = JSON.parse(await fetchProjectionText("data-trace-src"));
+  const projectionTraceText = await fetchProjectionText("data-trace-src");
+  const projectionTrace = JSON.parse(projectionTraceText);
   const projectionShelfmark = JSON.parse(await fetchProjectionText("data-shelfmark-src"));
   assert.equal(projectionSrc("data-dataset-src"), "/repository-host-dataset.json");
   assert.equal(projectionCapture.version, 2);
@@ -809,6 +810,35 @@ try {
   );
   assert.equal(projectionCapture.score.items.length, projectionNodeCount);
   assert.ok(projectionSteps > 0 && projectionSteps <= 16);
+  // The supplied trace folds with the S5 fold fact (Rulings 149-155). The
+  // smoke's fold expectations come from it and the host dataset, not names.
+  const projectionSourceOf = (instance) =>
+    projectionCapture.scene.tables.sources[
+      projectionCapture.scene.tables.items[instance].source
+    ].id;
+  const projectionFold = projectionTrace.steps
+    .flatMap((step) => step.diff?.operations ?? [])
+    .find((operation) => operation.AddFold)?.AddFold.value;
+  assert.ok(projectionFold, "the supplied trace folds with the fold fact");
+  assert.ok(
+    !JSON.stringify(projectionTrace).includes('"fold"'),
+    "the retired fold channel still travels",
+  );
+  const projectionFoldRoot = projectionSourceOf(projectionFold.stand_in.Member);
+  const projectionFoldHidden = projectionFold.members
+    .filter((member) => member !== projectionFold.stand_in.Member)
+    .map(projectionSourceOf);
+  const projectionUnfolded = projectionCapture.scene.tables.items
+    .map((_, instance) => projectionSourceOf(instance))
+    .find((id) => !projectionFold.members.some((member) => projectionSourceOf(member) === id));
+  assert.ok(projectionFoldHidden.length > 0 && projectionUnfolded);
+  const projectionDataset = JSON.parse(await fetchProjectionText("data-dataset-src"));
+  const projectionFoldEdge = projectionDataset.relationships.find(
+    (relationship) =>
+      relationship.from_occurrence === projectionFoldRoot &&
+      relationship.to_occurrence === projectionFoldHidden[0],
+  )?.id;
+  assert.ok(projectionFoldEdge, "a relationship leads into the fold");
   for (const retired of ["projection-scene.json"]) {
     assert.equal((await fetch(`${baseUrl}/${retired}`)).status, 404, `${retired} still ships`);
   }
@@ -976,27 +1006,40 @@ try {
     true,
   );
 
-  await canvasProjection.locator('[data-projection-node="mere"]').click();
+  await canvasProjection
+    .locator(`[data-projection-node="${projectionFoldRoot}"]`)
+    .click();
   await projectionProof.locator('[data-projection-action="fold"]').click();
-  assert.equal(await projectionProof.getAttribute("data-folded"), "mere");
+  assert.equal(await projectionProof.getAttribute("data-folded"), projectionFoldRoot);
   assert.equal(
-    await canvasProjection.locator('[data-projection-node="genet"]').isHidden(),
-    true,
+    await projectionProof.getAttribute("data-fold-labels"),
+    projectionFold.label,
   );
-  assert.equal(
-    await swatchProjection.locator('[data-projection-node="genet"]').isHidden(),
-    true,
-  );
+  for (const hidden of projectionFoldHidden) {
+    for (const view of [canvasProjection, swatchProjection]) {
+      assert.equal(
+        await view.locator(`[data-projection-node="${hidden}"]`).isHidden(),
+        true,
+        `${hidden} is not hidden by the fold`,
+      );
+    }
+  }
   assert.equal(
     await canvasProjection
-      .locator('[data-projection-edge="mere-depends-on-genet"]')
+      .locator(`[data-projection-edge="${projectionFoldEdge}"]`)
       .isHidden(),
     true,
     "folded dependency edge remains painted",
   );
+  const projectionBadge = canvasProjection.locator(
+    `[data-projection-node="${projectionFoldRoot}"] .projection-proof-node-fold`,
+  );
+  // The "+N" is the fact's hidden count, and the badge names the fold's label.
+  assert.equal(await projectionBadge.textContent(), `+${projectionFoldHidden.length}`);
+  assert.ok((await projectionBadge.getAttribute("title")).startsWith(projectionFold.label));
   assert.equal(
     await canvasProjection
-      .locator('[data-projection-node="woodshed"] .projection-proof-node-fold')
+      .locator(`[data-projection-node="${projectionUnfolded}"] .projection-proof-node-fold`)
       .isHidden(),
     true,
     "unfolded nodes display an empty fold badge",
@@ -1049,13 +1092,16 @@ try {
     Number(await receivedProof.getAttribute("data-cursor")),
     sharedProjectionCursor,
   );
-  assert.equal(await receivedProof.getAttribute("data-folded"), "mere");
+  assert.equal(await receivedProof.getAttribute("data-folded"), projectionFoldRoot);
   assert.equal(await receivedProof.getAttribute("data-link-state"), "restored");
   const receivedCursor = receivedProof.locator("[data-projection-cursor]");
   await receivedCursor.press("Home");
   assert.equal(await receivedProof.getAttribute("data-cursor"), "0");
   assert.equal(
-    await receivedProof.locator('[data-projection-node="genet"]').first().isVisible(),
+    await receivedProof
+      .locator(`[data-projection-node="${projectionFoldHidden[0]}"]`)
+      .first()
+      .isVisible(),
     true,
   );
   await receivedCursor.press("End");
@@ -1063,7 +1109,7 @@ try {
     Number(await receivedProof.getAttribute("data-cursor")),
     sharedProjectionActions,
   );
-  assert.equal(await receivedProof.getAttribute("data-folded"), "mere");
+  assert.equal(await receivedProof.getAttribute("data-folded"), projectionFoldRoot);
   assert.equal(await horizontalOverflow(projectionReceiver), 0);
   assert.deepEqual(
     projectionReceiverDiagnostics,
@@ -1290,6 +1336,47 @@ try {
   );
   receipt.projects.projection_proof.retired_link = "notice-and-default-trace";
   await projectionRetired.close();
+
+  // S5: a v3 link whose steps fold the retired way (a `fold` channel and
+  // visibility diffs) gets the same retired notice. Its steps are the supplied
+  // ones as raw text, so the epoch's digits survive, with the channel added.
+  const retiredFoldSteps = projectionTraceText
+    .slice(projectionTraceText.indexOf('"steps":') + '"steps":'.length, -1)
+    .replace('"channels":[]', '"channels":[["fold",1.0]]');
+  assert.ok(retiredFoldSteps.includes('["fold",1.0]'));
+  const retiredFoldParams = new URLSearchParams({
+    "projection-scene": "v3",
+    projection: projectionShelfmark.projection,
+    "expects-generation": projectionGeneration,
+    position: "2",
+    trace: Buffer.from(retiredFoldSteps)
+      .toString("base64")
+      .replaceAll("+", "-")
+      .replaceAll("/", "_")
+      .replace(/=+$/, ""),
+  });
+  const projectionRetiredFold = await browser.newPage({
+    viewport: { width: 900, height: 900 },
+  });
+  const projectionRetiredFoldDiagnostics = collectDiagnostics(projectionRetiredFold);
+  await projectionRetiredFold.goto(
+    `${baseUrl}/projects/mere/#${retiredFoldParams.toString()}`,
+    { waitUntil: "networkidle" },
+  );
+  await projectionRetiredFold.waitForFunction(
+    () =>
+      document.querySelector("[data-projection-proof]")?.dataset.ready === "true",
+  );
+  const retiredFoldProof = projectionRetiredFold.locator("[data-projection-proof]");
+  assert.equal(await retiredFoldProof.getAttribute("data-link-state"), "retired");
+  assert.equal(await retiredFoldProof.getAttribute("data-cursor"), "0");
+  assert.deepEqual(
+    projectionRetiredFoldDiagnostics,
+    [],
+    "retired fold link emitted browser errors",
+  );
+  receipt.projects.projection_proof.retired_fold_link = "notice-and-default-trace";
+  await projectionRetiredFold.close();
 
   const textProject = await browser.newPage({
     viewport: { width: 375, height: 812 },
