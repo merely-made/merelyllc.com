@@ -246,3 +246,143 @@ fn the_session_refuses_what_the_native_consumer_refuses() {
     assert!(read_portable_projection(&broken).is_err());
     assert!(ProjectionSession::open(&broken.capture, &broken.trace, &broken.shelfmark).is_err());
 }
+
+/// The view the page draws at `position`: which items show, and Mere's "+N"
+/// and label, all derived by sceno from the fold fact.
+fn view_at(session: &mut ProjectionSession, position: usize) -> Value {
+    session.move_to(position);
+    serde_json::to_value(session.view()).expect("view JSON")
+}
+
+#[test]
+fn the_page_reads_the_fold_from_the_fact() {
+    let artifacts = artifacts();
+    let native: SceneTrace = serde_json::from_slice(&artifacts.trace).expect("trace");
+    let mut session = open(&artifacts);
+    let mere = 0;
+
+    for position in 0..=native.len() {
+        let view = view_at(&mut session, position);
+        let snapshot = native.snapshot_at(position).expect("in range");
+        let shown = (0..snapshot.tables.items.len())
+            .map(|index| json!(snapshot.is_shown(sceno::InstanceId(index as u32))))
+            .collect::<Vec<_>>();
+        assert_eq!(view["shown"], json!(shown), "position {position}");
+        assert_eq!(view["snapshot"], serde_json::to_value(&snapshot).unwrap());
+        let folded = native.steps()[..position]
+            .iter()
+            .filter(|step| step.label.starts_with("Fold "))
+            .count()
+            > native.steps()[..position]
+                .iter()
+                .filter(|step| step.label.starts_with("Expand "))
+                .count();
+        if folded {
+            assert_eq!(
+                view["folds"],
+                json!([{"stand_in": mere, "hidden": 6, "label": "Mere's dependencies"}]),
+                "position {position}"
+            );
+            assert_eq!(
+                view["shown"]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .filter(|s| **s == json!(false))
+                    .count(),
+                6
+            );
+        } else {
+            assert_eq!(view["folds"], json!([]), "position {position}");
+            assert!(
+                view["shown"]
+                    .as_array()
+                    .unwrap()
+                    .iter()
+                    .all(|s| *s == json!(true))
+            );
+        }
+    }
+}
+
+#[test]
+fn folding_and_unfolding_are_steps_the_session_builds() {
+    let artifacts = artifacts();
+    let native: SceneTrace = serde_json::from_slice(&artifacts.trace).expect("trace");
+    let mut session = open(&artifacts);
+
+    // Where the supplied trace selects Mere, the session's fold step is the
+    // supplied trace's own next step.
+    let selected = native
+        .steps()
+        .iter()
+        .position(|step| step.label == "Select Mere")
+        .expect("the trace selects Mere")
+        + 1;
+    session.move_to(selected);
+    let fold = session.fold_step("mere", "Mere").expect("Mere folds");
+    let step: Value = serde_json::from_str(&fold).expect("step JSON");
+    let supplied = &native.steps()[selected];
+    assert_eq!(step["label"], supplied.label.as_str());
+    assert_eq!(
+        step["operations"],
+        serde_json::to_value(&supplied.diff.as_ref().unwrap().operations).unwrap()
+    );
+    assert_eq!(session.record(&fold), Ok(true));
+    assert_eq!(
+        session.snapshot(),
+        native.snapshot_at(selected + 1).unwrap()
+    );
+    let shared: Vec<scenotime::TraceStep> =
+        serde_json::from_str(&session.shared_steps().expect("recording cleared redo")).unwrap();
+    assert_eq!(
+        shared,
+        native.steps()[..=selected],
+        "the recorded fold is the supplied one"
+    );
+
+    // Folded, the same request unfolds; folding a member's dependent would
+    // share members with the fold, so there is nothing to offer.
+    assert!(session.fold_step("turnstone", "Turnstone").is_none());
+    assert!(session.fold_step("knot-editor", "Knot Editor").is_none());
+    let unfold = session.fold_step("mere", "Mere").expect("Mere unfolds");
+    assert_eq!(session.record(&unfold), Ok(true));
+    assert_eq!(
+        session.snapshot(),
+        native.snapshot_at(selected + 2).unwrap()
+    );
+
+    // Refolding takes the next fold slot, and a project that depends on
+    // nothing has nothing to fold.
+    let refold: Value = serde_json::from_str(&session.fold_step("mere", "Mere").unwrap()).unwrap();
+    assert_eq!(refold["operations"][0]["AddFold"]["index"], 1);
+    assert!(session.fold_step("genet", "Genet").is_none());
+    assert!(session.fold_step("absent", "Absent").is_none());
+}
+
+#[test]
+fn a_link_that_folds_by_visibility_is_retired() {
+    const VISIBLE_DIFF_TRACE: &str = include_str!("fixtures/projection_trace_visible_diff.json");
+    let artifacts = artifacts();
+    let mut session = open(&artifacts);
+    let old: Value = serde_json::from_str(VISIBLE_DIFF_TRACE).expect("old trace");
+    let steps = old["steps"].as_array().unwrap();
+
+    // The capture is unchanged, so an old link without steps still restores,
+    // and old steps before the fold still chain.
+    assert_eq!(session.restore(None, 6.0), Ok(()));
+    let before_fold = json!(steps[..5]).to_string();
+    assert_eq!(session.restore(Some(&before_fold), 5.0), Ok(()));
+
+    // Steps that fold the retired way are refused politely, not replayed.
+    let before = (session.position(), session.length());
+    assert_eq!(
+        session.restore(Some(&json!(steps).to_string()), 6.0),
+        Err(RestoreRefusal::Retired)
+    );
+    assert_eq!((session.position(), session.length()), before);
+    assert_eq!(
+        serde_json::to_string(&RestoreRefusal::Retired).unwrap(),
+        r#"{"refusal":"retired"}"#
+    );
+}

@@ -295,17 +295,20 @@ fn default_trace(input: &GraphInput, base: &SceneSnapshot) -> Result<SceneTrace,
         "node",
         PREFERRED_FOCUS_REPOSITORY,
     ))?;
-    let dependencies = input
-        .edges
+    // The fold is the S5 fact (Rulings 149-155): one AddFold, then its
+    // TombstoneFold. No item's own visibility changes.
+    let mere = instance_for_source(&current, PREFERRED_FOCUS_REPOSITORY)
+        .ok_or_else(|| "the projection lost Mere".to_owned())?;
+    let name = input
+        .nodes
         .iter()
-        .filter(|edge| edge.source == PREFERRED_FOCUS_REPOSITORY)
-        .filter_map(|edge| instance_for_source(&current, &edge.target))
-        .collect::<Vec<_>>();
-    if !dependencies.is_empty() {
-        let fold = visibility_diff(&current, PREFERRED_FOCUS_REPOSITORY, &dependencies, false)?;
-        current = push(TraceStep::diff("Fold Mere dependencies", fold))?;
-        let expand = visibility_diff(&current, PREFERRED_FOCUS_REPOSITORY, &dependencies, true)?;
-        push(TraceStep::diff("Expand Mere dependencies", expand))?;
+        .find(|node| node.id == PREFERRED_FOCUS_REPOSITORY)
+        .map_or(PREFERRED_FOCUS_REPOSITORY, |node| node.name.as_str());
+    if let Some((label, operations)) = fold_operations(&current, mere, name) {
+        current = push(TraceStep::diff(label, next_diff(&current, operations)))?;
+        let (label, operations) = fold_operations(&current, mere, name)
+            .ok_or_else(|| "the folded scene cannot unfold".to_owned())?;
+        push(TraceStep::diff(label, next_diff(&current, operations)))?;
     }
 
     Ok(trace)

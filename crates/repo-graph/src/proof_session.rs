@@ -17,6 +17,12 @@
 //!   15), refused here rather than capped.
 //! - The epoch and generation leave as decimal strings: they exceed 2^53.
 //!
+//! - Folding is the S5 fold fact (Rulings 149-155). The session builds the
+//!   fold and unfold steps ([`ProjectionSession::fold_step`]), and every scene
+//!   it hands the page carries what sceno derives from the fact
+//!   ([`SceneView`]): which items are shown, and each stand-in's "+N" and
+//!   label. The page never decides what a fold hides.
+//!
 //! The JavaScript keeps rendering, controls, labels from the host dataset, and
 //! the share link's text.
 
@@ -52,8 +58,76 @@ pub enum RestoreRefusal {
     TooLong,
     /// Step `step` (counted from 1) is not a trace step or does not chain.
     Broken { step: usize },
+    /// The steps fold the way the proof did before the fold fact: a
+    /// `["fold", 1]` channel on the root and `visible: false` on its
+    /// dependencies. That encoding is retired, so the link is not restored.
+    Retired,
     /// The position is not a step the trace has.
     Position,
+}
+
+/// A scene as the page draws it: the snapshot, and what its folds derive.
+#[derive(Debug, Serialize)]
+pub struct SceneView {
+    pub snapshot: SceneSnapshot,
+    /// Whether each instance is drawn: its own flag, and no fold hiding it
+    /// (`sceno::FoldEffect`). Indexed by instance; a tombstone is `false`.
+    pub shown: Vec<bool>,
+    /// Each active fold with a member stand-in, in table order.
+    pub folds: Vec<FoldView>,
+}
+
+/// One fold, as a stand-in carries it.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
+pub struct FoldView {
+    /// The member drawn in the fold's place.
+    pub stand_in: u32,
+    /// The "+N": `sceno::Fold::hidden_count`.
+    pub hidden: usize,
+    /// The host's label, when the fold carries one (Ruling 155).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub label: Option<String>,
+}
+
+impl SceneView {
+    /// Derive the view of `snapshot` from its fold facts alone.
+    pub fn of(snapshot: SceneSnapshot) -> Self {
+        let effect = snapshot.fold_effect();
+        let shown = snapshot
+            .tables
+            .items
+            .iter()
+            .enumerate()
+            .map(|(index, item)| {
+                item.as_ref().is_some_and(|item| {
+                    effect.is_shown(sceno::InstanceId(index as u32), item.visible)
+                })
+            })
+            .collect();
+        let folds = snapshot
+            .active_folds()
+            .into_iter()
+            .filter_map(|(_, fold)| {
+                Some(FoldView {
+                    stand_in: fold.stand_in_member()?.0,
+                    hidden: fold.hidden_count(),
+                    label: fold.label.clone(),
+                })
+            })
+            .collect();
+        Self {
+            snapshot,
+            shown,
+            folds,
+        }
+    }
+}
+
+/// The step the page records to fold or unfold, as it sends any step.
+#[derive(Debug, Serialize)]
+struct FoldStep {
+    label: String,
+    operations: Vec<SceneOp>,
 }
 
 /// The proof's trace, its history and the identities the page shows.
@@ -186,6 +260,23 @@ impl ProjectionSession {
         Ok(self.appended(step)?.head())
     }
 
+    /// The scene where the page stands, with what its folds derive.
+    pub fn view(&self) -> SceneView {
+        SceneView::of(self.snapshot())
+    }
+
+    /// The step that folds `source`'s dependencies where the page stands, or
+    /// unfolds them when `source` already stands in for a fold. `name` is the
+    /// host dataset's name for `source`, for the step's and the fold's
+    /// labels. `None` when there is nothing to fold, or the fold would share
+    /// a member with another fold.
+    pub fn fold_step(&self, source: &str, name: &str) -> Option<String> {
+        let head = self.current.head();
+        let root = instance_for_source(&head, source)?;
+        let (label, operations) = fold_operations(&head, root, name)?;
+        Some(serde_json::to_string(&FoldStep { label, operations }).expect("a step serializes"))
+    }
+
     /// Return to the supplied trace, at its base.
     pub fn reset(&mut self) {
         let default = self.default_trace.clone();
@@ -254,6 +345,9 @@ impl ProjectionSession {
                     .map_err(|_| RestoreRefusal::Broken { step: index + 1 })
             })
             .collect::<Result<Vec<_>, _>>()?;
+        if steps.iter().any(folds_by_visibility) {
+            return Err(RestoreRefusal::Retired);
+        }
         SceneTrace::from_steps(self.default_trace.base().clone(), steps).map_err(
             |error| match error {
                 scenotime::TraceError::Step { index, .. } => {
@@ -309,6 +403,17 @@ impl ProjectionSession {
             .appended(trace_step)
             .map_err(|error| format_trace_error(&error))
     }
+}
+
+/// Whether a step folds the retired way: an item carrying the `fold` channel
+/// the proof wrote before the fold fact.
+fn folds_by_visibility(step: &TraceStep) -> bool {
+    step.diff.as_ref().is_some_and(|diff| {
+        diff.operations.iter().any(|operation| {
+            matches!(operation, SceneOp::AddItem { value, .. } | SceneOp::UpdateItem { value, .. }
+                if value.channels.iter().any(|(name, _)| name == "fold"))
+        })
+    })
 }
 
 /// The page keeps every step up to its own bound, so the history has no cap of
@@ -380,10 +485,10 @@ impl ProjectionSession {
         self.length()
     }
 
-    /// The scene where the page stands, as scenotime's snapshot JSON.
-    #[wasm_bindgen(js_name = snapshot)]
-    pub fn js_snapshot(&self) -> Result<String, JsValue> {
-        to_json(&self.snapshot())
+    /// The scene where the page stands, as a [`SceneView`]'s JSON.
+    #[wasm_bindgen(js_name = scene)]
+    pub fn js_scene(&self) -> Result<String, JsValue> {
+        to_json(&self.view())
     }
 
     #[wasm_bindgen(js_name = snapshotAt)]
@@ -415,13 +520,19 @@ impl ProjectionSession {
         self.record(step).map_err(|error| JsValue::from_str(&error))
     }
 
-    #[wasm_bindgen(js_name = preview)]
-    pub fn js_preview(&self, step: &str) -> Result<String, JsValue> {
-        to_json(
-            &self
-                .preview(step)
+    /// A drag's preview, as a [`SceneView`]'s JSON.
+    #[wasm_bindgen(js_name = previewScene)]
+    pub fn js_preview_scene(&self, step: &str) -> Result<String, JsValue> {
+        to_json(&SceneView::of(
+            self.preview(step)
                 .map_err(|error| JsValue::from_str(&error))?,
-        )
+        ))
+    }
+
+    /// The fold or unfold step for `source`, as JSON, or `undefined`.
+    #[wasm_bindgen(js_name = foldStep)]
+    pub fn js_fold_step(&self, source: &str, name: &str) -> Option<String> {
+        self.fold_step(source, name)
     }
 
     #[wasm_bindgen(js_name = reset)]
