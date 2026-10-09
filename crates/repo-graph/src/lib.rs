@@ -2900,7 +2900,10 @@ mod tests {
         let registry: serde_json::Value =
             serde_json::from_str(&encoded).expect("reading registry JSON");
         assert_eq!(registry["schema"], "mere.graph-reading-registry/v1");
-        assert_eq!(registry["profiles"].as_array().expect("profiles").len(), 5);
+        // Five readings, plus the two-reading matrix S2 added to Mere's
+        // catalog (mere fc87c3e81), which the sandbox lists like any other.
+        assert_eq!(registry["profiles"].as_array().expect("profiles").len(), 6);
+        assert_eq!(registry["profiles"][5]["id"], "two-reading-matrix");
         assert_eq!(registry["profiles"][3]["id"], "neighbors");
         assert_eq!(
             registry["profiles"][3]["actor_scope"],
