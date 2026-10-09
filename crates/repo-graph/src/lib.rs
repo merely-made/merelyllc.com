@@ -15,11 +15,11 @@ use chirograph::{
 use euclid::default::Point2D;
 use incipit::{ShelfmarkAuthorityV1, ShelfmarkInputV1, ShelfmarkV1};
 use sceno::{
-    Arrangement as SceneArrangement, AxisValue, Footprint, HeldPlacement, InstanceId, Placement,
-    ProjectedItem, Rect, Representation, RoutedRelation, Score, ScoreItem, Size2, SourceRef,
-    Spiral, Transform2, Vec2,
+    Arrangement as SceneArrangement, AxisValue, Fold, FoldDirection, FoldRule, Footprint,
+    HeldPlacement, InstanceId, Placement, ProjectedItem, Rect, Representation, RoutedRelation,
+    Score, ScoreItem, Size2, SourceRef, Spiral, StandIn, Transform2, Vec2,
 };
-use scenotime::{RelationId, Revision, SceneDiff, SceneEpoch, SceneOp, SceneSnapshot};
+use scenotime::{FoldId, RelationId, Revision, SceneDiff, SceneEpoch, SceneOp, SceneSnapshot};
 use seiche::{
     AnchorSpring, Boundary, EdgeSpring, NodeCollider, NodeExclusion, NodeKey, SceneBodySpec,
     SceneField, SceneSpec, Simulation,
@@ -34,7 +34,7 @@ pub use portable::{
     check_shelfmark, consume_portable_projection, portable_projection,
     projection_capture_with_placement_json, read_portable_projection,
 };
-pub use proof_session::{ProjectionSession, RestoreRefusal};
+pub use proof_session::{FoldView, ProjectionSession, RestoreRefusal, SceneView};
 
 const PREFERRED_FOCUS_REPOSITORY: &str = "mere";
 const DEFAULT_ARRANGEMENT: &str = "graph_layout:radial";
@@ -1935,38 +1935,85 @@ fn move_diff(
     Ok(next_diff(snapshot, operations))
 }
 
-fn visibility_diff(
+/// The relation family the proof folds along (site canvas plan, Ruling 154).
+const FOLD_FAMILY: &str = "depends_on";
+
+/// The proof's dependency fold over `root`, as the S5 fold fact: `root` and
+/// every active instance it reaches through `depends_on` relations, followed
+/// transitively and in table order (Ruling 154), with `root` as the member
+/// stand-in, the rule recorded (Ruling 151), and the host's label (Ruling
+/// 155). `None` when `root` reaches nothing, so there is nothing to fold.
+pub(crate) fn dependency_fold(
     snapshot: &SceneSnapshot,
-    root: &str,
-    dependencies: &[sceno::InstanceId],
-    visible: bool,
-) -> Result<SceneDiff, String> {
-    let root_id = instance_for_source(snapshot, root)
-        .ok_or_else(|| format!("cannot fold absent source {root}"))?;
-    let mut root_item = snapshot
-        .active_item(root_id)
-        .ok_or_else(|| format!("cannot fold absent instance {}", root_id.0))?
-        .clone();
-    root_item.channels.retain(|(name, _)| name != "fold");
-    if !visible {
-        root_item.channels.push(("fold".to_owned(), 1.0));
+    root: sceno::InstanceId,
+    name: &str,
+) -> Option<Fold> {
+    snapshot.active_item(root)?;
+    let mut members = vec![root];
+    let mut seen = HashSet::from([root]);
+    let mut next = 0;
+    while let Some(&at) = members.get(next) {
+        next += 1;
+        for relation in snapshot.tables.relations.iter().flatten() {
+            if relation.from == at
+                && relation.kind.as_deref() == Some(FOLD_FAMILY)
+                && snapshot.active_item(relation.to).is_some()
+                && seen.insert(relation.to)
+            {
+                members.push(relation.to);
+            }
+        }
     }
-    let mut operations = vec![SceneOp::UpdateItem {
-        index: root_id,
-        value: root_item,
-    }];
-    for dependency in dependencies {
-        let mut item = snapshot
-            .active_item(*dependency)
-            .ok_or_else(|| format!("cannot update absent dependency {}", dependency.0))?
-            .clone();
-        item.visible = visible;
-        operations.push(SceneOp::UpdateItem {
-            index: *dependency,
-            value: item,
-        });
+    (members.len() > 1).then(|| Fold {
+        members,
+        stand_in: StandIn::Member(root),
+        rule: Some(FoldRule::Descendants {
+            root,
+            family: FOLD_FAMILY.to_owned(),
+            direction: FoldDirection::Outgoing,
+        }),
+        boundary: None,
+        label: Some(format!("{name}'s dependencies")),
+    })
+}
+
+/// The step that folds or unfolds `root`'s dependencies where `snapshot`
+/// stands: a `TombstoneFold` when `root` stands in for an active fold, else an
+/// `AddFold` of [`dependency_fold`] in the next fold slot. `None` when there
+/// is nothing to fold, or when the fold would share a member with an active
+/// fold, which the fact refuses (folds do not nest).
+pub(crate) fn fold_operations(
+    snapshot: &SceneSnapshot,
+    root: sceno::InstanceId,
+    name: &str,
+) -> Option<(String, Vec<SceneOp>)> {
+    let folds = snapshot.active_folds();
+    if let Some((index, _)) = folds
+        .iter()
+        .find(|(_, fold)| fold.stand_in_member() == Some(root))
+    {
+        return Some((
+            format!("Expand {name} dependencies"),
+            vec![SceneOp::TombstoneFold { index: *index }],
+        ));
     }
-    Ok(next_diff(snapshot, operations))
+    let fold = dependency_fold(snapshot, root, name)?;
+    let overlaps = folds.iter().any(|(_, active)| {
+        active
+            .members
+            .iter()
+            .any(|member| fold.members.contains(member))
+    });
+    if overlaps {
+        return None;
+    }
+    Some((
+        format!("Fold {name} dependencies"),
+        vec![SceneOp::AddFold {
+            index: FoldId(snapshot.tables.folds.len() as u32),
+            value: fold,
+        }],
+    ))
 }
 
 fn instance_for_source(snapshot: &SceneSnapshot, source_id: &str) -> Option<sceno::InstanceId> {
