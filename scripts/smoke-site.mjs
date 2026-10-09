@@ -1466,10 +1466,71 @@ try {
   );
   assert.equal(await sandboxDesktop.locator("[data-repository-graph]").count(), 0);
 
+  // Ruling 157: /repos/ opens on the frozen first view, built from mere's
+  // shared readers, and fetches no graph runtime until the first interaction.
+  const liveSandbox = sandboxDesktop.locator("[data-graph-sandbox]");
+  const graphRuntimeFetchedOn = (page) =>
+    page.evaluate(() =>
+      performance
+        .getEntriesByType("resource")
+        .some(
+          (entry) =>
+            entry.name.includes("mer3ly_repo_graph") ||
+            entry.name.includes("/graph-sandbox.js") ||
+            entry.name.includes("repository-host-history.json"),
+        ),
+    );
+  assert.equal(await liveSandbox.getAttribute("data-sandbox-state"), "frozen");
+  assert.equal(await graphRuntimeFetchedOn(sandboxDesktop), false, "/repos/ loaded the sandbox before interaction");
+  assert.equal(await liveSandbox.locator("[data-sandbox-interface]").isHidden(), true);
+  const frozenLead = liveSandbox.locator("[data-sandbox-reading-lead]");
+  assert.equal(await frozenLead.textContent(), await frozenLead.getAttribute("data-scripted-lead"));
+  const historySrc = await liveSandbox.getAttribute("data-sandbox-history-src");
+  assert.match(historySrc, /^\/repository-host-history\.json\?v=[0-9a-f]{12}$/);
+  const publishedHistory = await (await fetch(`${baseUrl}${historySrc}`)).json();
+  assert.equal(publishedHistory.schema, "scenomise.host-dataset/v2");
+  assert.deepEqual(publishedHistory.compared_fields, ["label", "class", "status", "pushed_at"]);
+  assert.deepEqual(publishedHistory.compared_relationship_fields, ["endpoints", "kind"]);
+  assert.equal(
+    await liveSandbox.locator("[data-sandbox-history-revision]").count(),
+    publishedHistory.revisions.length,
+  );
+  const liveDisclosure = publishedHistory.revisions.at(-1);
+  const frozenScene = liveSandbox.locator(".graph-sandbox-frozen-scene");
+  assert.equal(
+    await frozenScene.locator(".frozen-instances > li[data-source-id]").count(),
+    liveDisclosure.dataset.occurrences.length,
+  );
+  assert.equal(
+    await frozenScene.locator(".frozen-relations > li").count(),
+    liveDisclosure.relationships.length,
+  );
+  const frozenGridRows = await liveSandbox.locator(".frozen-grid tbody tr").count();
+  const frozenGridColumns =
+    (await liveSandbox.locator('.frozen-grid thead th[scope="col"]').count()) - 1;
+  assert.equal(await liveSandbox.locator(".frozen-grid td").count(), frozenGridRows * frozenGridColumns);
+  const frozenMatrixSentences = await liveSandbox
+    .locator(".frozen-grid td")
+    .evaluateAll((cells) => cells.map((cell) => cell.getAttribute("aria-label")));
+
+  // The first interaction loads the sandbox, its glue, the Wasm and the history.
+  await liveSandbox.locator("[data-sandbox-open]").click();
   await sandboxDesktop.waitForFunction(
     () => document.querySelector("[data-graph-sandbox]")?.dataset.sandboxState === "ready",
   );
-  const liveSandbox = sandboxDesktop.locator("[data-graph-sandbox]");
+  assert.equal(await graphRuntimeFetchedOn(sandboxDesktop), true);
+  assert.equal(await liveSandbox.locator("[data-sandbox-frozen]").isHidden(), true);
+  assert.equal(
+    await liveSandbox.locator("[data-sandbox-history]").getAttribute("max"),
+    String(publishedHistory.revisions.length - 1),
+  );
+  // The live matrix says what the frozen one said, cell for cell.
+  assert.deepEqual(
+    await liveSandbox
+      .locator(".graph-sandbox-matrix-cell")
+      .evaluateAll((cells) => cells.map((cell) => cell.getAttribute("aria-label"))),
+    frozenMatrixSentences,
+  );
   assert.equal(
     await liveSandbox.getAttribute("data-sandbox-scene-schema"),
     "mere.shelfmark/1",
@@ -1649,6 +1710,12 @@ try {
     live_canvas: "graphshell-only",
   };
   receipt.graph_sandbox = {
+    first_view: {
+      state: "frozen",
+      runtime_before_interaction: false,
+      history_revisions: publishedHistory.revisions.length,
+      matrix_cells: frozenMatrixSentences.length,
+    },
     state: "ready",
     datasets: { live: expectedRepositoryCountNow, specimen: 12 },
     readings: ["graph", "changes", "activity", "neighbors", "matrix"],
@@ -1663,6 +1730,8 @@ try {
   const sandboxMobile = await browser.newPage({ viewport: { width: 420, height: 900 } });
   const sandboxMobileDiagnostics = collectDiagnostics(sandboxMobile);
   await sandboxMobile.goto(`${baseUrl}/repos/`, { waitUntil: "networkidle" });
+  assert.equal(await horizontalOverflow(sandboxMobile), 0, "the frozen first view overflows");
+  await sandboxMobile.locator("[data-sandbox-open]").click();
   await sandboxMobile.waitForFunction(
     () => document.querySelector("[data-graph-sandbox]")?.dataset.sandboxState === "ready",
   );
@@ -1747,15 +1816,26 @@ try {
   await sandboxFallback.goto(`${baseUrl}/repos/?graph-sandbox=no-wasm`, {
     waitUntil: "networkidle",
   });
+  // The forced failure comes at the first interaction, and keeps the frozen view.
+  await sandboxFallback.locator("[data-sandbox-frozen] .frozen-grid").click();
   await sandboxFallback.waitForFunction(
     () => document.querySelector("[data-graph-sandbox]")?.dataset.sandboxState === "unavailable",
   );
+  assert.equal(await sandboxFallback.locator("[data-sandbox-frozen]").isVisible(), true);
   assert.equal(await sandboxFallback.locator("[data-sandbox-fallback]").isVisible(), true);
+  const failedLead = sandboxFallback.locator("[data-sandbox-reading-lead]");
+  assert.equal(await failedLead.textContent(), await failedLead.getAttribute("data-failed-lead"));
+  assert.equal(await sandboxFallback.locator(".frozen-grid td").count() > 0, true);
+  assert.equal(await graphRuntimeFetchedOn(sandboxFallback), false);
   assert.equal(await sandboxFallback.locator("[data-sandbox-interface]").isHidden(), true);
   assert.equal(await sandboxFallback.locator("[data-repository-id]").count(), expectedRepositoryCountNow);
   assert.equal(await horizontalOverflow(sandboxFallback), 0);
   assert.deepEqual(sandboxFallbackDiagnostics, [], "forced sandbox fallback emitted browser errors");
-  receipt.fallback = { state: "unavailable", semantic_index: expectedRepositoryCountNow };
+  receipt.fallback = {
+    state: "unavailable",
+    frozen_view: "kept",
+    semantic_index: expectedRepositoryCountNow,
+  };
   await sandboxFallback.close();
 
   await writeFile(
