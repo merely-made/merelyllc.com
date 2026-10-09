@@ -1747,6 +1747,27 @@ them; keep the sandbox longer. Mark: "Promote where a home exists
 - The sandbox keeps them until they land. Anything still without a home
   then is dropped.
 
+*Amended 2026-10-09* (Scenograph editor plan SE84-SE86, mere `44aca8c0`;
+Mark's rulings, carried by the editor lane):
+- **Scatter and deck** land in track S2, "linked swatches". Each becomes a
+  cell (a swatch under its own recipe) in a facet beside the spatial view.
+  S2 also adds a selection shared across cells (`selection.clauses`,
+  crossfilter or highlight) and per-cell visibility, so the deck's "dismiss
+  appearance" hides one appearance while its source stays.
+- **The sandbox's "facets"** are not the swatch grid. In `graph-sandbox.js` a
+  facet is a selected part of one appearance (`{view, source, facet:
+  cell|heading|summary|status}`), the sense SE71 retired. SE84 makes
+  appearance-part selection a clause in S2's linked selection, under a name
+  still to be ruled. The shelfmark key `mer3ly.facets` then migrates to that
+  name. "Facets → swatch grid" above reads as "→ S2's linked selection".
+- **Backdrops** land in track B1: the Graphshell viewer draws a scene's
+  backdrops, and a tangible backdrop becomes a physics obstacle. Clear,
+  ambient and props come first. "Field" waits until it is defined (SE86:
+  "field later"), so the sandbox keeps field for now.
+- Both tracks are queued behind the swatch grid (S1, landed `1be08b6a`).
+  When S2 opens, the editor lane asks the site for the sandbox's exact state
+  shapes, so the mapping is lossless.
+
 **Ruling 159, the graph Wasm.** Options: the viewer absorbs it later; keep
 both. Mark: "Viewer absorbs it, later (Recommended)". What follows:
 - The viewer gains the matrix, history and proof-session consumers (S2-S4).
