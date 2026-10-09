@@ -3249,3 +3249,39 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
       `visibility_diff`, the `["fold",1]` channel and the JS "+N";
     - drawing the stand-in in `ports/graphshell` view code (native phase);
     - the native phase itself.
+- 2026-10-08: **The projection proof moved onto the S5 fold fact** (branch
+  `proof-fold-fact`), against mere `39aebbd6` (S5 plus the Ruling 155 label,
+  `sceno::Fold::label`, off the wire when absent and refused when blank).
+  - **Export.** The default trace folds with `AddFold` (members Mere's
+    transitive `depends_on` descendants per Ruling 154, `[0,5,1,3,2,9,10]`;
+    stand-in Mere; rule `Descendants{root: Mere, depends_on, Outgoing}`; label
+    "Mere's dependencies") and unfolds with `TombstoneFold`.
+    `visibility_diff` and the `["fold",1]` channel are retired. The capture,
+    and so its address, is unchanged.
+  - **Session and script.** `ProjectionSession` builds fold and unfold steps
+    (`foldStep`) and returns every scene as a view: which items show
+    (`FoldEffect`) and each stand-in's +N (`hidden_count`) and label. The
+    script's own fold step, visibility toggling and +N are deleted. The badge
+    stays "+N", titled with the label, which the node's name and the
+    announcement carry too. Under Ruling 154, folding another project now
+    folds its transitive `depends_on` descendants, and a fold that would
+    share members with an active one is not offered.
+  - **Reading.** A folding step lists graphshell-client's frozen fold group
+    (heading with the label, and all six members); `validate-artifact` checks
+    it.
+  - **Old links.** v3 links without steps, or whose steps never fold, restore
+    (the capture is unchanged). Steps carrying the retired fold channel get the
+    existing retired notice.
+  - **Sizes.** Graph Wasm 1,412,875 B raw, 442,499 B gzip -9 (was 431,978;
+    the repin alone is 440,413, the fold work +2,086), under 450 KiB; runtime
+    464,160 B gzip, under 475 KiB. Two builds byte-identical. Script 37,610 B
+    (40 KiB guard).
+  - **Tests.** Root 74/0, repo-graph 43/0, radio-mirror 9/0; fmt and clippy
+    `-D warnings` clean. The parity tests hold the fact trace to both the
+    retired v1 trace and the last visible-diff `projection-trace.json` at all
+    8 positions. Browser check at 1000x900: fold and unfold as first
+    interactions, revisions [1, 1, 2, 2, 3, 3, 4, 5], +6 and the label at
+    position 6 only, v3 restore with steps, an old position-only link
+    restored, an old visible-diff link retired, no console errors.
+  - **Open:** the repin adds S2's `two-reading-matrix` profile to the
+    sandbox's reading cycle on `/repos/`.
