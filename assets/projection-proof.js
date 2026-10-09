@@ -9,7 +9,10 @@
 // Its ProjectionSession does the stack's work: chirograph's decoding and
 // content address, the shelfmark check, scenotime's chained replay, and
 // edit_history::History<SceneTrace> for position, undo, redo and
-// truncate-on-commit. This script renders, handles controls and words links.
+// truncate-on-commit. Folding is sceno's fold fact (Rulings 149-155): the
+// session builds the fold and unfold steps, and every scene it returns says
+// which items show and what each stand-in's "+N" and label are. This script
+// renders, handles controls and words links.
 
 const SHARE_VERSION = "v3";
 // The most steps this page keeps. Host policy (Ruling 15), not trace data;
@@ -154,13 +157,13 @@ function readSharedLink(store) {
   const fallback = (state, notice) => ({ state, notice });
   const broken = (why) =>
     fallback("broken", `This link's trace ${why}, so it cannot be restored. Showing the default trace.`);
-  if (version === null) return fallback("none", null);
-  if (version !== SHARE_VERSION) {
-    return fallback(
+  const retired = () =>
+    fallback(
       "retired",
       "This link uses a retired scene format, so it cannot be restored. Showing the default trace.",
     );
-  }
+  if (version === null) return fallback("none", null);
+  if (version !== SHARE_VERSION) return retired();
   if (
     params.get("projection") !== session.captureAddress() ||
     params.get("expects-generation") !== session.generation()
@@ -188,6 +191,8 @@ function readSharedLink(store) {
       throw error;
     }
     if (refusal.refusal === "unreadable") return broken("cannot be read");
+    // Its steps fold the way the proof did before the fold fact.
+    if (refusal.refusal === "retired") return retired();
     if (refusal.refusal === "too-long") {
       return fallback(
         "refused",
@@ -340,20 +345,25 @@ class ProofStore {
     this.listeners.add(listener);
   }
 
+  // A scene as drawn: the snapshot, which items show, and the folds' stand-ins.
+  // Before replay loads it is the capture, which carries no fold.
   committedSnapshot() {
-    if (!this.session) return { snapshot: this.proof.scene, selection: DEFAULT_SELECTION };
-    const snapshot = JSON.parse(this.session.snapshot());
+    if (!this.session) {
+      const shown = this.proof.scene.tables.items.map((item) => Boolean(item?.visible));
+      return { snapshot: this.proof.scene, shown, folds: [], selection: DEFAULT_SELECTION };
+    }
+    const view = JSON.parse(this.session.scene());
     let selection = DEFAULT_SELECTION;
     this.annotations.slice(0, this.cursor).forEach((annotation, index) => {
       if (annotation !== null) selection = readSelection(this.proof, annotation, index);
     });
-    return { snapshot, selection };
+    return { ...view, selection };
   }
 
   snapshot() {
     const state = this.committedSnapshot();
     if (this.transient) {
-      state.snapshot = this.transient.snapshot;
+      Object.assign(state, this.transient.view);
       if (this.transient.step.annotation !== undefined) {
         state.selection = readSelection(this.proof, this.transient.step.annotation, this.cursor);
       }
@@ -386,7 +396,7 @@ class ProofStore {
   }
 
   preview(step) {
-    this.transient = { step, snapshot: JSON.parse(this.session.preview(JSON.stringify(step))) };
+    this.transient = { step, view: JSON.parse(this.session.previewScene(JSON.stringify(step))) };
     this.notify();
   }
 
@@ -571,11 +581,11 @@ class ProjectionView {
     this.state = state;
     for (const node of this.proof.nodes) {
       const button = this.nodeButtons.get(node.id);
-      const item = itemForSource(state.snapshot, node.id);
+      const instance = instanceForSource(state.snapshot, node.id);
+      const item = activeItem(state.snapshot, instance);
       const selected = state.selection.kind === "node" && state.selection.id === node.id;
-      const folded = item ? channel(item, "fold") > 0 : false;
-      const foldCount = folded ? dependencyIds(node.id, this.proof).size : 0;
-      button.hidden = !item || !item.visible;
+      const fold = state.folds.find(({ stand_in: standIn }) => standIn === instance);
+      button.hidden = !item || !state.shown[instance];
       if (item) {
         const position = normalizedPosition(this.proof.scene, item);
         button.style.left = `${position.x * 100}%`;
@@ -585,21 +595,20 @@ class ProjectionView {
       }
       button.classList.toggle("is-selected", selected);
       button.setAttribute("aria-pressed", String(selected));
+      const folded = fold ? ` ${foldText(fold)}.` : "";
       button.setAttribute(
         "aria-label",
-        `${node.name}, ${node.class}, ${node.status}. Drag or use arrow keys to move.`,
+        `${node.name}, ${node.class}, ${node.status}.${folded} Drag or use arrow keys to move.`,
       );
-      const fold = button.querySelector(".projection-proof-node-fold");
-      fold.textContent = foldCount > 0 ? `+${foldCount}` : "";
-      fold.hidden = foldCount === 0;
+      const badge = button.querySelector(".projection-proof-node-fold");
+      badge.textContent = fold ? `+${fold.hidden}` : "";
+      badge.title = fold ? foldText(fold) : "";
+      badge.hidden = !fold;
     }
 
     for (const metadata of this.proof.relations) {
       const relation = activeRelation(state.snapshot, metadata.index);
-      const endpointHidden =
-        !relation ||
-        !activeItem(state.snapshot, relation.from)?.visible ||
-        !activeItem(state.snapshot, relation.to)?.visible;
+      const endpointHidden = !relation || !state.shown[relation.from] || !state.shown[relation.to];
       const selected = state.selection.kind === "edge" && state.selection.id === metadata.id;
       const path = this.edgePaths.get(metadata.id);
       const button = this.edgeButtons.get(metadata.id);
@@ -675,10 +684,18 @@ class ProjectionControls {
       act(() => {
         const state = this.store.snapshot();
         if (state.selection.kind !== "node") return;
-        const node = this.proof.nodes.find(({ id }) => id === state.selection.id);
-        if (this.store.dispatch(foldStep(state.snapshot, node, this.proof))) {
-          announce(this.root, "Scenotime applied the folded-scope scene diff.");
-        }
+        const step = this.foldStep(state.selection.id);
+        if (!step) return;
+        if (!this.store.dispatch(step)) return;
+        const fold = this.store.snapshot().folds.find(
+          ({ stand_in: standIn }) => standIn === instanceForSource(state.snapshot, state.selection.id),
+        );
+        announce(
+          this.root,
+          fold
+            ? `Scenotime applied the fold: ${foldText(fold)}.`
+            : "Scenotime removed the fold; its projects show again.",
+        );
       }),
     );
     this.edgeButton.addEventListener("click", () =>
@@ -731,21 +748,20 @@ class ProjectionControls {
     this.root.dataset.sceneRevision = String(state.snapshot.revision);
     this.root.dataset.selectedKind = state.selection.kind;
     this.root.dataset.selectedId = state.selection.id;
-    this.root.dataset.folded = this.proof.nodes
-      .filter((node) => channel(itemForSource(state.snapshot, node.id), "fold") > 0)
-      .map((node) => node.id)
-      .join(",");
+    const standIns = state.folds.map(({ stand_in: standIn }) => sourceOf(state.snapshot, standIn));
+    this.root.dataset.folded = standIns.join(",");
+    this.root.dataset.foldLabels = state.folds.map(({ label }) => label ?? "").join(",");
     this.cursor.max = String(this.store.length);
     this.cursor.value = String(this.store.cursor);
     this.cursorOutput.textContent = `${this.store.cursor} of ${this.store.length}`;
     this.readout.textContent = `${selectionLabel(state.selection, this.proof)} · revision ${state.snapshot.revision}`;
 
     if (state.selection.kind === "node") {
-      const item = itemForSource(state.snapshot, state.selection.id);
-      const children = dependencyIds(state.selection.id, this.proof);
-      const folded = channel(item, "fold") > 0;
-      this.foldButton.disabled = !item || children.size === 0;
-      this.foldButton.textContent = folded ? "Expand dependencies" : "Fold dependencies";
+      // Before replay loads, the session decides on the click.
+      const step = this.store.session ? this.foldStep(state.selection.id) : null;
+      const unfolds = step?.operations.some((operation) => "TombstoneFold" in operation);
+      this.foldButton.disabled = Boolean(this.store.session) && !step;
+      this.foldButton.textContent = unfolds ? "Expand dependencies" : "Fold dependencies";
     } else {
       this.foldButton.disabled = true;
       this.foldButton.textContent = "Fold dependencies";
@@ -760,6 +776,13 @@ class ProjectionControls {
       this.edgeButton.disabled = true;
       this.edgeButton.textContent = "Select an edge";
     }
+  }
+
+  // The session's fold or unfold step for a project, or null.
+  foldStep(id) {
+    const node = this.proof.nodes.find((candidate) => candidate.id === id);
+    const step = node ? this.store.session.foldStep(node.id, node.name) : undefined;
+    return step == null ? null : JSON.parse(step);
   }
 
   replay() {
@@ -843,24 +866,6 @@ function moveStep(snapshot, node, x, y, proof) {
   return { label: `Move ${node.name}`, operations };
 }
 
-function foldStep(snapshot, node, proof) {
-  const instance = instanceForSource(snapshot, node.id);
-  const rootItem = clone(activeItem(snapshot, instance));
-  if (!rootItem) throw new Error("fold source is absent");
-  const folded = channel(rootItem, "fold") > 0;
-  rootItem.channels = rootItem.channels.filter(([name]) => name !== "fold");
-  if (!folded) rootItem.channels.push(["fold", 1]);
-  const operations = [{ UpdateItem: { index: instance, value: rootItem } }];
-  for (const dependency of dependencyIds(node.id, proof)) {
-    const child = instanceForSource(snapshot, dependency);
-    if (child < 0) continue;
-    const item = clone(activeItem(snapshot, child));
-    item.visible = folded;
-    operations.push({ UpdateItem: { index: child, value: item } });
-  }
-  return { label: `${folded ? "Expand" : "Fold"} ${node.name} dependencies`, operations };
-}
-
 function removeRelationStep(metadata) {
   return {
     label: `Remove ${metadata.label} from the scene`,
@@ -913,17 +918,15 @@ function relationMetadata(proof, id) {
   return proof.relations.find((relation) => relation.id === id) ?? null;
 }
 
-function dependencyIds(sourceId, proof) {
-  return new Set(
-    proof.relations
-      .filter((relation) => relation.source === sourceId)
-      .map((relation) => relation.target),
-  );
+function sourceOf(snapshot, instance) {
+  const item = activeItem(snapshot, instance);
+  return item ? (snapshot.tables.sources[item.source]?.id ?? null) : null;
 }
 
-function channel(item, name) {
-  if (!item) return 0;
-  return item.channels.find(([channelName]) => channelName === name)?.[1] ?? 0;
+// A fold as the page words it: the host's label (Ruling 155) and its count.
+function foldText(fold) {
+  const hidden = `${fold.hidden} ${fold.hidden === 1 ? "project" : "projects"} folded`;
+  return fold.label ? `${fold.label}, ${hidden}` : hidden;
 }
 
 function normalizedPosition(baseline, item) {

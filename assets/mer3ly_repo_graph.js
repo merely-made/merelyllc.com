@@ -264,6 +264,32 @@ export class ProjectionSession {
         }
     }
     /**
+     * The fold or unfold step for `source`, as JSON, or `undefined`.
+     * @param {string} source
+     * @param {string} name
+     * @returns {string | undefined}
+     */
+    foldStep(source, name) {
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            const ptr0 = passStringToWasm0(source, wasm.__wbindgen_export, wasm.__wbindgen_export2);
+            const len0 = WASM_VECTOR_LEN;
+            const ptr1 = passStringToWasm0(name, wasm.__wbindgen_export, wasm.__wbindgen_export2);
+            const len1 = WASM_VECTOR_LEN;
+            wasm.projectionsession_foldStep(retptr, this.__wbg_ptr, ptr0, len0, ptr1, len1);
+            var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+            var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+            let v3;
+            if (r0 !== 0) {
+                v3 = getStringFromWasm0(r0, r1);
+                wasm.__wbindgen_export3(r0, r1 * 1, 1);
+            }
+            return v3;
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+        }
+    }
+    /**
      * @returns {string}
      */
     generation() {
@@ -333,17 +359,18 @@ export class ProjectionSession {
         return ret >>> 0;
     }
     /**
+     * A drag's preview, as a [`SceneView`]'s JSON.
      * @param {string} step
      * @returns {string}
      */
-    preview(step) {
+    previewScene(step) {
         let deferred3_0;
         let deferred3_1;
         try {
             const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
             const ptr0 = passStringToWasm0(step, wasm.__wbindgen_export, wasm.__wbindgen_export2);
             const len0 = WASM_VECTOR_LEN;
-            wasm.projectionsession_preview(retptr, this.__wbg_ptr, ptr0, len0);
+            wasm.projectionsession_previewScene(retptr, this.__wbg_ptr, ptr0, len0);
             var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
             var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
             var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
@@ -414,6 +441,34 @@ export class ProjectionSession {
         }
     }
     /**
+     * The scene where the page stands, as a [`SceneView`]'s JSON.
+     * @returns {string}
+     */
+    scene() {
+        let deferred2_0;
+        let deferred2_1;
+        try {
+            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
+            wasm.projectionsession_scene(retptr, this.__wbg_ptr);
+            var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
+            var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
+            var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
+            var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
+            var ptr1 = r0;
+            var len1 = r1;
+            if (r3) {
+                ptr1 = 0; len1 = 0;
+                throw takeObject(r2);
+            }
+            deferred2_0 = ptr1;
+            deferred2_1 = len1;
+            return getStringFromWasm0(ptr1, len1);
+        } finally {
+            wasm.__wbindgen_add_to_stack_pointer(16);
+            wasm.__wbindgen_export3(deferred2_0, deferred2_1, 1);
+        }
+    }
+    /**
      * @returns {string | undefined}
      */
     sharedSteps() {
@@ -442,34 +497,6 @@ export class ProjectionSession {
         try {
             const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
             wasm.projectionsession_snapshotAt(retptr, this.__wbg_ptr, position);
-            var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
-            var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
-            var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);
-            var r3 = getDataViewMemory0().getInt32(retptr + 4 * 3, true);
-            var ptr1 = r0;
-            var len1 = r1;
-            if (r3) {
-                ptr1 = 0; len1 = 0;
-                throw takeObject(r2);
-            }
-            deferred2_0 = ptr1;
-            deferred2_1 = len1;
-            return getStringFromWasm0(ptr1, len1);
-        } finally {
-            wasm.__wbindgen_add_to_stack_pointer(16);
-            wasm.__wbindgen_export3(deferred2_0, deferred2_1, 1);
-        }
-    }
-    /**
-     * The scene where the page stands, as scenotime's snapshot JSON.
-     * @returns {string}
-     */
-    snapshot() {
-        let deferred2_0;
-        let deferred2_1;
-        try {
-            const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
-            wasm.projectionsession_snapshot(retptr, this.__wbg_ptr);
             var r0 = getDataViewMemory0().getInt32(retptr + 4 * 0, true);
             var r1 = getDataViewMemory0().getInt32(retptr + 4 * 1, true);
             var r2 = getDataViewMemory0().getInt32(retptr + 4 * 2, true);

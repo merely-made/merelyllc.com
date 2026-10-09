@@ -206,6 +206,60 @@ fn mere_profile_projects_one_authority_into_canvas_and_swatch_views() {
             "{retired} is back in the script"
         );
     }
+    // S5 (Rulings 149-155): the fold is the fold fact. The session builds the
+    // fold and unfold steps and derives what shows and each "+N"; the
+    // script's own fold channel, visibility toggling and count are retired.
+    for retired in [
+        "dependencyIds",
+        "\"fold\", 1",
+        "[\"fold\"",
+        "item.visible = ",
+    ] {
+        assert!(
+            !projection_proof.contains(retired),
+            "{retired} is back in the script"
+        );
+    }
+    assert!(projection_proof.contains("this.store.session.foldStep(node.id, node.name)"));
+    assert!(projection_proof.contains("this.session.previewScene("));
+    assert!(projection_proof.contains("`+${fold.hidden}`"));
+    assert!(projection_proof.contains("refusal.refusal === \"retired\""));
+    let trace: serde_json::Value =
+        serde_json::from_slice(&proof.artifacts.trace).expect("trace JSON");
+    let operations = trace["steps"]
+        .as_array()
+        .expect("steps")
+        .iter()
+        .filter_map(|step| step["diff"]["operations"].as_array())
+        .flatten()
+        .collect::<Vec<_>>();
+    let fold = operations
+        .iter()
+        .find_map(|operation| operation.get("AddFold"))
+        .expect("the trace folds with the fact");
+    assert_eq!(fold["value"]["label"], "Mere's dependencies");
+    assert_eq!(fold["value"]["stand_in"]["Member"], 0);
+    assert!(
+        operations
+            .iter()
+            .any(|operation| operation.get("TombstoneFold").is_some())
+    );
+    assert!(
+        !String::from_utf8_lossy(&proof.artifacts.trace).contains("\"fold\""),
+        "no fold channel travels"
+    );
+    let [(_, folds)] = proof.folds.as_slice() else {
+        panic!("one step folds");
+    };
+    assert!(mere.contains(&format!("<summary>{}</summary>", folds[0].heading())));
+    for member in &folds[0].members {
+        assert!(
+            mere.contains(&format!(">{}</li>", member.name)),
+            "{}",
+            member.name
+        );
+    }
+
     let (graph_runtime, graph_wasm) = mer3ly_site::pages::repositories::graph_runtime_hrefs();
     assert!(mere.contains(&format!("data-graph-runtime=\"{graph_runtime}\"")));
     assert!(mere.contains(&format!("data-graph-wasm=\"{graph_wasm}\"")));
