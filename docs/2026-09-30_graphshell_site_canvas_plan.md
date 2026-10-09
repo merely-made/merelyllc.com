@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-147 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-148 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 P0's viewer review and main integration are complete (Rulings 122-123).
 Mere main is pushed at `ea9e6da7`, with current Genet `965b64e2`. The numerical
 payload cap and initial-site deployment remain open. Plain viewer is selected
@@ -1573,6 +1573,18 @@ the rule. Mark: "Refuse + fix rule (Recommended)". What follows:
   endpoints still exist in the current revision, as the site's comment
   intended. The site's behaviour changes to match when it moves over.
 
+### Ruling 148 (2026-10-08): a v2 history gets 4 MiB
+
+The v2 envelope inherited v1's 1 MiB input limit. The site's real export is
+65,038 B per revision pretty-printed (43,059 B compact):
+- all 27 checkpoints come to about 1.13 MB (0.75 MB compact);
+- the 14 left after merging identical neighbours come to about 0.47 MB.
+Options: raise v2 to 4 MiB; keep 1 MiB and export merged checkpoints only;
+keep it and refuse. Mark: "Raise v2 to 4 MiB (Recommended)". What follows:
+- `MAX_HOST_HISTORY_BYTES` (4 MiB) bounds `parse_host_history`.
+- A v1 envelope keeps `MAX_HOST_DATASET_BYTES` (1 MiB), including when it is
+  read as a history.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
@@ -3069,3 +3081,13 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     graphshell-client and gazette. The v1 consumers (viewer, practice) still
     pass.
   - Follow-ups for Rulings 146-147 are under way on the same branch.
+- 2026-10-08: the Ruling 146-148 follow-ups landed on mere main
+  (`071f1132d`, then the 4 MiB history limit).
+  - `compared_relationship_fields` takes a closed set: `endpoints`, `kind`,
+    `label`, `explanation` and four provenance fields.
+  - `MissingFocus` is documented as never guessed.
+  - The removed-relationship rule is fixed: for checkpoints 27c9e87 and
+    69b31d9 it now reports 0 removed edges, where the site's `diff_graphs`
+    as written reported 8. All 8 belonged to the removed `hocket` and
+    `isometry`.
+  - scenomise and cartography pass 204/0.
