@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-145 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
+**Status:** assessment complete; Action under way. Rulings 1-147 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
 P0's viewer review and main integration are complete (Rulings 122-123).
 Mere main is pushed at `ea9e6da7`, with current Genet `965b64e2`. The numerical
 payload cap and initial-site deployment remain open. Plain viewer is selected
@@ -1548,6 +1548,31 @@ host-declared only; all fields, always. Mark: "All fields, host may narrow
 - A host may declare a narrower field set. The site uses one (name, class,
   status, pushed_at) for exact parity with its checkpoint slider.
 
+### Rulings 146-147 (2026-10-08): S3's comparison and two behaviours
+
+S2 and S3 landed on mere main as 7 commits from `fbc149bd9` to `1adedb50d`.
+Mark approved the push. Three forks came back with them.
+
+**Ruling 146, what counts in a relationship.** By default a relationship
+compares on everything it discloses except source and revision, so labels
+(which carry repository names) and explanations (which carry verification
+dates) count. Options: hosts narrow both; endpoints and kind fixed; keep as
+built. Mark: "Hosts narrow both (Recommended)". What follows: the v2 envelope
+may declare which relationship parts count, as well as occurrence fields
+(Ruling 145). The default is unchanged.
+
+**Ruling 147, focus and removed edges.**
+- When a neighbors reading has no focus, the shared adapter refuses with
+  `MissingFocus`, where the site falls back to `mere` or the first node.
+- The site's removed-edge rule checks endpoints against a node set that
+  includes removed nodes, so it keeps every removed edge.
+Options: refuse and fix the rule; refuse and keep the rule; fall back and keep
+the rule. Mark: "Refuse + fix rule (Recommended)". What follows:
+- The site supplies its own default focus.
+- The shared evaluator reports a removed relationship only when both its
+  endpoints still exist in the current revision, as the site's comment
+  intended. The site's behaviour changes to match when it moves over.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
@@ -3020,3 +3045,27 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     covers the replay failure and the scripted opening; it parses under
     JavaScriptCore. The branch is rebased onto `7a62f2a`, which records
     Ruling 140.
+- 2026-10-08: **S2 and S3 landed on mere main** at `1adedb50d` (7 commits).
+  - **S2.**
+    - `scenomise::matrix` has four cell kinds (relation, identity, absence,
+      value) and contributors.
+    - cartography `adapters/matrix.rs` adds the `two-reading-matrix` profile.
+      The existing `matrix` profile is unchanged, and the `Cargo.toml:18`
+      comment is fixed.
+    - graphshell-client gains `FrozenGrid`, a two-axis table with scoped
+      headers and no blank cells.
+    - Gazette's three Ledger tests pass through the shared derivation; its
+      `ledger.rs` is untouched (Ruling 143).
+    - The site's default matrix (132 cells) reproduces exactly, against site
+      `a812e7d`.
+  - **S3.**
+    - `scenomise.host-dataset/v2` carries a dataset per revision, and v1
+      reads as a one-revision history.
+    - The `history` evaluator and the cartography `changes` adapter.
+    - Checkpoints 27c9e87 and 69b31d9 reproduce the site's `diff_graphs`
+      exactly under the site's narrowed fields: 15 updated, 5 stable,
+      1 added, 5 removed.
+  - **Tests.** 301/0 across scenomise, scenograph, cartography,
+    graphshell-client and gazette. The v1 consumers (viewer, practice) still
+    pass.
+  - Follow-ups for Rulings 146-147 are under way on the same branch.
