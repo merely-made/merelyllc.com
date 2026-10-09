@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status (2026-10-08):** active; Rulings 1-152 recorded. P0's viewer review
+**Status (2026-10-08):** active; Rulings 1-153 recorded. P0's viewer review
 and provider integration are complete. Three P2 surfaces are deployed: devices,
 message-path lab, and projection proof. The latest accepted site code is
 `f151b45`; [headed Chromium smoke and deployment passed](https://github.com/merely-made/merelyllc.com/actions/runs/37858985653).
@@ -1618,11 +1618,9 @@ arrangement of tiles, which are panels/panes/etc. rendering addressed
 content/documents/media/etc. according to the correct/chosen
 renderer/engine." *Reading, not ruled:* that matches forme's own crate docs
 (members, tiles, groups; stacked, split, compare, focus-path and mirror
-relations). Folding graph nodes is a decision inside one graph view, so
-`FoldRecord` likely belongs with the canvas view (pictograph or pandect's
-`ViewIntent`), not with forme. Where the native record lives is an open
-question for the native phase (Ruling 152). The data layer does not touch
-forme.
+relations). Folding graph nodes is a decision inside one graph view, not a
+workbench decision. Ruling 153 settles where the native record lives. The
+data layer does not touch forme.
 
 **Ruling 150, stand-in and hiding.** Options: the fact implies hiding, with
 a member or a summary as stand-in; keep `visible:false`. Mark: "Fact implies
@@ -1649,6 +1647,35 @@ native later (Recommended)". What follows:
 - **Later**, coordinated with `graph-semantics`' owner and the editor lane:
   the native canvas trigger, the pandect restore, `MereHost` lowering, and
   the native record's home (Ruling 149).
+
+### Ruling 153 (2026-10-08): the native fold record leaves forme
+
+Mark confirmed his reading of forme (Ruling 149) and asked to settle the
+record's home now.
+
+The facts:
+- pandect saves folds (`ViewIntent.folds`) and depends on forme.
+- pictograph renders them and optionally depends on forme.
+- Neither depends on the other, so forme is only the low-level crate both
+  share.
+- `fold.rs` already describes itself as "view-local graph folds… curation,
+  not a source-graph group".
+
+Options: a new leaf crate; keep it in forme; move it into pandect, which
+would make pictograph depend on pandect and invert the layering. Mark: "New
+leaf crate (Recommended)".
+
+What follows:
+- A small, framework-free leaf crate for view-local graph curation (folds
+  now, other per-view curation later) is the native record's home.
+- pandect and pictograph depend on it.
+- forme drops `fold.rs` and stays the workbench: a recursively splittable
+  arrangement of tiles. Being published, forme takes this as a breaking
+  removal.
+- The move happens in the native phase (Ruling 152), alongside
+  `graph-semantics`. The record also gains the stand-in (Ruling 150) and the
+  membership rule (Ruling 151) there, with a version bump and a migration
+  for saved folds.
 
 ## Findings (2026-09-30)
 
