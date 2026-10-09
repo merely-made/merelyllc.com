@@ -3376,3 +3376,68 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   - Hop count settled by retinue: `hops` counts relays crossed (2 on the cold
     route), and RNS's path table holds one more. The site's "2 relays" is
     right.
+- 2026-10-09: **/repos/ opens on a frozen first view (Ruling 157, site-side
+  first slice)**, branch `repos-frozen-first` off `ee94280`, against mere
+  `17519aa4`. Not pushed.
+  - **v2 history export.** `repository-host-history.json` is a
+    `scenomise.host-dataset/v2` envelope: one revision per merged checkpoint
+    (identical neighbours merge into the later one, as the slider did; 14
+    revisions), each disclosing the reduced public graph. It narrows
+    comparison to `label`, `class`, `status`, `pushed_at` (Ruling 145) and
+    relationships to `endpoints` and `kind` (Ruling 146). A revision's
+    identity is its checkpoint cursor as JSON, the record string the sandbox
+    already cites, so share links keep naming their checkpoint. The bytes pass
+    `parse_host_history` before they are written, and `validate-artifact`
+    compares them exactly. v1 `repository-host-dataset.json` is unchanged.
+    *Reading, not ruled:* the cursor-as-revision is the S2 fixture's record
+    convention; a separate revision field would need a scenograph change.
+  - **Frozen first view, by the shared readers.**
+    - Scene: the live authority solved through the graph crate's portable
+      capture and frozen by graphshell-client's `FrozenScene`, named and
+      detailed from the history's current disclosure. The default reading
+      has no fold, so no fold group shows.
+    - Matrix: Mere's `neighbors` in the live checkpoint by the specimen's
+      `changes`, through cartography's `two-reading-matrix` adapter and
+      scenomise's `derive_matrix`, with the site's own focus (Mere, else the
+      first repository; Ruling 147), frozen as a `FrozenGrid`. In the browser
+      its 132 cell sentences equal the live sandbox's, cell for cell.
+    - History: each revision classified by scenomise's `history` evaluator,
+      worded as counts plus the names added and removed.
+    - The scene's and grid's markup is graphshell-client's own `to_html`,
+      spliced in after rendering, since the site's view tree has no raw-markup
+      node. The repository index, hero and editorial copy are unchanged.
+  - **First interaction.** `graph-sandbox-mount.js` (1,319 B gzip) is the
+    only script loaded up front. It swaps in the scripted opening ("Interact
+    with the graph to load the live sandbox. Until then, this"; without a
+    script, "The sandbox requires WebAssembly. Without it, this") and imports
+    `graph-sandbox.js` on the first pointer or keyboard action on the frozen
+    view, or at once for a `#graphshell-scene=` link. Loading is announced
+    politely with `aria-busy`; a failure keeps the frozen view and opens "The
+    live sandbox could not load, so this". `?graph-sandbox=no-wasm` forces
+    that at first interaction. The sandbox now exports `mountSandbox`, reads
+    its checkpoints from the v2 file and drops its own merge; every behaviour
+    after load is unchanged. The checkpoint history no longer rides inline.
+  - **Sizes (flate2 best).** First load 30,051 B gzip (HTML 16,298, site.css
+    12,434, mount 1,319) against 64 KiB; v2 history 5,845 B against 128 KiB;
+    mount 1,319 B against 8 KiB. Graph Wasm unchanged at 443,530 B (450 KiB
+    cap); runtime 465,530 B (475 KiB cap). Before, the first load carried the
+    whole runtime: 503,838 B gzip in the Ruling 157 assessment.
+  - **Gate.** fmt and clippy `-D warnings` clean; root tests 81/0 (new: the
+    m5 Ruling 157 caps, two exporter tests, four first-view tests);
+    repo-graph and radio-mirror unchanged and passing; `authority validate`
+    and `validate-artifact` clean. The graph Wasm did not change, so it was
+    not rebuilt.
+  - **Browser, 127.0.0.1 at 1000x900, then 375 px.** The first load fetched
+    only `site.css` and the mount script; the button, a pointer on the view
+    and Enter each loaded the sandbox (21 nodes, 14 history positions); a
+    share link at an older checkpoint restored dataset, checkpoint and
+    arrangement on load; the forced failure kept the frozen view; the Mere
+    proof still replays. No console errors; no horizontal overflow at 375 px
+    (the grid scrolls in its own region).
+  - **Not run locally:** the headed smoke (no Node). Its /repos/ section now
+    checks the frozen first load, derives counts from the published v2
+    history, compares the live matrix to the frozen one, and covers the kept
+    failure; it parses under JavaScriptCore.
+  - **Still site-local:** the sandbox's live matrix, readings and diff remain
+    the graph Wasm's own (`matrix_projection`, `diff_graphs`) until the viewer
+    absorbs it (Ruling 159).

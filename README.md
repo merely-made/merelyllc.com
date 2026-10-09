@@ -34,9 +34,15 @@ and deploys on main pushes, manual dispatch, and a daily schedule.
   envelope. It records scope and a content-derived revision; this is published
   repository-family context, not a resolved Cargo dependency closure. Native
   parser/compiler acceptance is [recorded](docs/receipts/site/2026-10-07_host_dataset/receipt.json).
-  The site's Graphshell viewer mount remains ahead. S2's shared matrix and S3's
-  source-history evaluator are on Mere main (`463c8d40`), including the 4 MiB
-  v2 history limit; the site's consumer adoption remains ahead.
+  The site's Graphshell viewer mount remains ahead.
+- /repos/ opens on a first view frozen at build time (Ruling 157, 2026-10-09):
+  the default reading through Graphshell's frozen reader, the default matrix
+  through the shared two-reading-matrix adapter as a `FrozenGrid` (S2), and the
+  source history as text through scenomise's evaluator (S3). The history comes
+  from `repository-host-history.json`, a `scenomise.host-dataset/v2` envelope
+  of the merged authority checkpoints. Only a small mount script loads up
+  front; the site's own sandbox, its glue and the graph Wasm load on the first
+  interaction with the frozen view, or at once for a share link.
 - P2 has replaced three surfaces. The V4 device bench runs radio-mirror
   (2026-10-07). The community-radio page's message path lab (2026-10-08) reads
   retinue-sim's generated cold and warm route traces, committed under
