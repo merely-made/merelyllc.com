@@ -8,6 +8,7 @@ pub mod message_path;
 pub mod pages;
 pub mod projection_proof;
 pub mod repositories;
+pub mod repository_frozen;
 pub mod repository_history;
 pub mod retinue_traces;
 pub mod site;

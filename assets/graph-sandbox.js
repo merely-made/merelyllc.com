@@ -6,6 +6,8 @@ const SHELFMARK_SCHEMA = "mere.shelfmark/1";
 const SCENE_STATE_SCHEMA = "mer3ly.graphshell-scene-state/v2";
 const SCENE_STATE_SCHEMA_V1 = "mer3ly.graphshell-scene-state/v1";
 const PROJECTION_ADAPTER = "mer3ly.repository-graph/v1";
+const HISTORY_SCHEMA = "scenomise.host-dataset/v2";
+const RELATION_METHOD_PREFIX = "mer3ly.repository-relations.";
 // Delta sections this reader honors; anything else is preserved and reported,
 // never dropped. The unhonored-section rule is the WebCoLa lesson at the
 // citation layer: silent best-effort is the warned failure mode.
@@ -49,23 +51,11 @@ const {
   GraphPhysics,
 } = await import(`./mer3ly_repo_graph.js${runtimeVersion}`);
 
-const root = document.querySelector("[data-graph-sandbox]");
-if (root) {
-  startSandbox(root).catch((error) => {
-    const fallback = root.querySelector("[data-sandbox-fallback]");
-    if (fallback) {
-      fallback.textContent =
-        "The graph sandbox could not initialize. The semantic repository index remains available.";
-    }
-    root.dataset.sandboxState = "unavailable";
-    console.warn("Mer3ly graph sandbox unavailable:", error);
-  });
-}
-
-async function startSandbox(sandboxRoot) {
-  if (new URLSearchParams(window.location.search).get("graph-sandbox") === "no-wasm") {
-    throw new Error("forced Graphshell fallback");
-  }
+// The page opens on a frozen first view built at site build time (Ruling
+// 157). graph-sandbox-mount.js imports this module on the first interaction
+// with it, or at once for a share link, and calls mountSandbox; a failure
+// throws back to the mount script, which keeps the frozen view.
+export async function mountSandbox(sandboxRoot) {
   const specimenElement = document.querySelector("#graph-sandbox-data");
   const repositoryElement = document.querySelector("#repository-graph-data");
   if (!specimenElement || !repositoryElement) {
@@ -77,17 +67,20 @@ async function startSandbox(sandboxRoot) {
   validateAuthority(specimen);
   validateAuthority(repositories);
 
-  await initWasm({
-    module_or_path: new URL(
-      `./mer3ly_repo_graph_bg.wasm${runtimeVersion}`,
-      import.meta.url,
-    ),
-  });
+  const [history] = await Promise.all([
+    fetchHistory(sandboxRoot.dataset.sandboxHistorySrc),
+    initWasm({
+      module_or_path: new URL(
+        `./mer3ly_repo_graph_bg.wasm${runtimeVersion}`,
+        import.meta.url,
+      ),
+    }),
+  ]);
   const registry = JSON.parse(representationRegistry());
   validateRegistry(registry);
   const readings = JSON.parse(readingRegistry());
   validateReadingRegistry(readings);
-  const datasets = buildDatasets(specimen, repositories);
+  const datasets = buildDatasets(specimen, repositories, history);
   const sharedState = decodeSceneState(window.location.hash);
   const sandbox = new GraphSandbox(
     sandboxRoot,
@@ -98,9 +91,10 @@ async function startSandbox(sandboxRoot) {
   );
   sandbox.start();
 
+  // The live sandbox stands in for the frozen view from here.
   sandboxRoot.dataset.sandboxState = "ready";
   sandboxRoot.dataset.sandboxSceneSchema = SHELFMARK_SCHEMA;
-  sandboxRoot.querySelector("[data-sandbox-fallback]").hidden = true;
+  sandboxRoot.querySelector("[data-sandbox-frozen]").hidden = true;
   sandboxRoot.querySelector("[data-sandbox-interface]").hidden = false;
   announce(
     sandboxRoot,
@@ -108,12 +102,66 @@ async function startSandbox(sandboxRoot) {
   );
 }
 
-function buildDatasets(specimen, repositories) {
-  const snapshots = collapseEquivalentSnapshots(
-    (repositories.history?.checkpoints ?? [])
-      .filter((checkpoint) => checkpoint.availability === "available")
-      .map((checkpoint) => ({ cursor: checkpoint.cursor, graph: checkpoint.graph })),
-  );
+// The checkpoint history: the site's scenomise.host-dataset/v2 export, one
+// revision per merged checkpoint (Rulings 144 and 157). Each revision's
+// identity is its cursor as JSON, the record this sandbox cites.
+async function fetchHistory(href) {
+  if (!href) throw new Error("the repository history is not cited");
+  const response = await fetch(href);
+  if (!response.ok) throw new Error(`could not load ${href}`);
+  const history = await response.json();
+  if (history?.schema !== HISTORY_SCHEMA || !Array.isArray(history.revisions)) {
+    throw new Error("the repository history is not a v2 host dataset");
+  }
+  return history;
+}
+
+function historySnapshots(history) {
+  const text = (occurrence, field) => {
+    const value = occurrence.values?.[field];
+    if (value?.kind !== "text" || typeof value.value !== "string") {
+      throw new Error(`a disclosed repository has no ${field}`);
+    }
+    return value.value;
+  };
+  return history.revisions.map((revision) => {
+    const cursor = JSON.parse(revision.revision);
+    if (
+      typeof cursor?.source !== "string" ||
+      typeof cursor?.commit !== "string" ||
+      typeof cursor?.committed_at !== "string"
+    ) {
+      throw new Error("a history revision names no checkpoint");
+    }
+    const graph = {
+      schema: "mer3ly.repo-graph/v1",
+      nodes: revision.dataset.occurrences.map((occurrence) => ({
+        id: occurrence.occurrence_id,
+        name: text(occurrence, "label"),
+        class: text(occurrence, "class"),
+        status: text(occurrence, "status"),
+        pushed_at: text(occurrence, "pushed_at"),
+      })),
+      edges: revision.relationships.map((relationship) => {
+        const method = relationship.provenance?.method ?? "";
+        if (!method.startsWith(RELATION_METHOD_PREFIX)) {
+          throw new Error(`relationship ${relationship.id} has no site provenance`);
+        }
+        return {
+          id: relationship.id,
+          source: relationship.from_occurrence,
+          target: relationship.to_occurrence,
+          kind: relationship.kind,
+          provenance: method.slice(RELATION_METHOD_PREFIX.length),
+        };
+      }),
+    };
+    validateAuthority(graph);
+    return { cursor, graph };
+  });
+}
+
+function buildDatasets(specimen, repositories, history) {
   return new Map([
     [
       "live",
@@ -121,7 +169,7 @@ function buildDatasets(specimen, repositories) {
         id: "live",
         label: "merely-made feed",
         graph: graphOnly(repositories),
-        snapshots,
+        snapshots: historySnapshots(history),
       },
     ],
     [
@@ -134,31 +182,6 @@ function buildDatasets(specimen, repositories) {
       },
     ],
   ]);
-}
-
-function collapseEquivalentSnapshots(snapshots) {
-  const meaningful = [];
-  for (const snapshot of snapshots) {
-    const previous = meaningful.at(-1);
-    if (previous && graphSignature(previous.graph) === graphSignature(snapshot.graph)) {
-      meaningful[meaningful.length - 1] = snapshot;
-    } else {
-      meaningful.push(snapshot);
-    }
-  }
-  return meaningful;
-}
-
-function graphSignature(graph) {
-  const nodes = graph.nodes
-    .map((node) => `${node.id}:${nodeSignature(node)}`)
-    .sort()
-    .join("|");
-  const edges = graph.edges
-    .map((edge) => [edge.id, edge.source, edge.target, edge.kind, edge.provenance].join(":"))
-    .sort()
-    .join("|");
-  return `${nodes}\u0001${edges}`;
 }
 
 function graphOnly(authority) {
@@ -1789,10 +1812,6 @@ class GraphSandbox {
     }
     context.restore();
   }
-}
-
-function nodeSignature(node) {
-  return [node.name, node.class, node.status, node.pushed_at].join("\u0000");
 }
 
 function behaviorText(profile) {

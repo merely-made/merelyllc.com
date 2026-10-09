@@ -70,7 +70,7 @@ fn every_html_document_links_the_discovery_identity() {
     let data = PublicSiteData::load(workspace_root()).expect("load validated public site data");
     let mut documents = vec![
         home::document_for(&data),
-        repositories::document_for(&data),
+        repositories::document(&workspace_root()).expect("render repository page"),
         radio::document(),
         devices::index_document_for(&data.devices),
     ];

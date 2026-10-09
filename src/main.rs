@@ -4,6 +4,7 @@ use std::path::{Path, PathBuf};
 
 use mer3ly_site::discovery::{ROBOTS_TXT, sitemap};
 use mer3ly_site::host_dataset::{HOST_DATASET_FILE, repository_host_dataset_json};
+use mer3ly_site::host_history::HOST_HISTORY_FILE;
 use mer3ly_site::message_path;
 use mer3ly_site::pages::{devices, home, projects, radio, repositories};
 use mer3ly_site::projection_proof::ProjectionProof;
@@ -13,6 +14,7 @@ use mer3ly_site::site::{DEVICE_CSS, SITE_CSS};
 
 const FAVICON: &[u8] = include_bytes!("../assets/favicon.svg");
 const GRAPH_SANDBOX: &[u8] = include_bytes!("../assets/graph-sandbox.js");
+const GRAPH_SANDBOX_MOUNT: &[u8] = include_bytes!("../assets/graph-sandbox-mount.js");
 const MESSAGE_PATH_LAB: &[u8] = include_bytes!("../assets/message-path-lab.js");
 const OG_IMAGE: &[u8] = include_bytes!("../assets/og.jpg");
 const PROJECTION_PROOF: &[u8] = include_bytes!("../assets/projection-proof.js");
@@ -63,9 +65,16 @@ fn build_site(output: &Path) -> std::io::Result<()> {
     fs::create_dir_all(output.join("devices"))?;
     fs::write(output.join("index.html"), home::document_for(&data))?;
     fs::write(output.join("radio.html"), radio::document())?;
+    // The repositories page and the v2 history its sandbox fetches on first
+    // interaction (Ruling 157).
+    let repositories_page = repositories::page(root).map_err(std::io::Error::other)?;
     fs::write(
         output.join("repos").join("index.html"),
-        repositories::document(root).map_err(std::io::Error::other)?,
+        &repositories_page.html,
+    )?;
+    fs::write(
+        output.join(HOST_HISTORY_FILE),
+        &repositories_page.frozen.history_json,
     )?;
     fs::write(
         output.join("devices").join("index.html"),
@@ -95,6 +104,7 @@ fn build_site(output: &Path) -> std::io::Result<()> {
     }
     fs::write(output.join("site.css"), SITE_CSS)?;
     fs::write(output.join("graph-sandbox.js"), GRAPH_SANDBOX)?;
+    fs::write(output.join("graph-sandbox-mount.js"), GRAPH_SANDBOX_MOUNT)?;
     fs::write(output.join("devices.css"), DEVICE_CSS)?;
     fs::write(output.join("message-path-lab.js"), MESSAGE_PATH_LAB)?;
     fs::write(output.join("projection-proof.js"), PROJECTION_PROOF)?;

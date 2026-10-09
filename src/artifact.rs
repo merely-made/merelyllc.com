@@ -12,12 +12,14 @@ use sha2::{Digest, Sha256};
 use crate::devices::{DeviceCatalog, DeviceRecord, DeviceStatus};
 use crate::discovery::{ROBOTS_TXT, canonical_urls_from_authority_and_devices};
 use crate::host_dataset::{HOST_DATASET_FILE, validate_repository_host_dataset};
+use crate::host_history::{HOST_HISTORY_FILE, host_history_href, validate_repository_host_history};
 use crate::message_path;
-use crate::pages::{devices, radio as radio_page};
+use crate::pages::{devices, radio as radio_page, repositories as repositories_page};
 use crate::projection_proof::{
     CAPTURE_FILE, PortableProjection, ProjectionProof, SHELFMARK_FILE, TRACE_FILE,
 };
 use crate::repositories::{Authority, PublicMetadataCache, RepositoryRecord, ShowcaseManifest};
+use crate::repository_frozen::{self, FrozenFirstView};
 use crate::retinue_traces::{TRACE_DIRECTORY, TraceSet};
 use crate::site::{
     DEFAULT_SOCIAL_IMAGE_ALT, DEFAULT_SOCIAL_IMAGE_URL, ORGANIZATION_ID, WEBSITE_ID,
@@ -31,6 +33,7 @@ const BASE_FILES: &[&str] = &[
     "devices.css",
     "favicon.svg",
     "graph-sandbox.js",
+    "graph-sandbox-mount.js",
     "devices/index.html",
     "index.html",
     "message-path-lab.js",
@@ -46,6 +49,7 @@ const BASE_FILES: &[&str] = &[
     "radio_mirror.js",
     "radio_mirror_bg.wasm",
     HOST_DATASET_FILE,
+    HOST_HISTORY_FILE,
     "repos/index.html",
     "robots.txt",
     "sitemap.xml",
@@ -73,6 +77,8 @@ pub struct ArtifactReceipt {
     projection_active_relations: usize,
     projection_trace_steps: usize,
     projection_capture_address: String,
+    repository_history_revisions: usize,
+    repository_frozen_matrix_cells: usize,
     device_profiles: usize,
     device_structured_records: usize,
     radio_mirror_screens: usize,
@@ -265,6 +271,22 @@ pub fn validate_public_artifact(
     validate_copied_asset(
         artifact_root,
         source_root,
+        "graph-sandbox.js",
+        "assets/graph-sandbox.js",
+        "graph sandbox",
+        &mut errors,
+    );
+    validate_copied_asset(
+        artifact_root,
+        source_root,
+        "graph-sandbox-mount.js",
+        "assets/graph-sandbox-mount.js",
+        "graph sandbox mount",
+        &mut errors,
+    );
+    validate_copied_asset(
+        artifact_root,
+        source_root,
         "projection-proof.js",
         "assets/projection-proof.js",
         "portable projection proof",
@@ -393,9 +415,14 @@ pub fn validate_public_artifact(
     validate_static_authority(&repository_ids, &relation_ids, authority, &mut errors);
     let repository_count = repository_ids.len();
     let relation_text_projections = relation_ids.len();
-    if !repositories.contains("<script type=\"module\" src=\"/graph-sandbox.js?v=") {
-        errors.push("repository page is missing the Graphshell sandbox module".to_owned());
-    }
+    let frozen = validate_repositories_first_view(
+        artifact_root,
+        source_root,
+        authority,
+        metadata,
+        &repositories,
+        &mut errors,
+    );
     if !repositories.contains("data-graph-sandbox")
         || !repositories.contains("id=\"graph-sandbox-data\"")
     {
@@ -694,6 +721,12 @@ pub fn validate_public_artifact(
             projection_capture_address: projection.as_ref().map_or_else(String::new, |proof| {
                 proof.reading.receipt.capture_address.clone()
             }),
+            repository_history_revisions: frozen
+                .as_ref()
+                .map_or(0, |frozen| frozen.history.revisions.len()),
+            repository_frozen_matrix_cells: frozen
+                .as_ref()
+                .map_or(0, |frozen| frozen.matrix.cells.len()),
             device_profiles: device_ids.len(),
             device_structured_records,
             radio_mirror_screens: radio_screens.len(),
@@ -719,6 +752,93 @@ pub fn validate_public_artifact(
     } else {
         Err(errors)
     }
+}
+
+/// The repositories page's first view (Ruling 157): the v2 history byte for
+/// byte, the page citing it and the sandbox at their content versions, only
+/// the mount script loading up front, both openings, and the frozen scene,
+/// matrix and history exactly as the shared readers render them.
+fn validate_repositories_first_view(
+    artifact_root: &Path,
+    source_root: &Path,
+    authority: &Authority,
+    metadata: &PublicMetadataCache,
+    repositories: &str,
+    errors: &mut Vec<String>,
+) -> Option<FrozenFirstView> {
+    let history = match repositories_page::site_history(source_root, authority, metadata) {
+        Ok(history) => history,
+        Err(error) => {
+            errors.push(format!("repository history could not be derived: {error}"));
+            return None;
+        }
+    };
+    let published = read_text(artifact_root, HOST_HISTORY_FILE, errors);
+    if let Err(error) = validate_repository_host_history(&published, &history) {
+        errors.push(error);
+    }
+    let frozen = match repositories_page::frozen_first_view(authority, metadata, &history) {
+        Ok(frozen) => frozen,
+        Err(error) => {
+            errors.push(format!(
+                "repository first view could not be derived: {error}"
+            ));
+            return None;
+        }
+    };
+    let mount = format!(
+        "<script type=\"module\" src=\"{}\"></script>",
+        repositories_page::graph_sandbox_mount_href()
+    );
+    if !repositories.contains(&mount) {
+        errors.push("repository page is missing its versioned sandbox mount script".to_owned());
+    }
+    if repositories.contains("<script type=\"module\" src=\"/graph-sandbox.js") {
+        errors.push("repository page loads the graph sandbox before interaction".to_owned());
+    }
+    for (attribute, href) in [
+        (
+            "data-sandbox-runtime",
+            format!(
+                "/graph-sandbox.js{}",
+                repositories_page::graph_runtime_version()
+            ),
+        ),
+        (
+            "data-sandbox-history-src",
+            host_history_href(&frozen.history_json),
+        ),
+    ] {
+        if !repositories.contains(&format!("{attribute}=\"{href}\"")) {
+            errors.push(format!("repository page does not cite {href}"));
+        }
+    }
+    let lead = format!(
+        "<span data-sandbox-reading-lead=\"\" data-scripted-lead=\"{}\" data-failed-lead=\"{}\">{}</span>",
+        escape_html_text(repository_frozen::SCRIPTED_LEAD),
+        escape_html_text(repository_frozen::FAILED_LEAD),
+        escape_html_text(repository_frozen::NO_SCRIPT_LEAD),
+    );
+    if !repositories.contains(&lead) {
+        errors.push("repository page's frozen view does not carry its openings".to_owned());
+    }
+    if !repositories.contains(&frozen.scene_html()) {
+        errors.push("repository page's frozen scene differs from the shared reader's".to_owned());
+    }
+    if !repositories.contains(&frozen.grid_html()) {
+        errors.push("repository page's frozen matrix differs from the shared reader's".to_owned());
+    }
+    let revisions = attribute_values(repositories, "data-sandbox-history-revision");
+    let expected = frozen
+        .history
+        .revisions
+        .iter()
+        .map(|revision| revision.sequence.to_string())
+        .collect::<Vec<_>>();
+    if revisions != expected {
+        errors.push("repository page's history text differs from the v2 history".to_owned());
+    }
+    Some(frozen)
 }
 
 /// The projection proof's published capture, trace and shelfmark: each must

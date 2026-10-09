@@ -21,6 +21,11 @@ path = "src/main.rs"
 
 [dependencies]
 cambium = "0.3.3"
+# The /repos/ frozen first view (Ruling 157): the default matrix through the
+# shared two-reading-matrix adapter (S2), and the default reading's capture
+# decoded for the frozen reader. Native only, as graphshell-client is.
+cartography = { package = "mere-cartography", git = "https://github.com/merely-made/mere.git", rev = "17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65" }
+chirograph = { git = "https://github.com/merely-made/mere.git", rev = "17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65" }
 genet-scripted-dom = "0.1.2"
 # The shared frozen reader: the no-script reading lists the proof's fold as
 # its group (site canvas plan, S5). Native only; the graph Wasm does not link it.
