@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status (2026-10-08):** active; Rulings 1-148 recorded. P0's viewer review
+**Status (2026-10-08):** active; Rulings 1-152 recorded. P0's viewer review
 and provider integration are complete. Three P2 surfaces are deployed: devices,
 message-path lab, and projection proof. The latest accepted site code is
 `f151b45`; [headed Chromium smoke and deployment passed](https://github.com/merely-made/merelyllc.com/actions/runs/37858985653).
@@ -1589,6 +1589,66 @@ keep it and refuse. Mark: "Raise v2 to 4 MiB (Recommended)". What follows:
 - `MAX_HOST_HISTORY_BYTES` (4 MiB) bounds `parse_host_history`.
 - A v1 envelope keeps `MAX_HOST_DATASET_BYTES` (1 MiB), including when it is
   read as a history.
+
+### Rulings 149-152 (2026-10-08): S5's shape, stand-in, membership and order
+
+These were asked after a read-only assessment against mere `463c8d402`. It
+found S5 not started on any branch, with no graph-fold work in the Knot,
+Turnstone, editor, dynamics, stack seams or catalog lanes. Today's fold is
+native-only:
+- forme's `FoldRecord` holds UUID members and no stand-in.
+- pictograph's `FoldProjection` draws a synthetic summary, with no product
+  trigger.
+- pandect's `ViewIntent.folds` is saved but never restored.
+- Served scenes, the remote reader and the frozen reader carry no fold, and
+  the frozen reader drops invisible items.
+- The site's fold is untyped `visible` diffs plus a `["fold",1]` channel.
+
+**Ruling 149, the fold's shape.** Options: a new sceno fact that native
+lowers into; a sceno fact replacing `FoldRecord`; a typed field on `Region`.
+Mark asked for a comparison and for forme's role, then chose 1: "1 sounds
+ok". What follows:
+- A new sceno fold fact (members as scene instances, the stand-in, optional
+  boundary detail), with scenotime ops, is what is served, traced, and read
+  remotely and frozen. It needs a catalog addition record.
+- The native record stays native, and a host lowers it into the fact.
+
+Mark on forme: "i guess i viewed the workbench as a recursively splittable
+arrangement of tiles, which are panels/panes/etc. rendering addressed
+content/documents/media/etc. according to the correct/chosen
+renderer/engine." *Reading, not ruled:* that matches forme's own crate docs
+(members, tiles, groups; stacked, split, compare, focus-path and mirror
+relations). Folding graph nodes is a decision inside one graph view, so
+`FoldRecord` likely belongs with the canvas view (pictograph or pandect's
+`ViewIntent`), not with forme. Where the native record lives is an open
+question for the native phase (Ruling 152). The data layer does not touch
+forme.
+
+**Ruling 150, stand-in and hiding.** Options: the fact implies hiding, with
+a member or a summary as stand-in; keep `visible:false`. Mark: "Fact implies
+hiding; member or summary (Recommended)". What follows:
+- The fact alone says the members are hidden, and readers derive it.
+- The "+N" count comes from the fact.
+- The stand-in is a chosen member or a summary, on every reader.
+
+**Ruling 151, membership.** Options: host chooses and the fact says how;
+host chooses with no rule; a shared descendant rule. Mark: "Host chooses,
+fact says how (Recommended)". What follows: the fact carries members, the
+stand-in, and an optional rule (a selection, or descendants by family and
+direction). Readers can explain the fold, and hosts can re-derive it. The
+site's dependency fold and the canvas's `collapse_descendants` record the
+same rule shape.
+
+**Ruling 152, sequencing.** The unmerged `graph-semantics` branch rewrites
+`fold_projection.rs` and adds 534 lines to `mere_host.rs`, and the editor
+lane's command menu is active nearby. Options: data layer now, native later;
+rebase onto `graph-semantics`; ask its owner first. Mark: "Data layer now,
+native later (Recommended)". What follows:
+- **Now:** the sceno fact, the scenotime ops, the remote and frozen readers,
+  and the site.
+- **Later**, coordinated with `graph-semantics`' owner and the editor lane:
+  the native canvas trigger, the pandect restore, `MereHost` lowering, and
+  the native record's home (Ruling 149).
 
 ## Findings (2026-09-30)
 
