@@ -129,9 +129,12 @@ refresh; local build owners have finished.
 
 The only new worktree, `Code/worktrees/genet-upstreams`, was created for the
 actual incoming paragraph/layout collision, qualified, published, and removed.
-The primary Genet checkout retains its unfinished layout/forms/runtime changes
-and local `a26cd7b` head. Published main is `cca45fc7a5c`; a primary fast-forward
-remains pending because incoming `text.rs` changes overlap that unfinished work.
+At publication, primary Genet remained at `a26cd7b` because incoming `text.rs`
+overlapped unfinished work. Its owning lane subsequently reconciled that
+checkout to published `cca45fc7a5c`; unfinished forms/layout/runtime edits remain
+preserved. A later context refresh also fast-forwarded clean site, Mere, and
+Netrender checkouts to their then-published mains (`4def69c`, `463c8d40`,
+`99d8d71ec`). This does not repin the deployed site runtime to newer providers.
 Under the subsequent removal authorization, three more clean worktrees whose
 heads are contained in published main were removed: `mere-l3`,
 `mere-sceno-editor`, and `netrender-deps`. Their ignored configuration, locks,

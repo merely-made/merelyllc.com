@@ -1,5 +1,11 @@
 # Canvas stage unification
 
+**Status (2026-10-08):** scroll-policy fixes are landed. The original shared
+JavaScript stage-kit assessment below remains historical; the subsequent
+[site canvas plan](2026-09-30_graphshell_site_canvas_plan.md) governs replacement
+through shared Rust capabilities. Devices, message-path lab and projection
+proof are deployed; the repository sandbox/viewer cutover remains open.
+
 ## Purpose
 
 Decide whether the site's draggable canvases should share code, and record the
@@ -7,9 +13,9 @@ evidence either way. The question arose from a real defect: a phone could not
 scroll past the Graphshell sandbox, and the same defect existed in every other
 canvas on the site.
 
-The scroll policy half is already landed. This plan covers the remaining
-question — whether a shared JavaScript stage kit is worth building — and
-recommends against it for now, with the conditions that would change that.
+The scroll policy landed. This assessment considered whether a shared
+JavaScript stage kit was worth building and recommended against it at that
+source. The site canvas plan now owns the broader replacement direction.
 
 ## What was already fixed
 

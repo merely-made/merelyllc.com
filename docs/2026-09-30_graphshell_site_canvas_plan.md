@@ -1,24 +1,29 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status:** assessment complete; Action under way. Rulings 1-148 recorded (the RNS-source incident was resolved by Rulings 39-42); Plan rewritten as stack (S1-S8) and site (P0-P3) phases; all stages inventoried 2026-10-01.
-P0's viewer review and main integration are complete (Rulings 122-123).
-Mere main is pushed at `ea9e6da7`, with current Genet `965b64e2`. The numerical
-payload cap and initial-site deployment remain open. Plain viewer is selected
-(Ruling 121); six fresh assets total 2,147,689 B brotli. See Progress and the
-handoff's authorized integration before continuing Assemble (Ruling 22).
+**Status (2026-10-08):** active; Rulings 1-148 recorded. P0's viewer review
+and provider integration are complete. Three P2 surfaces are deployed: devices,
+message-path lab, and projection proof. The latest accepted site code is
+`f151b45`; [headed Chromium smoke and deployment passed](https://github.com/merely-made/merelyllc.com/actions/runs/37858985653).
 
-The site still ships its own sandbox. Rulings 103 and 104 landed the manual-pin
-and legacy-link resolver fixes; P1 export and P2 Graphshell surface replacement
-remain ahead.
+S1, S4 and S6 are shared provider capabilities already consumed by the site.
+S2's two-reading matrix and S3's source-history evaluator are now on Mere main
+at `463c8d40`, including Rulings 146-148. The site's active Mere pin remains
+`7a5bedd1`; adopting the new matrix/history APIs and exporting a v2 history is
+still site work. The v2 history limit is 4 MiB; v1 retains 1 MiB.
 
-**Consumer continuation (2026-10-07):** the site now exports its current
-repository authority through S1's versioned host envelope. The native consumer
-receipt preserves 21 project identities and 30 relationship disclosures against
-the unmerged S1 reader at `3a0925265`; its viewer/practice runtime gate stays
-with the existing S1 owner. This is one exporter slice, not completion of P1
-or P2. Ambiance's relation-lens proposal and Turnstone's browser-sidecar scope
-have their own canonical homes; neither changes the surface order in Ruling 22.
+The repository sandbox is the remaining P2 surface. Its matrix/history copies,
+S5's portable fold, the Graphshell viewer mount, and retirement of the remaining
+site copies are still ahead. The proof uses the shared Rust replay session with
+its lightweight site renderer. The full viewer's numerical payload cap remains
+open; the six-asset 2,147,689 B brotli measurement is the 2026-10-07 P0 baseline,
+not the smaller graph computation runtime or the current site's entire payload.
+
+**Historical consumer continuation (2026-10-07):** the initial native exporter
+qualified 21 project identities and 30 relationship disclosures against the
+then-unmerged S1 reader. Later progress entries record provider integration,
+portable artifacts, the three deployed surface replacements, and S2/S3 landing.
+The original receipt remains evidence for that earlier source.
 
 ## Purpose
 
@@ -1999,26 +2004,38 @@ Done when the practice proof runs from a host-supplied dataset with its
 receipts unchanged, a dataset with relations renders edges, and a stale
 revision or an unknown field fails explicitly.
 
-**S2: the matrix (mere; Rulings 4, 10, and 19).**
-- The contract types and a thin adapter go in cartography beside
-  `RelationMatrix`.
-- The cell derivation goes in the scenes family.
-- The frozen realization gains a two-axis table form (Ruling 3).
-- mer3ly's matrix and `ports/gazette/src/ledger.rs` both retire onto it.
+**S2: the matrix (mere; Rulings 142-143 supersede earlier placement).**
+- Product-neutral result types and pure cell derivation live in scenomise.
+- Cartography re-exports them through the new `two-reading-matrix` adapter/profile;
+  the existing one-authority `matrix` profile stays separate.
+- The frozen realization has a two-axis table form.
+- Provider parity reproduces the site's 132-cell matrix and Gazette's three
+  ledger tests. The site still needs to consume this shared derivation.
 
-Done when gazette's ledger receipts and the site's matrix receipts reproduce
-through the shared derivation, with neither copy left, and the frozen form
-reads as a grid to a screen reader.
+Done when the site consumes the shared result, retires its cell derivation,
+and qualifies the frozen grid with accessible row/column headers. Gazette's
+`ledger.rs` retires at the Dramatis split (Ruling 143), under that lane's owner.
 
-**S3: authority-revision history (mere; Rulings 14 and 19).** A cartography adapter, with the computation in the scenes family:
-An evaluator for the declared `AdjacentRevision`/`Change` reading over S1's
-revision sequence. Depends on S1.
-Done when the site's checkpoint classes (added, updated, stable, removed)
-reproduce from the evaluator, given the same two checkpoints.
+**S3: authority-revision history (mere; Rulings 144-148).** Scenomise supplies
+`scenomise.host-dataset/v2` and the shared history evaluator; cartography adapts
+the `AdjacentRevision`/`Change` reading. V1 stays readable as one revision.
+The provider is landed; the site must export its checkpoints as v2 and replace
+its local comparison with the evaluator.
 
-**S4: scene-edit history (mere, scenotime; Ruling 15).** `SceneTrace`: a base
-snapshot, chained diffs, a cursor, and pure replay, with truncate-on-commit.
-Selection, preview, and the step bound stay as host policy.
+The host may narrow occurrence and relationship comparisons. It supplies the
+default focus; a missing focus is refused. Removed relationships are reported
+only when both endpoints exist in the current revision. Under Ruling 147, this
+corrects the site's eight retained removed edges in the checked checkpoint pair.
+V2 histories have a 4 MiB input bound; v1 retains 1 MiB (Ruling 148).
+
+Done when the site's checkpoint classes reproduce through the shared evaluator
+with the declared narrowed comparisons and corrected removed-edge behavior.
+
+**S4: scene-edit history (mere; Rulings 130 and 133).** Scenotime's
+`SceneTrace` is a pure record of the base and chained diffs. Shared
+`edit_history::History<SceneTrace>` owns the cursor and truncate-on-commit.
+The deployed proof consumes both through its Rust session. Selection, preview,
+and the step bound stay host policy.
 Done when `projection-proof`'s default trace and a shared trace replay
 through `SceneTrace` to the same revisions and snapshots that the JavaScript
 store produced.
@@ -3091,3 +3108,10 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     as written reported 8. All 8 belonged to the removed `hocket` and
     `isometry`.
   - scenomise and cartography pass 204/0.
+
+- 2026-10-08: **Context and checkout reconciliation.** Clean primary checkouts
+  fast-forwarded to site `4def69c`, Mere `463c8d40`, and Netrender `99d8d71ec`.
+  Genet is at published `cca45fc7a5c` with its concurrent forms/layout work
+  preserved. Site runtime pins and generated assets remain those qualified by
+  the `f151b45` deployment. Status headers and S2/S3/S4 execution descriptions
+  now distinguish deployed consumers, landed providers, and outstanding adoption.
