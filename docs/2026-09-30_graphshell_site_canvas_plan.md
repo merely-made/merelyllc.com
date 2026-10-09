@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status (2026-10-08):** active; Rulings 1-153 recorded. P0's viewer review
+**Status (2026-10-08):** active; Rulings 1-155 recorded. P0's viewer review
 and provider integration are complete. Three P2 surfaces are deployed: devices,
 message-path lab, and projection proof. The latest accepted site code is
 `f151b45`; [headed Chromium smoke and deployment passed](https://github.com/merely-made/merelyllc.com/actions/runs/37858985653).
@@ -1677,6 +1677,29 @@ What follows:
   membership rule (Ruling 151) there, with a version bump and a migration
   for saved folds.
 
+### Rulings 154-155 (2026-10-08): the site's fold rule, and a fold label
+
+S5's data layer landed on mere main at `64974ccbe` (6 commits; Mark approved
+the push). Its lane added `root` to `Descendants`, beyond the brief, so that
+a summary stand-in can name what it descends from; this was accepted with the
+push.
+
+**Ruling 154, the site's fold rule.** The site hides the direct targets of
+every relation leaving Mere. The recorded rule is "descendants by depends_on,
+followed transitively". These agree on today's data (6 members, pinned by a
+test) but diverge if the graph changes. Options: the site follows the rule;
+add a direct-neighbors rule. Mark: "Site follows the rule (Recommended)".
+What follows: when the site moves onto the fact, it folds transitive
+`depends_on` descendants, the same rule shape as the canvas's
+`collapse_descendants`.
+
+**Ruling 155, a fold's text.** Readers word the rule generically ("Mere and
+everything it reaches by depends on"). Options: an optional host label;
+generic wording only. Mark: "Optional host label (Recommended)". What
+follows: `Fold` gains an optional host-supplied label (e.g. "Mere's
+dependencies") that every reader uses, with the generic wording as the
+fallback.
+
 ## Findings (2026-09-30)
 
 Sources: mer3ly at `c1b8ab1` (2026-09-24), mere at `bd5912fb` (2026-09-30),
@@ -3202,3 +3225,27 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   preserved. Site runtime pins and generated assets remain those qualified by
   the `f151b45` deployment. Status headers and S2/S3/S4 execution descriptions
   now distinguish deployed consumers, landed providers, and outstanding adoption.
+- 2026-10-08: **S5's data layer landed on mere main** at `64974ccbe`.
+  - **sceno.** The `Fold` fact holds members as instances, a stand-in (member
+    or summary), an optional rule and optional boundary accounting. The fact
+    implies hiding, and folds don't overlap.
+  - **scenotime.** Fold ops (`AddFold`, `UpdateFold`, `SetFoldStandIn`,
+    `TombstoneFold`) go through `apply_diff` and `SceneTrace`, and `pick`
+    skips hidden members.
+  - **graphshell-client.** The remote reader (accessibility tree and
+    `read_folds`) shows folds, and the frozen reader shows them as
+    `<details>` groups instead of dropping members.
+  - **Site parity.** The site's fold as a fact (members
+    `[0,5,1,3,2,9,10]`, stand-in Mere, `Descendants{root: Mere, depends_on,
+    Outgoing}`) matches at all 8 positions, with the same +6 and no `fold`
+    channel.
+  - **Tests.** 415/0 across sceno, scenotime, scenomise, chirograph,
+    cartography and graphshell-client. Fold-free scenes are byte-identical.
+  - The editor lane writes the catalog addition record. Mark ruled
+    "Promote, marked pending" and "Not a duplicate" (mere `526cbb3b`).
+  - **Still to do:**
+    - the Ruling 155 label;
+    - the site moving onto the fact (Ruling 154), which retires
+      `visibility_diff`, the `["fold",1]` channel and the JS "+N";
+    - drawing the stand-in in `ports/graphshell` view code (native phase);
+    - the native phase itself.
