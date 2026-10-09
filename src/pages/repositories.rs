@@ -5,9 +5,13 @@ use serde::Serialize;
 use serde_json::json;
 use sha2::{Digest, Sha256};
 
+use crate::host_history::host_history_href;
 use crate::repositories::{
-    AuthorityError, PublicOrganizationEvent, PublicRepositoryMetadata, PublicSiteData,
-    RelationRecord, RepositoryClass, RepositoryRecord,
+    Authority, AuthorityError, PublicMetadataCache, PublicOrganizationEvent,
+    PublicRepositoryMetadata, PublicSiteData, RelationRecord, RepositoryClass, RepositoryRecord,
+};
+use crate::repository_frozen::{
+    FAILED_LEAD, FrozenFirstView, GRID_MARKER, NO_SCRIPT_LEAD, SCENE_MARKER, SCRIPTED_LEAD,
 };
 use crate::repository_history::{
     GitAuthorityHistoryProjection, RepositoryGraph, public_history_projection,
@@ -24,36 +28,67 @@ pub const METADATA: PageMetadata = PageMetadata {
 };
 
 const GRAPH_SANDBOX_LOADER: &[u8] = include_bytes!("../../assets/graph-sandbox.js");
+const GRAPH_SANDBOX_MOUNT: &[u8] = include_bytes!("../../assets/graph-sandbox-mount.js");
 const REPO_GRAPH_WASM_GLUE: &[u8] = include_bytes!("../../assets/mer3ly_repo_graph.js");
 const REPO_GRAPH_WASM: &[u8] = include_bytes!("../../assets/mer3ly_repo_graph_bg.wasm");
 const HISTORY_POINT_LIMIT: usize = 24;
 
-pub fn document(root: &Path) -> Result<String, AuthorityError> {
+/// The published page and the history file it cites.
+pub struct RepositoriesPage {
+    pub html: String,
+    pub frozen: FrozenFirstView,
+}
+
+/// The authority's checkpoint history, sampled as the sandbox's slider is.
+pub fn site_history(
+    root: &Path,
+    authority: &Authority,
+    metadata: &PublicMetadataCache,
+) -> Result<GitAuthorityHistoryProjection, AuthorityError> {
+    let graph =
+        RepositoryGraph::from_parts(&authority.repositories, &authority.relations, metadata)
+            .map_err(AuthorityError::from_message)?;
+    public_history_projection(root, graph, HISTORY_POINT_LIMIT)
+        .map_err(AuthorityError::from_message)
+}
+
+/// Build the page, its frozen first view, and the v2 history it cites.
+pub fn page(root: &Path) -> Result<RepositoriesPage, AuthorityError> {
     let data = PublicSiteData::load(root)?;
-    let graph = RepositoryGraph::from_parts(
-        &data.authority.repositories,
-        &data.authority.relations,
-        &data.metadata,
-    )
-    .map_err(AuthorityError::from_message)?;
-    let history = public_history_projection(root, graph, HISTORY_POINT_LIMIT)
-        .map_err(AuthorityError::from_message)?;
-    Ok(document_with_history(&data, Some(&history)))
+    let history = site_history(root, &data.authority, &data.metadata)?;
+    page_for(&data, &history)
 }
 
-pub fn document_for(data: &PublicSiteData) -> String {
-    document_with_history(data, None)
-}
-
-fn document_with_history(
+/// [`page`], from loaded data and a history.
+pub fn page_for(
     data: &PublicSiteData,
-    history: Option<&GitAuthorityHistoryProjection>,
-) -> String {
-    let bootstrap = graph_bootstrap(data, history);
-    render_with_body_end(&METADATA, move || view(data), &bootstrap)
+    history: &GitAuthorityHistoryProjection,
+) -> Result<RepositoriesPage, AuthorityError> {
+    let frozen = frozen_first_view(&data.authority, &data.metadata, history)
+        .map_err(AuthorityError::from_message)?;
+    let bootstrap = graph_bootstrap(data);
+    let html = render_with_body_end(&METADATA, || view(data, &frozen), &bootstrap)
+        .replacen(SCENE_MARKER, &frozen.scene_html(), 1)
+        .replacen(GRID_MARKER, &frozen.grid_html(), 1);
+    Ok(RepositoriesPage { html, frozen })
 }
 
-pub fn view(data: &PublicSiteData) -> SiteView {
+/// The frozen first view the page and `validate-artifact` both derive.
+pub fn frozen_first_view(
+    authority: &Authority,
+    metadata: &PublicMetadataCache,
+    history: &GitAuthorityHistoryProjection,
+) -> Result<FrozenFirstView, String> {
+    let current =
+        RepositoryGraph::from_parts(&authority.repositories, &authority.relations, metadata)?;
+    FrozenFirstView::build(&current, &specimen(), history)
+}
+
+pub fn document(root: &Path) -> Result<String, AuthorityError> {
+    page(root).map(|page| page.html)
+}
+
+pub fn view(data: &PublicSiteData, frozen: &FrozenFirstView) -> SiteView {
     shell(
         ActivePage::Repositories,
         element(
@@ -61,7 +96,7 @@ pub fn view(data: &PublicSiteData) -> SiteView {
             &[("id", "main"), ("class", "repositories-main")],
             vec![
                 hero(data),
-                graph_sandbox(),
+                graph_sandbox(frozen),
                 organization_activity(data),
                 repository_index(data),
                 source_note(data),
@@ -70,14 +105,18 @@ pub fn view(data: &PublicSiteData) -> SiteView {
     )
 }
 
-fn graph_sandbox() -> SiteView {
+fn graph_sandbox(frozen: &FrozenFirstView) -> SiteView {
+    let runtime = graph_sandbox_runtime_href();
+    let history = host_history_href(&frozen.history_json);
     element(
         "section",
         &[
             ("class", "content-section graph-sandbox-section"),
             ("aria-labelledby", "graph-sandbox-title"),
             ("data-graph-sandbox", ""),
-            ("data-sandbox-state", "pending"),
+            ("data-sandbox-state", "frozen"),
+            ("data-sandbox-runtime", runtime.as_str()),
+            ("data-sandbox-history-src", history.as_str()),
         ],
         vec![
             section_heading("01", "graphshell sandbox"),
@@ -99,16 +138,7 @@ fn graph_sandbox() -> SiteView {
                     ),
                 ],
             ),
-            element(
-                "p",
-                &[
-                    ("class", "graph-sandbox-fallback"),
-                    ("data-sandbox-fallback", ""),
-                ],
-                vec![txt(
-                    "The sandbox requires WebAssembly. Its semantic repository index remains available below.",
-                )],
-            ),
+            frozen_view(frozen),
             element(
                 "div",
                 &[
@@ -176,6 +206,73 @@ fn graph_sandbox() -> SiteView {
                     "A Mermaid diagram or spreadsheet chart can be another projection of the same graph. Their boxes, bars, axes, lanes, and labels are faces and scene marks; a frozen export simply omits the interaction layer.",
                 )],
             ),
+        ],
+    )
+}
+
+/// The first view, frozen at build time (Ruling 157): the default reading, its
+/// matrix and the source history, until someone interacts with it.
+fn frozen_view(frozen: &FrozenFirstView) -> SiteView {
+    element(
+        "div",
+        &[
+            ("class", "graph-sandbox-frozen"),
+            ("data-sandbox-frozen", ""),
+        ],
+        vec![
+            element(
+                "p",
+                &[
+                    ("class", "graph-sandbox-fallback"),
+                    ("data-sandbox-fallback", ""),
+                ],
+                vec![
+                    // Two openings (Ruling 140): without a script the sandbox
+                    // needs WebAssembly; with one, it waits for a first
+                    // interaction, and the mount script swaps in that wording.
+                    element(
+                        "span",
+                        &[
+                            ("data-sandbox-reading-lead", ""),
+                            ("data-scripted-lead", SCRIPTED_LEAD),
+                            ("data-failed-lead", FAILED_LEAD),
+                        ],
+                        vec![txt(NO_SCRIPT_LEAD)],
+                    ),
+                    txt(frozen.summary()),
+                ],
+            ),
+            element(
+                "button",
+                &[
+                    ("type", "button"),
+                    ("class", "graph-sandbox-open"),
+                    ("data-sandbox-open", ""),
+                    ("hidden", "hidden"),
+                ],
+                vec![txt("open the live sandbox")],
+            ),
+            element(
+                "div",
+                &[("class", "graph-sandbox-frozen-scene")],
+                vec![txt(SCENE_MARKER)],
+            ),
+            element(
+                "div",
+                &[
+                    ("class", "graph-sandbox-frozen-matrix"),
+                    ("role", "region"),
+                    ("aria-labelledby", "repos-frozen-matrix-caption"),
+                    ("tabindex", "0"),
+                ],
+                vec![txt(GRID_MARKER)],
+            ),
+            element(
+                "h4",
+                &[("class", "graph-sandbox-frozen-heading")],
+                vec![txt("Source history")],
+            ),
+            frozen.history_view(),
         ],
     )
 }
@@ -1073,10 +1170,7 @@ fn source_note(data: &PublicSiteData) -> SiteView {
     )
 }
 
-fn graph_bootstrap(
-    data: &PublicSiteData,
-    history: Option<&GitAuthorityHistoryProjection>,
-) -> String {
+fn graph_bootstrap(data: &PublicSiteData) -> String {
     let authority = RepositoryGraph::from_parts(
         &data.authority.repositories,
         &data.authority.relations,
@@ -1088,33 +1182,32 @@ fn graph_bootstrap(
     let nodes = serialize_json_records(&authority.nodes);
     let edges = serialize_json_records(&authority.edges);
     let feed = serialize_json_records(&data.metadata.event);
-    let mut json = format!(
-        "{{\n\"schema\":{schema},\n\"nodes\":[\n{nodes}\n],\n\"edges\":[\n{edges}\n],\n\"feed\":[\n{feed}\n]"
+    // The checkpoint history no longer rides inline: the sandbox fetches the
+    // v2 history on first interaction (Ruling 157).
+    let json = format!(
+        "{{\n\"schema\":{schema},\n\"nodes\":[\n{nodes}\n],\n\"edges\":[\n{edges}\n],\n\"feed\":[\n{feed}\n]\n}}"
     );
-    if let Some(history) = history {
-        let history_schema = serde_json::to_string(&history.schema)
-            .expect("repository history schema is serializable");
-        let checkpoints = serialize_json_records(&history.checkpoints);
-        json.push_str(&format!(
-            ",\n\"history\":{{\n\"schema\":{history_schema},\n\"checkpoints\":[\n{checkpoints}\n]\n}}"
-        ));
-    }
-    json.push_str("\n}");
-    let json = json
-        .replace('<', "\\u003c")
-        .replace('>', "\\u003e")
-        .replace('&', "\\u0026");
-    let sandbox_runtime_href = graph_sandbox_runtime_href();
-    let sandbox_json = graph_sandbox_json();
+    let json = script_safe(&json);
+    let sandbox_json = script_safe(
+        &serde_json::to_string_pretty(&specimen()).expect("graph sandbox data is serializable"),
+    );
+    let mount_href = graph_sandbox_mount_href();
     format!(
         "<script id=\"repository-graph-data\" type=\"application/json\">{json}</script>\n\
 <script id=\"graph-sandbox-data\" type=\"application/json\">{sandbox_json}</script>\n\
-<script type=\"module\" src=\"{sandbox_runtime_href}\"></script>"
+<script type=\"module\" src=\"{mount_href}\"></script>"
     )
 }
 
-fn graph_sandbox_json() -> String {
-    serde_json::to_string_pretty(&json!({
+fn script_safe(json: &str) -> String {
+    json.replace('<', "\\u003c")
+        .replace('>', "\\u003e")
+        .replace('&', "\\u0026")
+}
+
+/// The sandbox's authored specimen: a heterogeneous graph beside the live one.
+pub fn specimen() -> serde_json::Value {
+    json!({
         "schema": "mer3ly.repo-graph/v1",
         "focus": "merecat",
         "nodes": [
@@ -1158,11 +1251,7 @@ fn graph_sandbox_json() -> String {
             "motion_rule": "interactive actors are anchored or free; frozen belongs to static renderers",
             "views": ["graph", "changes", "activity", "neighbors", "matrix"]
         }
-    }))
-    .expect("graph sandbox data is serializable")
-    .replace('<', "\\u003c")
-    .replace('>', "\\u003e")
-    .replace('&', "\\u0026")
+    })
 }
 
 fn serialize_json_records<T: Serialize>(records: &[T]) -> String {
@@ -1178,6 +1267,15 @@ fn serialize_json_records<T: Serialize>(records: &[T]) -> String {
 
 fn graph_sandbox_runtime_href() -> String {
     format!("/graph-sandbox.js{}", graph_runtime_version())
+}
+
+/// The only script /repos/ loads up front: it swaps in the scripted opening
+/// and imports the sandbox on first interaction.
+pub fn graph_sandbox_mount_href() -> String {
+    format!(
+        "/graph-sandbox-mount.js?v={}",
+        &format!("{:x}", Sha256::digest(GRAPH_SANDBOX_MOUNT))[..12]
+    )
 }
 
 /// The version query the graph runtime is fetched under. The sandbox loader

@@ -7,8 +7,17 @@ use mer3ly_site::site::SITE_CSS;
 use serde::Deserialize;
 
 const GRAPH_SANDBOX: &str = include_str!("../assets/graph-sandbox.js");
+const GRAPH_SANDBOX_MOUNT: &str = include_str!("../assets/graph-sandbox-mount.js");
 const GRAPH_GLUE: &str = include_str!("../assets/mer3ly_repo_graph.js");
 const GRAPH_WASM: &[u8] = include_bytes!("../assets/mer3ly_repo_graph_bg.wasm");
+
+/// Gzip bytes at best compression: what a visitor downloads (Ruling 141).
+fn gzip(bytes: &[u8]) -> usize {
+    use std::io::Write as _;
+    let mut encoder = flate2::write::GzEncoder::new(Vec::new(), flate2::Compression::best());
+    encoder.write_all(bytes).expect("gzip in memory");
+    encoder.finish().expect("gzip in memory").len()
+}
 
 fn workspace_root() -> PathBuf {
     Path::new(env!("CARGO_MANIFEST_DIR")).to_path_buf()
@@ -20,7 +29,7 @@ struct GraphAuthority {
     nodes: Vec<GraphNode>,
     edges: Vec<GraphEdge>,
     feed: Vec<GraphEvent>,
-    history: Option<GraphHistory>,
+    history: Option<serde_json::Value>,
 }
 
 #[derive(Deserialize)]
@@ -30,16 +39,28 @@ struct GraphEvent {
 }
 
 #[derive(Deserialize)]
-struct GraphHistory {
+struct HostHistory {
     schema: String,
-    checkpoints: Vec<GraphHistoryCheckpoint>,
+    revisions: Vec<HostHistoryRevision>,
+    compared_fields: Vec<String>,
+    compared_relationship_fields: Vec<String>,
 }
 
 #[derive(Deserialize)]
-struct GraphHistoryCheckpoint {
-    availability: String,
-    cursor: GraphHistoryCursor,
-    graph: Option<GraphHistoryGraph>,
+struct HostHistoryRevision {
+    revision: String,
+    dataset: HostHistoryDataset,
+    relationships: Vec<serde_json::Value>,
+}
+
+#[derive(Deserialize)]
+struct HostHistoryDataset {
+    occurrences: Vec<HostHistoryOccurrence>,
+}
+
+#[derive(Deserialize)]
+struct HostHistoryOccurrence {
+    occurrence_id: String,
 }
 
 #[derive(Deserialize)]
@@ -47,12 +68,6 @@ struct GraphHistoryCursor {
     source: String,
     commit: String,
     committed_at: String,
-}
-
-#[derive(Deserialize)]
-struct GraphHistoryGraph {
-    nodes: Vec<GraphNode>,
-    edges: Vec<GraphEdge>,
 }
 
 #[derive(Deserialize)]
@@ -148,81 +163,65 @@ fn graph_and_semantic_index_share_exact_public_ids() {
     }
     assert!(document.contains("share scene"));
 
-    let history = graph
-        .history
-        .as_ref()
-        .expect("repository page includes a Git authority history projection");
-    assert_eq!(history.schema, "mer3ly.repository-git-history/v1");
-    assert!(!history.checkpoints.is_empty());
-    assert!(
-        history
-            .checkpoints
-            .iter()
-            .any(|checkpoint| checkpoint.availability == "available"),
-        "history retains at least one usable committed authority checkpoint"
+    // The checkpoint history no longer rides inline: it is the v2 history
+    // the sandbox fetches on first interaction (Ruling 157).
+    assert!(graph.history.is_none());
+    let page = repositories::page(&root).expect("render repository page");
+    let history: HostHistory =
+        serde_json::from_str(&page.frozen.history_json).expect("valid v2 history JSON");
+    assert_eq!(history.schema, "scenomise.host-dataset/v2");
+    assert_eq!(
+        history.compared_fields,
+        ["label", "class", "status", "pushed_at"]
     );
+    assert_eq!(history.compared_relationship_fields, ["endpoints", "kind"]);
     assert!(
-        history.checkpoints.iter().all(|checkpoint| {
-            checkpoint.availability == "available" || checkpoint.availability == "unavailable"
-        }),
-        "history only exposes explicit checkpoint availability"
-    );
-    let available_history = history
-        .checkpoints
-        .iter()
-        .filter(|checkpoint| checkpoint.availability == "available")
-        .collect::<Vec<_>>();
-    assert!(
-        available_history.len() >= 6,
+        history.revisions.len() >= 6,
         "history retains public source eras"
     );
+    let cursor = |revision: &HostHistoryRevision| -> GraphHistoryCursor {
+        serde_json::from_str(&revision.revision).expect("a revision is its checkpoint cursor")
+    };
+    let has = |revision: &HostHistoryRevision, id: &str| {
+        revision
+            .dataset
+            .occurrences
+            .iter()
+            .any(|occurrence| occurrence.occurrence_id == id)
+    };
+    let earliest = &history.revisions[0];
     assert_eq!(
-        available_history[0].cursor.source, "merely-made/mere",
+        cursor(earliest).source,
+        "merely-made/mere",
         "the earliest historical snapshot identifies its public source"
     );
+    assert!(has(earliest, "graphshell"));
     assert!(
-        available_history[0]
-            .graph
-            .as_ref()
-            .expect("available checkpoint includes a graph")
-            .nodes
+        history
+            .revisions
             .iter()
-            .any(|node| node.id == "graphshell")
+            .any(|revision| has(revision, "webrender-wgpu"))
     );
-    assert!(available_history.iter().any(|checkpoint| {
-        checkpoint
-            .graph
-            .as_ref()
-            .expect("available checkpoint includes a graph")
-            .nodes
-            .iter()
-            .any(|node| node.id == "webrender-wgpu")
+    assert!(history.revisions.iter().any(|revision| {
+        cursor(revision).commit == "020170dcc9d526edddbfe5ea3788975498f27281"
+            && !has(revision, "graphshell")
     }));
-    assert!(available_history.iter().any(|checkpoint| {
-        checkpoint.cursor.commit == "020170dcc9d526edddbfe5ea3788975498f27281"
-            && checkpoint
-                .graph
-                .as_ref()
-                .expect("available checkpoint includes a graph")
-                .nodes
-                .iter()
-                .all(|node| node.id != "graphshell")
-    }));
-    let latest = available_history
+    let latest = history
+        .revisions
         .last()
         .expect("live historical checkpoint");
-    assert!(!latest.cursor.committed_at.is_empty());
-    let latest_graph = latest.graph.as_ref().expect("live graph");
+    assert!(!cursor(latest).committed_at.is_empty());
     assert_eq!(
-        latest_graph
-            .nodes
+        latest
+            .dataset
+            .occurrences
             .iter()
-            .map(|node| node.id.as_str())
+            .map(|occurrence| occurrence.occurrence_id.as_str())
             .collect::<BTreeSet<_>>(),
         node_ids,
         "the final history snapshot is fresh current authority"
     );
-    assert!(latest_graph.edges.len() >= graph.edges.len());
+    assert!(latest.relationships.len() >= graph.edges.len());
 }
 
 #[test]
@@ -385,12 +384,6 @@ fn graph_assets_and_responsive_styles_are_bounded() {
     // (opt-level "z", fat LTO) and the runtime 452,481 B, against 437,734 B
     // and about 458,400 B before the session moved in. The bounds keep about
     // 30 KiB of headroom each.
-    let gzip = |bytes: &[u8]| {
-        use std::io::Write as _;
-        let mut encoder = flate2::write::GzEncoder::new(Vec::new(), flate2::Compression::best());
-        encoder.write_all(bytes).expect("gzip in memory");
-        encoder.finish().expect("gzip in memory").len()
-    };
     let wasm = gzip(GRAPH_WASM);
     let runtime = gzip(GRAPH_SANDBOX.as_bytes()) + gzip(GRAPH_GLUE.as_bytes()) + wasm;
     assert!(
@@ -415,4 +408,54 @@ fn graph_assets_and_responsive_styles_are_bounded() {
             "site CSS is missing {contract}"
         );
     }
+}
+
+#[test]
+fn repositories_first_load_and_its_lazy_tier_are_bounded() {
+    // Ruling 157: /repos/ opens on a frozen first view, and the live sandbox
+    // loads on first interaction. Gzip bytes at best compression, as m5's
+    // graph bounds are (Ruling 141).
+    let page = repositories::page(&workspace_root()).expect("render repository page");
+
+    // Nothing in the first load reaches the graph runtime: the page loads the
+    // mount script and cites the sandbox and the history for later.
+    assert!(
+        !page
+            .html
+            .contains("<script type=\"module\" src=\"/graph-sandbox.js")
+    );
+    assert!(!page.html.contains("mer3ly_repo_graph"));
+    assert!(page.html.contains(&format!(
+        "<script type=\"module\" src=\"{}\"></script>",
+        repositories::graph_sandbox_mount_href()
+    )));
+    assert!(
+        page.html
+            .contains("data-sandbox-runtime=\"/graph-sandbox.js?v=")
+    );
+    assert!(
+        page.html
+            .contains("data-sandbox-history-src=\"/repository-host-history.json?v=")
+    );
+
+    let html = gzip(page.html.as_bytes());
+    let css = gzip(SITE_CSS.as_bytes());
+    let mount = gzip(GRAPH_SANDBOX_MOUNT.as_bytes());
+    let first_load = html + css + mount;
+    let history = gzip(page.frozen.history_json.as_bytes());
+    eprintln!(
+        "/repos/ first load {first_load} B gzip (HTML {html}, site.css {css}, mount {mount}); v2 history {history} B gzip"
+    );
+    assert!(
+        first_load <= 64 * 1024,
+        "the /repos/ first load is {first_load} bytes gzip"
+    );
+    assert!(
+        mount <= 8 * 1024,
+        "the sandbox mount script is {mount} bytes gzip"
+    );
+    assert!(
+        history <= mer3ly_site::host_history::HOST_HISTORY_GZIP_LIMIT,
+        "the v2 repository history is {history} bytes gzip"
+    );
 }

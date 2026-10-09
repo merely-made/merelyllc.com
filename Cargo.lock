@@ -1064,12 +1064,14 @@ name = "mer3ly-site"
 version = "0.1.0"
 dependencies = [
  "cambium",
+ "chirograph",
  "flate2",
  "genet-scripted-dom",
  "graphshell-client",
  "layout-dom-api",
  "mer3ly-radio-mirror",
  "mer3ly-repo-graph",
+ "mere-cartography",
  "regex",
  "sceno",
  "scenograph",
