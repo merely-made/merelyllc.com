@@ -836,6 +836,26 @@ fn validate_projection_page(project: &str, proof: &ProjectionProof, errors: &mut
         errors
             .push("Mere project profile's static trace reading differs from the trace".to_owned());
     }
+    // S5: a folding step lists the frozen reader's fold group, its heading
+    // (with the host's label) and every member it hides.
+    for (_, folds) in &proof.folds {
+        for fold in folds {
+            let heading = format!("<summary>{}</summary>", escape_html_text(&fold.heading()));
+            let listed = fold.members.iter().all(|member| {
+                project.contains(&format!(
+                    "data-projection-instance=\"{}\">{}</li>",
+                    member.instance.0,
+                    escape_html_text(&member.name)
+                ))
+            });
+            if !project.contains(&heading) || !listed {
+                errors.push(
+                    "Mere project profile's reading does not list its fold as the frozen group"
+                        .to_owned(),
+                );
+            }
+        }
+    }
     if !project.contains(&escape_html_text(&proof.summary())) {
         errors
             .push("Mere project profile's projection summary differs from the capture".to_owned());
