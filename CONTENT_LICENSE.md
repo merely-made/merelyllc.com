@@ -32,9 +32,9 @@ The message path lab on the community-radio page reads route traces and face
 tracks under `content/retinue-traces/` (published as `retinue-traces/`). They
 are the output of retinue's `retinue-sim` lab example, which is MPL-2.0, run
 outside this site at retinue revision
-`0731bd8c1c488f37839fa9c8bad6973798e59d95`; `provenance.toml` beside them
+`fa0d98b1562357e617062283be1de483f3dcd4d4`; `provenance.toml` beside them
 records the commands and each file's SHA-256, and the source is
-<https://github.com/merely-made/retinue/tree/0731bd8c1c488f37839fa9c8bad6973798e59d95/crates/retinue-sim>.
+<https://github.com/merely-made/retinue/tree/fa0d98b1562357e617062283be1de483f3dcd4d4/crates/retinue-sim>.
 The files are generated data, not original site prose, and CC BY 4.0 does not
 apply to them. `retinue-sim` links the `retinue` crate, which is under the
 Reticulum License. The traces contain no part of that crate's source: they

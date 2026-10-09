@@ -45,7 +45,7 @@ fn provenance_records_each_files_hash_revision_and_command() {
     .unwrap();
     assert_eq!(
         provenance["revision"].as_str(),
-        Some("0731bd8c1c488f37839fa9c8bad6973798e59d95")
+        Some("fa0d98b1562357e617062283be1de483f3dcd4d4")
     );
     for trace in provenance["trace"].as_array().unwrap() {
         for kind in ["route", "face"] {

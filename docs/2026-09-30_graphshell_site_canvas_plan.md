@@ -3310,3 +3310,16 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     is clean.
   - The intermediate branch commits pinned the unpushed `39aebbd6`. The final
     commit repins to the real rev.
+- 2026-10-09: the traces re-pinned at retinue `fa0d98b` (CI green). It
+  carries the 600-line split, Priority 2 announce rebroadcasting (jittered
+  relays from Wake polls), and the firmware's earliest-deadline wake in
+  retinue-sim.
+  - Cold has 105 events and warm 237. Outcomes are unchanged.
+  - Warm's three expiries now fall on exact deadlines (198, 378 and 558 s,
+    were 200, 380 and 560), so the smoke no longer pins the first expiry's
+    time.
+  - The devices runtime stays at `6aa78fc`: the site's checks render every
+    new face entry through it.
+  - Hop count settled by retinue: `hops` counts relays crossed (2 on the cold
+    route), and RNS's path table holds one more. The site's "2 relays" is
+    right.
