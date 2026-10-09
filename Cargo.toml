@@ -24,15 +24,15 @@ cambium = "0.3.3"
 genet-scripted-dom = "0.1.2"
 # The shared frozen reader: the no-script reading lists the proof's fold as
 # its group (site canvas plan, S5). Native only; the graph Wasm does not link it.
-graphshell-client = { git = "https://github.com/merely-made/mere.git", rev = "39aebbd6093c85211b98827f95e1feb5e54e0266" }
+graphshell-client = { git = "https://github.com/merely-made/mere.git", rev = "17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65" }
 layout-dom-api = "0.1.1"
 mer3ly-radio-mirror = { path = "crates/radio-mirror" }
 mer3ly-repo-graph = { path = "crates/repo-graph" }
 regex = "1"
-sceno = { git = "https://github.com/merely-made/mere.git", rev = "39aebbd6093c85211b98827f95e1feb5e54e0266" }
-scenograph = { git = "https://github.com/merely-made/mere.git", rev = "39aebbd6093c85211b98827f95e1feb5e54e0266" }
-scenomise = { git = "https://github.com/merely-made/mere.git", rev = "39aebbd6093c85211b98827f95e1feb5e54e0266" }
-scenotime = { git = "https://github.com/merely-made/mere.git", rev = "39aebbd6093c85211b98827f95e1feb5e54e0266" }
+sceno = { git = "https://github.com/merely-made/mere.git", rev = "17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65" }
+scenograph = { git = "https://github.com/merely-made/mere.git", rev = "17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65" }
+scenomise = { git = "https://github.com/merely-made/mere.git", rev = "17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65" }
+scenotime = { git = "https://github.com/merely-made/mere.git", rev = "17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 sha2 = "0.10"
