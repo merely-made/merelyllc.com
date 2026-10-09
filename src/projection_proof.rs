@@ -12,8 +12,15 @@
 //! disclosed occurrence, every captured relation must match exactly one
 //! disclosed relationship by its endpoints and kind, and every selection in
 //! the trace must name one of them.
+//!
+//! A step that folds is read through Graphshell's shared frozen reader
+//! (site canvas plan, S5): the reading lists the fold as its group, with the
+//! host's label and every member it hides, rather than dropping them.
 
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, HashMap};
+
+use graphshell_client::frozen::{FrozenFold, FrozenScene};
+use scenotime::{SceneOp, SceneTrace};
 
 use mer3ly_repo_graph::read_portable_projection;
 use scenomise::host_dataset::parse_host_dataset;
@@ -62,6 +69,9 @@ pub struct ProjectionProof {
     pub reading: ProjectionReading,
     pub nodes: Vec<ProofNode>,
     pub relations: Vec<ProofRelation>,
+    /// Each step that folds, by step index, and the fold groups the frozen
+    /// reader lists for the scene that step leaves.
+    pub folds: Vec<(usize, Vec<FrozenFold>)>,
 }
 
 /// The repository authority the proof projects: Mere's direct relations and
@@ -180,11 +190,14 @@ impl ProjectionProof {
             }
         }
 
+        let folds = frozen_folds(&artifacts.trace, &nodes)?;
+
         Ok(Self {
             artifacts,
             reading,
             nodes,
             relations,
+            folds,
         })
     }
 
@@ -249,10 +262,14 @@ impl ProjectionProof {
                     None if step.changes_scene => format!("scene revision {}", step.revision),
                     None => "no scene change".to_owned(),
                 };
+                let mut children = vec![txt(format!("{}: {what}.", step.label))];
+                for (_, folds) in self.folds.iter().filter(|(at, _)| *at == index) {
+                    children.extend(folds.iter().map(fold_group));
+                }
                 element(
                     "li",
                     &[("data-projection-reading-step", &(index + 1).to_string())],
-                    vec![txt(format!("{}: {what}.", step.label))],
+                    children,
                 )
             })
             .collect();
@@ -293,6 +310,80 @@ impl ProjectionProof {
             ],
         )
     }
+}
+
+/// Read each folding step through the shared frozen reader: freeze the scene
+/// the step leaves, named from the host dataset, and keep its fold groups.
+fn frozen_folds(
+    trace: &[u8],
+    nodes: &[ProofNode],
+) -> Result<Vec<(usize, Vec<FrozenFold>)>, String> {
+    let trace: SceneTrace =
+        serde_json::from_slice(trace).map_err(|error| format!("invalid scene trace: {error}"))?;
+    let mut folds = Vec::new();
+    for (index, step) in trace.steps().iter().enumerate() {
+        let folding = step.diff.as_ref().is_some_and(|diff| {
+            diff.operations.iter().any(|operation| {
+                matches!(
+                    operation,
+                    SceneOp::AddFold { .. }
+                        | SceneOp::UpdateFold { .. }
+                        | SceneOp::SetFoldStandIn { .. }
+                )
+            })
+        });
+        if !folding {
+            continue;
+        }
+        let scene = trace.snapshot_at(index + 1).map_err(|error| {
+            format!("the trace does not replay to step {}: {error:?}", index + 1)
+        })?;
+        let names = scene
+            .tables
+            .items
+            .iter()
+            .enumerate()
+            .filter_map(|(instance, item)| {
+                let source = scene
+                    .tables
+                    .sources
+                    .get(item.as_ref()?.source.0 as usize)?
+                    .as_ref()?;
+                let node = nodes.iter().find(|node| node.id == source.id)?;
+                Some((sceno::InstanceId(instance as u32), node.label.clone()))
+            })
+            .collect::<HashMap<_, _>>();
+        let frozen = FrozenScene::freeze_snapshot(&scene, "Mere projection", &names);
+        folds.push((index, frozen.folds));
+    }
+    Ok(folds)
+}
+
+/// One fold group in the reading: the frozen reader's heading (stand-in,
+/// "+N", and the host's label) and the members it hides, as a disclosure.
+fn fold_group(fold: &FrozenFold) -> SiteView {
+    let members = fold
+        .members
+        .iter()
+        .map(|member| {
+            element(
+                "li",
+                &[("data-projection-instance", &member.instance.0.to_string())],
+                vec![txt(member.name.clone())],
+            )
+        })
+        .collect();
+    element(
+        "details",
+        &[
+            ("class", "projection-proof-reading-fold"),
+            ("data-projection-fold", &fold.fold.to_string()),
+        ],
+        vec![
+            element("summary", &[], vec![txt(fold.heading())]),
+            element("ul", &[], members),
+        ],
+    )
 }
 
 fn count_words(count: usize) -> String {
@@ -408,5 +499,60 @@ mod tests {
             "revision {}",
             proof.reading.receipt.final_revision
         )));
+    }
+
+    #[test]
+    fn the_reading_lists_the_fold_as_the_frozen_readers_group() {
+        let data = data();
+        let proof = ProjectionProof::build(&data).expect("proof");
+        let [(step, folds)] = proof.folds.as_slice() else {
+            panic!("one step folds: {:?}", proof.folds);
+        };
+        assert_eq!(proof.reading.steps[*step].label, "Fold Mere dependencies");
+        let [fold] = folds.as_slice() else {
+            panic!("one fold: {folds:?}");
+        };
+        assert_eq!(fold.name, "Mere");
+        assert_eq!(fold.label.as_deref(), Some("Mere's dependencies"));
+        assert_eq!(
+            fold.rule.as_deref(),
+            Some("Mere and everything it reaches by depends on")
+        );
+        assert_eq!(fold.badge, format!("+{}", fold.members.len()));
+        // Every project the fold hides is listed by its host dataset name,
+        // and the frozen form drops none of them.
+        let names = fold
+            .members
+            .iter()
+            .map(|member| member.name.as_str())
+            .collect::<Vec<_>>();
+        for member in &names {
+            assert!(
+                proof.nodes.iter().any(|node| node.label == *member),
+                "{member}"
+            );
+        }
+        assert!(!names.contains(&"Mere"));
+
+        let mere = data
+            .authority
+            .repositories
+            .repository
+            .iter()
+            .find(|repository| repository.id == "mere")
+            .unwrap();
+        let html = crate::pages::projects::document_for(&data, mere);
+        assert_eq!(
+            html.matches("class=\"projection-proof-reading-fold\"")
+                .count(),
+            1
+        );
+        assert!(html.contains(&format!(
+            "<summary>Mere, {} folded: Mere's dependencies</summary>",
+            fold.badge
+        )));
+        for member in names {
+            assert!(html.contains(&format!(">{member}</li>")), "{member}");
+        }
     }
 }

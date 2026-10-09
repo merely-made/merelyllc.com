@@ -714,6 +714,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "graphshell-client"
+version = "0.0.2"
+source = "git+https://github.com/merely-made/mere.git?rev=39aebbd6093c85211b98827f95e1feb5e54e0266#39aebbd6093c85211b98827f95e1feb5e54e0266"
+dependencies = [
+ "chirograph",
+ "sceno",
+ "scenotime",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
 name = "grid"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1054,6 +1066,7 @@ dependencies = [
  "cambium",
  "flate2",
  "genet-scripted-dom",
+ "graphshell-client",
  "layout-dom-api",
  "mer3ly-radio-mirror",
  "mer3ly-repo-graph",
@@ -1061,6 +1074,7 @@ dependencies = [
  "sceno",
  "scenograph",
  "scenomise",
+ "scenotime",
  "serde",
  "serde_json",
  "sha2 0.10.9",
