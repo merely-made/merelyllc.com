@@ -1,5 +1,12 @@
 # Browser delivery
 
+**Status (2026-10-08):** shared Rust behavior now drives the deployed devices,
+message-path lab and projection proof. Their site presentation remains
+lightweight. The repository sandbox and Graphshell viewer cutover are still
+open, with the full viewer payload cap unresolved. See the current
+[site canvas plan](2026-09-30_graphshell_site_canvas_plan.md). The original
+architecture assessment below records the 2026-08-16 source.
+
 ## Purpose
 
 Ship the Merely applications as real applications in a browser, not as
@@ -7,12 +14,11 @@ reimplementations of their views. Cross-platform including the web is a product
 thesis, not a demo: the browser is the cheapest way to distribute the apps and
 the fastest loop for refining them.
 
-The site already embeds Rust. It embeds it as computation only: `crates/repo-graph`
-is 936 KB of arrangements, cartography, sceno, scenomise, scenotime and seiche
-with no renderer in it, and the drawing happens in `assets/graph-sandbox.js`.
-Every interactive surface on the site today is a JavaScript re-creation of an
-application's behaviour. This plan replaces that division for applications that
-warrant it.
+At this plan's original assessment, the site embedded Rust as computation only:
+`crates/repo-graph` was 936 KB and the drawing happened in
+`assets/graph-sandbox.js`. Three deployed surfaces now consume shared Rust
+behavior, including firmware screens and the projection replay session. The
+sandbox and viewer mount remain the application-delivery target.
 
 ## The load-bearing finding
 

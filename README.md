@@ -23,18 +23,20 @@ and deploys on main pushes, manual dispatch, and a daily schedule.
   browser delivery, canvas stage unification, and
   [Graphshell as the site canvas](docs/2026-09-30_graphshell_site_canvas_plan.md)
   cover the replacement of the site-owned interactive surfaces.
-- Graphshell integration is in P0: the viewer cone and speed estimator are
+- P0 viewer review and provider integration are complete: the viewer cone and speed estimator are
   merged into Mere main at `ea9e6da7`, with fresh browser, accessibility and
   frame receipts. The six-asset plain viewer payload is 2,147,689 B brotli;
   its numerical budget remains open. The site still ships its own sandbox;
-  P1 export and P2 surface replacement remain ahead. See the
+  the remaining sandbox exports and Graphshell viewer cutover stay open. See the
   [integration receipt](docs/handoffs/2026-10-07_viewer_cone/RESUME.md#authorized-integration).
 - The build now emits `repository-host-dataset.json` from the reconciled public
   authority: 21 projects and 30 explained relationships in the versioned S1
   envelope. It records scope and a content-derived revision; this is published
   repository-family context, not a resolved Cargo dependency closure. Native
   parser/compiler acceptance is [recorded](docs/receipts/site/2026-10-07_host_dataset/receipt.json).
-  Browser loading through S1 and surface replacement remain ahead.
+  The site's Graphshell viewer mount remains ahead. S2's shared matrix and S3's
+  source-history evaluator are on Mere main (`463c8d40`), including the 4 MiB
+  v2 history limit; the site's consumer adoption remains ahead.
 - P2 has replaced three surfaces. The V4 device bench runs radio-mirror
   (2026-10-07). The community-radio page's message path lab (2026-10-08) reads
   retinue-sim's generated cold and warm route traces, committed under
