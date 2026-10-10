@@ -1,11 +1,20 @@
 # Browser delivery
 
-**Status (2026-10-08):** shared Rust behavior now drives the deployed devices,
+**Status (2026-10-09):** shared Rust behavior now drives the deployed devices,
 message-path lab and projection proof. Their site presentation remains
-lightweight. The repository sandbox and Graphshell viewer cutover are still
-open, with the full viewer payload cap unresolved. See the current
+lightweight. The repository page now opens through the shared frozen scene,
+matrix and history readers, loading the existing sandbox on first interaction.
+The Graphshell viewer cutover remains open; Ruling 157 sets its delivery caps.
+See the current
 [site canvas plan](2026-09-30_graphshell_site_canvas_plan.md). The original
 architecture assessment below records the 2026-08-16 source.
+
+Mere's design-language continuation is the shared cross-app context:
+`mere/design_docs/2026-08-23_projection_scenes_and_graph_native_platform.md` §9.
+Its app composition brief distinguishes retained Cambium sessions, owner-served
+projections and the separate Moot Wasm applet experiment. Browser-local sessions,
+extensions and attached native Turnstone sessions retain their own capability,
+storage and carrier gates; static site delivery does not settle those choices.
 
 ## Purpose
 

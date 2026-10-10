@@ -5,7 +5,7 @@ small static Rust build (Cambium views serialized to HTML) plus a WebGPU
 repository-graph client, deployed to GitHub Pages. The complete site remains
 readable without JavaScript, WebAssembly, or WebGPU.
 
-## Status (2026-10-08)
+## Status (2026-10-09)
 
 Live and deployed. The pages.yml workflow rebuilds, validates, browser-smokes,
 and deploys on main pushes, manual dispatch, and a daily schedule.
@@ -26,7 +26,9 @@ and deploys on main pushes, manual dispatch, and a daily schedule.
 - P0 viewer review and provider integration are complete: the viewer cone and speed estimator are
   merged into Mere main at `ea9e6da7`, with fresh browser, accessibility and
   frame receipts. The six-asset plain viewer payload is 2,147,689 B brotli;
-  its numerical budget remains open. The site still ships its own sandbox;
+  Ruling 157 now sets the delivery caps (64 KiB gzip first load; on interaction,
+  viewer Wasm 3.25 MiB gzip, glue 20 KiB, mount 8 KiB, history 128 KiB). The
+  measurement above is the historical P0 baseline. The site still ships its own sandbox;
   the remaining sandbox exports and Graphshell viewer cutover stay open. See the
   [integration receipt](docs/handoffs/2026-10-07_viewer_cone/RESUME.md#authorized-integration).
 - The build now emits `repository-host-dataset.json` from the reconciled public
