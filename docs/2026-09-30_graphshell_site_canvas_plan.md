@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status (2026-10-09):** active; Rulings 1-160 recorded. P0's viewer review
+**Status (2026-10-09):** active; Rulings 1-162 recorded. P0's viewer review
 and provider integration are complete. Three P2 surfaces are deployed: devices,
 message-path lab, and projection proof. The frozen-first repository opening
 landed at `b16d040`, followed by the smoke update `1de8915` and published
@@ -1796,6 +1796,32 @@ a second grouping concept beside S5's `sceno::Fold`. Options: fold it into
 follows: no action until that branch is ready to land. Mere-side viewer
 work in the files it touches (`web_tree*`, `host_dataset_view.rs`) waits
 for it, or for Mark's word.
+
+### Rulings 161-162 (2026-10-09): grouping is folding, and who owns the viewer
+
+`graph-semantics` merged into mere main (P1-P5), which unblocks S5's native
+phase. `codex/nested-graph-view` is still unmerged: 8 commits ahead, last at
+`04fdf0065`. It merged S5's fold providers at `6a7c7d8fa` but keeps its own
+`scenomise::grouping`. Moot's applet mount is also active in the viewer.
+
+**Ruling 161, Ruling 160 decided.** Options: the groups become folds;
+separate concepts; still later. Mark: "Groups become Folds (Recommended)".
+What follows: one grouping concept (Ruling 1). The branch's expandable
+host-dataset groups are expressed as `sceno::Fold` facts (members, stand-in,
+rule, label), adapted by that branch's owner (Mark's Codex agent, through
+Mark) before it lands. `scenomise::grouping` does not land as a second
+concept.
+
+**Ruling 162, the viewer files' owner.** These are `web_tree*`,
+`host_dataset_view.rs` and `web_dataset.rs`, touched by the Codex branch,
+Moot's mount and the editor lane's S2/B1. Options: Codex lands first, then
+the site; the site lane now; the editor lane. Mark: "Site lane now". What
+follows:
+- This lane owns the viewer files for the cutover from now on.
+- `codex/nested-graph-view` rebases onto the cutover work, adapting its
+  groups per Ruling 161.
+- Moot's mount and the editor lane's S2/B1 coordinate their edits through
+  this lane.
 
 ## Findings (2026-09-30)
 
