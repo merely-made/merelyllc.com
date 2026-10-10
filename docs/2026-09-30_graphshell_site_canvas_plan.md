@@ -1,7 +1,7 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status (2026-10-09):** active; Rulings 1-162 recorded. P0's viewer review
+**Status (2026-10-09):** active; Rulings 1-166 recorded. P0's viewer review
 and provider integration are complete. Three P2 surfaces are deployed: devices,
 message-path lab, and projection proof. The frozen-first repository opening
 landed at `b16d040`, followed by the smoke update `1de8915` and published
@@ -1822,6 +1822,62 @@ follows:
   groups per Ruling 161.
 - Moot's mount and the editor lane's S2/B1 coordinate their edits through
   this lane.
+
+### Rulings 163-166 (2026-10-09): S5's native phase
+
+These were asked after a read-only assessment against mere `7c0c12008`.
+
+**What it found:**
+- Nothing native has landed. `curation` exists (0.1.0, serde only, holding
+  `SubgraphSpec` and `SubgraphKind`) but holds no fold. forme's `fold.rs` is
+  still at v1.
+- The catalogue (33 ids) has no fold verb, and nothing writes or restores
+  `ViewIntent.folds`.
+- `MereHost` holds no `Canvas`, so its active folds come from the view
+  intent.
+- graph-semantics changed only how a collapse walks relations (across the
+  Resource and Surface layers).
+- `codex/nested-graph-view` never uses `sceno::Fold`, but its `framing.rs`
+  calls the native fold projection.
+- Moot's mount exists only in an uncommitted local worktree.
+
+**Ruling 163, member identity in `curation`.** Options: string IDs at
+0.1.1; add uuid at 0.2.0. Mark: "String IDs, 0.1.1 (Recommended)". What
+follows:
+- `curation::FoldRecord` (version 2) holds opaque string members, plus
+  `stand_in` (Member or Summary), `rule` (Selection, or Descendants{root,
+  family, direction}) and `label`. This keeps SE73's serde-only rule.
+- pandect and pictograph convert UUIDs at their edge.
+- curation goes to 0.1.1.
+
+**Ruling 164, leaving forme.** Options: a shim and migrate v1; a hard drop
+and migrate; a hard drop and refuse v1. Mark: "Hard drop + migrate". What
+follows: forme removes `fold.rs` (breaking, 0.2.0). Saved v1 records load as
+a Summary stand-in with no rule and no label.
+
+**Ruling 165, native fold UX.** Options: many folds with menu verbs; one fold
+with menu verbs; one fold with keys only. Mark: "Many folds, menu verbs
+(Recommended)". What follows:
+- The canvas holds several non-overlapping folds, matching `ViewIntent.folds`
+  and the fact.
+- New command-menu verbs live in a `fold:` namespace: fold selection,
+  collapse descendants, expand fold.
+- A collapse defaults to the hierarchy family, outgoing, with family and
+  direction choosable in the command's context.
+- The editor lane's session had ended, so the verbs were not agreed with it
+  first. They land as an additive catalogue change for that lane to review.
+
+**Ruling 166, pictograph's synthetic summary.** Options: it becomes
+`StandIn::Summary`; draw only from the fact. Mark: "It becomes
+StandIn::Summary (Recommended)". What follows: `project_fold` stays as the
+native check and the source of boundary accounting. The synthetic summary
+retires as a separate concept: it is how the canvas draws a Summary
+stand-in, the default for migrated v1 folds.
+
+*Settled by the lane, as technical choices:*
+- Lowering maps pictograph's `EdgeFamily` onto the `relation_kind_label`
+  names that served scenes already use.
+- Folds persist under the canvas's current view key.
 
 ## Findings (2026-09-30)
 
