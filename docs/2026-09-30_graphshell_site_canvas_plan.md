@@ -1,23 +1,37 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status (2026-10-08):** active; Rulings 1-160 recorded. P0's viewer review
+**Status (2026-10-09):** active; Rulings 1-160 recorded. P0's viewer review
 and provider integration are complete. Three P2 surfaces are deployed: devices,
-message-path lab, and projection proof. The latest accepted site code is
-`f151b45`; [headed Chromium smoke and deployment passed](https://github.com/merely-made/merelyllc.com/actions/runs/37858985653).
+message-path lab, and projection proof. The frozen-first repository opening
+landed at `b16d040`, followed by the smoke update `1de8915` and published
+progress `3a3341e`; this review read main at `9ba3f03`. The checks and browser findings
+are recorded in the frozen-first progress entry below; this context refresh reruns no
+runtime or deployment gate.
 
 S1, S4 and S6 are shared provider capabilities already consumed by the site.
-S2's two-reading matrix and S3's source-history evaluator are now on Mere main
-at `463c8d40`, including Rulings 146-148. The site's active Mere pin remains
-`7a5bedd1`; adopting the new matrix/history APIs and exporting a v2 history is
-still site work. The v2 history limit is 4 MiB; v1 retains 1 MiB.
+S2's two-reading matrix, S3's source-history evaluator and S5's labelled fold
+are consumed at the site's Mere pin `17519aa4`. The frozen repository scene,
+matrix and source-history text use those shared readers; the exporter publishes
+a v2 history. The v2 history limit is 4 MiB; v1 retains 1 MiB.
 
-The repository sandbox is the remaining P2 surface. Its matrix/history copies,
-S5's portable fold, the Graphshell viewer mount, and retirement of the remaining
-site copies are still ahead. The proof uses the shared Rust replay session with
-its lightweight site renderer. The full viewer's numerical payload cap remains
-open; the six-asset 2,147,689 B brotli measurement is the 2026-10-07 P0 baseline,
-not the smaller graph computation runtime or the current site's entire payload.
+The interactive repository sandbox remains the P2 replacement target. Its live
+matrix/history copies, the Graphshell viewer mount, and retirement of the
+remaining site copies are still ahead. The proof uses the shared Rust replay
+session with its lightweight site renderer. Ruling 157 now sets the delivery
+caps: first load at most 64 KiB gzip; interaction assets individually bounded
+at 3.25 MiB gzip for viewer Wasm, 20 KiB for glue, 8 KiB for mount, and 128 KiB
+for v2 history. The six-asset 2,147,689 B brotli measurement is the historical
+2026-10-07 P0 baseline; it is not a current viewer qualification or the smaller
+graph computation runtime. Mobile and non-WebGPU browsers retain the frozen
+reading under R157.
+
+**Design context (2026-10-09):** Mere's incoming
+`mere/design_docs/2026-08-23_projection_scenes_and_graph_native_platform.md` §9
+is the shared visual/interaction direction. Its selection, retained background,
+foreground-pin and forme-field ideas are reconciled in the ambiance design §10
+and Scenograph handoff. R158's S2/B1 homes and R160's grouping hold stand;
+the new direction does not complete the viewer or settle the deferred field.
 
 **Historical consumer continuation (2026-10-07):** the initial native exporter
 qualified 21 project identities and 30 relationship disclosures against the
@@ -3399,7 +3413,8 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     right.
 - 2026-10-09: **/repos/ opens on a frozen first view (Ruling 157, site-side
   first slice)**, branch `repos-frozen-first` off `ee94280`, against mere
-  `17519aa4`. Not pushed.
+  `17519aa4`. Published as `b16d040` (code), `1de8915` (smoke) and `3a3341e`
+  (progress); the branch-only wording here is superseded.
   - **v2 history export.** `repository-host-history.json` is a
     `scenomise.host-dataset/v2` envelope: one revision per merged checkpoint
     (identical neighbours merge into the later one, as the slider did; 14
