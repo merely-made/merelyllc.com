@@ -50,12 +50,17 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
     const choices = viewer.getByRole('button', {name: /^Select /});
     await choices.first().waitFor({state: 'attached'});
     assert.equal(await choices.count(), results.repositories);
-    await choices.first().focus();
+    const selectedProject = authority.nodes[0];
+    await viewer.getByRole('button', {name: `Select ${selectedProject.name}`, exact: true}).focus();
     await page.keyboard.press('Enter');
     await viewer.getByRole('button', {name: 'Clear project selection', exact: true}).waitFor();
     await viewer.getByRole('link', {name: 'Project page', exact: true}).first().waitFor({state: 'attached'});
     assert.ok(await viewer.getByRole('link', {name: 'Project page', exact: true}).count() > 0);
-    const projectLink = await viewer.getByRole('link', {name: 'Project page', exact: true}).first().getAttribute('href');
+    // Canvas links expose accessible actions, not native anchor hrefs. Bind
+    // the expectation to the public disclosure and verify actual navigation.
+    const history = JSON.parse(await viewer.getAttribute('data-dataset'));
+    const disclosed = history.revisions.at(-1).dataset.occurrences.find(item => item.occurrence_id === selectedProject.id);
+    const projectLink = disclosed.values.project_url.value;
     assert.match(projectLink, /^https:\/\/merelyllc\.com\/projects\/[a-z0-9-]+\/$/);
     assert.equal((await page.request.get(new URL(new URL(projectLink).pathname, baseUrl).href)).status(), 200);
     results.selected_project = projectLink;
