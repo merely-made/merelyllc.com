@@ -1,0 +1,39 @@
+name: Diagnose viewer Linux rendering
+on:
+  push:
+    branches: [codex/site-viewer-linux]
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npx playwright install --with-deps chromium
+      - name: Prepare the source-bound reproduction
+        shell: python
+        run: |
+          from pathlib import Path
+          import hashlib,json,shutil
+          root=Path('.tmp/viewer-linux-site');(root/'repos').mkdir(parents=True)
+          shutil.copyfile('tests/fixtures/viewer-linux/repos.html',root/'repos/index.html')
+          shutil.copyfile('tests/fixtures/viewer-linux/history.json',root/'repository-host-history.json')
+          for name in ['site.css','graph-sandbox-mount.js','favicon.svg']:
+            shutil.copyfile('assets/'+name,root/name)
+          shutil.copytree('assets/graphshell',root/'graphshell/56d0cc1465a0')
+          manifest={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in root.rglob('*') if p.is_file()}
+          Path('.tmp/viewer-linux').mkdir()
+          Path('.tmp/viewer-linux/served-inputs.json').write_text(json.dumps(manifest,indent=2))
+      - run: xvfb-run --auto-servernum node scripts/diagnose-viewer-linux.mjs
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        if: always()
+        with:
+          name: viewer-linux-${{ github.sha }}
+          path: .tmp/viewer-linux/
+          include-hidden-files: true
