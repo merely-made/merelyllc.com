@@ -46,7 +46,7 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
     assert.equal(await viewer.getAttribute('data-ready'), 'true');
     assert.equal(await page.title(), title);
     await staticReading(page);
-    await viewer.getByRole('button', {name: 'Choose projects', exact: true}).click();
+    await viewer.getByRole('button', {name: 'Choose projects', exact: true}).press('Enter');
     const choices = viewer.getByRole('button', {name: /^Select /});
     await choices.first().waitFor({state: 'attached'});
     assert.equal(await choices.count(), results.repositories);
@@ -95,7 +95,7 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
       const response = await page.request.get(new URL(url.pathname + url.search, baseUrl).href);
       await route.fulfill({response});
     });
-    await viewer.getByRole('link', {name: 'Project page', exact: true}).first().click();
+    await viewer.getByRole('link', {name: 'Project page', exact: true}).first().press('Enter');
     await page.waitForURL(new URL(projectLink, baseUrl).href);
     assert.equal(await page.locator('h1').count(), 1);
   });
