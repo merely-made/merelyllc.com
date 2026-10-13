@@ -1,0 +1,72 @@
+{
+  "browser": "156.0.8078.4",
+  "fixture": "source-bound local R9 published authority, 21 projects",
+  "result": {
+    "cases": {
+      "desktop": "pass",
+      "no-script": "pass",
+      "mobile": "pass",
+      "tablet": "pass",
+      "no-webgpu": "pass",
+      "no-adapter": "pass",
+      "legacy-share": "pass",
+      "startup-timeout": "pass",
+      "failure-forced": "pass",
+      "failure-history": "pass",
+      "failure-wasm": "pass",
+      "failure-stylesheet": "pass"
+    },
+    "screenshots": [
+      "viewer-desktop.png",
+      "viewer-desktop-component.png",
+      "viewer-desktop-viewport.png",
+      "viewer-mobile-static.png"
+    ],
+    "repositories": 21,
+    "relationships": 30,
+    "selected_project": "https://merelyllc.com/projects/org-profile/",
+    "adapter": {
+      "vendor": "google",
+      "architecture": "swiftshader",
+      "device": "",
+      "description": ""
+    },
+    "capture_bounds": {
+      "x": 240,
+      "y": 836.703125,
+      "width": 960,
+      "height": 720
+    },
+    "resources": [
+      "http://127.0.0.1:37183/graphshell/56d0cc1465a0/styles.css",
+      "http://127.0.0.1:37183/graphshell/56d0cc1465a0/viewer.js",
+      "http://127.0.0.1:37183/graphshell/56d0cc1465a0/mount.js",
+      "http://127.0.0.1:37183/graphshell/56d0cc1465a0/pkg/graphshell_web.js",
+      "http://127.0.0.1:37183/graphshell/56d0cc1465a0/pkg/graphshell_web_bg.wasm"
+    ],
+    "startup_cancellation": {
+      "before": {
+        "connected": true,
+        "rafRequests": 0
+      },
+      "after": {
+        "ready": null,
+        "mountState": "cancelled",
+        "mirror": 0,
+        "fileInputs": 0,
+        "rafRequests": 0,
+        "deviceLost": {
+          "reason": "destroyed"
+        },
+        "adapter": {
+          "vendor": "google",
+          "architecture": "swiftshader",
+          "device": "",
+          "description": ""
+        },
+        "refusal": "the tree has not booted"
+      },
+      "deadline_ms": 45000
+    }
+  }
+}

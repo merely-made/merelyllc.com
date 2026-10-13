@@ -1,0 +1,15 @@
+{
+  "diagnostic_source": "60e579a2f3e68a047acb74cd40a7a572a31cca13",
+  "diagnostic_workflow": "https://github.com/merely-made/merelyllc.com/actions/runs/38477121807",
+  "initial_production_failure": "https://github.com/merely-made/merelyllc.com/actions/runs/38473500013",
+  "observed_failure": "Chromium shared-image backing creation failed on ANGLE-only SwiftShader. Picker state changed, but choices and visible presentation stalled. Device loss was recorded before cleanup, with no explicit destroy call.",
+  "correction": "Explicit Linux software-GPU launcher uses a shared Vulkan presentation path. Fixed capture shows graph and inspector pixels; queue completion succeeds without lost devices or uncaptured errors.",
+  "scope": "Test launcher only. Frozen runtime, site application, data export and test assertions unchanged. Full production workflow remains required.",
+  "files": {
+    "baseline.json": "9fc21022ab44f2f3f5927991903239f99e6e62ecda1aafdc59cadfc6ea91ab1d",
+    "fixed.json": "5d0df16c8961c8d9dba5854a9a1bd410eb23b7c4483f3cab34e8138f7549e29c",
+    "fixed-viewer.png": "3c19e0940f4ab5695b05b2ac0b6aaf450f974bb5ea38ce63f9f494e17729fa8b"
+  },
+  "production_fix": "9363ab035e8bd062aed5d398a8dd5be841090a82",
+  "watchdog": "Enabled; no override in the accepted diagnostic or production launcher."
+}
