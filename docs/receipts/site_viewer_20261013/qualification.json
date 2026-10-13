@@ -1,0 +1,95 @@
+{
+  "schema": "mer3ly.site-viewer-qualification/v1",
+  "recorded_utc": "2026-10-13T21:45:49.718249+00:00",
+  "status": "local-browser-qualified; publication and live deployment recorded separately",
+  "live_site_deployed": false,
+  "site_application_source": "a0406ad624961822575b2c5c41e1f2735a767b32",
+  "site_acceptance_head": "57ed372104bca5bb880cd2146cf972f0cd2a7c18",
+  "runtime_source": "377a0e30c84e2059a945583833008e84ae045fce",
+  "base_runtime_source": "47199232d205576e84c802a84eb0cda401f926e1",
+  "prior_qualification_source": "5b3442ddd39084231b83d9d175161293f1c5cefd",
+  "runtime_changes": [
+    "Build-host paths remapped to /build",
+    "Pending default mount cancellation; destroy unpublished device after late GPU acquisition"
+  ],
+  "runtime_limits": [
+    "No claim of general activated-instance disposal or cleanup of optional visibility_sink observers/workers",
+    "Newer Mere main lifetime/API changes are outside this pinned package"
+  ],
+  "provenance": "../../../assets/graphshell/provenance.json",
+  "content_prefix": "/graphshell/56d0cc1465a0/",
+  "sizes": {
+    "wasm": {
+      "raw_bytes": 9470526,
+      "sha256": "885f9ce1a863afb7b1d2de04ac7d81ccd4a517e51d000b9bb4c1da9ab1d18cd3",
+      "cap_bytes": 3407872,
+      "gzip6_bytes": 3303476,
+      "gzip9_bytes": 3289697,
+      "cap_pass": true
+    },
+    "glue": {
+      "raw_bytes": 120107,
+      "sha256": "04273e52f64ca2665a06c1d8e60475d7082b4b2d15aa44bcfc8f1d20ee0730f8",
+      "cap_bytes": 20480,
+      "gzip6_bytes": 19186,
+      "gzip9_bytes": 18655,
+      "cap_pass": true
+    },
+    "mount": {
+      "raw_bytes": 998,
+      "sha256": "d36f0c879683b0f18e27d31b67162055fab268377ad04c2d0039f1aaf116419f",
+      "cap_bytes": 8192,
+      "gzip6_bytes": 588,
+      "gzip9_bytes": 588,
+      "cap_pass": true
+    },
+    "history": {
+      "raw_bytes": 271932,
+      "sha256": "aa3411e8b7eb9d4b145ed895c5330ef3be47c31746a5ac9b61f4f7fe1452289d",
+      "cap_bytes": 131072,
+      "gzip6_bytes": 6704,
+      "gzip9_bytes": 6254,
+      "cap_pass": true
+    }
+  },
+  "site_history_gzip6": 6830,
+  "site_toolchain": "Rust 1.99.0",
+  "viewer_toolchain": "Rust 1.98.1; wasm-bindgen 0.2.129",
+  "cpu_gates": {
+    "site_tests": 83,
+    "site_clippy": "pass, -D warnings",
+    "public_artifact": "pass, exact source-bound record",
+    "viewer_wasm_configurations": 4,
+    "web_host_native_tests": 12
+  },
+  "browser": {
+    "version": "Chrome 152.0.7977.83",
+    "headed": true,
+    "adapter": "AMD gcn-5",
+    "commands": 24,
+    "presenter": 11,
+    "physics_scenarios": 17,
+    "physical_input_checks": 4,
+    "site_viewer_cases": 12,
+    "page_errors": 0
+  },
+  "evidence": {
+    "r5": "startup, commands and presenter",
+    "r6": "Unicode, physics, physical input and expected unsupported refusals",
+    "r9": "complete site including all fallbacks and real 45000ms startup timeout"
+  },
+  "identity_rule": "Standalone fixture bytes are identical across retained R5/R6 and R9; current-only site disclosure changed after R7 and was newly accepted in R9. Earlier failed SITE runs do not qualify final data.",
+  "visual_review": "Selected and intentionally zoomed graph with adjacent inspector and open project picker; static mobile reading. These captures are not a default-overview claim.",
+  "timing_limits": "Frame receipts are bounded diagnostics, not sustained performance guarantees.",
+  "failed_attempts": {
+    "r3": "RAF spy counted Playwright default polling; corrected to numeric polling, strict zero-RAF assertion retained.",
+    "r5": "Exact Unicode comparator read before source-details update; await disclosure state, retain exact equality.",
+    "r6": "Site driver tried pointer click on intentionally non-hit-testable accessibility mirror; use qualified keyboard route.",
+    "r7": "Real site exporter omitted inspector links; fixed current-only public disclosure, with historical omission and mismatch tests.",
+    "r8": "Site driver assumed canvas accessibility link had native href; now derive expected canonical path from selected authority and verify actual navigation."
+  },
+  "release": "All owned browser/server/sleep inhibitor processes closed; lease records included.",
+  "rollback": "Revert site cutover commits through normal Pages workflow; no persistent user data or DNS changes.",
+  "site_mount_and_styles_gzip6": 7020,
+  "deployment_metadata": "CI refreshes public GitHub metadata and regenerates source history; its new artifact requires its own complete smoke. Viewer binary identity remains fixed."
+}

@@ -19,6 +19,8 @@ and deploys on main pushes, manual dispatch, and a daily schedule.
   graph, matrix, source history and project links remain available throughout.
   Mobile and non-WebGPU browsers keep the static reading. Legacy sandbox scene
   links receive an explicit unsupported-import notice.
+  [Cutover qualification](docs/receipts/site_viewer_20261013/qualification.json)
+  records the source-bound browser checks and the 3.15 MiB gzip viewer package.
 - An authority binary validates content manifests, the metadata cache, and
   the exact Pages artifact (file set, structured data, absence of secrets
   and personal data), emitting SHA-256 JSON receipts.

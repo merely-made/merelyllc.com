@@ -1,0 +1,35 @@
+{
+  "runs": [
+    "unicode-reading-comparison",
+    "p4_tree_physics_springs.scn",
+    "p4_tree_physics_charge.scn",
+    "p4_tree_physics_flow.scn",
+    "p4_tree_physics_density.scn",
+    "p4_tree_physics_flock.scn",
+    "p4_tree_physics_orbit.scn",
+    "p4_tree_physics_energy.scn",
+    "p4_tree_physics_meaning.scn",
+    "p4_tree_physics_anneal.scn",
+    "p4_tree_physics_stress.scn",
+    "p4_tree_physics_still.scn",
+    "p4_tree_physics_profiles.scn",
+    "p4_tree_physics_drag.scn",
+    "p4_tree_physics_kinds.scn",
+    "p4_tree_physics_converted.scn",
+    "p4_tree_physics_keys.scn",
+    "p4_tree_physics_add.scn",
+    "site-scale-frames",
+    "saved-route-refused",
+    "saved-edit-refused",
+    "remote-absent-refused"
+  ],
+  "browser": "152.0.7977.83",
+  "adapter": {
+    "vendor": "amd",
+    "architecture": "gcn-5",
+    "device": "",
+    "description": ""
+  },
+  "errors": [],
+  "headed": true
+}

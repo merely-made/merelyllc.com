@@ -1,0 +1,21 @@
+{
+  "runs": [
+    "physical-keyboard-choice",
+    "physical-keyboard-overlay",
+    "physical-keyboard-apply-focus",
+    "physical-keyboard-applied",
+    "site-scale-frames",
+    "saved-route-refused",
+    "saved-edit-refused",
+    "remote-absent-refused"
+  ],
+  "browser": "152.0.7977.83",
+  "adapter": {
+    "vendor": "amd",
+    "architecture": "gcn-5",
+    "device": "",
+    "description": ""
+  },
+  "errors": [],
+  "headed": true
+}

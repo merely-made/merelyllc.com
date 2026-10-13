@@ -1,0 +1,18 @@
+{
+  "candidate_sha256": "b5b6f02701d726b33459996e974fc90760f79ba9c692cc3e0d69ab6cd3cbbd34",
+  "started": "2026-10-13T21:42:01.421618+00:00",
+  "deadline": "2026-10-13T21:51:59.814798+00:00",
+  "closed": true,
+  "owned_pids": [
+    24676,
+    24677,
+    24678
+  ],
+  "runs": [
+    {
+      "driver": "scripts/smoke-site.mjs",
+      "exit": 0
+    }
+  ],
+  "released": "2026-10-13T21:43:54.309770+00:00"
+}

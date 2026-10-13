@@ -1,0 +1,2 @@
+{"gzip_level": 6, "files": {"viewer.js": 588, "mount.js": 1163, "styles.css": 3461, "pkg/graphshell_web.js": 19186, "pkg/graphshell_web_bg.wasm": 3303476}, "mount_and_styles": 7020}
+{"gzip_level": 9, "files": {"viewer.js": 588, "mount.js": 1163, "styles.css": 3440, "pkg/graphshell_web.js": 18655, "pkg/graphshell_web_bg.wasm": 3289697}, "mount_and_styles": 6998}

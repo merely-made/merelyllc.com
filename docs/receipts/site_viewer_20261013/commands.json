@@ -1,0 +1,37 @@
+{
+  "runs": [
+    "commands-fixture",
+    "commands-grouped",
+    "fold-page-gestures",
+    "fold-history",
+    "external-page-focus",
+    "keyboard-zoom",
+    "keyboard-footer",
+    "right-drag",
+    "physical-background-pan",
+    "command-fold-expand",
+    "command-fold-enter",
+    "prepare-pointer",
+    "empty-selection",
+    "right-box-selection",
+    "prepare-selected-zoom",
+    "physical-pointer-zoom",
+    "prepare-node-drag",
+    "physical-node-drag",
+    "command-fold-leave",
+    "narrow-commands",
+    "plain-physical-wheel",
+    "outside-graph-wheel",
+    "unknown-wheel-refusal",
+    "wheel-planted-control"
+  ],
+  "headed": true,
+  "browser": "152.0.7977.83",
+  "adapter": {
+    "vendor": "amd",
+    "architecture": "gcn-5",
+    "device": "",
+    "description": ""
+  },
+  "errors": []
+}

@@ -1,0 +1,61 @@
+{
+  "browser": "152.0.7977.83",
+  "results": [
+    {
+      "folder": "web-prefixed",
+      "expected": "late-install",
+      "before": {
+        "connected": true,
+        "ready": null,
+        "rafRequests": 0
+      },
+      "observed": {
+        "connected": false,
+        "ready": "true",
+        "mirror": 1,
+        "fileInputs": 1,
+        "rafRequests": 4,
+        "refusal": null,
+        "mountState": null,
+        "deviceLost": null,
+        "adapter": {
+          "vendor": "amd",
+          "architecture": "gcn-5",
+          "device": "",
+          "description": ""
+        }
+      },
+      "errors": []
+    },
+    {
+      "folder": "web-reconciled",
+      "expected": "cancelled",
+      "before": {
+        "connected": true,
+        "ready": null,
+        "rafRequests": 0
+      },
+      "observed": {
+        "connected": false,
+        "ready": null,
+        "mirror": 0,
+        "fileInputs": 0,
+        "rafRequests": 0,
+        "refusal": "the tree has not booted",
+        "mountState": "cancelled",
+        "deviceLost": {
+          "reason": "destroyed",
+          "message": "Device was destroyed."
+        },
+        "adapter": {
+          "vendor": "amd",
+          "architecture": "gcn-5",
+          "device": "",
+          "description": ""
+        }
+      },
+      "errors": []
+    }
+  ],
+  "note": "Actual pending requestDevice was held after device allocation, then released after DOM removal. requestDevice itself was not cancelled. Fixed case observes the unpublished device lost with reason destroyed; the pre-fix positive control is explicitly destroyed by the driver before closing its browsing context."
+}
