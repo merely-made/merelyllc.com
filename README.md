@@ -20,7 +20,11 @@ and deploys on main pushes, manual dispatch, and a daily schedule.
   Mobile and non-WebGPU browsers keep the static reading. Legacy sandbox scene
   links receive an explicit unsupported-import notice.
   [Cutover qualification](docs/receipts/site_viewer_20261013/qualification.json)
-  records the source-bound browser checks and the 3.15 MiB gzip viewer package.
+  records the source-bound browser checks. The viewer is live at
+  [the repository map](https://merelyllc.com/repos/);
+  [hosted verification](docs/receipts/site_viewer_20261013/live-deployment.json)
+  confirms the exact package and a 3,341,081-byte gzip Wasm transfer (3.19 MiB),
+  below the 3.25 MiB cap. All 12 production viewer cases passed with 22 projects.
 - An authority binary validates content manifests, the metadata cache, and
   the exact Pages artifact (file set, structured data, absence of secrets
   and personal data), emitting SHA-256 JSON receipts.
@@ -33,9 +37,9 @@ and deploys on main pushes, manual dispatch, and a daily schedule.
   frame receipts. The six-asset plain viewer payload is 2,147,689 B brotli;
   Ruling 157 now sets the delivery caps (64 KiB gzip first load; on interaction,
   viewer Wasm 3.25 MiB gzip, glue 20 KiB, mount 8 KiB, history 128 KiB). The
-  measurement above is the historical P0 baseline. The repository page now stages
-  the pinned Graphshell inspector viewer; final cutover acceptance is recorded in
-  the canvas plan. The separate Mere profile projection proof remains open. See the
+  measurement above is the historical P0 baseline. The repository page now serves
+  the pinned Graphshell inspector viewer; deployed revision `b254071` and final
+  cutover acceptance are recorded in the canvas plan. The separate Mere profile projection proof remains open. See the
   [integration receipt](docs/handoffs/2026-10-07_viewer_cone/RESUME.md#authorized-integration).
 - The build now emits `repository-host-dataset.json` from the reconciled public
   authority: 21 projects and 30 explained relationships in the versioned S1

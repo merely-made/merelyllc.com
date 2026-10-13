@@ -1,0 +1,10 @@
+{
+  "source": "1fbd82a3752aadd27ee549f03718af8815b95fd7",
+  "workflow": "https://github.com/merely-made/merelyllc.com/actions/runs/38479864712",
+  "production_fix": "b254071f4c468c86559ffae22e0d2d9791cf5569",
+  "previous_production_failure": "https://github.com/merely-made/merelyllc.com/actions/runs/38477480630",
+  "cause": "Locator screenshot timed out waiting for stable frames after successful full-page capture. Measured document bounds and page clip capture pass before/after layout equality; no application or runtime change.",
+  "cases": 12,
+  "fixture_projects": 21,
+  "scope": "Actual site viewer suite with frozen R9 page/history and actual project-page fixture. Final production workflow must separately validate refreshed metadata."
+}
