@@ -137,6 +137,7 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
       window.requestAnimationFrame = callback => { window.__rafRequests++; return raf(callback); };
       const request = GPUAdapter.prototype.requestDevice;
       GPUAdapter.prototype.requestDevice = function(...args) {
+        window.__heldAdapter = {vendor: this.info.vendor, architecture: this.info.architecture, device: this.info.device, description: this.info.description};
         return request.apply(this, args).then(device => new Promise(resolve => {
           window.__heldDevice = true;
           window.__cleanupDevice = () => device.destroy();
@@ -165,8 +166,9 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
         let refusal = null;
         try { module.run_scenario('settle 1\n'); } catch (error) { refusal = String(error); }
         const root = window.__removedRoot;
-        return {ready: root.dataset.ready ?? null, mountState: root.dataset.mountState, mirror: root.querySelectorAll('[data-cambium-mirror]').length, fileInputs: root.querySelectorAll('#cambium-file-input').length, rafRequests: window.__rafRequests, deviceLost: window.__deviceLost, refusal};
+        return {ready: root.dataset.ready ?? null, mountState: root.dataset.mountState, mirror: root.querySelectorAll('[data-cambium-mirror]').length, fileInputs: root.querySelectorAll('#cambium-file-input').length, rafRequests: window.__rafRequests, deviceLost: window.__deviceLost, adapter: window.__heldAdapter, refusal};
       });
+      if (process.env.MER3LY_REQUIRE_HARDWARE === 'true') assert.ok(after.adapter?.vendor === 'amd' && !/swiftshader/i.test(JSON.stringify(after.adapter)), 'timeout control requires actual AMD device');
       assert.notEqual(after.ready, 'true');
       assert.equal(after.mirror, 0); assert.equal(after.fileInputs, 0);
       assert.equal(after.rafRequests, before.rafRequests);
