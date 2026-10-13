@@ -31,6 +31,8 @@ jobs:
           Path('.tmp/viewer-linux').mkdir()
           Path('.tmp/viewer-linux/served-inputs.json').write_text(json.dumps(manifest,indent=2))
       - run: xvfb-run --auto-servernum node scripts/diagnose-viewer-linux.mjs
+        env:
+          DEBUG: pw:browser
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: always()
         with:
