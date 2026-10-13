@@ -1,8 +1,8 @@
 {
   "schema": "mer3ly.site-viewer-qualification/v1",
   "recorded_utc": "2026-10-13T21:45:49.718249+00:00",
-  "status": "local-browser-qualified; publication and live deployment recorded separately",
-  "live_site_deployed": false,
+  "status": "browser-qualified, published and live; see live-deployment.json and production/",
+  "live_site_deployed": true,
   "site_application_source": "a0406ad624961822575b2c5c41e1f2735a767b32",
   "site_acceptance_head": "57ed372104bca5bb880cd2146cf972f0cd2a7c18",
   "runtime_source": "377a0e30c84e2059a945583833008e84ae045fce",
@@ -91,5 +91,15 @@
   "release": "All owned browser/server/sleep inhibitor processes closed; lease records included.",
   "rollback": "Revert site cutover commits through normal Pages workflow; no persistent user data or DNS changes.",
   "site_mount_and_styles_gzip6": 7020,
-  "deployment_metadata": "CI refreshes public GitHub metadata and regenerates source history; its new artifact requires its own complete smoke. Viewer binary identity remains fixed."
+  "deployment_metadata": "CI refreshes public GitHub metadata and regenerates source history; its new artifact requires its own complete smoke. Viewer binary identity remains fixed.",
+  "deployment": {
+    "source": "b254071f4c468c86559ffae22e0d2d9791cf5569",
+    "workflow": "https://github.com/merely-made/merelyllc.com/actions/runs/38480236209",
+    "receipt": "live-deployment.json",
+    "production_cases": 12,
+    "production_projects": 22,
+    "production_relationships": 30,
+    "ci_diagnostics": "linux-ci/diagnosis.json",
+    "capture_diagnostics": "linux-ci/capture-diagnosis.json"
+  }
 }

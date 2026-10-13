@@ -1,0 +1,14 @@
+{
+  "schema": "mer3ly.projection-receipt/v2",
+  "capture_address": "decfe1b9cd327d37031a8861c0850ce934e67d70eb51167eaf368c0d46145809",
+  "authority_sha256": "ni:///sha-256;YGCD-lOdFJ-Uv5qwVeUUAPZL9FcXOJNureEMFMwop_E",
+  "generation": "6944695736573170847",
+  "score_items": 11,
+  "initial_revision": 1,
+  "final_revision": 5,
+  "active_items": 11,
+  "active_relations": 12,
+  "picked_source": "mere",
+  "trace_steps": 7,
+  "honored_holds": 0
+}

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {captureViewer} from './capture-viewer.mjs';
 import path from 'node:path';
 import {writeFile} from 'node:fs/promises';
 
@@ -91,7 +92,7 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
     if (process.env.MER3LY_REQUIRE_HARDWARE === 'true') assert.ok(adapter.vendor === 'amd' && !/swiftshader/i.test(JSON.stringify(adapter)), 'local acceptance needs AMD hardware');
     results.adapter = adapter;
     await page.screenshot({path: path.join(receiptRoot, 'viewer-desktop.png'), fullPage: true});
-    await viewer.screenshot({path: path.join(receiptRoot, 'viewer-desktop-component.png')});
+    results.capture_bounds = await captureViewer(page, viewer, path.join(receiptRoot, 'viewer-desktop-component.png'));
     await page.screenshot({path: path.join(receiptRoot, 'viewer-desktop-viewport.png')});
     results.screenshots.push('viewer-desktop.png', 'viewer-desktop-component.png', 'viewer-desktop-viewport.png');
     assert.deepEqual(diagnostics, [], 'live viewer console errors');
