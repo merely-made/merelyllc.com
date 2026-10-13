@@ -48,10 +48,12 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
     await staticReading(page);
     await viewer.getByRole('button', {name: 'Choose projects', exact: true}).click();
     const choices = viewer.getByRole('button', {name: /^Select /});
+    await choices.first().waitFor({state: 'attached'});
     assert.equal(await choices.count(), results.repositories);
     await choices.first().focus();
     await page.keyboard.press('Enter');
     await viewer.getByRole('button', {name: 'Clear project selection', exact: true}).waitFor();
+    await viewer.getByRole('link', {name: 'Project page', exact: true}).first().waitFor({state: 'attached'});
     assert.ok(await viewer.getByRole('link', {name: 'Project page', exact: true}).count() > 0);
     const projectLink = await viewer.getByRole('link', {name: 'Project page', exact: true}).first().getAttribute('href');
     assert.match(projectLink, /^https:\/\/merelyllc\.com\/projects\/[a-z0-9-]+\/$/);
@@ -65,6 +67,7 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
     await viewer.getByRole('button', {name: 'Graph commands', exact: true}).press('Enter');
     await viewer.getByRole('dialog', {name: 'Graph commands', exact: true}).waitFor();
     await viewer.getByRole('button', {name: 'Close commands', exact: true}).press('Enter');
+    await viewer.getByRole('dialog', {name: 'Graph commands', exact: true}).waitFor({state: 'detached'});
     const y = await page.evaluate(() => scrollY);
     await page.mouse.move(graphBox.x + graphBox.width / 2, graphBox.y + graphBox.height / 2);
     await page.mouse.wheel(0, -100);
