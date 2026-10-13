@@ -1,0 +1,15 @@
+{
+  "runtime_source": "47199232d205576e84c802a84eb0cda401f926e1",
+  "files": {
+    "viewer.js": "d36f0c879683b0f18e27d31b67162055fab268377ad04c2d0039f1aaf116419f",
+    "mount.js": "1782f3a692b7eba17ffda8e40f6bb88a9db883c214b6ee4a17b9350a62902c75",
+    "styles.css": "a0944b06a83a7249fc69239ecffc8cab543f7556ffc95f2446b33ce3b5cd0bfd",
+    "pkg/graphshell_web.js": "d236a8203487012ab7d8249e870958a5af559bba9a982122b30e3699a04ff412",
+    "pkg/graphshell_web_bg.wasm": "9b9efdb3c868c9c42112fb272ec83bf92e1f13dc220023f86074120100f41861"
+  },
+  "prior_qualification_source": "5b3442ddd39084231b83d9d175161293f1c5cefd",
+  "build_source": "5b3442ddd39084231b83d9d175161293f1c5cefd",
+  "build_adjustment": "Rust remap-path-prefix: build-host home to /build; runtime source unchanged",
+  "toolchain": "Rust 1.98.1; wasm-bindgen 0.2.129; viewer profile; no default features",
+  "acceptance_record": "docs/receipts/site_viewer_20261013/qualification.json"
+}

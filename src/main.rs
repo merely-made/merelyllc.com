@@ -13,7 +13,6 @@ use mer3ly_site::retinue_traces::TraceSet;
 use mer3ly_site::site::{DEVICE_CSS, SITE_CSS};
 
 const FAVICON: &[u8] = include_bytes!("../assets/favicon.svg");
-const GRAPH_SANDBOX: &[u8] = include_bytes!("../assets/graph-sandbox.js");
 const GRAPH_SANDBOX_MOUNT: &[u8] = include_bytes!("../assets/graph-sandbox-mount.js");
 const MESSAGE_PATH_LAB: &[u8] = include_bytes!("../assets/message-path-lab.js");
 const OG_IMAGE: &[u8] = include_bytes!("../assets/og.jpg");
@@ -56,16 +55,24 @@ fn build_site(output: &Path) -> std::io::Result<()> {
     let root = Path::new(env!("CARGO_MANIFEST_DIR"));
     let data = PublicSiteData::load(root).map_err(std::io::Error::other)?;
     fs::create_dir_all(output)?;
-    let obsolete_repository_canvas = output.join("repo-graph.js");
-    if obsolete_repository_canvas.exists() {
-        fs::remove_file(obsolete_repository_canvas)?;
+    for name in ["repo-graph.js", "graph-sandbox.js"] {
+        let obsolete = output.join(name);
+        if obsolete.exists() {
+            fs::remove_file(obsolete)?;
+        }
+    }
+    // This directory is generated exclusively from the pinned viewer assets.
+    // Do not retain obsolete packages when rebuilding an existing artifact.
+    let viewer_assets = output.join("graphshell");
+    if viewer_assets.exists() {
+        fs::remove_dir_all(viewer_assets)?;
     }
     fs::create_dir_all(output.join("repos"))?;
     fs::create_dir_all(output.join("projects"))?;
     fs::create_dir_all(output.join("devices"))?;
     fs::write(output.join("index.html"), home::document_for(&data))?;
     fs::write(output.join("radio.html"), radio::document())?;
-    // The repositories page and the v2 history its sandbox fetches on first
+    // The repositories page and the v2 history its viewer fetches on first
     // interaction (Ruling 157).
     let repositories_page = repositories::page(root).map_err(std::io::Error::other)?;
     fs::write(
@@ -103,7 +110,11 @@ fn build_site(output: &Path) -> std::io::Result<()> {
         }
     }
     fs::write(output.join("site.css"), SITE_CSS)?;
-    fs::write(output.join("graph-sandbox.js"), GRAPH_SANDBOX)?;
+    for (name, bytes) in mer3ly_site::viewer::FILES {
+        let destination = output.join(mer3ly_site::viewer::prefix()).join(name);
+        fs::create_dir_all(destination.parent().expect("viewer asset parent"))?;
+        fs::write(destination, bytes)?;
+    }
     fs::write(output.join("graph-sandbox-mount.js"), GRAPH_SANDBOX_MOUNT)?;
     fs::write(output.join("devices.css"), DEVICE_CSS)?;
     fs::write(output.join("message-path-lab.js"), MESSAGE_PATH_LAB)?;

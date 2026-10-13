@@ -32,7 +32,6 @@ const BASE_FILES: &[&str] = &[
     "CNAME",
     "devices.css",
     "favicon.svg",
-    "graph-sandbox.js",
     "graph-sandbox-mount.js",
     "devices/index.html",
     "index.html",
@@ -147,6 +146,11 @@ pub fn validate_public_artifact(
         .iter()
         .map(|path| (*path).to_owned())
         .collect::<BTreeSet<_>>();
+    expected_paths.extend(
+        crate::viewer::FILES
+            .iter()
+            .map(|(name, _)| format!("{}/{name}", crate::viewer::prefix())),
+    );
     for repository in authority
         .repositories
         .repository
@@ -229,12 +233,7 @@ pub fn validate_public_artifact(
         };
         total_bytes = total_bytes.saturating_add(bytes.len() as u64);
         if is_scannable(&relative) {
-            scan_public_text(
-                &relative,
-                &String::from_utf8_lossy(&bytes),
-                &allowed_github_slugs,
-                &mut errors,
-            );
+            scan_public_bytes(&relative, &bytes, &allowed_github_slugs, &mut errors);
         }
         file_receipts.push(ArtifactFileReceipt {
             path: relative,
@@ -268,14 +267,16 @@ pub fn validate_public_artifact(
         "message path lab",
         &mut errors,
     );
-    validate_copied_asset(
-        artifact_root,
-        source_root,
-        "graph-sandbox.js",
-        "assets/graph-sandbox.js",
-        "graph sandbox",
-        &mut errors,
-    );
+    for (name, _) in crate::viewer::FILES {
+        validate_copied_asset(
+            artifact_root,
+            source_root,
+            &format!("{}/{name}", crate::viewer::prefix()),
+            &format!("assets/graphshell/{name}"),
+            "qualified viewer",
+            &mut errors,
+        );
+    }
     validate_copied_asset(
         artifact_root,
         source_root,
@@ -423,11 +424,11 @@ pub fn validate_public_artifact(
         &repositories,
         &mut errors,
     );
-    if !repositories.contains("data-graph-sandbox")
-        || !repositories.contains("id=\"graph-sandbox-data\"")
-    {
-        errors
-            .push("repository page is missing the Graphshell sandbox landmark or data".to_owned());
+    if !repositories.contains("data-graph-sandbox") || !repositories.contains("data-viewer-style") {
+        errors.push(
+            "repository page is missing the Graphshell viewer landmark or asset reference"
+                .to_owned(),
+        );
     }
 
     let mut project_ids = Vec::new();
@@ -797,13 +798,7 @@ fn validate_repositories_first_view(
         errors.push("repository page loads the graph sandbox before interaction".to_owned());
     }
     for (attribute, href) in [
-        (
-            "data-sandbox-runtime",
-            format!(
-                "/graph-sandbox.js{}",
-                repositories_page::graph_runtime_version()
-            ),
-        ),
+        ("data-sandbox-runtime", crate::viewer::href("viewer.js")),
         (
             "data-sandbox-history-src",
             host_history_href(&frozen.history_json),
@@ -1021,10 +1016,43 @@ fn is_scannable(path: &str) -> bool {
         || path.ends_with("CNAME")
 }
 
+fn scan_public_bytes(
+    relative_path: &str,
+    bytes: &[u8],
+    allowed_github_slugs: &BTreeSet<String>,
+    errors: &mut Vec<String>,
+) {
+    // Only the exact pinned application binary admits parser constants and
+    // upstream shader references. A changed binary or a lookalike filename
+    // does not inherit this allowance. Machine paths remain forbidden even
+    // in these verified bytes.
+    let qualified_viewer = relative_path
+        == crate::viewer::href("pkg/graphshell_web_bg.wasm").trim_start_matches('/')
+        && format!("{:x}", Sha256::digest(bytes)) == crate::viewer::WASM_SHA256;
+    scan_public_text_policy(
+        relative_path,
+        &String::from_utf8_lossy(bytes),
+        allowed_github_slugs,
+        qualified_viewer,
+        errors,
+    );
+}
+
+#[cfg(test)]
 fn scan_public_text(
     relative_path: &str,
     text: &str,
     allowed_github_slugs: &BTreeSet<String>,
+    errors: &mut Vec<String>,
+) {
+    scan_public_bytes(relative_path, text.as_bytes(), allowed_github_slugs, errors);
+}
+
+fn scan_public_text_policy(
+    relative_path: &str,
+    text: &str,
+    allowed_github_slugs: &BTreeSet<String>,
+    qualified_viewer: bool,
     errors: &mut Vec<String>,
 ) {
     let lower = text.to_ascii_lowercase();
@@ -1055,7 +1083,7 @@ fn scan_public_text(
         "begin ec private key",
         "begin openssh private key",
     ] {
-        if lower.contains(marker) {
+        if lower.contains(marker) && !(qualified_viewer && marker == "file://") {
             errors.push(format!(
                 "{relative_path} contains a forbidden public-data marker"
             ));
@@ -1121,10 +1149,16 @@ fn scan_public_text(
         let repository = captures
             .get(2)
             .map(|value| value.as_str().trim_end_matches(".git").to_ascii_lowercase());
-        let approved = owner == "merely-made"
-            && repository.as_ref().is_none_or(|repository| {
-                allowed_github_slugs.contains(&format!("{owner}/{repository}"))
-            });
+        let upstream_shader_reference = qualified_viewer
+            && matches!(
+                (owner.as_str(), repository.as_deref()),
+                ("gfx-rs", Some("naga")) | ("linebender", Some("vello")) | ("google", Some("skia"))
+            );
+        let approved = upstream_shader_reference
+            || owner == "merely-made"
+                && repository.as_ref().is_none_or(|repository| {
+                    allowed_github_slugs.contains(&format!("{owner}/{repository}"))
+                });
         if !approved {
             errors.push(format!(
                 "{relative_path} contains an unapproved GitHub repository link"
@@ -1867,6 +1901,51 @@ fn sha256(bytes: &[u8]) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn viewer_binary_scanning_retains_private_boundaries() {
+        let path = crate::viewer::href("pkg/graphshell_web_bg.wasm");
+        let path = path.trim_start_matches('/');
+        let allowed = BTreeSet::new();
+        let mut errors = Vec::new();
+        scan_public_text(
+            path,
+            "file:// https://github.com/gfx-rs/naga/issues/1930",
+            &allowed,
+            &mut errors,
+        );
+        assert!(
+            !errors.is_empty(),
+            "a filename alone does not admit binary parser literals"
+        );
+        for forbidden in [
+            "file:///tmp/private-file",
+            "https://service.internal",
+            "person@example.com",
+            "/Users/person/source.rs",
+            "C:\\Users\\person\\source.rs",
+            "https://github.com/unapproved/repository",
+            "github_pat_example",
+        ] {
+            errors.clear();
+            scan_public_text(path, forbidden, &allowed, &mut errors);
+            assert!(
+                !errors.is_empty(),
+                "viewer scanner must reject private or unapproved content"
+            );
+        }
+        errors.clear();
+        scan_public_text(
+            "index.html",
+            "file:// https://github.com/gfx-rs/naga",
+            &allowed,
+            &mut errors,
+        );
+        assert!(
+            !errors.is_empty(),
+            "binary allowances must not extend to published content"
+        );
+    }
 
     #[test]
     fn public_text_scan_accepts_approved_github_links() {

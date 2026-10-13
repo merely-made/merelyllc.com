@@ -92,16 +92,6 @@ fn graph_authority(document: &str) -> GraphAuthority {
     serde_json::from_str(&document[start..end]).expect("valid graph authority JSON")
 }
 
-fn sandbox_authority(document: &str) -> serde_json::Value {
-    let marker = "<script id=\"graph-sandbox-data\" type=\"application/json\">";
-    let start = document.find(marker).expect("graph sandbox bootstrap") + marker.len();
-    let end = document[start..]
-        .find("</script>")
-        .map(|offset| start + offset)
-        .expect("graph sandbox bootstrap end");
-    serde_json::from_str(&document[start..end]).expect("valid sandbox authority JSON")
-}
-
 #[test]
 fn graph_and_semantic_index_share_exact_public_ids() {
     let root = workspace_root();
@@ -161,7 +151,7 @@ fn graph_and_semantic_index_share_exact_public_ids() {
         assert!(document.contains(&format!("id=\"repo-{}\"", repository.id)));
         assert!(document.contains(&format!("data-repository-id=\"{}\"", repository.id)));
     }
-    assert!(document.contains("share scene"));
+    assert!(document.contains("Open the live graph"));
 
     // The checkpoint history no longer rides inline: it is the v2 history
     // the sandbox fetches on first interaction (Ruling 157).
@@ -239,7 +229,7 @@ fn graphshell_is_the_only_live_canvas_and_preserves_the_static_index() {
         .find("class=\"content-section repository-index\"")
         .expect("semantic repository index");
 
-    assert!(fallback < interface);
+    assert!(interface < fallback);
     assert!(interface < index);
     assert!(document[interface..].contains("hidden=\"hidden\""));
     assert_eq!(
@@ -252,120 +242,24 @@ fn graphshell_is_the_only_live_canvas_and_preserves_the_static_index() {
 }
 
 #[test]
-fn graphshell_sandbox_keeps_truth_face_arrangement_and_motion_distinct() {
-    let root = workspace_root();
-    let document = repositories::document(&root).expect("render repository page");
-    let sandbox = sandbox_authority(&document);
-    let classes = sandbox["nodes"]
-        .as_array()
-        .expect("sandbox nodes")
-        .iter()
-        .filter_map(|node| node["class"].as_str())
-        .collect::<BTreeSet<_>>();
-
-    assert!(
-        classes.len() >= 8,
-        "the specimen graph is meaningfully heterogeneous"
-    );
-    assert_eq!(sandbox["sandbox"]["schema"], "mer3ly.graphshell-sandbox/v5");
-    assert_eq!(sandbox["sandbox"]["scene_state_schema"], "mere.shelfmark/1");
-    assert_eq!(
-        sandbox["sandbox"]["reading_registry_schema"],
-        "mere.graph-reading-registry/v1"
-    );
-    assert_eq!(
-        sandbox["sandbox"]["representation_registry_schema"],
-        "mere.graph-representation-registry/v2"
-    );
-    assert!(document.contains("data-graph-sandbox"));
-    assert!(document.contains("The graph is also its own control surface."));
-    assert!(document.contains("spreadsheet chart can be another projection"));
-    assert!(document.contains("data-sandbox-cycle=\"reading\""));
-    assert!(document.contains("data-sandbox-cycle=\"arrangement\""));
-    assert!(document.contains("data-sandbox-cycle=\"mobility\""));
-    assert!(document.contains("data-sandbox-matrix"));
-    assert!(document.contains("data-sandbox-scatter"));
-    assert!(document.contains("data-sandbox-deck"));
-    assert!(document.contains("data-sandbox-clear-matrix"));
-    assert!(document.contains("data-sandbox-clear-facets"));
-    assert!(document.contains("data-sandbox-camera=\"pan-right\""));
-    assert!(!document.contains("data-sandbox-control="));
-
-    for contract in [
-        "new GraphPhysics",
-        "setArrangement",
-        "setBackdrop",
-        "pinNode",
-        "unpinNode",
-        "graph_layout:stack",
-        "graph_layout:radial",
-        "recomputeNeighborhood",
-        "buildMatrix",
-        "projectMatrix",
-        "projectionSourceAdapter",
-        "projectionSourceId",
-        "projectionInstance",
-        "composeMatrixShelfmark",
-        "resolveMatrixShelfmark",
-        "buildRepeatedAppearances",
-        "applyCoordinatedSelection",
-        "clearMatrixFilter",
-        "clearFacets",
-        "selectFacet",
-        "changeCamera",
-        "spatialRequest",
-        "shelfmarkPlacement",
-        "mer3ly.camera",
-        "dataset.sandboxScene",
-        "dataset.sandboxFace",
-        "READING_FACES",
-        "controlActors",
-        "cycleControl",
-        "updateSelectionFaces",
-        "readingRegistry",
-        "projectReading",
-        "representationRegistry",
-        "encodeSceneState",
-        "pinsByDataset",
-        "physics.tick",
-        "ResizeObserver",
-    ] {
-        assert!(
-            GRAPH_SANDBOX.contains(contract),
-            "sandbox runtime is missing {contract}"
-        );
+fn qualified_viewer_is_the_lazy_owner() {
+    let page = repositories::document(&workspace_root()).unwrap();
+    assert!(page.contains(&mer3ly_site::viewer::href("viewer.js")));
+    assert!(page.contains(&mer3ly_site::viewer::href("styles.css")));
+    assert!(!page.contains("graph-sandbox-data"));
+    assert!(!page.contains("data-sandbox-cycle"));
+    let mut mounting = gzip(GRAPH_SANDBOX_MOUNT.as_bytes());
+    for (name, bytes) in mer3ly_site::viewer::FILES {
+        match *name {
+            "pkg/graphshell_web_bg.wasm" => assert!(gzip(bytes) <= 3_407_872),
+            "pkg/graphshell_web.js" => assert!(gzip(bytes) <= 20_480),
+            "viewer.js" | "mount.js" | "styles.css" => mounting += gzip(bytes),
+            _ => (),
+        }
     }
-    for contract in [
-        ".graph-sandbox-control-actor",
-        ".graph-sandbox-node[data-face=\"delta\"]",
-        ".graph-sandbox-node[data-face=\"signal\"]",
-        ".graph-sandbox-node[data-face=\"orbit\"]",
-        ".graph-sandbox-node.primitive-diamond",
-        ".graph-sandbox-node.primitive-square",
-        ".graph-sandbox-history",
-        ".graph-sandbox-share",
-        "[data-sandbox-scene=\"neighbors\"]",
-        ".graph-sandbox-matrix-cell.has-relation",
-        ".graph-sandbox-receipts",
-        ".graph-sandbox-scatter-point",
-        ".graph-sandbox-deck-card",
-        "[data-source-id].is-filtered-out",
-        ".graph-sandbox-camera-control",
-        "[data-source-id].is-facet-selected",
-    ] {
-        assert!(
-            SITE_CSS.contains(contract),
-            "sandbox CSS is missing {contract}"
-        );
-    }
-    // The loader is served as its own asset rather than inlined, so this is a
-    // growth guard rather than a page-payload constraint. It sat at 99.3% of
-    // the old 64 KiB ceiling, which left no room for the narrow-screen tools
-    // drawer; raised to keep the guard meaningful instead of removing it.
     assert!(
-        GRAPH_SANDBOX.len() < 72 * 1024,
-        "sandbox loader is too large: {} bytes",
-        GRAPH_SANDBOX.len()
+        mounting <= 8192,
+        "viewer mounting and styles: {mounting} gzip bytes"
     );
 }
 
@@ -429,10 +323,7 @@ fn repositories_first_load_and_its_lazy_tier_are_bounded() {
         "<script type=\"module\" src=\"{}\"></script>",
         repositories::graph_sandbox_mount_href()
     )));
-    assert!(
-        page.html
-            .contains("data-sandbox-runtime=\"/graph-sandbox.js?v=")
-    );
+    assert!(page.html.contains("data-sandbox-runtime=\"/graphshell/"));
     assert!(
         page.html
             .contains("data-sandbox-history-src=\"/repository-host-history.json?v=")

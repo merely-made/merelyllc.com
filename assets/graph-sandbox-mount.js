@@ -1,85 +1,92 @@
-// The repositories page's only up-front script (site canvas plan, Ruling 157).
-//
-// /repos/ opens on a first view frozen at build time: the default reading,
-// its matrix and the source history, read by mere's shared readers. The live
-// sandbox (graph-sandbox.js, its glue and the graph Wasm) loads on the first
-// pointer or keyboard action on that view, or at once when a share link is
-// present, as the Mere profile's projection proof loads its replay (Ruling
-// 140). Until then the frozen view stands in, opening with the scripted line;
-// if the sandbox cannot load, the frozen view stays, saying so.
-
-const root = document.querySelector("[data-graph-sandbox]");
-if (root) prepare(root);
-
-function prepare(sandboxRoot) {
-  const frozen = sandboxRoot.querySelector("[data-sandbox-frozen]");
-  const lead = sandboxRoot.querySelector("[data-sandbox-reading-lead]");
-  const open = sandboxRoot.querySelector("[data-sandbox-open]");
-  const forcedFailure =
-    new URLSearchParams(window.location.search).get("graph-sandbox") === "no-wasm";
-  let loading = null;
-
-  // Keys that only move focus or modify another key are not an action.
-  const ignored = new Set(["Tab", "Shift", "Control", "Alt", "Meta", "Escape"]);
-  const onPointer = () => load();
-  const onKey = (event) => {
-    if (!ignored.has(event.key)) load();
+// The site owns its published data and the frozen reading. Graphshell owns
+// the live graph. Its qualified package is imported unchanged on demand.
+const root = document.querySelector('[data-graph-sandbox]');
+if (root) {
+  const open = root.querySelector('[data-sandbox-open]');
+  const lead = root.querySelector('[data-sandbox-reading-lead]');
+  const status = root.querySelector('[data-sandbox-status]');
+  const surface = root.querySelector('[data-sandbox-interface]');
+  const frozen = root.querySelector('[data-sandbox-frozen]');
+  const query = new URLSearchParams(location.search);
+  let started = false;
+  const say = (text) => { status.textContent = text; };
+  // Legacy sandbox scenes describe a different model. Never silently discard
+  // them or reinterpret their authored positions as a Graphshell document.
+  const legacy = location.hash.startsWith('#graphshell-scene=');
+  const eligible = () => !matchMedia('(max-width: 760px), (pointer: coarse)').matches && !!navigator.gpu;
+  const refuse = () => {
+    root.dataset.sandboxState = 'unavailable';
+    surface.hidden = true;
+    surface.replaceChildren();
+    lead.textContent = lead.dataset.failedLead;
+    open.hidden = true;
+    say('The live graph is unavailable. The static graph, matrix, source history and project links remain available.');
   };
-  const detach = () => {
-    frozen?.removeEventListener("pointerdown", onPointer);
-    frozen?.removeEventListener("keydown", onKey);
-  };
-
-  function load() {
-    loading ??= start();
-    return loading;
-  }
-
-  async function start() {
-    detach();
-    sandboxRoot.dataset.sandboxState = "loading";
-    sandboxRoot.setAttribute("aria-busy", "true");
-    if (open) {
-      open.disabled = true;
-      open.textContent = "loading the live sandbox…";
-    }
-    announce(sandboxRoot, "Loading the live sandbox.");
+  async function start(event) {
+    if (event.type === 'keydown' && !['Enter', ' '].includes(event.key)) return;
+    if (event.target.closest('a') || started || legacy || !eligible()) return;
+    started = true;
+    root.dataset.sandboxState = 'loading';
+    root.setAttribute('aria-busy', 'true');
+    open.disabled = true;
+    say('Loading the live graph…');
+    let observer, timer;
+    const controller = new AbortController();
+    const deadline = new Promise((_, reject) => {
+      timer = setTimeout(() => { controller.abort(); reject(new Error('Viewer startup timed out')); }, 45000);
+    });
     try {
-      if (forcedFailure) throw new Error("forced Graphshell fallback");
-      const { mountSandbox } = await import(sandboxRoot.dataset.sandboxRuntime);
-      await mountSandbox(sandboxRoot);
-    } catch (error) {
-      sandboxRoot.dataset.sandboxState = "unavailable";
-      sandboxRoot.querySelector("[data-sandbox-interface]").hidden = true;
-      if (frozen) frozen.hidden = false;
-      if (lead) lead.textContent = lead.dataset.failedLead;
-      if (open) open.hidden = true;
-      announce(
-        sandboxRoot,
-        "The live sandbox could not load. The frozen reading and the semantic repository index remain available.",
-      );
-      if (!forcedFailure) console.warn("Mer3ly graph sandbox unavailable:", error);
-    } finally {
-      sandboxRoot.removeAttribute("aria-busy");
-    }
+      await Promise.race([deadline, (async () => {
+        if (query.get('graph-sandbox') === 'no-wasm') throw new Error('Forced fallback');
+        if (!await navigator.gpu.requestAdapter()) throw new Error('WebGPU adapter unavailable');
+        const response = await fetch(root.dataset.sandboxHistorySrc, {signal: controller.signal});
+        if (!response.ok) throw new Error(`History HTTP ${response.status}`);
+        const dataset = await response.text();
+        if (controller.signal.aborted) return;
+        const style = document.createElement('link');
+        style.rel = 'stylesheet'; style.href = root.dataset.viewerStyle;
+        const styled = new Promise((resolve, reject) => {
+          style.onload = resolve; style.onerror = () => reject(new Error('Viewer stylesheet unavailable'));
+        });
+        document.head.append(style);
+        await Promise.all([styled, import(root.dataset.sandboxRuntime)]);
+        if (controller.signal.aborted) return;
+        const viewer = document.createElement('graphshell-tree');
+        viewer.className = 'site-graphshell-viewer';
+        viewer.setAttribute('data-presenter', 'inspector');
+        viewer.setAttribute('data-project-link-field', 'project_url');
+        viewer.setAttribute('data-source-link-field', 'github_url');
+        // Set data before connection: shared mount must not accept ?dataset=
+        // as authority for the published site's graph.
+        viewer.setAttribute('data-dataset', dataset);
+        const ready = new Promise(resolve => {
+          observer = new MutationObserver(() => {
+            if (viewer.dataset.ready === 'true') resolve();
+          });
+          observer.observe(viewer, {attributes: true, attributeFilter: ['data-ready']});
+        });
+        surface.style.visibility = 'hidden'; surface.hidden = false;
+        surface.append(viewer);
+        await ready;
+        if (controller.signal.aborted) return;
+        surface.style.visibility = '';
+        root.dataset.sandboxState = 'ready';
+        open.hidden = true;
+        say('Live graph ready. The static reading below remains available.');
+        viewer.scrollIntoView({block: 'nearest'});
+      })()]);
+    } catch { controller.abort(); refuse(); }
+    finally { clearTimeout(timer); observer?.disconnect(); root.removeAttribute('aria-busy'); }
   }
-
-  if (lead) lead.textContent = lead.dataset.scriptedLead;
-  // A share link counts as an interaction: it needs the live sandbox.
-  if (window.location.hash.startsWith("#graphshell-scene=")) {
-    load();
-    return;
-  }
-  if (open) {
+  if (legacy) {
+    say('This link contains a legacy sandbox scene, which this viewer cannot import. Its scene has not been applied; the current static reading is shown.');
+  } else if (eligible()) {
+    lead.textContent = lead.dataset.scriptedLead;
     open.hidden = false;
-    open.addEventListener("click", () => load());
+    frozen.addEventListener('pointerdown', start);
+    frozen.addEventListener('keydown', start);
+    open.addEventListener('click', start);
+  } else {
+    say('Static reading shown. The live graph is available in desktop browsers with WebGPU.');
   }
-  frozen?.addEventListener("pointerdown", onPointer);
-  frozen?.addEventListener("keydown", onKey);
-  announce(sandboxRoot, "Interact with the graph to load the live sandbox.");
-}
-
-function announce(sandboxRoot, message) {
-  const status = sandboxRoot.querySelector("[data-sandbox-status]");
-  if (status) status.textContent = message;
 }

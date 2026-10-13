@@ -96,7 +96,7 @@ pub fn view(data: &PublicSiteData, frozen: &FrozenFirstView) -> SiteView {
             &[("id", "main"), ("class", "repositories-main")],
             vec![
                 hero(data),
-                graph_sandbox(frozen),
+                graph_viewer(frozen),
                 organization_activity(data),
                 repository_index(data),
                 source_note(data),
@@ -105,8 +105,9 @@ pub fn view(data: &PublicSiteData, frozen: &FrozenFirstView) -> SiteView {
     )
 }
 
-fn graph_sandbox(frozen: &FrozenFirstView) -> SiteView {
-    let runtime = graph_sandbox_runtime_href();
+fn graph_viewer(frozen: &FrozenFirstView) -> SiteView {
+    let runtime = crate::viewer::href("viewer.js");
+    let style = crate::viewer::href("styles.css");
     let history = host_history_href(&frozen.history_json);
     element(
         "section",
@@ -115,96 +116,38 @@ fn graph_sandbox(frozen: &FrozenFirstView) -> SiteView {
             ("aria-labelledby", "graph-sandbox-title"),
             ("data-graph-sandbox", ""),
             ("data-sandbox-state", "frozen"),
-            ("data-sandbox-runtime", runtime.as_str()),
-            ("data-sandbox-history-src", history.as_str()),
+            ("data-sandbox-runtime", &runtime),
+            ("data-viewer-style", &style),
+            ("data-sandbox-history-src", &history),
         ],
         vec![
-            section_heading("01", "graphshell sandbox"),
+            section_heading("01", "repository graph"),
+            element(
+                "h3",
+                &[("id", "graph-sandbox-title")],
+                vec![txt("Explore the projects and their relationships.")],
+            ),
+            element(
+                "p",
+                &[],
+                vec![txt(
+                    "Select a project to inspect it. Drag the canvas to pan, scroll to zoom, or use the graph’s commands. The static graph, matrix and source history remain available below.",
+                )],
+            ),
             element(
                 "div",
-                &[("class", "graph-sandbox-heading")],
-                vec![
-                    element(
-                        "h3",
-                        &[("id", "graph-sandbox-title")],
-                        vec![txt("The graph is also its own control surface.")],
-                    ),
-                    element(
-                        "p",
-                        &[],
-                        vec![txt(
-                            "Switch the graph from inside the graph. Reading changes membership and face; arrangement changes placement; anchored or free motion decides what happens after you move a node. The typed actors and relations remain the same beneath every projection.",
-                        )],
-                    ),
-                ],
+                &[("data-sandbox-interface", ""), ("hidden", "hidden")],
+                vec![],
             ),
             frozen_view(frozen),
             element(
-                "div",
-                &[
-                    ("class", "graph-sandbox-shell"),
-                    ("data-sandbox-interface", ""),
-                    ("hidden", "hidden"),
-                ],
-                vec![
-                    element(
-                        "div",
-                        &[
-                            ("class", "graph-sandbox-stage"),
-                            ("data-sandbox-stage", ""),
-                            ("data-sandbox-scene", "graph"),
-                            ("data-sandbox-backdrop", "ambient"),
-                        ],
-                        vec![
-                            element(
-                                "canvas",
-                                &[
-                                    ("class", "graph-sandbox-canvas"),
-                                    ("data-sandbox-canvas", ""),
-                                    ("aria-hidden", "true"),
-                                ],
-                                vec![],
-                            ),
-                            element(
-                                "div",
-                                &[
-                                    ("class", "graph-sandbox-nodes"),
-                                    ("data-sandbox-nodes", ""),
-                                    ("role", "group"),
-                                    ("aria-label", "Graph sandbox nodes"),
-                                ],
-                                vec![],
-                            ),
-                            sandbox_graph_controls(),
-                            sandbox_scene_tools(),
-                            element(
-                                "p",
-                                &[
-                                    ("class", "graph-sandbox-caption"),
-                                    ("data-sandbox-caption", ""),
-                                ],
-                                vec![txt("Loading the graph runtime…")],
-                            ),
-                        ],
-                    ),
-                    sandbox_receipt_views(),
-                ],
-            ),
-            element(
                 "p",
                 &[
-                    ("class", "sr-only"),
                     ("data-sandbox-status", ""),
+                    ("role", "status"),
                     ("aria-live", "polite"),
                 ],
-                vec![txt("Graphshell sandbox not initialized.")],
-            ),
-            element(
-                "p",
-                &[("class", "graph-sandbox-range-note")],
-                vec![txt(
-                    "A Mermaid diagram or spreadsheet chart can be another projection of the same graph. Their boxes, bars, axes, lanes, and labels are faces and scene marks; a frozen export simply omits the interaction layer.",
-                )],
+                vec![txt("Static reading is available.")],
             ),
         ],
     )
@@ -250,7 +193,7 @@ fn frozen_view(frozen: &FrozenFirstView) -> SiteView {
                     ("data-sandbox-open", ""),
                     ("hidden", "hidden"),
                 ],
-                vec![txt("open the live sandbox")],
+                vec![txt("Open the live graph")],
             ),
             element(
                 "div",
@@ -274,271 +217,6 @@ fn frozen_view(frozen: &FrozenFirstView) -> SiteView {
             ),
             frozen.history_view(),
         ],
-    )
-}
-
-fn sandbox_receipt_views() -> SiteView {
-    element(
-        "aside",
-        &[
-            ("class", "graph-sandbox-receipts"),
-            ("aria-label", "Coordinated projection receipts"),
-        ],
-        vec![
-            element(
-                "section",
-                &[("class", "graph-sandbox-receipt")],
-                vec![
-                    element("h4", &[], vec![txt("Matrix")]),
-                    element(
-                        "p",
-                        &[("class", "graph-sandbox-receipt-note")],
-                        vec![txt("Neighborhood rows crossed with change columns.")],
-                    ),
-                    element(
-                        "button",
-                        &[
-                            ("type", "button"),
-                            ("class", "graph-sandbox-clear-filter"),
-                            ("data-sandbox-clear-matrix", ""),
-                        ],
-                        vec![txt("clear Matrix filter")],
-                    ),
-                    element(
-                        "button",
-                        &[
-                            ("type", "button"),
-                            ("class", "graph-sandbox-clear-filter"),
-                            ("data-sandbox-clear-facets", ""),
-                        ],
-                        vec![txt("clear selected facets")],
-                    ),
-                    element(
-                        "div",
-                        &[
-                            ("class", "graph-sandbox-matrix"),
-                            ("data-sandbox-matrix", ""),
-                        ],
-                        vec![],
-                    ),
-                ],
-            ),
-            element(
-                "section",
-                &[("class", "graph-sandbox-receipt")],
-                vec![
-                    element("h4", &[], vec![txt("Scatter")]),
-                    element(
-                        "div",
-                        &[
-                            ("class", "graph-sandbox-scatter"),
-                            ("data-sandbox-scatter", ""),
-                            ("role", "group"),
-                            ("aria-label", "Scatter appearances"),
-                        ],
-                        vec![],
-                    ),
-                ],
-            ),
-            element(
-                "section",
-                &[("class", "graph-sandbox-receipt")],
-                vec![
-                    element("h4", &[], vec![txt("Deck")]),
-                    element(
-                        "div",
-                        &[
-                            ("class", "graph-sandbox-deck"),
-                            ("data-sandbox-deck", ""),
-                            ("role", "list"),
-                        ],
-                        vec![],
-                    ),
-                ],
-            ),
-            element(
-                "p",
-                &[("class", "sr-only"), ("id", "graph-source-description")],
-                vec![txt(
-                    "Each appearance addresses the same repository source in a distinct projected view.",
-                )],
-            ),
-        ],
-    )
-}
-
-fn sandbox_graph_controls() -> SiteView {
-    element(
-        "div",
-        &[
-            ("class", "graph-sandbox-control-actors"),
-            ("role", "group"),
-            ("aria-label", "Graph controls"),
-        ],
-        vec![
-            sandbox_control_actor("dataset", "Source", "merely-made feed"),
-            sandbox_control_actor("reading", "Reading", "Graph"),
-            sandbox_control_actor("arrangement", "Arrangement", "Stack"),
-            sandbox_control_actor("mobility", "Motion", "Anchored"),
-            sandbox_control_actor("environment", "Field", "Ambient"),
-        ],
-    )
-}
-
-fn sandbox_control_actor(name: &str, label: &str, value: &str) -> SiteView {
-    element(
-        "button",
-        &[
-            ("type", "button"),
-            ("class", "graph-sandbox-control-actor"),
-            ("data-sandbox-cycle", name),
-        ],
-        vec![
-            element(
-                "span",
-                &[("class", "graph-sandbox-control-kind")],
-                vec![txt(label)],
-            ),
-            element(
-                "span",
-                &[
-                    ("class", "graph-sandbox-control-value"),
-                    ("data-sandbox-cycle-value", ""),
-                ],
-                vec![txt(value)],
-            ),
-        ],
-    )
-}
-
-fn sandbox_scene_tools() -> SiteView {
-    // The tools ride as an overlay pinned inside the stage. Narrow screens
-    // collapse them behind the handle so a bar that would otherwise reflow
-    // into a tall stack cannot bury the graph it belongs to; the handle and
-    // the open/closed state are inert on wide screens, where the panel is
-    // always the row it has always been.
-    element(
-        "div",
-        &[
-            ("class", "graph-sandbox-scene-tools"),
-            ("data-sandbox-scene-tools", ""),
-            ("data-tools-open", "false"),
-        ],
-        vec![
-            element(
-                "button",
-                &[
-                    ("type", "button"),
-                    ("class", "graph-sandbox-tools-toggle"),
-                    ("data-sandbox-tools-toggle", ""),
-                    ("aria-expanded", "false"),
-                    ("aria-controls", "graph-sandbox-tools-panel"),
-                ],
-                vec![txt("scene tools")],
-            ),
-            element(
-                "div",
-                &[
-                    ("class", "graph-sandbox-tools-panel"),
-                    ("id", "graph-sandbox-tools-panel"),
-                    ("data-sandbox-tools-panel", ""),
-                ],
-                vec![
-                    element(
-                        "label",
-                        &[
-                            ("class", "graph-sandbox-history"),
-                            ("data-sandbox-history-control", ""),
-                        ],
-                        vec![
-                            element("span", &[], vec![txt("Source time")]),
-                            element(
-                                "input",
-                                &[
-                                    ("type", "range"),
-                                    ("min", "0"),
-                                    ("max", "0"),
-                                    ("value", "0"),
-                                    ("data-sandbox-history", ""),
-                                    ("aria-label", "Sandbox source time"),
-                                ],
-                                vec![],
-                            ),
-                            element(
-                                "output",
-                                &[("data-sandbox-history-status", "")],
-                                vec![txt("loading source")],
-                            ),
-                        ],
-                    ),
-                    element(
-                        "div",
-                        &[
-                            ("class", "graph-sandbox-camera-tools"),
-                            ("role", "group"),
-                            ("aria-label", "View camera"),
-                        ],
-                        vec![
-                            element("span", &[], vec![txt("Camera")]),
-                            camera_control("pan-left", "Pan left"),
-                            camera_control("pan-right", "Pan right"),
-                            camera_control("pan-up", "Pan up"),
-                            camera_control("pan-down", "Pan down"),
-                            camera_control("zoom-out", "Zoom out"),
-                            camera_control("zoom-in", "Zoom in"),
-                            camera_control("reset", "Reset camera"),
-                        ],
-                    ),
-                    element(
-                        "button",
-                        &[
-                            ("type", "button"),
-                            ("class", "graph-sandbox-share"),
-                            ("data-sandbox-share", ""),
-                        ],
-                        vec![txt("share scene")],
-                    ),
-                    element(
-                        "span",
-                        &[
-                            ("class", "graph-sandbox-share-status"),
-                            ("data-sandbox-share-status", ""),
-                        ],
-                        vec![txt("state stays in the link")],
-                    ),
-                    element(
-                        "button",
-                        &[
-                            ("type", "button"),
-                            ("class", "graph-sandbox-share"),
-                            ("data-sandbox-export", ""),
-                        ],
-                        vec![txt("export projection")],
-                    ),
-                    element(
-                        "span",
-                        &[
-                            ("class", "graph-sandbox-share-status"),
-                            ("data-sandbox-export-status", ""),
-                            ("aria-live", "polite"),
-                        ],
-                        vec![txt("the realized scene, not the link")],
-                    ),
-                ],
-            ),
-        ],
-    )
-}
-
-fn camera_control(action: &'static str, label: &'static str) -> SiteView {
-    element(
-        "button",
-        &[
-            ("type", "button"),
-            ("class", "graph-sandbox-camera-control"),
-            ("data-sandbox-camera", action),
-        ],
-        vec![txt(label)],
     )
 }
 
@@ -1182,19 +860,15 @@ fn graph_bootstrap(data: &PublicSiteData) -> String {
     let nodes = serialize_json_records(&authority.nodes);
     let edges = serialize_json_records(&authority.edges);
     let feed = serialize_json_records(&data.metadata.event);
-    // The checkpoint history no longer rides inline: the sandbox fetches the
+    // The checkpoint history no longer rides inline: the viewer fetches the
     // v2 history on first interaction (Ruling 157).
     let json = format!(
         "{{\n\"schema\":{schema},\n\"nodes\":[\n{nodes}\n],\n\"edges\":[\n{edges}\n],\n\"feed\":[\n{feed}\n]\n}}"
     );
     let json = script_safe(&json);
-    let sandbox_json = script_safe(
-        &serde_json::to_string_pretty(&specimen()).expect("graph sandbox data is serializable"),
-    );
     let mount_href = graph_sandbox_mount_href();
     format!(
         "<script id=\"repository-graph-data\" type=\"application/json\">{json}</script>\n\
-<script id=\"graph-sandbox-data\" type=\"application/json\">{sandbox_json}</script>\n\
 <script type=\"module\" src=\"{mount_href}\"></script>"
     )
 }
@@ -1265,12 +939,8 @@ fn serialize_json_records<T: Serialize>(records: &[T]) -> String {
         .join(",\n")
 }
 
-fn graph_sandbox_runtime_href() -> String {
-    format!("/graph-sandbox.js{}", graph_runtime_version())
-}
-
 /// The only script /repos/ loads up front: it swaps in the scripted opening
-/// and imports the sandbox on first interaction.
+/// and imports the viewer on first interaction.
 pub fn graph_sandbox_mount_href() -> String {
     format!(
         "/graph-sandbox-mount.js?v={}",
