@@ -2,7 +2,8 @@
 name = "mer3ly-site"
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.92"
+
+rust-version = "1.97.1"
 publish = false
 description = "Static Mer3ly site builder and public repository authority."
 repository = "https://github.com/merely-made/merelyllc.com"
