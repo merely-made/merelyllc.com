@@ -1,3 +1,4 @@
+import {browserArguments} from './browser-launch.mjs';
 import assert from "node:assert/strict";
 import { createServer } from "node:http";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
@@ -71,9 +72,7 @@ const baseUrl = `http://127.0.0.1:${port}`;
 const browser = await chromium.launch({
   channel: browserChannel,
   headless,
-  args: headless || process.env.MER3LY_SOFTWARE_GPU === "true"
-    ? ["--enable-unsafe-webgpu", "--use-angle=swiftshader"]
-    : ["--enable-unsafe-webgpu"],
+  args: browserArguments({headless, softwareGpu: process.env.MER3LY_SOFTWARE_GPU === "true"}),
 });
 
 const receipt = {
