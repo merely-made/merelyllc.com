@@ -1,6 +1,6 @@
 //! Immutable browser-qualified Graphshell viewer; the site owns data and mounting.
 use sha2::{Digest, Sha256};
-pub const WASM_SHA256: &str = "9b9efdb3c868c9c42112fb272ec83bf92e1f13dc220023f86074120100f41861";
+pub const WASM_SHA256: &str = "885f9ce1a863afb7b1d2de04ac7d81ccd4a517e51d000b9bb4c1da9ab1d18cd3";
 pub const FILES: &[(&str, &[u8])] = &[
     (
         "viewer.js",

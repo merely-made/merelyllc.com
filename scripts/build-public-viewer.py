@@ -12,7 +12,7 @@ parser.add_argument('--out-dir', type=Path, required=True)
 parser.add_argument('--wasm-bindgen', default='wasm-bindgen')
 args = parser.parse_args()
 source = args.source.resolve()
-runtime = '47199232d205576e84c802a84eb0cda401f926e1'
+runtime = '377a0e30c84e2059a945583833008e84ae045fce'
 assert not subprocess.check_output(['git', 'status', '--porcelain'], cwd=source).strip(), 'source must be clean'
 changed = subprocess.check_output(['git', 'diff', '--name-only', runtime, 'HEAD'], cwd=source, text=True).splitlines()
 assert all(name.startswith(('design_docs/', 'docs/', 'ports/graphshell/docs/', 'support/doc-audit/')) for name in changed), 'runtime differs from qualified source'

@@ -128,6 +128,55 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
     assert.match(await page.locator('[data-sandbox-status]').textContent(), /cannot import/);
     assert.deepEqual(await heavy(page), []);
   });
+  await check('startup-timeout', {}, async page => {
+    const diagnostics = [];
+    page.on('console', msg => { if (msg.type() === 'error') diagnostics.push(msg.text()); });
+    await page.addInitScript(() => {
+      window.__rafRequests = 0;
+      const raf = window.requestAnimationFrame.bind(window);
+      window.requestAnimationFrame = callback => { window.__rafRequests++; return raf(callback); };
+      const request = GPUAdapter.prototype.requestDevice;
+      GPUAdapter.prototype.requestDevice = function(...args) {
+        return request.apply(this, args).then(device => new Promise(resolve => {
+          window.__heldDevice = true;
+          window.__cleanupDevice = () => device.destroy();
+          device.lost.then(info => { window.__deviceLost = {reason: info.reason}; });
+          window.__releaseDevice = () => { window.__releaseDevice = null; resolve(device); };
+        }));
+      };
+    });
+    try {
+      await goto(page); await activate(page);
+      await page.waitForFunction(() => window.__heldDevice === true, null, {timeout: 40000});
+      const before = await page.evaluate(() => {
+        window.__removedRoot = document.querySelector('graphshell-tree');
+        return {connected: window.__removedRoot.isConnected, rafRequests: window.__rafRequests};
+      });
+      assert.equal(before.connected, true);
+      // Exercise the real production 45-second deadline, without advancing clocks.
+      await state(page, 'unavailable');
+      await staticReading(page);
+      assert.equal(await page.evaluate(() => window.__removedRoot.isConnected), false);
+      await page.evaluate(() => window.__releaseDevice());
+      await page.waitForFunction(() => window.__removedRoot.dataset.mountState === 'cancelled' && window.__deviceLost?.reason === 'destroyed', null, {timeout: 60000});
+      const after = await page.evaluate(async () => {
+        const entry = document.querySelector('[data-graph-sandbox]').dataset.sandboxRuntime;
+        const module = await import(new URL('./pkg/graphshell_web.js', new URL(entry, location.href)).href);
+        let refusal = null;
+        try { module.run_scenario('settle 1\n'); } catch (error) { refusal = String(error); }
+        const root = window.__removedRoot;
+        return {ready: root.dataset.ready ?? null, mountState: root.dataset.mountState, mirror: root.querySelectorAll('[data-cambium-mirror]').length, fileInputs: root.querySelectorAll('#cambium-file-input').length, rafRequests: window.__rafRequests, deviceLost: window.__deviceLost, refusal};
+      });
+      assert.notEqual(after.ready, 'true');
+      assert.equal(after.mirror, 0); assert.equal(after.fileInputs, 0);
+      assert.equal(after.rafRequests, before.rafRequests);
+      assert.match(after.refusal, /tree has not booted/);
+      assert.deepEqual(diagnostics, []);
+      results.startup_cancellation = {before, after, deadline_ms: 45000};
+    } finally {
+      await page.evaluate(() => window.__cleanupDevice?.()).catch(() => {});
+    }
+  });
   for (const failure of ['forced', 'history', 'wasm', 'stylesheet']) {
     await check(`failure-${failure}`, {}, async page => {
       if (failure === 'history') await page.route('**/repository-host-history.json?*', route => route.fulfill({status: 503, body: 'unavailable'}));

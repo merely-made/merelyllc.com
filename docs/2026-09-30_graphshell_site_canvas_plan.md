@@ -7,6 +7,11 @@ stages the viewer from Mere runtime `47199232d205576e84c802a84eb0cda401f926e1`,
 original qualification published at `5b3442ddd39084231b83d9d175161293f1c5cefd`.
 The original binary retained build-machine paths in diagnostics; publication
 requires a path-remapped build with fresh package-bound browser evidence.
+The site package also backports pending-startup cancellation at
+`377a0e30c84e2059a945583833008e84ae045fce`: removed canvases cannot install a
+late host, and newly acquired unpublished devices are explicitly destroyed.
+The broader mounted-instance disposal API and newer runtime changes remain
+outside this pinned package.
 
 S1, S4 and S6 are shared provider capabilities already consumed by the site.
 S2's two-reading matrix, S3's source-history evaluator and S5's labelled fold
