@@ -3,7 +3,7 @@
 // for this viewer. Hardware browser acceptance retains its original arguments.
 export function browserArguments({headless, softwareGpu, platform = process.platform}) {
   if (!headless && !softwareGpu) return ['--enable-unsafe-webgpu'];
-  if (platform !== 'linux') return ['--enable-unsafe-webgpu', '--use-angle=swiftshader'];
+  if (platform !== 'linux' || !softwareGpu) return ['--enable-unsafe-webgpu', '--use-angle=swiftshader'];
   return [
     '--enable-unsafe-webgpu',
     '--use-gl=angle',
@@ -11,6 +11,5 @@ export function browserArguments({headless, softwareGpu, platform = process.plat
     '--use-vulkan=swiftshader',
     '--enable-features=Vulkan,VulkanFromANGLE,DefaultANGLEVulkan',
     '--disable-vulkan-surface',
-    '--disable-gpu-watchdog',
   ];
 }
