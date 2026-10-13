@@ -56,6 +56,14 @@ pub fn repository_host_dataset_json(
         .map_err(|error| format!("could not serialize repository host dataset: {error}"))
 }
 
+/// Reuse the current authority disclosure for the history viewer's inspector.
+pub(crate) fn current_dataset(
+    authority: &Authority,
+    metadata: &PublicMetadataCache,
+) -> Result<ProjectionDataset, String> {
+    Ok(export(authority, metadata)?.dataset)
+}
+
 /// Artifact integrity uses the authority writer, not a second host-input
 /// parser. Exact bytes also preserve canonical ordering and every explanation.
 pub fn validate_repository_host_dataset(

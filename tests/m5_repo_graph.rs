@@ -350,3 +350,57 @@ fn repositories_first_load_and_its_lazy_tier_are_bounded() {
         "the v2 repository history is {history} bytes gzip"
     );
 }
+
+#[test]
+fn viewer_history_discloses_current_links_without_rewriting_older_checkpoints() {
+    use scenomise::projection::ProjectionValue;
+    let root = workspace_root();
+    let data = PublicSiteData::load(&root).unwrap();
+    let page = repositories::page(&root).unwrap();
+    let history = &page.frozen.history;
+    let authority: serde_json::Value = serde_json::from_str(
+        &mer3ly_site::host_dataset::repository_host_dataset_json(&data.authority, &data.metadata)
+            .unwrap(),
+    )
+    .unwrap();
+    for occurrence in &history.current().dataset.occurrences {
+        let original = authority["dataset"]["occurrences"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .find(|item| item["occurrence_id"] == occurrence.occurrence_id)
+            .unwrap();
+        for field in ["summary", "project_url", "github_url"] {
+            assert_eq!(
+                serde_json::to_value(&occurrence.values[field]).unwrap(),
+                original["values"][field]
+            );
+        }
+    }
+    for revision in &history.revisions[..history.revisions.len() - 1] {
+        for field in ["summary", "project_url", "github_url"] {
+            assert!(!revision.dataset.fields.contains_key(field));
+            assert!(
+                revision
+                    .dataset
+                    .occurrences
+                    .iter()
+                    .all(|item| !item.values.contains_key(field))
+            );
+        }
+    }
+    assert_eq!(
+        history.compared_fields.as_ref().unwrap(),
+        &vec!["label", "class", "status", "pushed_at"]
+    );
+    let checkpoints = repositories::site_history(&root, &data.authority, &data.metadata).unwrap();
+    let mut mismatched = history.current().dataset.clone();
+    mismatched.occurrences[0].values.insert(
+        "label".into(),
+        ProjectionValue::Text("Wrong checkpoint".into()),
+    );
+    assert!(
+        mer3ly_site::host_history::repository_viewer_history_json(&checkpoints, &mismatched)
+            .is_err()
+    );
+}
