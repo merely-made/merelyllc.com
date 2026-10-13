@@ -5,7 +5,8 @@ resolver = "2"
 name = "mer3ly-radio-mirror"
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.92"
+
+rust-version = "1.97.1"
 publish = false
 description = "Mer3ly build crate for retinue's radio-mirror: the devices-page Wasm runtime and its build-time screens."
 repository = "https://github.com/merely-made/merelyllc.com"
@@ -42,3 +43,6 @@ lto = "thin"
 opt-level = "s"
 panic = "abort"
 strip = "symbols"
+
+[workspace.package]
+rust-version = "1.97.1"
