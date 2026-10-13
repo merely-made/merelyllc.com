@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import path from 'node:path';
+import {writeFile} from 'node:fs/promises';
 
 // Runs inside the caller's finite browser lease. Every case gets a fresh page
 // and closes it; failure evidence belongs to the caller's receipt directory.
@@ -7,13 +8,16 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
   const results = {cases: {}, screenshots: []};
   async function check(name, options, run) {
     const page = await browser.newPage({viewport: {width: 1440, height: 1000}, ...options});
-    const errors = [];
+    const errors = [], consoleErrors = [];
+    page.on('console', message => { if (message.type() === 'error') consoleErrors.push(message.text()); });
     page.on('pageerror', error => errors.push(String(error)));
     try {
       await run(page);
       assert.deepEqual(errors, [], `${name}: uncaught page errors`);
       results.cases[name] = 'pass';
     } catch (error) {
+      const state = await page.evaluate(() => ({hidden: document.hidden, focused: document.hasFocus(), title: document.title, state: document.querySelector('[data-graph-sandbox]')?.dataset.sandboxState, ready: document.querySelector('graphshell-tree')?.dataset.ready, connected: document.querySelector('graphshell-tree')?.isConnected, active: document.activeElement?.outerHTML, mirror: document.querySelector('[data-cambium-mirror]')?.textContent})).catch(() => null);
+      await writeFile(path.join(receiptRoot, `viewer-${name}-failure.json`), JSON.stringify({error: String(error), errors, consoleErrors, state}, null, 2));
       await page.screenshot({path: path.join(receiptRoot, `viewer-${name}-failure.png`), fullPage: true}).catch(() => {});
       throw error;
     } finally { await page.close(); }
