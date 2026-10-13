@@ -64,7 +64,7 @@ fn repository_page_is_static_semantic_and_filterable() {
     assert!(!document.contains("data-repository-graph"));
     assert!(!document.contains("/repo-graph.js"));
     assert!(document.contains("data-graph-sandbox"));
-    assert!(document.contains("The graph is also its own control surface."));
+    assert!(document.contains("Explore the projects and their relationships."));
     assert!(document.contains("href=\"mailto:markik@mer3ly.net\""));
     assert!(document.contains(">Merely organization profile</a></h2>"));
     assert!(document.contains("data-project-href=\"/projects/mere/\""));

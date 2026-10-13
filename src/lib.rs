@@ -12,3 +12,4 @@ pub mod repository_frozen;
 pub mod repository_history;
 pub mod retinue_traces;
 pub mod site;
+pub mod viewer;

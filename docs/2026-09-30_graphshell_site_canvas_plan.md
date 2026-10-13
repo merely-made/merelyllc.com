@@ -1,13 +1,12 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status (2026-10-09):** active; Rulings 1-166 recorded. P0's viewer review
-and provider integration are complete. Three P2 surfaces are deployed: devices,
-message-path lab, and projection proof. The frozen-first repository opening
-landed at `b16d040`, followed by the smoke update `1de8915` and published
-progress `3a3341e`; this review read main at `9ba3f03`. The checks and browser findings
-are recorded in the frozen-first progress entry below; this context refresh reruns no
-runtime or deployment gate.
+**Status (2026-10-13):** repository viewer cutover candidate implemented;
+browser acceptance and deployment are recorded below when complete. The site
+stages the viewer from Mere runtime `47199232d205576e84c802a84eb0cda401f926e1`,
+original qualification published at `5b3442ddd39084231b83d9d175161293f1c5cefd`.
+The original binary retained build-machine paths in diagnostics; publication
+requires a path-remapped build with fresh package-bound browser evidence.
 
 S1, S4 and S6 are shared provider capabilities already consumed by the site.
 S2's two-reading matrix, S3's source-history evaluator and S5's labelled fold
@@ -15,16 +14,28 @@ are consumed at the site's Mere pin `17519aa4`. The frozen repository scene,
 matrix and source-history text use those shared readers; the exporter publishes
 a v2 history. The v2 history limit is 4 MiB; v1 retains 1 MiB.
 
-The interactive repository sandbox remains the P2 replacement target. Its live
-matrix/history copies, the Graphshell viewer mount, and retirement of the
-remaining site copies are still ahead. The proof uses the shared Rust replay
-session with its lightweight site renderer. Ruling 157 now sets the delivery
-caps: first load at most 64 KiB gzip; interaction assets individually bounded
-at 3.25 MiB gzip for viewer Wasm, 20 KiB for glue, 8 KiB for mount, and 128 KiB
-for v2 history. The six-asset 2,147,689 B brotli measurement is the historical
-2026-10-07 P0 baseline; it is not a current viewer qualification or the smaller
-graph computation runtime. Mobile and non-WebGPU browsers retain the frozen
-reading under R157.
+The repository page now lazily mounts the inspector viewer against its published
+v2 history. Its generated static scene, matrix, history and semantic index stay
+visible, including after mounting. Phones, missing WebGPU/adapter, failed assets
+and failed history loads retain that reading. Old `#graphshell-scene` payloads
+are explicitly refused, not silently discarded or interpreted as new documents.
+The separate Mere profile projection proof still uses the small graph runtime;
+its retirement remains a later consumer migration under R159.
+
+R157 delivery caps remain: first load 64 KiB gzip; interaction assets 3.25 MiB
+Wasm, 20 KiB glue, 8 KiB mount, 128 KiB history. `scripts/verify-viewer.py`
+checks pinned package hashes and gzip levels 6 and 9.
+`scripts/build-public-viewer.py` documents the pinned source/toolchain build
+with public diagnostic paths. The mount bound includes
+the site adapter, shared mount helper and viewer CSS. No runtime rebuild occurs
+in the site workflow; a replacement package requires fresh browser qualification.
+Provenance lives in `assets/graphshell/provenance.json`; source and package files
+are published under a content-derived directory. The existing projection-proof
+runtime continues to be rebuilt reproducibly and tested separately.
+
+Rollback is a normal revert of the site cutover commit followed by the Pages
+workflow; static reading remains the fallback while deployment changes propagate.
+No DNS, account settings or persisted user data change with this cutover.
 
 **Design context (2026-10-09):** Mere's incoming
 `mere/design_docs/2026-08-23_projection_scenes_and_graph_native_platform.md` §9

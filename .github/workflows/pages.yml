@@ -45,6 +45,7 @@ jobs:
       MER3LY_SITE_DIR: .tmp/pages-artifact
       MER3LY_RECEIPT_DIR: .tmp/m9-headed
       MER3LY_HEADLESS: "false"
+      MER3LY_SOFTWARE_GPU: "true"
     steps:
       - name: Check out the pinned source revision
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -64,6 +65,9 @@ jobs:
         run: |
           npm ci --ignore-scripts
           cargo install wasm-bindgen-cli --version 0.2.129 --locked
+
+      - name: Verify the unchanged qualified viewer and delivery budgets
+        run: python3 scripts/verify-viewer.py
 
       - name: Validate the committed authority
         run: cargo run --locked --bin authority -- validate

@@ -47,15 +47,14 @@ use crate::repository_history::{GitAuthorityCursor, GitAuthorityHistoryProjectio
 use crate::site::{SiteView, element, txt};
 
 /// How the frozen view opens when no script runs: the existing wording.
-pub const NO_SCRIPT_LEAD: &str = "The sandbox requires WebAssembly. Without it, this";
+pub const NO_SCRIPT_LEAD: &str = "The live graph requires a compatible desktop browser. This";
 
 /// How it opens while the script runs and the sandbox waits for a first
 /// interaction (Ruling 140's two openings).
-pub const SCRIPTED_LEAD: &str =
-    "Interact with the graph to load the live sandbox. Until then, this";
+pub const SCRIPTED_LEAD: &str = "Open the live graph to explore. This";
 
 /// How it opens when the sandbox could not load.
-pub const FAILED_LEAD: &str = "The live sandbox could not load, so this";
+pub const FAILED_LEAD: &str = "The live graph could not load, so this";
 
 /// The default matrix's row focus. cartography never guesses one (Ruling
 /// 147); the site's default is Mere, else the first repository.
@@ -559,9 +558,9 @@ mod tests {
             page.html.matches("data-sandbox-history-revision=").count(),
             page.frozen.history.revisions.len()
         );
-        // The frozen view comes before the hidden live interface.
+        // The live interface has a reserved position above the retained static reading.
         let frozen = page.html.find("data-sandbox-frozen").unwrap();
         let interface = page.html.find("data-sandbox-interface").unwrap();
-        assert!(frozen < interface);
+        assert!(interface < frozen);
     }
 }

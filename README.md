@@ -5,17 +5,20 @@ small static Rust build (Cambium views serialized to HTML) plus a WebGPU
 repository-graph client, deployed to GitHub Pages. The complete site remains
 readable without JavaScript, WebAssembly, or WebGPU.
 
-## Status (2026-10-09)
+## Status (2026-10-13)
 
-Live and deployed. The pages.yml workflow rebuilds, validates, browser-smokes,
+The pages.yml workflow rebuilds, validates, browser-smokes,
 and deploys on main pushes, manual dispatch, and a daily schedule.
 
 - Ships home, the repository map with a semantic index and an optional
-  Mere-arranged WebGPU graph, project showcase profiles, the community-radio
+  Graphshell viewer, project showcase profiles, the community-radio
   page, and the open radio device catalog (added 2026-08-06).
-- The repository graph is driven from live GitHub org data with normalized
-  topic metadata (2026-08-11) and embeds a Graphshell scene sandbox with
-  portable, history-aware scenes (2026-08-12).
+- The repository graph is driven from public GitHub metadata refreshed during
+  the build, with normalized
+  topic metadata and a browser-qualified Graphshell inspector viewer. Static
+  graph, matrix, source history and project links remain available throughout.
+  Mobile and non-WebGPU browsers keep the static reading. Legacy sandbox scene
+  links receive an explicit unsupported-import notice.
 - An authority binary validates content manifests, the metadata cache, and
   the exact Pages artifact (file set, structured data, absence of secrets
   and personal data), emitting SHA-256 JSON receipts.
