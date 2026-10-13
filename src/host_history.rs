@@ -261,6 +261,57 @@ pub fn repository_host_history(
 }
 
 /// The published bytes: compact JSON, accepted by mere's shared reader.
+/// Add current inspector fields without backfilling historical disclosures or
+/// changing the ruled comparison fields. Reuse the v1 authority exporter.
+pub fn repository_viewer_history_json(
+    history: &GitAuthorityHistoryProjection,
+    current: &ProjectionDataset,
+) -> Result<String, String> {
+    let mut envelope = repository_host_history(history)?;
+    let latest = &mut envelope
+        .revisions
+        .last_mut()
+        .expect("nonempty history")
+        .dataset;
+    if latest.source != current.source || latest.occurrences.len() != current.occurrences.len() {
+        return Err(
+            "current inspector disclosure differs from the final history checkpoint".into(),
+        );
+    }
+    for occurrence in &mut latest.occurrences {
+        let disclosed = current
+            .occurrences
+            .iter()
+            .find(|item| item.occurrence_id == occurrence.occurrence_id)
+            .ok_or("current inspector disclosure is missing a history occurrence")?;
+        if occurrence.source != disclosed.source
+            || occurrence
+                .values
+                .iter()
+                .any(|(key, value)| disclosed.values.get(key) != Some(value))
+        {
+            return Err("current inspector disclosure differs from a history occurrence".into());
+        }
+        for field in ["summary", "project_url", "github_url"] {
+            let value = disclosed
+                .values
+                .get(field)
+                .ok_or("current inspector field is missing")?;
+            occurrence.values.insert(field.into(), value.clone());
+        }
+    }
+    for field in ["summary", "project_url", "github_url"] {
+        latest
+            .fields
+            .insert(field.into(), ProjectionFieldType::Text);
+    }
+    let json = serde_json::to_string(&envelope).map_err(|error| error.to_string())?;
+    parse_host_history(&json)
+        .map_err(|error| format!("mere's reader refuses the viewer history: {error}"))?;
+    Ok(json)
+}
+
+/// The historical disclosure without current inspector enrichment.
 pub fn repository_host_history_json(
     history: &GitAuthorityHistoryProjection,
 ) -> Result<String, String> {

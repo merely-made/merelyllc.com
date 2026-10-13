@@ -81,7 +81,8 @@ pub fn frozen_first_view(
 ) -> Result<FrozenFirstView, String> {
     let current =
         RepositoryGraph::from_parts(&authority.repositories, &authority.relations, metadata)?;
-    FrozenFirstView::build(&current, &specimen(), history)
+    let disclosure = crate::host_dataset::current_dataset(authority, metadata)?;
+    FrozenFirstView::build(&current, &specimen(), history, &disclosure)
 }
 
 pub fn document(root: &Path) -> Result<String, AuthorityError> {

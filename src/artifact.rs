@@ -12,7 +12,7 @@ use sha2::{Digest, Sha256};
 use crate::devices::{DeviceCatalog, DeviceRecord, DeviceStatus};
 use crate::discovery::{ROBOTS_TXT, canonical_urls_from_authority_and_devices};
 use crate::host_dataset::{HOST_DATASET_FILE, validate_repository_host_dataset};
-use crate::host_history::{HOST_HISTORY_FILE, host_history_href, validate_repository_host_history};
+use crate::host_history::{HOST_HISTORY_FILE, host_history_href};
 use crate::message_path;
 use crate::pages::{devices, radio as radio_page, repositories as repositories_page};
 use crate::projection_proof::{
@@ -775,9 +775,6 @@ fn validate_repositories_first_view(
         }
     };
     let published = read_text(artifact_root, HOST_HISTORY_FILE, errors);
-    if let Err(error) = validate_repository_host_history(&published, &history) {
-        errors.push(error);
-    }
     let frozen = match repositories_page::frozen_first_view(authority, metadata, &history) {
         Ok(frozen) => frozen,
         Err(error) => {
@@ -787,6 +784,9 @@ fn validate_repositories_first_view(
             return None;
         }
     };
+    if published != frozen.history_json {
+        errors.push("repository viewer history differs from the public authority".to_owned());
+    }
     let mount = format!(
         "<script type=\"module\" src=\"{}\"></script>",
         repositories_page::graph_sandbox_mount_href()

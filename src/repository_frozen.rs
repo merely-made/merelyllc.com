@@ -41,7 +41,7 @@ use scenomise::host_dataset::{HostDatasetV2, parse_host_history};
 use scenomise::projection::ProjectionDataset;
 
 use crate::host_history::{
-    SiteGraph, disclose_graph, repository_host_history_json, repository_source,
+    SiteGraph, disclose_graph, repository_source, repository_viewer_history_json,
 };
 use crate::repository_history::{GitAuthorityCursor, GitAuthorityHistoryProjection};
 use crate::site::{SiteView, element, txt};
@@ -87,8 +87,9 @@ impl FrozenFirstView {
         current: &impl serde::Serialize,
         specimen: &serde_json::Value,
         history: &GitAuthorityHistoryProjection,
+        current_disclosure: &ProjectionDataset,
     ) -> Result<Self, String> {
-        let history_json = repository_host_history_json(history)?;
+        let history_json = repository_viewer_history_json(history, current_disclosure)?;
         let history = parse_host_history(&history_json)
             .map_err(|error| format!("mere's reader refuses the repository history: {error}"))?;
         let scene = frozen_scene(current, history.current().dataset.clone())?;

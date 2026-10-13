@@ -20,7 +20,10 @@ matrix and source-history text use those shared readers; the exporter publishes
 a v2 history. The v2 history limit is 4 MiB; v1 retains 1 MiB.
 
 The repository page now lazily mounts the inspector viewer against its published
-v2 history. Its generated static scene, matrix, history and semantic index stay
+v2 history. The current checkpoint also discloses summary, canonical project URL
+and GitHub URL through the existing public-authority exporter. Historical
+checkpoints retain their original fields; the ruled comparison fields stay
+unchanged. Its generated static scene, matrix, history and semantic index stay
 visible, including after mounting. Phones, missing WebGPU/adapter, failed assets
 and failed history loads retain that reading. Old `#graphshell-scene` payloads
 are explicitly refused, not silently discarded or interpreted as new documents.
