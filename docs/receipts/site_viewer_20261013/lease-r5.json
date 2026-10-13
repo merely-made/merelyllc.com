@@ -1,0 +1,34 @@
+{
+  "candidate_sha256": "389d717ea42102a6b57d97d41083c5e04971d79c686c9e7c01ecb543c4f5c724",
+  "started": "2026-10-13T21:12:07.356418+00:00",
+  "deadline": "2026-10-13T21:30:25.100769+00:00",
+  "closed": true,
+  "owned_pids": [
+    16434,
+    16435,
+    16449,
+    16619,
+    17058,
+    17142
+  ],
+  "runs": [
+    {
+      "driver": "verify-startup-cancellation.cjs",
+      "exit": 0
+    },
+    {
+      "driver": "verify-reconciled-commands-final.cjs",
+      "exit": 0
+    },
+    {
+      "driver": "verify-reconciled-presenter-final-sync.cjs",
+      "exit": 0
+    },
+    {
+      "driver": "verify-reconciled-budget-final.cjs",
+      "exit": 1
+    }
+  ],
+  "failure": "Browser acceptance failed: verify-reconciled-budget-final.cjs",
+  "released": "2026-10-13T21:13:32.086918+00:00"
+}

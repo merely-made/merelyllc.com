@@ -1,0 +1,29 @@
+{
+  "candidate_sha256": "750000575273d9ba7dec80eacf727d007093251035fb2d64c9571b54e9f6f22c",
+  "started": "2026-10-13T21:20:15.975270+00:00",
+  "deadline": "2026-10-13T21:38:34.227530+00:00",
+  "closed": true,
+  "owned_pids": [
+    19099,
+    19100,
+    19101,
+    19719,
+    19796
+  ],
+  "runs": [
+    {
+      "driver": "verify-reconciled-budget-final.cjs",
+      "exit": 0
+    },
+    {
+      "driver": "verify-reconciled-physical-final.cjs",
+      "exit": 0
+    },
+    {
+      "driver": "scripts/smoke-site.mjs",
+      "exit": 1
+    }
+  ],
+  "failure": "Browser acceptance failed: scripts/smoke-site.mjs",
+  "released": "2026-10-13T21:27:48.852619+00:00"
+}

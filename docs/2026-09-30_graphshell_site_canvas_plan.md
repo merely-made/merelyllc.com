@@ -1,8 +1,10 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status (2026-10-13):** repository viewer cutover candidate implemented;
-browser acceptance and deployment are recorded below when complete. The site
+**Status (2026-10-13):** repository viewer cutover passes local browser acceptance.
+[Qualification and captures](receipts/site_viewer_20261013/qualification.json)
+bind the site, package, drivers and retained fixture receipts. Publication and
+live deployment are separate from this local acceptance. The site
 stages the viewer from Mere runtime `47199232d205576e84c802a84eb0cda401f926e1`,
 original qualification published at `5b3442ddd39084231b83d9d175161293f1c5cefd`.
 The original binary retained build-machine paths in diagnostics; publication
@@ -41,7 +43,17 @@ Provenance lives in `assets/graphshell/provenance.json`; source and package file
 are published under a content-derived directory. The existing projection-proof
 runtime continues to be rebuilt reproducibly and tested separately.
 
-Rollback is a normal revert of the site cutover commit followed by the Pages
+Acceptance covers 24 command checks, 11 presenter checks, 17 physics scenarios,
+physical input, Unicode disclosure, expected unsupported-product refusals, and
+12 site viewer cases with zero page errors on headed Chrome 152 / AMD gcn-5.
+The real 45-second startup timeout destroys the late unpublished device and
+leaves no tree, accessibility mirror or animation loop. This is the default
+site startup route, not general activated-instance or optional observer disposal.
+Current Wasm is 3,303,476 bytes gzip-6; glue is 19,186, mount/styles 7,020,
+and the accepted history is 6,830. CI refreshes public metadata and reruns the
+full site smoke against its exact generated artifact before deployment.
+
+Rollback is a normal revert of the site cutover commits followed by the Pages
 workflow; static reading remains the fallback while deployment changes propagate.
 No DNS, account settings or persisted user data change with this cutover.
 

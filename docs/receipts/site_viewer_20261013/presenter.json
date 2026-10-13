@@ -1,0 +1,24 @@
+{
+  "runs": [
+    "fold-selection",
+    "checkpoint-selection",
+    "site-keyboard-selection",
+    "related-inspection-keeps-subject",
+    "keyboard-clear-focus",
+    "narrow-keyboard-selection",
+    "narrow-command-focus",
+    "selection-loss-control",
+    "unknown-profile-refusal",
+    "historical-undisclosed-links-omitted",
+    "project-link-activation"
+  ],
+  "headed": true,
+  "browser": "152.0.7977.83",
+  "adapter": {
+    "vendor": "amd",
+    "architecture": "gcn-5",
+    "device": "",
+    "description": ""
+  },
+  "errors": []
+}

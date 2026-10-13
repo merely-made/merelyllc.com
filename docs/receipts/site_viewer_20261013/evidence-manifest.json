@@ -1,0 +1,23 @@
+{
+  "artifact-disclosure.json": "d56016315b917f2cda9214ac141e464e4761f0dcbe67d62a0a189678af724b40",
+  "budget.json": "55e88bed428d827999e63144949971fa36bd0f756d2d0cf07ad265082da73565",
+  "clippy-disclosure.log": "6e39eaca595d8bbdbdd8a4f206f47a84926bf3fdb1ec2452e49e3d1a2add990a",
+  "commands.json": "79ecdc92ecc1a6b83072c09b00e436bf21dee6a7b0bcf42ab5af6365d38384e4",
+  "inputs-r5.json": "1d7d39a5e6036fb9eb79224e0f77b3937dcc9bbc62c2211823cd2d0f84dbfee9",
+  "inputs-r6.json": "54634a60cdeaf50db8ba6f2d9ec563fa6f44aa6183ade87ad839b540d3e9ae22",
+  "inputs-r9.json": "6542f1dbb734726e7c1bfd5fcf643d95a7e53034d2a493f8228f6ee05c73eefe",
+  "lease-r5.json": "d0c62a22549217ab796c17ef748bb76718c752b0ed367472355d88ac2854fe24",
+  "lease-r6.json": "43eefd2cb36ab9065c1605577e877c73bd71deef080ec33855b36d8bcf571f4e",
+  "lease-r9.json": "b018f9598812afb0edacc4013bc82f9e48407ab11ac2778ae6daa97553f3315e",
+  "physical.json": "aea0cc8e2a113e4b2a5f9b84e0e4f3755f1142241912813363da95f20aebc89a",
+  "presenter.json": "08ea93c94f579ff373cc3fa6eddd44e3f07695a98d38f0ea3222436df523d96a",
+  "qualification.json": "36848305946064c2ce65fb7163ae654c279be904220df19d1745a3c13a4a7d53",
+  "site.json": "0b110941d4ab09625d026afd07fe7f44728dc17adcf78869c778b84277f1659b",
+  "size-disclosure.jsonl": "aa77d9e390ee6460f8e93f51b3bd3c2104b0daca1d98a941b4e64bfbda151b5f",
+  "startup.json": "6aadfb93318383412f3a743b7762f55bc8120eff44d73f1fd20d48a986b61dd6",
+  "tests-disclosure.log": "da399b22fa23c8d8b7fa9c8a559a34a5493b16e507c2f14554f74e6f5ba358de",
+  "viewer-desktop-component.png": "925312bfc04898ea3a002bb0e4707dbd76a95a857d07196e4942b8ebadecd945",
+  "viewer-desktop-viewport.png": "49f5cbd69d39f7f627a6cba6e08557101ae929c9037925dad548557db706b499",
+  "viewer-desktop.png": "4f8dcc6212d7902cdf40ef02bb255eec0777e63fe874be4a2b1793895ed35dcf",
+  "viewer-mobile-static.png": "d7bdc1cea354b3bde5e8fcc7de7bb52526cc4672c1e22adc9bb366463a785b5e"
+}

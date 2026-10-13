@@ -1,0 +1,224 @@
+{
+  "schema": "mer3ly.browser-smoke-receipt/v3",
+  "source_sha": "candidate:b5b6f02701d726b33459996e974fc90760f79ba9c692cc3e0d69ab6cd3cbbd34",
+  "browser": "Chromium 152.0.7977.83",
+  "browser_channel": "chrome",
+  "mode": "headed",
+  "routes": {
+    "/": {
+      "status": 200,
+      "horizontal_overflow": 0
+    },
+    "/radio.html": {
+      "status": 200,
+      "horizontal_overflow": 0
+    },
+    "/devices/": {
+      "status": 200,
+      "horizontal_overflow": 0
+    },
+    "/devices/v4-desktop-radio/": {
+      "status": 200,
+      "horizontal_overflow": 0
+    },
+    "/devices/t114-field-radio/": {
+      "status": 200,
+      "horizontal_overflow": 0
+    },
+    "/projects/mere/": {
+      "status": 200,
+      "horizontal_overflow": 0
+    },
+    "/projects/retinue/": {
+      "status": 200,
+      "horizontal_overflow": 0
+    }
+  },
+  "desktop": {
+    "repositories": 21,
+    "graph_edges": 30
+  },
+  "mobile": {},
+  "reduced_motion": {},
+  "fallback": {},
+  "showcase": {
+    "desktop": {
+      "cards": 5,
+      "images": 5,
+      "horizontal_overflow": 0
+    },
+    "mobile": {
+      "cards": 5,
+      "horizontal_overflow": 0
+    }
+  },
+  "message_path_lab": {
+    "desktop": {
+      "nodes": 5,
+      "edges": 5,
+      "traces": [
+        {
+          "id": "cold",
+          "events": 105,
+          "ledger_rows": 16
+        },
+        {
+          "id": "warm",
+          "events": 237,
+          "ledger_rows": 41
+        }
+      ],
+      "screen": "traffic",
+      "shared_step": true,
+      "retired_link_notice": true,
+      "horizontal_overflow": 0
+    },
+    "mobile": {
+      "width": 375,
+      "minimum_node_target": 44,
+      "x_span": 170,
+      "y_span": 245,
+      "horizontal_overflow": 0
+    },
+    "reduced_motion": "jumps-to-trace-end"
+  },
+  "radio_bench": {
+    "desktop": {
+      "runtime": "radio-mirror",
+      "scenarios": 3,
+      "firmware_images": 4,
+      "input_faces": 2,
+      "screens_reached": [
+        "status",
+        "power",
+        "menu:brightness:0",
+        "menu:verify:2",
+        "verify",
+        "display-off",
+        "handoff:meshtastic",
+        "fault",
+        "radio",
+        "traffic"
+      ],
+      "key_edges": "a-short, a-long",
+      "a_plus_b": "operable-on-two-button-face",
+      "horizontal_overflow": 0
+    },
+    "mobile": {
+      "width": 375,
+      "a_plus_b": "operable",
+      "horizontal_overflow": 0
+    },
+    "no_script": {
+      "screens": 11,
+      "text_projection": "alt"
+    }
+  },
+  "projects": {
+    "visual": {
+      "repository": "mere",
+      "showcase_images": 1,
+      "social_image": "https://merelyllc.com/showcase/mere.png",
+      "structured_type": "SoftwareSourceCode",
+      "horizontal_overflow": 0
+    },
+    "projection_proof": {
+      "nodes": 11,
+      "edges": 13,
+      "projections": 2,
+      "contract": "chirograph-capture-v2-scenotime-trace-incipit-shelfmark",
+      "capture_address": "5bd76e0d01425937dc7ece7ee28fd533ed50021702f0253fc4d1d0097daef9a9",
+      "initial_revision": 1,
+      "supplied_trace_steps": 7,
+      "shared_state": true,
+      "shared_trace": true,
+      "horizontal_overflow": 0,
+      "mobile": {
+        "width": 375,
+        "minimum_node_target": 44,
+        "swatch_controls_canvas": true,
+        "horizontal_overflow": 0
+      },
+      "reduced_motion": "jumps-to-final-state",
+      "fallback": "trace-reading-and-semantic-relations-remain",
+      "replay_failure": "notice-and-reading-remain",
+      "retired_link": "notice-and-default-trace",
+      "retired_fold_link": "notice-and-default-trace"
+    },
+    "text_only": {
+      "repository": "retinue",
+      "showcase_images": 0,
+      "social_image": "https://merelyllc.com/og.jpg",
+      "structured_type": "SoftwareSourceCode",
+      "horizontal_overflow": 0
+    }
+  },
+  "discovery": {
+    "sitemap_urls": 27,
+    "robots_policy": "allow-public",
+    "favicon": "favicon.svg"
+  },
+  "graph_sandbox": {},
+  "qualified_viewer": {
+    "cases": {
+      "desktop": "pass",
+      "no-script": "pass",
+      "mobile": "pass",
+      "tablet": "pass",
+      "no-webgpu": "pass",
+      "no-adapter": "pass",
+      "legacy-share": "pass",
+      "startup-timeout": "pass",
+      "failure-forced": "pass",
+      "failure-history": "pass",
+      "failure-wasm": "pass",
+      "failure-stylesheet": "pass"
+    },
+    "screenshots": [
+      "viewer-desktop.png",
+      "viewer-desktop-component.png",
+      "viewer-desktop-viewport.png",
+      "viewer-mobile-static.png"
+    ],
+    "repositories": 21,
+    "relationships": 30,
+    "selected_project": "https://merelyllc.com/projects/org-profile/",
+    "adapter": {
+      "vendor": "amd",
+      "architecture": "gcn-5",
+      "device": "",
+      "description": ""
+    },
+    "resources": [
+      "http://127.0.0.1:52964/graphshell/56d0cc1465a0/styles.css",
+      "http://127.0.0.1:52964/graphshell/56d0cc1465a0/viewer.js",
+      "http://127.0.0.1:52964/graphshell/56d0cc1465a0/mount.js",
+      "http://127.0.0.1:52964/graphshell/56d0cc1465a0/pkg/graphshell_web.js",
+      "http://127.0.0.1:52964/graphshell/56d0cc1465a0/pkg/graphshell_web_bg.wasm"
+    ],
+    "startup_cancellation": {
+      "before": {
+        "connected": true,
+        "rafRequests": 0
+      },
+      "after": {
+        "ready": null,
+        "mountState": "cancelled",
+        "mirror": 0,
+        "fileInputs": 0,
+        "rafRequests": 0,
+        "deviceLost": {
+          "reason": "destroyed"
+        },
+        "adapter": {
+          "vendor": "amd",
+          "architecture": "gcn-5",
+          "device": "",
+          "description": ""
+        },
+        "refusal": "the tree has not booted"
+      },
+      "deadline_ms": 45000
+    }
+  }
+}
