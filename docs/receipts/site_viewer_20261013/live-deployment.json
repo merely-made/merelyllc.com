@@ -1,0 +1,118 @@
+{
+  "schema": "mer3ly.site-viewer-live-verification/v1",
+  "verified_utc": "2026-10-13T23:05:02.650536+00:00",
+  "deployed_source": "b254071f4c468c86559ffae22e0d2d9791cf5569",
+  "workflow": "https://github.com/merely-made/merelyllc.com/actions/runs/38480236209",
+  "runtime_source": "377a0e30c84e2059a945583833008e84ae045fce",
+  "live_site_deployed": true,
+  "viewer_prefix": "/graphshell/56d0cc1465a0/",
+  "static_reading_preserved": true,
+  "mount_and_styles_transfer_bytes": 7053,
+  "current_projects": 22,
+  "history_revisions": 12,
+  "checks": [
+    {
+      "url": "https://merelyllc.com/repos/",
+      "final_url": "https://merelyllc.com/repos/",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "content_encoding": "gzip",
+      "wire_bytes": 14234,
+      "decoded_bytes": 138552,
+      "sha256": "cb47211ba85250d750bba6d090aa68dac12bb8cba8315bfface6218502e161c1",
+      "etag": "W/\"6aceb8ef-21d38\""
+    },
+    {
+      "url": "https://merelyllc.com/graphshell/56d0cc1465a0/viewer.js",
+      "final_url": "https://merelyllc.com/graphshell/56d0cc1465a0/viewer.js",
+      "status": 200,
+      "content_type": "application/javascript; charset=utf-8",
+      "content_encoding": "gzip",
+      "wire_bytes": 588,
+      "decoded_bytes": 998,
+      "sha256": "d36f0c879683b0f18e27d31b67162055fab268377ad04c2d0039f1aaf116419f",
+      "etag": "W/\"6aceb8ef-3e6\""
+    },
+    {
+      "url": "https://merelyllc.com/graphshell/56d0cc1465a0/mount.js",
+      "final_url": "https://merelyllc.com/graphshell/56d0cc1465a0/mount.js",
+      "status": 200,
+      "content_type": "application/javascript; charset=utf-8",
+      "content_encoding": "gzip",
+      "wire_bytes": 1163,
+      "decoded_bytes": 2454,
+      "sha256": "1782f3a692b7eba17ffda8e40f6bb88a9db883c214b6ee4a17b9350a62902c75",
+      "etag": "W/\"6aceb8ef-996\""
+    },
+    {
+      "url": "https://merelyllc.com/graphshell/56d0cc1465a0/styles.css",
+      "final_url": "https://merelyllc.com/graphshell/56d0cc1465a0/styles.css",
+      "status": 200,
+      "content_type": "text/css; charset=utf-8",
+      "content_encoding": "gzip",
+      "wire_bytes": 3490,
+      "decoded_bytes": 14965,
+      "sha256": "a0944b06a83a7249fc69239ecffc8cab543f7556ffc95f2446b33ce3b5cd0bfd",
+      "etag": "W/\"6aceb8ef-3a75\""
+    },
+    {
+      "url": "https://merelyllc.com/graphshell/56d0cc1465a0/pkg/graphshell_web.js",
+      "final_url": "https://merelyllc.com/graphshell/56d0cc1465a0/pkg/graphshell_web.js",
+      "status": 200,
+      "content_type": "application/javascript; charset=utf-8",
+      "content_encoding": "gzip",
+      "wire_bytes": 19454,
+      "decoded_bytes": 120107,
+      "sha256": "04273e52f64ca2665a06c1d8e60475d7082b4b2d15aa44bcfc8f1d20ee0730f8",
+      "etag": "W/\"6aceb8ef-1d52b\"",
+      "gzip_cap_bytes": 20480
+    },
+    {
+      "url": "https://merelyllc.com/graphshell/56d0cc1465a0/pkg/graphshell_web_bg.wasm",
+      "final_url": "https://merelyllc.com/graphshell/56d0cc1465a0/pkg/graphshell_web_bg.wasm",
+      "status": 200,
+      "content_type": "application/wasm",
+      "content_encoding": "gzip",
+      "wire_bytes": 3341081,
+      "decoded_bytes": 9470526,
+      "sha256": "885f9ce1a863afb7b1d2de04ac7d81ccd4a517e51d000b9bb4c1da9ab1d18cd3",
+      "etag": "W/\"6aceb8ef-90823e\"",
+      "gzip_cap_bytes": 3407872
+    },
+    {
+      "url": "https://merelyllc.com/graph-sandbox-mount.js",
+      "final_url": "https://merelyllc.com/graph-sandbox-mount.js",
+      "status": 200,
+      "content_type": "application/javascript; charset=utf-8",
+      "content_encoding": "gzip",
+      "wire_bytes": 1812,
+      "decoded_bytes": 4785,
+      "sha256": "40c60a007872c5b282e682fb61bb536bcbe433505ea98ab1cb832b5c3b57d51d",
+      "etag": "W/\"6aceb8ef-12b1\""
+    },
+    {
+      "url": "https://merelyllc.com/graphshell/56d0cc1465a0/provenance.json",
+      "final_url": "https://merelyllc.com/graphshell/56d0cc1465a0/provenance.json",
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "content_encoding": "gzip",
+      "wire_bytes": 694,
+      "decoded_bytes": 1190,
+      "sha256": "1471b345268569de3fb59b68edbe4037b4129dc9ffcc2dae37063407272b64e9",
+      "etag": "W/\"6aceb8ef-4a6\""
+    },
+    {
+      "url": "https://merelyllc.com/repository-host-history.json?v=2cf9c5b045f9",
+      "final_url": "https://merelyllc.com/repository-host-history.json?v=2cf9c5b045f9",
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "content_encoding": "gzip",
+      "wire_bytes": 8617,
+      "decoded_bytes": 200770,
+      "sha256": "2cf9c5b045f9b232833138f3fc3b76d853fb97eab9ed66d0126b4317f0e45303",
+      "etag": "W/\"6aceb8ef-31042\"",
+      "gzip_cap_bytes": 131072
+    }
+  ],
+  "scope": "HTTPS source and transferred asset identity/size checks. Local headed AMD and CI software-browser behavior are recorded separately; no additional live headed browser run claimed."
+}

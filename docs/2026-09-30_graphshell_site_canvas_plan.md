@@ -1,14 +1,24 @@
 # Graphshell as the site canvas
 
 **Date:** 2026-09-30
-**Status (2026-10-13):** repository viewer cutover passes local browser acceptance.
+**Status (2026-10-13):** the repository viewer is deployed and verified live at
+[merelyllc.com/repos/](https://merelyllc.com/repos/).
 [Qualification and captures](receipts/site_viewer_20261013/qualification.json)
-bind the site, package, drivers and retained fixture receipts. Publication and
-live deployment are separate from this local acceptance. The site
-stages the viewer from Mere runtime `47199232d205576e84c802a84eb0cda401f926e1`,
-original qualification published at `5b3442ddd39084231b83d9d175161293f1c5cefd`.
-The original binary retained build-machine paths in diagnostics; publication
-requires a path-remapped build with fresh package-bound browser evidence.
+bind the site, package, drivers and retained fixture receipts.
+[Production workflow 38480236209](https://github.com/merely-made/merelyllc.com/actions/runs/38480236209)
+passed and deployed `b254071f4c468c86559ffae22e0d2d9791cf5569`.
+[Hosted verification](receipts/site_viewer_20261013/live-deployment.json)
+confirms the exact package hashes, static reading and actual gzip transfer sizes.
+The production browser suite passed all 12 viewer cases with refreshed data for
+22 projects and 30 relationships, including canonical project navigation and the
+real 45-second startup cancellation. Local headed AMD acceptance and remote
+Linux software-GPU acceptance are recorded separately; no additional live
+headed browser run is claimed.
+
+The pinned runtime derives from `47199232d205576e84c802a84eb0cda401f926e1`,
+with original qualification published at `5b3442ddd39084231b83d9d175161293f1c5cefd`.
+Its published binary remaps build-machine diagnostic paths and has fresh
+package-bound browser evidence.
 The site package also backports pending-startup cancellation at
 `377a0e30c84e2059a945583833008e84ae045fce`: removed canvases cannot install a
 late host, and newly acquired unpublished devices are explicitly destroyed.
@@ -52,6 +62,17 @@ site startup route, not general activated-instance or optional observer disposal
 Current Wasm is 3,303,476 bytes gzip-6; glue is 19,186, mount/styles 7,020,
 and the accepted history is 6,830. CI refreshes public metadata and reruns the
 full site smoke against its exact generated artifact before deployment.
+
+The hosted transfer measured 3,341,081 bytes gzip for Wasm, 19,454 for glue
+and 8,617 for current history, all below their caps. Compression on the host
+differs from the local gzip-6 measurement; raw package hashes match exactly.
+Two CI-only fixes were needed: an explicit shared Vulkan path for Linux
+software-GPU presentation (hardware browser flags unchanged, watchdog enabled),
+and measured document-rectangle capture instead of a locator screenshot's
+extra frame-stability wait. All semantic, navigation, layout and fallback
+assertions remain. Failed runs and passing A/B diagnostics are retained in
+[the Linux CI records](receipts/site_viewer_20261013/linux-ci/diagnosis.json)
+and [capture records](receipts/site_viewer_20261013/linux-ci/capture-diagnosis.json).
 
 Rollback is a normal revert of the site cutover commits followed by the Pages
 workflow; static reading remains the fallback while deployment changes propagate.
