@@ -62,7 +62,7 @@ dependencies = [
 [[package]]
 name = "armillary"
 version = "0.1.1"
-source = "git+https://github.com/merely-made/mere.git?rev=17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65#17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
 dependencies = [
  "tracing",
 ]
@@ -216,15 +216,18 @@ checksum = "fc652a48c352aef3ea3aed32080501cf3ef6ed5da78602a020c991775b0aff04"
 [[package]]
 name = "cambium"
 version = "0.3.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "87075e88d875cf3e32bbe9020a8f0a76582cc418b39b2bd4336b4069eaaa5a8c"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
 dependencies = [
- "genet-host-api",
+ "command-menu",
+ "edit-history",
  "genet-scripted-dom",
+ "genet-text",
  "layout-dom-api",
+ "mere-surface-api",
  "meristem",
+ "sceno",
  "sprigging",
- "unicode-segmentation",
+ "workbench",
 ]
 
 [[package]]
@@ -257,7 +260,7 @@ checksum = "9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801"
 [[package]]
 name = "chartulary"
 version = "0.2.2"
-source = "git+https://github.com/merely-made/mere.git?rev=17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65#17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
 dependencies = [
  "muniment",
  "petgraph",
@@ -265,12 +268,13 @@ dependencies = [
  "serde",
  "serde_json",
  "slotmap",
+ "uuid",
 ]
 
 [[package]]
 name = "chirograph"
 version = "0.0.2"
-source = "git+https://github.com/merely-made/mere.git?rev=17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65#17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
 dependencies = [
  "base64",
  "blake3",
@@ -290,7 +294,7 @@ checksum = "2ec7c5eb7a16992b1904d76c517d170ab353b0e0b3d5a0c81a8a0cd1037893cf"
 [[package]]
 name = "command-menu"
 version = "0.1.0"
-source = "git+https://github.com/merely-made/mere.git?rev=17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65#17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
 dependencies = [
  "serde",
 ]
@@ -306,6 +310,12 @@ name = "constant_time_eq"
 version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3d52eff69cd5e647efe296129160853a42795992097e8af39800e1060caeea9b"
+
+[[package]]
+name = "core_detect"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7f8f80099a98041a3d1622845c271458a2d73e688351bf3cb999266764b81d48"
 
 [[package]]
 name = "cpufeatures"
@@ -415,7 +425,7 @@ checksum = "117240f60069e65410b3ae1bb213295bd828f707b5bec6596a1afc8793ce0cbc"
 [[package]]
 name = "edit-history"
 version = "0.1.0"
-source = "git+https://github.com/merely-made/mere.git?rev=17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65#17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
 
 [[package]]
 name = "either"
@@ -426,7 +436,7 @@ checksum = "9e5e8f6c15a24b9a3ee5efec809ccd006d3b30e8b3bb63c39af737c7f87daa1d"
 [[package]]
 name = "embedded-graphics"
 version = "0.8.2"
-source = "git+https://github.com/merely-made/retinue.git?rev=6aa78fc0d0ddd30e94db59470f30f47e669321dc#6aa78fc0d0ddd30e94db59470f30f47e669321dc"
+source = "git+https://github.com/merely-made/retinue.git?rev=b49df894635bac95823284efee6c445885eaf62a#b49df894635bac95823284efee6c445885eaf62a"
 dependencies = [
  "az",
  "byteorder",
@@ -438,7 +448,7 @@ dependencies = [
 [[package]]
 name = "embedded-graphics-core"
 version = "0.4.1"
-source = "git+https://github.com/merely-made/retinue.git?rev=6aa78fc0d0ddd30e94db59470f30f47e669321dc#6aa78fc0d0ddd30e94db59470f30f47e669321dc"
+source = "git+https://github.com/merely-made/retinue.git?rev=b49df894635bac95823284efee6c445885eaf62a#b49df894635bac95823284efee6c445885eaf62a"
 dependencies = [
  "az",
  "byteorder",
@@ -454,10 +464,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "encoding_rs"
+version = "0.8.42"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8e985e0451871ad22fb8d2b6b076e2028a502a0d3950998c2c5c0a4f9b5d9679"
+dependencies = [
+ "cfg-if",
+ "core_detect",
+ "multiversion_no_op",
+ "rustversion",
+ "scopeguard",
+ "serde",
+ "simdutf8",
+]
+
+[[package]]
 name = "engine-observables-api"
 version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e4c15a722b333a574a8c2b6f66590f459dbb8520c3da9caa754bf38464bad6a3"
+source = "git+https://github.com/merely-made/genet.git?rev=7a8c5b8cb499f2d3b91083c2f7e38236599f98dc#7a8c5b8cb499f2d3b91083c2f7e38236599f98dc"
 dependencies = [
  "genet-paint-types",
  "serde",
@@ -557,9 +581,9 @@ checksum = "77ce24cb58228fbb8aa041425bb1050850ac19177686ea6e0f41a70416f56fdb"
 
 [[package]]
 name = "font-types"
-version = "0.11.3"
+version = "0.12.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5b38ad915f6dadd993ced50848a8291a543bd41ca62bc10740d5e64e2ab4cfd7"
+checksum = "6c92d9081c7ab3bd83ef1eecdfad090f3d966e3ce74106779664114cfe1a6274"
 dependencies = [
  "bytemuck",
 ]
@@ -620,16 +644,9 @@ dependencies = [
 ]
 
 [[package]]
-name = "genet-host-api"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e301bf8b1a5605b7195dc1037b406f4604ed000b42a588cdc3a1afba2f903b83"
-
-[[package]]
 name = "genet-paint-types"
 version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6342c8baae2cf4d53ff292f62cd15fa8827e2eab5dfb8372a73250bc52838924"
+source = "git+https://github.com/merely-made/genet.git?rev=7a8c5b8cb499f2d3b91083c2f7e38236599f98dc#7a8c5b8cb499f2d3b91083c2f7e38236599f98dc"
 dependencies = [
  "app_units",
  "euclid",
@@ -639,26 +656,35 @@ dependencies = [
 [[package]]
 name = "genet-scripted-dom"
 version = "0.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f0a49bc0452ef764684da5cef152252e69e652247407b0fa0b4ac3ee16d36ec5"
+source = "git+https://github.com/merely-made/genet.git?rev=7a8c5b8cb499f2d3b91083c2f7e38236599f98dc#7a8c5b8cb499f2d3b91083c2f7e38236599f98dc"
 dependencies = [
+ "encoding_rs",
  "engine-observables-api",
  "genet-static-dom",
  "html5ever",
  "layout-dom-api",
  "markup5ever",
+ "regress",
  "serde",
+ "url",
 ]
 
 [[package]]
 name = "genet-static-dom"
 version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "168bdcd627380efd177f98cef96a06cd9ee4fb70e405bb7a44644ae836544976"
+source = "git+https://github.com/merely-made/genet.git?rev=7a8c5b8cb499f2d3b91083c2f7e38236599f98dc#7a8c5b8cb499f2d3b91083c2f7e38236599f98dc"
 dependencies = [
  "html5ever",
  "layout-dom-api",
  "xml5ever",
+]
+
+[[package]]
+name = "genet-text"
+version = "0.1.0"
+source = "git+https://github.com/merely-made/genet.git?rev=7a8c5b8cb499f2d3b91083c2f7e38236599f98dc#7a8c5b8cb499f2d3b91083c2f7e38236599f98dc"
+dependencies = [
+ "unicode-segmentation",
 ]
 
 [[package]]
@@ -692,9 +718,9 @@ checksum = "f70749695b063ecbf6b62949ccccde2e733ec3ecbbd71d467dca4e5c6c97cca0"
 
 [[package]]
 name = "glam"
-version = "0.33.3"
+version = "0.33.12"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7360bd2cd76e0cd9032d42cf2922155cecea2685b0cfa4630c3246df030bcfd6"
+checksum = "37bfe73dc8ec21f54d181e5a60554327ec3f1c600c455a75ccbfc65d2106a6c4"
 dependencies = [
  "approx",
  "libm",
@@ -702,12 +728,12 @@ dependencies = [
 
 [[package]]
 name = "glamx"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9847f980afb0628849bcd6a406cdffd29eb9d53fca83e1646005901a9acd4c5c"
+checksum = "28d74079318e3a077bd3d15faa90fde24fa37bb9f157f92f853e6019a15fd413"
 dependencies = [
  "approx",
- "glam 0.33.3",
+ "glam 0.33.12",
  "nalgebra",
  "num-traits",
  "simba",
@@ -716,7 +742,7 @@ dependencies = [
 [[package]]
 name = "graphshell-client"
 version = "0.0.2"
-source = "git+https://github.com/merely-made/mere.git?rev=17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65#17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
 dependencies = [
  "chirograph",
  "sceno",
@@ -901,7 +927,7 @@ dependencies = [
 [[package]]
 name = "incipit"
 version = "0.2.0"
-source = "git+https://github.com/merely-made/mere.git?rev=17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65#17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
 dependencies = [
  "serde",
  "uuid",
@@ -915,6 +941,8 @@ checksum = "d466e9454f08e4a911e14806c24e16fba1b4c121d1ea474396f396069cf949d9"
 dependencies = [
  "equivalent",
  "hashbrown 0.17.1",
+ "serde",
+ "serde_core",
 ]
 
 [[package]]
@@ -958,8 +986,7 @@ dependencies = [
 [[package]]
 name = "layout-dom-api"
 version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2c7cf5ed92b909d67554b4621eb451cbb124b080651a07310ddfb1709a762a75"
+source = "git+https://github.com/merely-made/genet.git?rev=7a8c5b8cb499f2d3b91083c2f7e38236599f98dc#7a8c5b8cb499f2d3b91083c2f7e38236599f98dc"
 dependencies = [
  "markup5ever",
  "serde",
@@ -1086,7 +1113,7 @@ dependencies = [
 [[package]]
 name = "mere-cartography"
 version = "0.0.2"
-source = "git+https://github.com/merely-made/mere.git?rev=17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65#17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
 dependencies = [
  "mere-kernel",
  "sceno",
@@ -1095,10 +1122,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "mere-curation"
+version = "0.1.0"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "mere-forme"
 version = "0.1.0"
-source = "git+https://github.com/merely-made/mere.git?rev=17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65#17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
 dependencies = [
+ "mere-curation",
  "serde",
  "serde_json",
  "taffy",
@@ -1108,7 +1144,7 @@ dependencies = [
 [[package]]
 name = "mere-kernel"
 version = "0.0.2"
-source = "git+https://github.com/merely-made/mere.git?rev=17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65#17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
 dependencies = [
  "accesskit",
  "chartulary",
@@ -1133,13 +1169,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "mere-surface-api"
+version = "0.1.0"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
+dependencies = [
+ "workbench",
+]
+
+[[package]]
 name = "meristem"
-version = "0.1.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fd8fc729a7b643acd4b72254097a3ddadd6782aa054b744191682d37113f2e24"
+version = "0.2.0"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
 dependencies = [
  "anymore",
- "hashbrown 0.17.1",
  "tracing",
 ]
 
@@ -1186,6 +1228,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "multiversion_no_op"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "743fb55ba31b18fb1ecef6bdc9aa2743314978ac084044301a7eee33fb99a20d"
+
+[[package]]
 name = "munge"
 version = "0.4.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1208,7 +1256,7 @@ dependencies = [
 [[package]]
 name = "muniment"
 version = "0.1.2"
-source = "git+https://github.com/merely-made/mere.git?rev=17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65#17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
 dependencies = [
  "async-trait",
  "blake3",
@@ -1226,7 +1274,7 @@ dependencies = [
  "glam 0.30.10",
  "glam 0.31.1",
  "glam 0.32.1",
- "glam 0.33.3",
+ "glam 0.33.12",
  "matrixmultiply",
  "nalgebra-macros",
  "num-complex",
@@ -1245,6 +1293,21 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.119",
+]
+
+[[package]]
+name = "netrender-vello"
+version = "0.11.0"
+source = "git+https://github.com/mark-ik/vello?rev=2eae6243881d5b24c984d5ee35dde509ca5db782#2eae6243881d5b24c984d5ee35dde509ca5db782"
+dependencies = [
+ "bytemuck",
+ "log",
+ "peniko",
+ "png 0.18.1",
+ "skrifa",
+ "static_assertions",
+ "thiserror",
+ "vello_encoding",
 ]
 
 [[package]]
@@ -1280,13 +1343,13 @@ checksum = "521739c6d2bac4aa25192232afe6841231376b2b26d4d9fae5ecf8ca5772e441"
 
 [[package]]
 name = "num-derive"
-version = "0.4.2"
+version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ed3955f1a9c7c0c15e092f9c887db08b1fc683305fdf6eb6684f22555355e202"
+checksum = "e4e98dc3b890f6c23a0f9d3d491a2823d0dea0fa656302a13dd225fa924112a8"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.119",
+ "syn 3.0.3",
 ]
 
 [[package]]
@@ -1322,7 +1385,7 @@ dependencies = [
 [[package]]
 name = "numen"
 version = "0.2.0"
-source = "git+https://github.com/merely-made/mere.git?rev=17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65#17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
 dependencies = [
  "serde",
  "strum",
@@ -1346,9 +1409,8 @@ dependencies = [
 
 [[package]]
 name = "paint_list_api"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cf8d106a9c20e5ff07e914931f79dc4c3477593bc751c59f70d6db5f483c0da9"
+version = "0.1.2"
+source = "git+https://github.com/merely-made/netrender.git?rev=c74b7cb28090c28b1c6d80b08dcdea18aff48d3e#c74b7cb28090c28b1c6d80b08dcdea18aff48d3e"
 dependencies = [
  "euclid",
  "serde",
@@ -1379,9 +1441,9 @@ dependencies = [
 
 [[package]]
 name = "parry2d"
-version = "0.28.0"
+version = "0.31.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7442878be87d7db217355c73d925df664b0f8e46faf115c58a52139a3e40c8cd"
+checksum = "fe1ba500175e957aaa27ddc92290ec8ff503d73331365443660816d6302e2a31"
 dependencies = [
  "approx",
  "arrayvec",
@@ -1392,6 +1454,7 @@ dependencies = [
  "foldhash 0.2.0",
  "glamx",
  "hashbrown 0.17.1",
+ "indexmap",
  "log",
  "num-derive",
  "num-traits",
@@ -1601,7 +1664,7 @@ checksum = "f8dcc9c7d52a811697d2151c701e0d08956f92b0e24136cf4cf27b57a6a0d9bf"
 [[package]]
 name = "radio-face"
 version = "0.0.1"
-source = "git+https://github.com/merely-made/retinue.git?rev=6aa78fc0d0ddd30e94db59470f30f47e669321dc#6aa78fc0d0ddd30e94db59470f30f47e669321dc"
+source = "git+https://github.com/merely-made/retinue.git?rev=b49df894635bac95823284efee6c445885eaf62a#b49df894635bac95823284efee6c445885eaf62a"
 dependencies = [
  "embedded-graphics",
 ]
@@ -1609,7 +1672,7 @@ dependencies = [
 [[package]]
 name = "radio-mirror"
 version = "0.0.1"
-source = "git+https://github.com/merely-made/retinue.git?rev=6aa78fc0d0ddd30e94db59470f30f47e669321dc#6aa78fc0d0ddd30e94db59470f30f47e669321dc"
+source = "git+https://github.com/merely-made/retinue.git?rev=b49df894635bac95823284efee6c445885eaf62a#b49df894635bac95823284efee6c445885eaf62a"
 dependencies = [
  "embedded-graphics",
  "png 0.17.16",
@@ -1630,11 +1693,12 @@ dependencies = [
 
 [[package]]
 name = "rapier2d"
-version = "0.33.0"
+version = "0.36.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6350781ded7f80bc5c76ef9c45c57813c34c2b3df43769677114633a6b36059e"
+checksum = "b73d84c8e78f4fbd46fb5c800bbdb15cad6ef2bd517de6a4d31fe60edd838f8d"
 dependencies = [
  "approx",
+ "arrayvec",
  "bitflags 2.13.1",
  "glamx",
  "log",
@@ -1657,12 +1721,13 @@ checksum = "60a357793950651c4ed0f3f52338f53b2f809f32d83a07f72909fa13e4c6c1e3"
 
 [[package]]
 name = "read-fonts"
-version = "0.39.2"
+version = "0.41.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c4ed38b89c2c77ff968c524145ad65fb010f38af5c7a224b53b81d47ac2daa81"
+checksum = "046a7d674daf459825b32f5062056d6882db0d2f5a479fbd76ccfc870ac18709"
 dependencies = [
  "bytemuck",
  "font-types",
+ "once_cell",
 ]
 
 [[package]]
@@ -1702,6 +1767,15 @@ name = "regex-syntax"
 version = "0.8.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d6f6ff9a378485b298a5286656da665ba74413d36db0979633275d2e708145d4"
+
+[[package]]
+name = "regress"
+version = "0.11.1"
+source = "git+https://github.com/merely-made/genet.git?rev=7a8c5b8cb499f2d3b91083c2f7e38236599f98dc#7a8c5b8cb499f2d3b91083c2f7e38236599f98dc"
+dependencies = [
+ "hashbrown 0.16.1",
+ "memchr",
+]
 
 [[package]]
 name = "rend"
@@ -1766,7 +1840,7 @@ dependencies = [
 [[package]]
 name = "sceno"
 version = "0.0.4"
-source = "git+https://github.com/merely-made/mere.git?rev=17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65#17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
 dependencies = [
  "serde",
  "serde_json",
@@ -1775,8 +1849,9 @@ dependencies = [
 [[package]]
 name = "scenograph"
 version = "0.0.4"
-source = "git+https://github.com/merely-made/mere.git?rev=17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65#17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
 dependencies = [
+ "mere-curation",
  "sceno",
  "serde",
  "serde_json",
@@ -1785,7 +1860,7 @@ dependencies = [
 [[package]]
 name = "scenomise"
 version = "0.0.4"
-source = "git+https://github.com/merely-made/mere.git?rev=17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65#17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
 dependencies = [
  "sceno",
  "scenograph",
@@ -1796,7 +1871,7 @@ dependencies = [
 [[package]]
 name = "scenotime"
 version = "0.0.4"
-source = "git+https://github.com/merely-made/mere.git?rev=17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65#17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
 dependencies = [
  "sceno",
  "serde",
@@ -1812,7 +1887,7 @@ checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
 [[package]]
 name = "seiche"
 version = "0.0.6"
-source = "git+https://github.com/merely-made/mere.git?rev=17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65#17519aa4b76f9fa37577d1bb9cbfb46c6bf4ae65"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
 dependencies = [
  "armillary",
  "euclid",
@@ -1915,6 +1990,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f1a7200d82ff1c7b4235efd12f11e2537a402c91cf83a5cb97ce80eef787fde7"
 dependencies = [
  "approx",
+ "libm",
  "num-complex",
  "num-traits",
  "wide",
@@ -1940,9 +2016,9 @@ checksum = "8ee5873ec9cce0195efcb7a4e9507a04cd49aec9c83d0389df45b1ef7ba2e649"
 
 [[package]]
 name = "skrifa"
-version = "0.42.1"
+version = "0.44.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0c34617370ae968efb7161bb2beb517d9084659aae19e24b89e3db25b46e4564"
+checksum = "819ab7d62b1d3e72d9d9dea5650bac30424f9111364bb94928dbf5ecad1baa68"
 dependencies = [
  "bytemuck",
  "read-fonts",
@@ -1985,12 +2061,11 @@ dependencies = [
 [[package]]
 name = "sprigging"
 version = "0.2.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f3288fa277d9512da0a2b188e784a9b2e75b5ca915dfc3c89d5211bfba528e9d"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
 dependencies = [
  "accesskit",
+ "netrender-vello",
  "paint_list_api",
- "vello",
 ]
 
 [[package]]
@@ -2311,26 +2386,9 @@ dependencies = [
 ]
 
 [[package]]
-name = "vello"
-version = "0.9.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "261359dbef879f8110ef7e1c442246c838d33d3d91cb05e0ea9288d432760c9f"
-dependencies = [
- "bytemuck",
- "log",
- "peniko",
- "png 0.18.1",
- "skrifa",
- "static_assertions",
- "thiserror",
- "vello_encoding",
-]
-
-[[package]]
 name = "vello_encoding"
-version = "0.9.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2346f5f0d7dccb3582fcd397b4a57b43165209f1424e0d76e85dd814db164af7"
+version = "0.11.0"
+source = "git+https://github.com/mark-ik/vello?rev=2eae6243881d5b24c984d5ee35dde509ca5db782#2eae6243881d5b24c984d5ee35dde509ca5db782"
 dependencies = [
  "bytemuck",
  "guillotiere",
@@ -2441,6 +2499,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "23b97319f7b8343df12cc98938e5c3eb436064524c8d2b4e30a1d3a36eecdf81"
 
 [[package]]
+name = "workbench"
+version = "0.1.0"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
+
+[[package]]
 name = "writeable"
 version = "0.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2544,3 +2607,63 @@ name = "zmij"
 version = "1.0.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "29666d0abbfad1e3dc4dcf6144730dd3a3ab225bbbdac83319345b1b44ccfc1b"
+
+[[patch.unused]]
+name = "mere-p2panda-net"
+version = "0.7.5"
+source = "git+https://github.com/mark-ik/p2panda.git?tag=mere-p2panda-net-0.7.5-upstream-20261013#1f69c9bcb9f2a9d798b1c25b2ec2f47c0416bd65"
+
+[[patch.unused]]
+name = "mere-proofs"
+version = "0.1.0"
+source = "git+https://www.github.com/merely-made/mere.git?rev=0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d#0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d"
+
+[[patch.unused]]
+name = "netrender_device"
+version = "0.1.2"
+source = "git+https://github.com/merely-made/netrender.git?rev=c74b7cb28090c28b1c6d80b08dcdea18aff48d3e#c74b7cb28090c28b1c6d80b08dcdea18aff48d3e"
+
+[[patch.unused]]
+name = "p2panda-auth"
+version = "0.7.1"
+source = "git+https://github.com/mark-ik/p2panda.git?tag=mere-p2panda-net-0.7.5-upstream-20261013#1f69c9bcb9f2a9d798b1c25b2ec2f47c0416bd65"
+
+[[patch.unused]]
+name = "p2panda-core"
+version = "0.7.1"
+source = "git+https://github.com/mark-ik/p2panda.git?tag=mere-p2panda-net-0.7.5-upstream-20261013#1f69c9bcb9f2a9d798b1c25b2ec2f47c0416bd65"
+
+[[patch.unused]]
+name = "p2panda-discovery"
+version = "0.7.1"
+source = "git+https://github.com/mark-ik/p2panda.git?tag=mere-p2panda-net-0.7.5-upstream-20261013#1f69c9bcb9f2a9d798b1c25b2ec2f47c0416bd65"
+
+[[patch.unused]]
+name = "p2panda-encryption"
+version = "0.7.1"
+source = "git+https://github.com/mark-ik/p2panda.git?tag=mere-p2panda-net-0.7.5-upstream-20261013#1f69c9bcb9f2a9d798b1c25b2ec2f47c0416bd65"
+
+[[patch.unused]]
+name = "p2panda-store"
+version = "0.7.1"
+source = "git+https://github.com/mark-ik/p2panda.git?tag=mere-p2panda-net-0.7.5-upstream-20261013#1f69c9bcb9f2a9d798b1c25b2ec2f47c0416bd65"
+
+[[patch.unused]]
+name = "p2panda-stream"
+version = "0.7.1"
+source = "git+https://github.com/mark-ik/p2panda.git?tag=mere-p2panda-net-0.7.5-upstream-20261013#1f69c9bcb9f2a9d798b1c25b2ec2f47c0416bd65"
+
+[[patch.unused]]
+name = "p2panda-sync"
+version = "0.7.1"
+source = "git+https://github.com/mark-ik/p2panda.git?tag=mere-p2panda-net-0.7.5-upstream-20261013#1f69c9bcb9f2a9d798b1c25b2ec2f47c0416bd65"
+
+[[patch.unused]]
+name = "genet-taffy"
+version = "0.14.0"
+source = "git+https://github.com/merely-made/genet.git?rev=7a8c5b8cb499f2d3b91083c2f7e38236599f98dc#7a8c5b8cb499f2d3b91083c2f7e38236599f98dc"
+
+[[patch.unused]]
+name = "vello_shaders"
+version = "0.11.0"
+source = "git+https://github.com/mark-ik/vello?rev=2eae6243881d5b24c984d5ee35dde509ca5db782#2eae6243881d5b24c984d5ee35dde509ca5db782"
