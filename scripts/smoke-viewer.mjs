@@ -28,7 +28,7 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
   }
   const goto = page => page.goto(`${baseUrl}/repos/`, {waitUntil: 'networkidle'});
   const activate = page => page.getByRole('button', {name: 'Open the live graph', exact: true}).click();
-  const state = (page, expected) => page.waitForFunction(expected => document.querySelector('[data-graph-sandbox]').dataset.sandboxState === expected, expected, {timeout: 60000});
+  const state = (page, expected) => page.waitForFunction(expected => document.querySelector('[data-graph-sandbox]').dataset.sandboxState === expected, expected, {timeout: 60000, polling: 100});
 
   await check('desktop', {}, async page => {
     const diagnostics = [];
@@ -148,7 +148,7 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
     });
     try {
       await goto(page); await activate(page);
-      await page.waitForFunction(() => window.__heldDevice === true, null, {timeout: 40000});
+      await page.waitForFunction(() => window.__heldDevice === true, null, {timeout: 40000, polling: 100});
       const before = await page.evaluate(() => {
         window.__removedRoot = document.querySelector('graphshell-tree');
         return {connected: window.__removedRoot.isConnected, rafRequests: window.__rafRequests};
@@ -159,7 +159,7 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
       await staticReading(page);
       assert.equal(await page.evaluate(() => window.__removedRoot.isConnected), false);
       await page.evaluate(() => window.__releaseDevice());
-      await page.waitForFunction(() => window.__removedRoot.dataset.mountState === 'cancelled' && window.__deviceLost?.reason === 'destroyed', null, {timeout: 60000});
+      await page.waitForFunction(() => window.__removedRoot.dataset.mountState === 'cancelled' && window.__deviceLost?.reason === 'destroyed', null, {timeout: 60000, polling: 100});
       const after = await page.evaluate(async () => {
         const entry = document.querySelector('[data-graph-sandbox]').dataset.sandboxRuntime;
         const module = await import(new URL('./pkg/graphshell_web.js', new URL(entry, location.href)).href);
