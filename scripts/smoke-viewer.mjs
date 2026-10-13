@@ -62,6 +62,7 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
     const disclosed = history.revisions.at(-1).dataset.occurrences.find(item => item.occurrence_id === selectedProject.id);
     const projectLink = disclosed.values.project_url.value;
     assert.match(projectLink, /^https:\/\/merelyllc\.com\/projects\/[a-z0-9-]+\/$/);
+    assert.equal(new URL(projectLink).pathname, `/projects/${selectedProject.id}/`);
     assert.equal((await page.request.get(new URL(new URL(projectLink).pathname, baseUrl).href)).status(), 200);
     results.selected_project = projectLink;
     await viewer.scrollIntoViewIfNeeded();
