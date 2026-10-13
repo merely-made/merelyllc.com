@@ -24,13 +24,15 @@ jobs:
           root=Path('.tmp/viewer-linux-site');(root/'repos').mkdir(parents=True)
           shutil.copyfile('tests/fixtures/viewer-linux/repos.html',root/'repos/index.html')
           shutil.copyfile('tests/fixtures/viewer-linux/history.json',root/'repository-host-history.json')
+          (root/'projects/org-profile').mkdir(parents=True)
+          shutil.copyfile('tests/fixtures/viewer-linux/org-profile.html',root/'projects/org-profile/index.html')
           for name in ['site.css','graph-sandbox-mount.js','favicon.svg']:
             shutil.copyfile('assets/'+name,root/name)
           shutil.copytree('assets/graphshell',root/'graphshell/56d0cc1465a0')
           manifest={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in root.rglob('*') if p.is_file()}
           Path('.tmp/viewer-linux').mkdir()
           Path('.tmp/viewer-linux/served-inputs.json').write_text(json.dumps(manifest,indent=2))
-      - run: xvfb-run --auto-servernum node scripts/diagnose-viewer-linux.mjs
+      - run: xvfb-run --auto-servernum node scripts/diagnose-viewer-capture.mjs
         env:
           DEBUG: pw:browser
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
