@@ -161,6 +161,13 @@ export async function checkBrowsingRoutes(page, viewer, {touch = false, pauseFor
     results.push('history-disclosure');
   }
   if (resumePhysics && !pauseForCapture) await command('Play physics');
-  if (pauseForCapture) results.push('capture-with-physics-paused');
+  if (pauseForCapture) {
+    await openMenu();
+    await search.pressSequentially('physics');
+    await menu.getByRole('option', {name: 'Play physics', exact: true}).waitFor();
+    assert.equal(await menu.getByRole('option', {name: 'Pause physics', exact: true}).count(), 0);
+    await search.press('Escape'); await closed();
+    results.push({capture_state: 'physics-paused', evidence: 'Play physics offered; Pause physics absent'});
+  }
   return results;
 }
