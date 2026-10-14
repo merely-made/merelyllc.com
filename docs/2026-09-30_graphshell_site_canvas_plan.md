@@ -125,9 +125,17 @@ artifact validation pass. The first package measured 3,326,405 bytes gzip6. Afte
 `56859e30292405e682f28f3841b76e4f141acf73`; its fresh build and five command
 tests pass. Wasm gzip6 is 3,280,020 bytes against the 3,407,872-byte cap.
 Earlier packages and failed browser runs remain distinct historical evidence.
-Fresh browser acceptance remains pending, with tap bounds intersected against
-both the viewport and menu clip, actual touch paging/activation/dismissal, and
-keyboard page navigation. No source or package from this candidate is deployed.
+Source-bound R5 browser acceptance now passes all 13 viewer cases and the full
+site smoke. This includes desktop context/keyboard commands and page navigation;
+actual emulated-touch Fit, Next/Previous, Graph tools, dismissal and focus;
+static reading with no JavaScript; no-WebGPU/no-adapter and all startup/failure
+fallbacks. The headed Chrome run used the AMD adapter, closed its owned groups
+within its lease, and retained captures for visual review. See
+[the qualification record](receipts/site_browsing_20261013/qualification.json).
+Physical-phone performance and an alternative renderer are not qualified. The
+fitted project faces remain small. Publication is pending; the deployed row is
+unchanged until this candidate lands. Earlier failed runs remain failures.
+
 
 ## Purpose
 
