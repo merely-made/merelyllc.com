@@ -16,11 +16,16 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
     try {
       await run(page);
       assert.deepEqual(errors, [], `${name}: uncaught page errors`);
+      if (['desktop', 'touch-live', 'legacy-share', 'no-script', 'mobile', 'tablet', 'no-webgpu'].includes(name)) {
+        assert.deepEqual(consoleErrors, [], `${name}: console errors`);
+      }
       results.cases[name] = 'pass';
+      await writeFile(path.join(receiptRoot, 'viewer-progress.json'), JSON.stringify(results, null, 2));
     } catch (error) {
-      const state = await page.evaluate(() => ({hidden: document.hidden, focused: document.hasFocus(), title: document.title, state: document.querySelector('[data-graph-sandbox]')?.dataset.sandboxState, ready: document.querySelector('graphshell-tree')?.dataset.ready, connected: document.querySelector('graphshell-tree')?.isConnected, active: document.activeElement?.outerHTML, mirror: document.querySelector('[data-cambium-mirror]')?.textContent})).catch(() => null);
+      const state = await page.evaluate(() => ({hidden: document.hidden, focused: document.hasFocus(), title: document.title, state: document.querySelector('[data-graph-sandbox]')?.dataset.sandboxState, ready: document.querySelector('graphshell-tree')?.dataset.ready, connected: document.querySelector('graphshell-tree')?.isConnected, active: document.activeElement?.outerHTML, mirror: document.querySelector('[data-cambium-mirror]')?.textContent, browsingRoutes: window.__browsingRouteEvidence, touchDiagnostics: window.__touchDiagnostics, semantics: [...document.querySelectorAll('graphshell-tree [role]')].map(e => ({role: e.getAttribute('role'), label: e.getAttribute('aria-label'), text: e.textContent?.slice(0,120)}))})).catch(() => null);
       await writeFile(path.join(receiptRoot, `viewer-${name}-failure.json`), JSON.stringify({error: String(error), errors, consoleErrors, state}, null, 2));
       await page.screenshot({path: path.join(receiptRoot, `viewer-${name}-failure.png`), fullPage: true}).catch(() => {});
+      await page.screenshot({path: path.join(receiptRoot, `viewer-${name}-failure-viewport.png`)}).catch(() => {});
       throw error;
     } finally { await page.close(); }
   }
@@ -105,6 +110,8 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
     }
     await viewer.getByRole('button', {name: `Select ${selectedProject.name}`, exact: true}).press('Enter');
     await viewer.getByRole('button', {name: 'Hide project list', exact: true}).press('Enter');
+    const hideSelection = viewer.getByRole('button', {name: 'Hide selection controls', exact: true});
+    if (await hideSelection.count()) await hideSelection.press('Enter');
     await page.screenshot({path: path.join(receiptRoot, 'viewer-desktop.png'), fullPage: true});
     results.capture_bounds = await captureViewer(page, viewer, path.join(receiptRoot, 'viewer-desktop-component.png'));
     await page.screenshot({path: path.join(receiptRoot, 'viewer-desktop-viewport.png')});
@@ -153,7 +160,26 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
     assert.equal(await page.locator('[data-sandbox-open]').isVisible(), true);
   });
   await check('touch-live', {viewport: {width: 390, height: 844}, isMobile: true, hasTouch: true}, async page => {
-    await goto(page); await staticReading(page);
+    await page.addInitScript(() => {
+      window.__touchDiagnostics = [];
+      const record = (phase, event) => {
+        if (window.__touchDiagnostics.length >= 80) return;
+        const root = document.querySelector('graphshell-tree');
+        const canvas = root?.querySelector('canvas');
+        const rect = canvas?.getBoundingClientRect();
+        window.__touchDiagnostics.push({phase, type: event.type, x: event.clientX, y: event.clientY,
+          pointerType: event.pointerType, button: event.button, target: event.target?.tagName,
+          scrollY, prevented: event.defaultPrevented, canvas: rect?.toJSON(),
+          overlay: root?.getAttribute('data-graphshell-painted-overlay'),
+          beforeEvent: root?.getAttribute('data-graphshell-overlay-before-event')});
+      };
+      for (const type of ['pointerdown', 'pointerup', 'pointercancel']) {
+        document.addEventListener(type, event => record('capture', event), true);
+        document.addEventListener(type, event => record('bubble', event));
+      }
+    });
+    await page.goto(`${baseUrl}/repos/?overlay_observe=1`, {waitUntil: 'networkidle'});
+    await staticReading(page);
     await page.getByRole('button', {name: 'Open the live graph', exact: true}).tap();
     await state(page, 'ready');
     const viewer = page.locator('graphshell-tree');

@@ -112,7 +112,18 @@ button row remain the accepted version until the new remapped release passes
 R157 size caps and source-bound browser acceptance. The acceptance driver adds
 right-click, Control/Command+K, Shift+F10, command execution, dismissal focus,
 history disclosure, compact touch targets and no-script disclosure keys. These
-checks are prepared, not yet executed against the replacement package.
+checks passed for desktop and no-script/mobile/tablet static reading in local
+R3/R4 runs. Touch Fit passed too; the later Graph tools tap was below the menu's
+painted clip. Those failed full runs are preserved and do not qualify adoption.
+
+Provider `13ede033f8afe6af58db81921b3ded61108602b9` adds bounded browsing
+command pages, visible Previous/Next controls and Close before the list. Shared
+search and keyboard selection reveal the same pages; no host event dispatch is
+duplicated. Five command tests, the release build, package verification and site
+artifact validation pass. Wasm gzip6 is 3,326,405 bytes against 3,407,872.
+Fresh browser acceptance remains pending, with tap bounds intersected against
+both the viewport and menu clip, actual touch paging/activation/dismissal, and
+keyboard page navigation. No source or package from this candidate is deployed.
 
 ## Purpose
 

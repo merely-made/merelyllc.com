@@ -98,6 +98,8 @@ const receipt = {
 };
 
 try {
+  receipt.qualified_viewer = await checkQualifiedViewer(browser, baseUrl, receiptRoot);
+  console.log('PASS shared browsing viewer cases:', Object.keys(receipt.qualified_viewer.cases).join(', '));
   const sitemapResponse = await fetch(`${baseUrl}/sitemap.xml`);
   assert.equal(sitemapResponse.status, 200);
   assert.match(
@@ -1430,7 +1432,6 @@ try {
   };
   await textProject.close();
 
-  receipt.qualified_viewer = await checkQualifiedViewer(browser, baseUrl, receiptRoot);
   receipt.desktop.repositories = receipt.qualified_viewer.repositories;
   receipt.desktop.graph_edges = receipt.qualified_viewer.relationships;
 
