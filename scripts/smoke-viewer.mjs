@@ -112,9 +112,12 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
     await viewer.getByRole('button', {name: 'Hide project list', exact: true}).press('Enter');
     const hideSelection = viewer.getByRole('button', {name: 'Hide selection controls', exact: true});
     if (await hideSelection.count()) await hideSelection.press('Enter');
-    await page.screenshot({path: path.join(receiptRoot, 'viewer-desktop.png'), fullPage: true});
     results.capture_bounds = await captureViewer(page, viewer, path.join(receiptRoot, 'viewer-desktop-component.png'));
     await page.screenshot({path: path.join(receiptRoot, 'viewer-desktop-viewport.png')});
+    // Preserve the visible viewer first. SwiftShader can need more than the
+    // default 30 seconds to capture the entire long repository document.
+    // A capture timeout still fails acceptance; this is a finite capture budget.
+    await page.screenshot({path: path.join(receiptRoot, 'viewer-desktop.png'), fullPage: true, timeout: 90000});
     results.screenshots.push('viewer-desktop.png', 'viewer-desktop-component.png', 'viewer-desktop-viewport.png');
     assert.deepEqual(diagnostics, [], 'live viewer console errors');
     results.resources = await heavy(page);
