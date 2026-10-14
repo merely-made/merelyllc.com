@@ -116,11 +116,15 @@ checks passed for desktop and no-script/mobile/tablet static reading in local
 R3/R4 runs. Touch Fit passed too; the later Graph tools tap was below the menu's
 painted clip. Those failed full runs are preserved and do not qualify adoption.
 
-Provider `13ede033f8afe6af58db81921b3ded61108602b9` adds bounded browsing
+Provider `13ede033f8afe6af58db81921b3ded61108602b9` introduced bounded browsing
 command pages, visible Previous/Next controls and Close before the list. Shared
 search and keyboard selection reveal the same pages; no host event dispatch is
 duplicated. Five command tests, the release build, package verification and site
-artifact validation pass. Wasm gzip6 is 3,326,405 bytes against 3,407,872.
+artifact validation pass. The first package measured 3,326,405 bytes gzip6. After merging upstream
+`5ca89dd4dfceea007fd58bace40042ca10a6eea6`, the current provider is
+`56859e30292405e682f28f3841b76e4f141acf73`; its fresh build and five command
+tests pass. Wasm gzip6 is 3,280,020 bytes against the 3,407,872-byte cap.
+Earlier packages and failed browser runs remain distinct historical evidence.
 Fresh browser acceptance remains pending, with tap bounds intersected against
 both the viewport and menu clip, actual touch paging/activation/dismissal, and
 keyboard page navigation. No source or package from this candidate is deployed.
