@@ -1,0 +1,12 @@
+{
+  "status": "pass",
+  "started_utc": "2026-10-14T06:18:43.314600+00:00",
+  "released_utc": "2026-10-14T06:20:59.273327+00:00",
+  "closed": true,
+  "within_deadline": true,
+  "cleanup_errors": [],
+  "interruptions": [],
+  "seal_sha256": "6114468a012717f72ab13f652bd43a085ece8f98498bc81b4afec7e06a6c9e61",
+  "lease_sha256": "11f64e3f7609eea91686d22b40867455100d182dab7e6935727b38534cf405a8",
+  "original_receipt_sha256": "c1d5cccaafb932bd20ce1b66b90f329e5041aab5161ef9b51eef71b1f8cf4d5f"
+}
