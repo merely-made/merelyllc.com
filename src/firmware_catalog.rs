@@ -1,4 +1,4 @@
-//! The retained public Retinue package index and its exact provenance.
+//! Murm's retained Retinue package index and its exact provenance.
 //!
 //! Mer3ly does not invent installer readiness in device prose. It renders the
 //! package state, instructions, recovery path, and physical-receipt hosts from
@@ -18,7 +18,7 @@ pub const PACKAGE_INDEX_PATH: &str = "content/retinue-package-index.toml";
 pub const PACKAGE_INDEX_SOURCE_PATH: &str = "content/retinue-package-index-source.toml";
 pub const PACKAGE_INDEX_SCHEMA: &str = "retinue.package-index/v1";
 pub const PACKAGE_INDEX_SOURCE_SCHEMA: &str = "mer3ly.firmware-index-source/v1";
-pub const RETINUE_PACKAGE_INDEX_URL: &str = "https://github.com/merely-made/retinue/blob/bd71ee1886a4dea397854aa3084341b44c76b55f/firmware/packages/index.toml";
+pub const RETINUE_PACKAGE_INDEX_URL: &str = "https://github.com/merely-made/murm/blob/bd71ee1886a4dea397854aa3084341b44c76b55f/firmware/packages/index.toml";
 
 #[derive(Clone, Debug)]
 pub struct FirmwareCatalog {
@@ -90,8 +90,25 @@ impl FirmwareCatalog {
         let index: PackageIndex = toml::from_slice(&index_bytes).map_err(|error| {
             AuthorityError::from_message(format!("parse {}: {error}", index_path.display()))
         })?;
-        let catalog = Self { index, source };
+        let mut catalog = Self { index, source };
         catalog.validate(&index_bytes)?;
+        // The recorded feed stays byte-for-byte verifiable at its immutable
+        // source commit. Project its links onto the renamed repository only
+        // after checking that custody record.
+        for package in &mut catalog.index.packages {
+            package.instructions_url = canonical_murm_url(&package.instructions_url);
+            package.recovery_url = canonical_murm_url(&package.recovery_url);
+            for url in package
+                .installer_receipts
+                .iter_mut()
+                .chain(&mut package.recovery_receipts)
+            {
+                *url = canonical_murm_url(url);
+            }
+            if let Some(url) = &mut package.purchase_url {
+                *url = canonical_murm_url(url);
+            }
+        }
         Ok(catalog)
     }
 
@@ -172,6 +189,18 @@ impl FirmwareCatalog {
             validate_package(package)?;
         }
         Ok(())
+    }
+}
+
+fn canonical_murm_url(url: &str) -> String {
+    const OLD: &str = "https://github.com/merely-made/retinue";
+    const NEW: &str = "https://github.com/merely-made/murm";
+    if url == OLD {
+        NEW.to_owned()
+    } else if let Some(path) = url.strip_prefix("https://github.com/merely-made/retinue/") {
+        format!("{NEW}/{path}")
+    } else {
+        url.to_owned()
     }
 }
 

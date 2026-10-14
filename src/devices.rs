@@ -202,7 +202,7 @@ impl DeviceCatalog {
                 check_public_text(&format!("device {} {field}", device.id), value, &mut errors);
             }
 
-            if device.source_repository != "https://github.com/merely-made/retinue" {
+            if device.source_repository != "https://github.com/merely-made/murm" {
                 errors.push(format!(
                     "device {} source_repository must be the public Retinue repository",
                     device.id
@@ -549,7 +549,7 @@ power = "USB bench power"
 antenna = "Open"
 enclosure = "Open"
 recipe_state = "Incomplete"
-source_repository = "https://github.com/merely-made/retinue"
+source_repository = "https://github.com/merely-made/murm"
 source_document = "firmware/example/README.md"
 
 [device.authorization]

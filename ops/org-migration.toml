@@ -237,8 +237,8 @@ source_aliases = ["mark-ik/mere"]
 
 [[migration]]
 id = "retinue"
-current_slug = "merely-made/retinue"
-target_slug = "merely-made/retinue"
+current_slug = "merely-made/murm"
+target_slug = "merely-made/murm"
 classification = "platform"
 batch = "platform"
 disposition = "already-in-org"

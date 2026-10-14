@@ -29,6 +29,8 @@ pub const ARTIFACT_DIRECTORY: &str = "retinue-traces";
 /// The scenarios the lab reads, in the order it offers them.
 pub const SCENARIO_IDS: [&str; 2] = ["cold", "warm"];
 
+// This is the repository locator recorded when the immutable traces were
+// generated. Public navigation uses Murm; the custody record keeps its bytes.
 const RETINUE_REPOSITORY: &str = "https://github.com/merely-made/retinue";
 const SIM_CRATE: &str = "retinue-sim";
 

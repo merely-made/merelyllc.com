@@ -719,3 +719,17 @@ artifact. Pages run `30557137565` deployed source
 `248aecc90f7c8f09212135cdaa50aef7e01c1e60`. The Cloudflare Worker custom
 domain was removed, and the proxied public site matched the checked Pages
 artifact at the home, repository, and community-radio routes.
+
+## 2026-10-13 — Retinue repository renamed to Murm
+
+The existing source repository became `merely-made/murm` with repository ID
+1291698578 and all refs retained. The public manifest keeps graph ID `retinue`
+while displaying Murm and using its canonical slug/homepage. Current device
+locators and the org profile use Murm. Cargo consumers select the imported
+carriers at their immutable source revision. The 83 site tests pass after the
+change, including firmware catalog and trace custody/navigation. The retained
+firmware index and generated trace/provenance bytes are unchanged; public
+links are projected onto the canonical home after verification. Existing
+headed viewer/deployment receipts retain their recorded sources. The family
+cutover and open implementation work are owned by
+`murm/design_docs/2026-10-13_murm_family_move_plan.md`.

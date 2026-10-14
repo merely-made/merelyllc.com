@@ -103,7 +103,7 @@ source = "mere"
 target = "retinue"
 kind = "depends_on"
 provenance = "derived"
-evidence = "Mere's root Cargo manifest uses Retinue from merely-made/retinue."
+evidence = "Mere's root Cargo manifest uses Retinue from merely-made/murm."
 verified_on = "2026-07-29"
 
 [[relation]]

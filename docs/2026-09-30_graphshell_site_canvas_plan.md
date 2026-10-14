@@ -755,7 +755,7 @@ Each answer was the recommended option where one was offered.
   Clippy and fmt are clean, and all three firmware images build.
 - **Ruling 80, pushing.** Options: push after landing; hold the push. Mark:
   "Push after landing (Recommended)". Done: `66bc578..fa4f925` was pushed to
-  `merely-made/retinue` (62 commits). CI run 37087337250 was queued. Before
+  `merely-made/murm` (62 commits). CI run 37087337250 was queued. Before
   the push, `main`'s CI had been red only on the `check` job, at
   `request_string_map`'s unresolved import, which N19 fixes; `msrv`,
   `firmware`, `fuzz`, `licenses`, and `validation-registry` were green.

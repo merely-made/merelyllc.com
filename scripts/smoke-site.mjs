@@ -1406,7 +1406,7 @@ try {
   assert.equal(textMetadata.structured_type, "SoftwareSourceCode");
   assert.equal(
     textMetadata.code_repository,
-    "https://github.com/merely-made/retinue",
+    "https://github.com/merely-made/murm",
   );
   assert.equal(await horizontalOverflow(textProject), 0);
   assert.deepEqual(
