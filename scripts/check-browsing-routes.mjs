@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 
 // Exercise browser input against the retained command surface, not DOM clicks
 // on the pointer-blind accessibility mirror.
-export async function checkBrowsingRoutes(page, viewer, {touch = false} = {}) {
+export async function checkBrowsingRoutes(page, viewer, {touch = false, pauseForCapture = false} = {}) {
   const menu = viewer.getByRole('dialog', {name: 'Graph commands', exact: true});
   const trigger = viewer.getByRole('button', {name: 'Graph menu', exact: true});
   const search = viewer.getByRole('textbox', {name: 'Search graph commands', exact: true});
@@ -160,6 +160,7 @@ export async function checkBrowsingRoutes(page, viewer, {touch = false} = {}) {
     await viewer.getByRole('region', {name: 'History', exact: true}).waitFor({state: 'detached'});
     results.push('history-disclosure');
   }
-  if (resumePhysics) await command('Play physics');
+  if (resumePhysics && !pauseForCapture) await command('Play physics');
+  if (pauseForCapture) results.push('capture-with-physics-paused');
   return results;
 }

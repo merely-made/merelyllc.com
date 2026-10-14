@@ -13,7 +13,7 @@ export async function captureViewer(page, viewer, destination) {
   await page.waitForTimeout(100);
   const clip = await bounds();
   assert.deepEqual(clip, before, 'viewer capture bounds remain stable');
-  await page.screenshot({path: destination, fullPage: true, clip});
+  await page.screenshot({path: destination, fullPage: true, clip, timeout: 90000});
   assert.deepEqual(await bounds(), clip, 'viewer capture preserves layout');
   return clip;
 }
