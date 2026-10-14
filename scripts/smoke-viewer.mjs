@@ -98,7 +98,7 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
     assert.ok(adapter, 'viewer requires WebGPU adapter');
     if (process.env.MER3LY_REQUIRE_HARDWARE === 'true') assert.ok(adapter.vendor === 'amd' && !/swiftshader/i.test(JSON.stringify(adapter)), 'local acceptance needs AMD hardware');
     results.adapter = adapter;
-    results.browsing_routes = await checkBrowsingRoutes(page, viewer);
+    results.browsing_routes = await checkBrowsingRoutes(page, viewer, {pauseForCapture: true});
     // A pointer context menu can change the active subject. Re-establish the
     // disclosed subject before checking its canonical navigation.
     if (await viewer.getByRole('button', {name: 'Manage selection', exact: true}).count()) {
@@ -113,7 +113,7 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
     const hideSelection = viewer.getByRole('button', {name: 'Hide selection controls', exact: true});
     if (await hideSelection.count()) await hideSelection.press('Enter');
     results.capture_bounds = await captureViewer(page, viewer, path.join(receiptRoot, 'viewer-desktop-component.png'));
-    await page.screenshot({path: path.join(receiptRoot, 'viewer-desktop-viewport.png')});
+    await page.screenshot({path: path.join(receiptRoot, 'viewer-desktop-viewport.png'), timeout: 90000});
     // Preserve the visible viewer first. SwiftShader can need more than the
     // default 30 seconds to capture the entire long repository document.
     // A capture timeout still fails acceptance; this is a finite capture budget.
@@ -187,9 +187,9 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
     await state(page, 'ready');
     const viewer = page.locator('graphshell-tree');
     await viewer.scrollIntoViewIfNeeded();
-    results.touch_routes = await checkBrowsingRoutes(page, viewer, {touch: true});
+    results.touch_routes = await checkBrowsingRoutes(page, viewer, {touch: true, pauseForCapture: true});
     await staticReading(page);
-    await page.screenshot({path: path.join(receiptRoot, 'viewer-touch-live.png')});
+    await page.screenshot({path: path.join(receiptRoot, 'viewer-touch-live.png'), timeout: 90000});
     results.screenshots.push('viewer-touch-live.png');
   });
   await check('no-webgpu', {}, async page => {
