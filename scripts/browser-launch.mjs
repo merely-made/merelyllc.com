@@ -6,6 +6,9 @@ export function browserArguments({headless, softwareGpu, platform = process.plat
   if (platform !== 'linux' || !softwareGpu) return ['--enable-unsafe-webgpu', '--use-angle=swiftshader'];
   return [
     '--enable-unsafe-webgpu',
+    // Full-document capture suppresses Chromium scrollbars. Suppress them
+    // from launch too, so capture cannot change the centered layout by 7.5px.
+    '--hide-scrollbars',
     '--use-gl=angle',
     '--use-angle=swiftshader',
     '--use-vulkan=swiftshader',
