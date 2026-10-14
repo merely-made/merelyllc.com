@@ -45,8 +45,13 @@ export async function checkBrowsingRoutes(page, viewer, {touch = false, pauseFor
       if (await option.count()) { await tap(option); await closed(); return; }
       const next = menu.getByRole('button', {name: 'Next commands', exact: true});
       assert.equal(await next.count(), 1, `touch can reach ${label}`);
+      const before = await menu.getByRole('option').allTextContents();
       await tap(next);
-      await page.waitForTimeout(80);
+      await page.waitForFunction(before => {
+        const dialog = document.querySelector('graphshell-tree [role="dialog"]');
+        const current = [...(dialog?.querySelectorAll('[role="option"]') ?? [])].map(el => el.textContent);
+        return current.length > 0 && JSON.stringify(current) !== JSON.stringify(before);
+      }, before, {timeout: 30000, polling: 100});
     }
     assert.fail(`touch command paging did not reach ${label}`);
   }
