@@ -23,7 +23,7 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
       await writeFile(path.join(receiptRoot, 'viewer-progress.json'), JSON.stringify(results, null, 2));
     } catch (error) {
       const state = await page.evaluate(() => ({hidden: document.hidden, focused: document.hasFocus(), title: document.title, state: document.querySelector('[data-graph-sandbox]')?.dataset.sandboxState, ready: document.querySelector('graphshell-tree')?.dataset.ready, connected: document.querySelector('graphshell-tree')?.isConnected, active: document.activeElement?.outerHTML, mirror: document.querySelector('[data-cambium-mirror]')?.textContent, captureDiagnostics: window.__captureDiagnostics, browsingRoutes: window.__browsingRouteEvidence, touchDiagnostics: window.__touchDiagnostics, semantics: [...document.querySelectorAll('graphshell-tree [role]')].map(e => ({role: e.getAttribute('role'), label: e.getAttribute('aria-label'), text: e.textContent?.slice(0,120)}))})).catch(() => null);
-      await writeFile(path.join(receiptRoot, `viewer-${name}-failure.json`), JSON.stringify({error: String(error), errors, consoleErrors, state}, null, 2));
+      await writeFile(path.join(receiptRoot, `viewer-${name}-failure.json`), JSON.stringify({error: String(error), errors, consoleErrors, completedEvidence: results, state}, null, 2));
       await page.screenshot({path: path.join(receiptRoot, `viewer-${name}-failure.png`), fullPage: true}).catch(() => {});
       await page.screenshot({path: path.join(receiptRoot, `viewer-${name}-failure-viewport.png`)}).catch(() => {});
       throw error;
@@ -104,14 +104,24 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
     if (await viewer.getByRole('button', {name: 'Manage selection', exact: true}).count()) {
       await viewer.getByRole('button', {name: 'Manage selection', exact: true}).press('Enter');
       await viewer.getByRole('button', {name: 'Clear project selection', exact: true}).press('Enter');
+      await viewer.getByRole('region', {name: 'Project inspector', exact: true}).getByRole('status').filter({hasText: /^0 selected/}).waitFor();
     }
     if (await viewer.getByRole('button', {name: 'Choose projects', exact: true}).count()) {
       await viewer.getByRole('button', {name: 'Choose projects', exact: true}).press('Enter');
     }
-    await viewer.getByRole('button', {name: `Select ${selectedProject.name}`, exact: true}).press('Enter');
+    const selectedChoice = viewer.getByRole('button', {name: `Select ${selectedProject.name}`, exact: true});
+    await selectedChoice.waitFor();
+    if (await selectedChoice.getAttribute('aria-pressed') !== 'true') await selectedChoice.press('Enter');
+    await page.waitForFunction(name => [...document.querySelectorAll('graphshell-tree [role="button"]')].some(el => el.textContent === `Select ${name}` && el.getAttribute('aria-pressed') === 'true'), selectedProject.name);
+    await viewer.getByRole('link', {name: 'Project page', exact: true}).first().waitFor();
     await viewer.getByRole('button', {name: 'Hide project list', exact: true}).press('Enter');
+    await selectedChoice.waitFor({state: 'detached'});
     const hideSelection = viewer.getByRole('button', {name: 'Hide selection controls', exact: true});
-    if (await hideSelection.count()) await hideSelection.press('Enter');
+    if (await hideSelection.count()) {
+      await hideSelection.press('Enter');
+      await viewer.getByRole('button', {name: 'Manage selection', exact: true}).waitFor();
+    }
+    await viewer.getByRole('link', {name: 'Project page', exact: true}).first().waitFor();
     results.capture_bounds = await captureViewer(page, viewer, path.join(receiptRoot, 'viewer-desktop-component.png'));
     await page.screenshot({path: path.join(receiptRoot, 'viewer-desktop-viewport.png'), timeout: 90000});
     // Preserve the visible viewer first. SwiftShader can need more than the
