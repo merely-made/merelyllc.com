@@ -29,13 +29,13 @@ pub use lab::{LAB_PAGE, lab_screen};
 
 /// Where radio-mirror and radio-face come from.
 pub const RETINUE_REPOSITORY: &str = "https://github.com/merely-made/murm";
-/// The pinned retinue revision; `Cargo.toml` names the same one.
-pub const RETINUE_REVISION: &str = "6aa78fc0d0ddd30e94db59470f30f47e669321dc";
+/// The pinned Murm revision; `Cargo.toml` names the same one.
+pub const RETINUE_REVISION: &str = "b49df894635bac95823284efee6c445885eaf62a";
 /// The Heltec V4's panel, in radio-mirror's surface names.
 pub const SURFACE: &str = "oled-128x64";
-/// retinue's `crates/radio-mirror/fixtures/receipts-local.json` at [`RETINUE_REVISION`].
+/// Murm's `crates/radio-mirror/fixtures/receipts-local.json` at [`RETINUE_REVISION`].
 pub const LOCAL_FIXTURE: &str = include_str!("../fixtures/receipts-local.json");
-/// retinue's `crates/radio-mirror/fixtures/receipts-host.json` at [`RETINUE_REVISION`].
+/// Murm's `crates/radio-mirror/fixtures/receipts-host.json` at [`RETINUE_REVISION`].
 pub const HOST_FIXTURE: &str = include_str!("../fixtures/receipts-host.json");
 
 /// The revision as the page states it.
