@@ -22,7 +22,7 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
       results.cases[name] = 'pass';
       await writeFile(path.join(receiptRoot, 'viewer-progress.json'), JSON.stringify(results, null, 2));
     } catch (error) {
-      const state = await page.evaluate(() => ({hidden: document.hidden, focused: document.hasFocus(), title: document.title, state: document.querySelector('[data-graph-sandbox]')?.dataset.sandboxState, ready: document.querySelector('graphshell-tree')?.dataset.ready, connected: document.querySelector('graphshell-tree')?.isConnected, active: document.activeElement?.outerHTML, mirror: document.querySelector('[data-cambium-mirror]')?.textContent, browsingRoutes: window.__browsingRouteEvidence, touchDiagnostics: window.__touchDiagnostics, semantics: [...document.querySelectorAll('graphshell-tree [role]')].map(e => ({role: e.getAttribute('role'), label: e.getAttribute('aria-label'), text: e.textContent?.slice(0,120)}))})).catch(() => null);
+      const state = await page.evaluate(() => ({hidden: document.hidden, focused: document.hasFocus(), title: document.title, state: document.querySelector('[data-graph-sandbox]')?.dataset.sandboxState, ready: document.querySelector('graphshell-tree')?.dataset.ready, connected: document.querySelector('graphshell-tree')?.isConnected, active: document.activeElement?.outerHTML, mirror: document.querySelector('[data-cambium-mirror]')?.textContent, captureDiagnostics: window.__captureDiagnostics, browsingRoutes: window.__browsingRouteEvidence, touchDiagnostics: window.__touchDiagnostics, semantics: [...document.querySelectorAll('graphshell-tree [role]')].map(e => ({role: e.getAttribute('role'), label: e.getAttribute('aria-label'), text: e.textContent?.slice(0,120)}))})).catch(() => null);
       await writeFile(path.join(receiptRoot, `viewer-${name}-failure.json`), JSON.stringify({error: String(error), errors, consoleErrors, state}, null, 2));
       await page.screenshot({path: path.join(receiptRoot, `viewer-${name}-failure.png`), fullPage: true}).catch(() => {});
       await page.screenshot({path: path.join(receiptRoot, `viewer-${name}-failure-viewport.png`)}).catch(() => {});
@@ -44,7 +44,7 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
   await check('desktop', {}, async page => {
     const diagnostics = [];
     page.on('console', msg => { if (msg.type() === 'error') diagnostics.push(msg.text()); });
-    await page.goto(`${baseUrl}/repos/?dataset=/untrusted-dataset.json`, {waitUntil: 'networkidle'});
+    await page.goto(`${baseUrl}/repos/?overlay_observe=1&dataset=/untrusted-dataset.json`, {waitUntil: 'networkidle'});
     const title = await page.title();
     await staticReading(page);
     assert.deepEqual(await heavy(page), []);
