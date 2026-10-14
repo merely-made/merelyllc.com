@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {checkBrowsingRoutes} from './check-browsing-routes.mjs';
 import {captureViewer} from './capture-viewer.mjs';
 import path from 'node:path';
 import {writeFile} from 'node:fs/promises';
@@ -58,7 +59,8 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
     const selectedProject = authority.nodes[0];
     await viewer.getByRole('button', {name: `Select ${selectedProject.name}`, exact: true}).focus();
     await page.keyboard.press('Enter');
-    await viewer.getByRole('button', {name: 'Clear project selection', exact: true}).waitFor();
+    await viewer.getByRole('button', {name: 'Manage selection', exact: true}).waitFor();
+    assert.equal(await viewer.getByRole('button', {name: 'Clear project selection', exact: true}).count(), 0);
     await viewer.getByRole('link', {name: 'Project page', exact: true}).first().waitFor({state: 'attached'});
     assert.ok(await viewer.getByRole('link', {name: 'Project page', exact: true}).count() > 0);
     // Canvas links expose accessible actions, not native anchor hrefs. Bind
@@ -75,7 +77,7 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
     const graph = viewer.getByRole('group', {name: /^\d+ of \d+ shown$/});
     const graphBox = await graph.boundingBox();
     assert.ok(panel && graphBox && panel.x >= graphBox.x + graphBox.width - 2, 'inspector beside graph');
-    await viewer.getByRole('button', {name: 'Graph commands', exact: true}).press('Enter');
+    await viewer.getByRole('button', {name: 'Graph menu', exact: true}).press('Enter');
     await viewer.getByRole('dialog', {name: 'Graph commands', exact: true}).waitFor();
     await viewer.getByRole('button', {name: 'Close commands', exact: true}).press('Enter');
     await viewer.getByRole('dialog', {name: 'Graph commands', exact: true}).waitFor({state: 'detached'});
@@ -91,6 +93,18 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
     assert.ok(adapter, 'viewer requires WebGPU adapter');
     if (process.env.MER3LY_REQUIRE_HARDWARE === 'true') assert.ok(adapter.vendor === 'amd' && !/swiftshader/i.test(JSON.stringify(adapter)), 'local acceptance needs AMD hardware');
     results.adapter = adapter;
+    results.browsing_routes = await checkBrowsingRoutes(page, viewer);
+    // A pointer context menu can change the active subject. Re-establish the
+    // disclosed subject before checking its canonical navigation.
+    if (await viewer.getByRole('button', {name: 'Manage selection', exact: true}).count()) {
+      await viewer.getByRole('button', {name: 'Manage selection', exact: true}).press('Enter');
+      await viewer.getByRole('button', {name: 'Clear project selection', exact: true}).press('Enter');
+    }
+    if (await viewer.getByRole('button', {name: 'Choose projects', exact: true}).count()) {
+      await viewer.getByRole('button', {name: 'Choose projects', exact: true}).press('Enter');
+    }
+    await viewer.getByRole('button', {name: `Select ${selectedProject.name}`, exact: true}).press('Enter');
+    await viewer.getByRole('button', {name: 'Hide project list', exact: true}).press('Enter');
     await page.screenshot({path: path.join(receiptRoot, 'viewer-desktop.png'), fullPage: true});
     results.capture_bounds = await captureViewer(page, viewer, path.join(receiptRoot, 'viewer-desktop-component.png'));
     await page.screenshot({path: path.join(receiptRoot, 'viewer-desktop-viewport.png')});
@@ -112,23 +126,46 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
   });
   await check('no-script', {javaScriptEnabled: false}, async page => {
     await goto(page); await staticReading(page); assert.deepEqual(await heavy(page), []);
+    assert.equal(await page.locator('.frozen-grid').isVisible(), false);
+    const matrixSummary = page.locator('[data-static-matrix] > summary');
+    await matrixSummary.focus(); await page.keyboard.press('Enter');
+    assert.equal(await page.locator('.frozen-grid').isVisible(), true);
+    const historySummary = page.locator('[data-static-history] > summary');
+    await historySummary.focus(); await page.keyboard.press('Space');
+    assert.equal(await page.locator('[data-sandbox-history-revision]').first().isVisible(), true);
+    await matrixSummary.focus(); await page.keyboard.press('Space');
+    assert.equal(await page.locator('.frozen-grid').isVisible(), false);
   });
   await check('mobile', {viewport: {width: 375, height: 812}, isMobile: true, hasTouch: true}, async page => {
     await goto(page); await staticReading(page);
-    await page.locator('.frozen-grid').click();
+    await page.locator('.graph-sandbox-frozen-scene').tap();
+    assert.deepEqual(await heavy(page), [], 'touching the static map does not load the live viewer');
+    await page.locator('[data-static-matrix] > summary').click();
+    assert.equal(await page.locator('.frozen-grid').isVisible(), true);
     assert.deepEqual(await heavy(page), []);
-    assert.equal(await page.locator('[data-sandbox-open]').isHidden(), true);
+    assert.equal(await page.locator('[data-sandbox-open]').isVisible(), true);
     await page.screenshot({path: path.join(receiptRoot, 'viewer-mobile-static.png'), fullPage: true});
     results.screenshots.push('viewer-mobile-static.png');
   });
   await check('tablet', {viewport: {width: 1024, height: 768}, isMobile: true, hasTouch: true}, async page => {
-    await goto(page); await staticReading(page); await page.locator('.frozen-grid').click();
+    await goto(page); await staticReading(page); await page.locator('[data-static-matrix] > summary').click();
     assert.deepEqual(await heavy(page), []);
-    assert.equal(await page.locator('[data-sandbox-open]').isHidden(), true);
+    assert.equal(await page.locator('[data-sandbox-open]').isVisible(), true);
+  });
+  await check('touch-live', {viewport: {width: 390, height: 844}, isMobile: true, hasTouch: true}, async page => {
+    await goto(page); await staticReading(page);
+    await page.getByRole('button', {name: 'Open the live graph', exact: true}).tap();
+    await state(page, 'ready');
+    const viewer = page.locator('graphshell-tree');
+    await viewer.scrollIntoViewIfNeeded();
+    results.touch_routes = await checkBrowsingRoutes(page, viewer, {touch: true});
+    await staticReading(page);
+    await page.screenshot({path: path.join(receiptRoot, 'viewer-touch-live.png')});
+    results.screenshots.push('viewer-touch-live.png');
   });
   await check('no-webgpu', {}, async page => {
     await page.addInitScript(() => Object.defineProperty(navigator, 'gpu', {value: undefined}));
-    await goto(page); await staticReading(page); await page.locator('.frozen-grid').click();
+    await goto(page); await staticReading(page); await page.locator('[data-static-matrix] > summary').click();
     assert.deepEqual(await heavy(page), []);
   });
   await check('no-adapter', {}, async page => {
@@ -139,8 +176,11 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
   await check('legacy-share', {}, async page => {
     await page.goto(`${baseUrl}/repos/#graphshell-scene=legacy`, {waitUntil: 'networkidle'});
     await staticReading(page);
-    assert.match(await page.locator('[data-sandbox-status]').textContent(), /cannot import/);
+    assert.match(await page.locator('[data-sandbox-status]').textContent(), /Cannot import/);
+    assert.equal(await page.locator('[data-sandbox-open]').isVisible(), true);
     assert.deepEqual(await heavy(page), []);
+    await activate(page); await state(page, 'ready');
+    assert.equal(await page.locator('graphshell-tree').getAttribute('data-ready'), 'true');
   });
   await check('startup-timeout', {}, async page => {
     const diagnostics = [];

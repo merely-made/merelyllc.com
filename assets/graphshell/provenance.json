@@ -1,17 +1,23 @@
 {
-  "runtime_source": "377a0e30c84e2059a945583833008e84ae045fce",
+  "runtime_source": "25c4eae566fdb81571f58201799adae6f0244aeb",
   "files": {
     "viewer.js": "d36f0c879683b0f18e27d31b67162055fab268377ad04c2d0039f1aaf116419f",
-    "mount.js": "1782f3a692b7eba17ffda8e40f6bb88a9db883c214b6ee4a17b9350a62902c75",
+    "mount.js": "88dafd9520fd2619aeef21aeacc183d49bf6e7f977155a3bc50c13a785913b13",
     "styles.css": "a0944b06a83a7249fc69239ecffc8cab543f7556ffc95f2446b33ce3b5cd0bfd",
-    "pkg/graphshell_web.js": "04273e52f64ca2665a06c1d8e60475d7082b4b2d15aa44bcfc8f1d20ee0730f8",
-    "pkg/graphshell_web_bg.wasm": "885f9ce1a863afb7b1d2de04ac7d81ccd4a517e51d000b9bb4c1da9ab1d18cd3"
+    "pkg/graphshell_web.js": "5e1dc255576b19c64fe6b3e99ba7071f44662f668c939360b9c3c70c3cb1da4a",
+    "pkg/graphshell_web_bg.wasm": "a988b4caad5376c9c06020d15c45b809d673afc349dad920a08d6ecc4d8e39ce"
   },
-  "prior_qualification_source": "5b3442ddd39084231b83d9d175161293f1c5cefd",
-  "build_source": "377a0e30c84e2059a945583833008e84ae045fce",
-  "build_adjustment": "Rust remap-path-prefix: build-host home to /build; runtime source unchanged",
-  "toolchain": "Rust 1.98.1; wasm-bindgen 0.2.129; viewer profile; no default features",
-  "acceptance_record": "docs/receipts/site_viewer_20261013/qualification.json",
-  "base_runtime_source": "47199232d205576e84c802a84eb0cda401f926e1",
-  "runtime_adjustment": "Pending mount cancellation before host activation; destroy fresh unpublished devices on cancellation. No general activated-instance disposal claim."
+  "build_source": "25c4eae566fdb81571f58201799adae6f0244aeb",
+  "build_adjustment": "Public diagnostic paths; preserve configured wasm_js backend and 4 MiB linear stack.",
+  "toolchain": "rustc 1.99.0 (b940084d7 2026-09-28); wasm-bindgen 0.2.129; viewer profile; no default features",
+  "rustflags": [
+    "--cfg",
+    "getrandom_backend=\"wasm_js\"",
+    "-C",
+    "link-arg=-zstack-size=4194304",
+    "--remap-path-prefix=<build-host-home>=/build"
+  ],
+  "acceptance_record": "docs/receipts/site_browsing_20261013/qualification.json",
+  "previous_published_runtime_source": "377a0e30c84e2059a945583833008e84ae045fce",
+  "runtime_adjustment": "Opt-in shared browsing presenter on current Mere main. Fresh package-bound acceptance required; no inherited runtime qualification."
 }

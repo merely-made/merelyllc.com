@@ -69,7 +69,10 @@ await new Promise((resolve, reject) => {
 
 const port = server.address().port;
 const baseUrl = `http://127.0.0.1:${port}`;
-const browser = await chromium.launch({
+// A bounded local supervisor may own Chrome; CI keeps its normal launch.
+const browser = process.env.MER3LY_CDP_ENDPOINT
+  ? await chromium.connectOverCDP(process.env.MER3LY_CDP_ENDPOINT)
+  : await chromium.launch({
   channel: browserChannel,
   headless,
   args: browserArguments({headless, softwareGpu: process.env.MER3LY_SOFTWARE_GPU === "true"}),

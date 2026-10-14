@@ -30,11 +30,10 @@ export async function loadHostDataset(root) {
   }
 }
 
-// Two elements, one bundle. `<graphshell-tree>` is the one-tree page and the
-// plain viewer; `<graphshell-view>` is the H5 main page, defined only when the
-// bundle has it (not in a `--no-default-features` viewer). Each fetches its
-// dataset, if it names one, before it mounts. Elements already in the
-// document upgrade on define.
+// Two elements, one retained tree. `mount` remains the full bundle's public
+// compatibility entry and delegates to `mount_tree`; the viewer-only bundle
+// exposes `mount_tree`. Each fetches its dataset, if it names one, before it
+// mounts. Elements already in the document upgrade on define.
 export function defineElements(module) {
   const define = (name, mount) => {
     if (!mount || customElements.get(name)) return;
