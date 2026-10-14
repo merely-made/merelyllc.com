@@ -1,0 +1,36 @@
+{
+  "schema": "mer3ly.cpu-source-mapping/v1",
+  "mapping_method": "Retrospective reconstruction from recorded edits followed immediately by commit; not a pre-execution source seal",
+  "site_head_at_test": "8d68329d53ca14cb79c1fba3f15635447e148efd",
+  "tested_site_code_commit": "30290762fb05fb641130d3725c2995a0b734a659",
+  "tested_dirty_code_files": [
+    "crates/radio-mirror/src/lib.rs",
+    "crates/radio-mirror/tests/pin.rs",
+    "tests/m10_devices.rs"
+  ],
+  "site_source_sha256": {
+    "Cargo.toml": "650f1d986e0f7832e768a918791609a12dd1c30154961905cddd986fc69b8d5e",
+    "Cargo.lock": "a5363c2be072fef1d0aeaffea4bd39dbf69e5518177f771a71e43b549286b71b",
+    "crates/radio-mirror/Cargo.toml": "dc4eb58685a2fb943df731f0f9423c4b03f146616b45ef81075eed28147f3f08",
+    "crates/radio-mirror/Cargo.lock": "97c943f410984331613b0ecd75bad5285276ac1911ef07d76eb7ed38e95da7cc",
+    "crates/radio-mirror/src/lib.rs": "cfc9bd9a53cb64d6775d246aa19c50c903b43f7f948a395e07d5bc5504f01222",
+    "crates/radio-mirror/tests/pin.rs": "4758328f17766904ccc838970e4a5a81fa9fe6855d7483852d1d6f5e56a22f7f",
+    "tests/m10_devices.rs": "4a0233aafa3857e41b3bfb2c4b96e9df077629d89d988d54e194ecf69524d1b6",
+    "crates/radio-mirror/fixtures/receipts-local.json": "2de76863329d4015a066dc8cacd0a32c3ea9a1768cf9ee47e6bb6303cf88c7ca",
+    "crates/radio-mirror/fixtures/receipts-host.json": "8720fb9b27de2018f6e6f784fdbeb6593c6073ef2df56204262c3d2d81b5c89f"
+  },
+  "receipt_source_field_is": "Mere worktree HEAD captured by a reused supervisor template, not the tested site source",
+  "mere_worktree_head": "71202c59811b8255115541b8f8821c0bcdc92f7d",
+  "site_mere_dependency_revision": "0b9b7a9b218579f1f36cc1ab05a51b2a13128f1d",
+  "qualified_viewer_runtime_source": "56859e30292405e682f28f3841b76e4f141acf73",
+  "qualified_viewer_wasm_sha256": "a6e094bca4e274bb9476e00051891178a7ec8509ef2ee71ddf883ea2e812215e",
+  "radio_source": {
+    "repository": "https://github.com/merely-made/murm.git",
+    "revision": "b49df894635bac95823284efee6c445885eaf62a",
+    "fixtures": "Byte-identical with Cargo pinned checkout; independently tested"
+  },
+  "original_receipts_preserved": {
+    "site-radio-ci-r2-cpu-result.json": "54fe8da5b2aea286b1dd439de36a8ab06bd073b6f66c166375cffb35f9d8955a",
+    "site-lint-ci-cpu-result.json": "24ed82157d52846f00cef6c3c1ec3d630365dacc979aa262794fa2f007552f83"
+  }
+}
