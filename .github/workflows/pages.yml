@@ -61,6 +61,11 @@ jobs:
       - name: Install the pinned Rust toolchain
         run: rustup toolchain install 1.99.0 --profile minimal --component clippy,rustfmt --target wasm32-unknown-unknown
 
+      - name: Install native font build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends pkg-config libfontconfig1-dev
+
       - name: Install locked build dependencies
         run: |
           npm ci --ignore-scripts
