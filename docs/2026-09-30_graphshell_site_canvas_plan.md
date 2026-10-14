@@ -91,6 +91,29 @@ then-unmerged S1 reader. Later progress entries record provider integration,
 portable artifacts, the three deployed surface replacements, and S2/S3 landing.
 The original receipt remains evidence for that earlier source.
 
+## Shared browsing mode candidate (2026-10-13)
+
+Mark requested the shared browsing mode and a quieter site, with static reading
+accessible and context-menu, keyboard and touch routes verified before removing
+the button row. The candidate opts into Graphshell's `browse` presenter: one
+Graph menu entry exposes the shared commands, history is optional, and selected
+project details precede selection-management controls. Native HTML disclosures
+retain the static map, relationship matrix and source history without JavaScript;
+opening those disclosures does not download the viewer. Existing old sandbox
+fragments receive an unsupported-import notice and may still open today's graph.
+
+The candidate allows an explicit live-viewer attempt on WebGPU-capable touch
+screens. This is subject to compact-layout and real browser touch-input checks;
+emulated touch is not physical-phone performance qualification. Browsers without
+WebGPU keep the static reading. Alternative renderers remain separate work.
+
+The implementation is isolated and not deployed. The current site's package and
+button row remain the accepted version until the new remapped release passes
+R157 size caps and source-bound browser acceptance. The acceptance driver adds
+right-click, Control/Command+K, Shift+F10, command execution, dismissal focus,
+history disclosure, compact touch targets and no-script disclosure keys. These
+checks are prepared, not yet executed against the replacement package.
+
 ## Purpose
 
 Mere's projection grammar adoption plan ruled on 2026-09-01 that Graphshell's

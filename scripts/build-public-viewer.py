@@ -12,13 +12,17 @@ parser.add_argument('--out-dir', type=Path, required=True)
 parser.add_argument('--wasm-bindgen', default='wasm-bindgen')
 args = parser.parse_args()
 source = args.source.resolve()
-runtime = '377a0e30c84e2059a945583833008e84ae045fce'
+runtime = '25c4eae566fdb81571f58201799adae6f0244aeb'
 assert not subprocess.check_output(['git', 'status', '--porcelain'], cwd=source).strip(), 'source must be clean'
 changed = subprocess.check_output(['git', 'diff', '--name-only', runtime, 'HEAD'], cwd=source, text=True).splitlines()
 assert all(name.startswith(('design_docs/', 'docs/', 'ports/graphshell/docs/', 'support/doc-audit/')) for name in changed), 'runtime differs from qualified source'
-compiler = Path(subprocess.check_output(['rustup', 'which', '--toolchain', '1.98.1', 'rustc'], text=True).strip()).parent
+compiler = Path(subprocess.check_output(['rustup', 'which', '--toolchain', '1.99.0', 'rustc'], text=True).strip()).parent
+# Preserve the pinned web workspace's target flags when adding public paths.
+# CARGO_ENCODED_RUSTFLAGS replaces, rather than extends, configured rustflags.
+flags = ['--cfg', 'getrandom_backend="wasm_js"', '-C', 'link-arg=-zstack-size=4194304',
+         f'--remap-path-prefix={Path.home()}=/build']
 env = dict(os.environ, RUSTC=str(compiler / 'rustc'), RUSTDOC=str(compiler / 'rustdoc'),
-           CARGO_ENCODED_RUSTFLAGS=f'--remap-path-prefix={Path.home()}=/build')
+           CARGO_ENCODED_RUSTFLAGS='\x1f'.join(flags))
 # Explicit toolchain executables need their own dylibs on macOS.
 if os.uname().sysname == 'Darwin':
     env['DYLD_LIBRARY_PATH'] = str(compiler.parent / 'lib')

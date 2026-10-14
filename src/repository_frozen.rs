@@ -46,8 +46,8 @@ use crate::host_history::{
 use crate::repository_history::{GitAuthorityCursor, GitAuthorityHistoryProjection};
 use crate::site::{SiteView, element, txt};
 
-/// How the frozen view opens when no script runs: the existing wording.
-pub const NO_SCRIPT_LEAD: &str = "The live graph requires a compatible desktop browser. This";
+/// How the frozen view opens before the live viewer is available.
+pub const NO_SCRIPT_LEAD: &str = "The live graph requires JavaScript and WebGPU. This";
 
 /// How it opens while the script runs and the sandbox waits for a first
 /// interaction (Ruling 140's two openings).

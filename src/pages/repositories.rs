@@ -163,61 +163,74 @@ fn frozen_view(frozen: &FrozenFirstView) -> SiteView {
             ("class", "graph-sandbox-frozen"),
             ("data-sandbox-frozen", ""),
         ],
-        vec![
-            element(
-                "p",
-                &[
-                    ("class", "graph-sandbox-fallback"),
-                    ("data-sandbox-fallback", ""),
-                ],
-                vec![
-                    // Two openings (Ruling 140): without a script the sandbox
-                    // needs WebAssembly; with one, it waits for a first
-                    // interaction, and the mount script swaps in that wording.
-                    element(
-                        "span",
-                        &[
-                            ("data-sandbox-reading-lead", ""),
-                            ("data-scripted-lead", SCRIPTED_LEAD),
-                            ("data-failed-lead", FAILED_LEAD),
-                        ],
-                        vec![txt(NO_SCRIPT_LEAD)],
-                    ),
-                    txt(frozen.summary()),
-                ],
-            ),
-            element(
-                "button",
-                &[
-                    ("type", "button"),
-                    ("class", "graph-sandbox-open"),
-                    ("data-sandbox-open", ""),
-                    ("hidden", "hidden"),
-                ],
-                vec![txt("Open the live graph")],
-            ),
-            element(
-                "div",
-                &[("class", "graph-sandbox-frozen-scene")],
-                vec![txt(SCENE_MARKER)],
-            ),
-            element(
-                "div",
-                &[
-                    ("class", "graph-sandbox-frozen-matrix"),
-                    ("role", "region"),
-                    ("aria-labelledby", "repos-frozen-matrix-caption"),
-                    ("tabindex", "0"),
-                ],
-                vec![txt(GRID_MARKER)],
-            ),
-            element(
-                "h4",
-                &[("class", "graph-sandbox-frozen-heading")],
-                vec![txt("Source history")],
-            ),
-            frozen.history_view(),
-        ],
+        vec![element(
+            "details",
+            &[("data-static-reading", ""), ("open", "open")],
+            vec![
+                element("summary", &[], vec![txt("Static project map")]),
+                element(
+                    "p",
+                    &[
+                        ("class", "graph-sandbox-fallback"),
+                        ("data-sandbox-fallback", ""),
+                    ],
+                    vec![
+                        // Static reading is the initial surface. The mount script
+                        // offers an explicit live-viewer route when supported.
+                        element(
+                            "span",
+                            &[
+                                ("data-sandbox-reading-lead", ""),
+                                ("data-scripted-lead", SCRIPTED_LEAD),
+                                ("data-failed-lead", FAILED_LEAD),
+                            ],
+                            vec![txt(NO_SCRIPT_LEAD)],
+                        ),
+                        txt(frozen.summary()),
+                    ],
+                ),
+                element(
+                    "button",
+                    &[
+                        ("type", "button"),
+                        ("class", "graph-sandbox-open"),
+                        ("data-sandbox-open", ""),
+                        ("hidden", "hidden"),
+                    ],
+                    vec![txt("Open the live graph")],
+                ),
+                element(
+                    "div",
+                    &[("class", "graph-sandbox-frozen-scene")],
+                    vec![txt(SCENE_MARKER)],
+                ),
+                element(
+                    "details",
+                    &[("data-static-matrix", "")],
+                    vec![
+                        element("summary", &[], vec![txt("Relationship matrix")]),
+                        element(
+                            "div",
+                            &[
+                                ("class", "graph-sandbox-frozen-matrix"),
+                                ("role", "region"),
+                                ("aria-labelledby", "repos-frozen-matrix-caption"),
+                                ("tabindex", "0"),
+                            ],
+                            vec![txt(GRID_MARKER)],
+                        ),
+                    ],
+                ),
+                element(
+                    "details",
+                    &[("data-static-history", "")],
+                    vec![
+                        element("summary", &[], vec![txt("Source history")]),
+                        frozen.history_view(),
+                    ],
+                ),
+            ],
+        )],
     )
 }
 

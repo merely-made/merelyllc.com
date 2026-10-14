@@ -3724,3 +3724,8 @@ tbody tr:last-child td {
 /* The embedded viewer owns gestures inside this finite desktop surface. */
 .site-graphshell-viewer { width: 100%; height: 720px; max-height: 85vh; min-height: 480px; }
 [data-sandbox-interface][hidden] { display: none; }
+
+/* Readings remain in the document; disclosure keeps the graph entrance concise. */
+.graph-sandbox-frozen details { margin: .75rem 0; }
+.graph-sandbox-frozen summary { cursor: pointer; min-height: 44px; padding: .6rem 0; font-weight: 600; }
+.graph-sandbox-frozen summary:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
