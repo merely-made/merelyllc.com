@@ -44,13 +44,13 @@ public = true
 
 [[repository]]
 id = "retinue"
-github_slug = "merely-made/retinue"
-name = "Retinue"
-summary = "A Rust implementation of Reticulum and the Merely radio stack for identity, links, resources, and reliable streams."
+github_slug = "merely-made/murm"
+name = "Murm"
+summary = "Transport and device management for the Merely stack, including native peer carriers, conversations, radio protocols, and operator applications."
 class = "platform"
 status = "active"
 license = "MPL-2.0"
-homepage = "https://github.com/merely-made/retinue"
+homepage = "https://github.com/merely-made/murm"
 public = true
 
 [[repository]]

@@ -65,6 +65,20 @@ fn firmware_recipe_state_is_derived_from_the_retained_retinue_index() {
             .state,
         FirmwareRecipeState::Partial
     );
+    // Renaming the repository changes the displayed locator, while the
+    // original received artifact remains covered by its recorded digest.
+    assert!(
+        firmware
+            .package("retinue.heltec-v4")
+            .unwrap()
+            .instructions_url
+            .starts_with("https://github.com/merely-made/murm/")
+    );
+    let recorded = std::fs::read_to_string(
+        workspace_root().join(mer3ly_site::firmware_catalog::PACKAGE_INDEX_PATH),
+    )
+    .unwrap();
+    assert!(recorded.contains("https://github.com/merely-made/retinue/"));
 }
 
 #[test]
@@ -200,7 +214,7 @@ fn v4_bench_states_where_its_screens_come_from() {
     assert!(document.contains("at retinue revision 6aa78fc"));
     assert_eq!(mer3ly_radio_mirror::short_revision(), "6aa78fc");
     assert!(document.contains(&format!(
-        "https://github.com/merely-made/retinue/tree/{}/crates/radio-mirror",
+        "https://github.com/merely-made/murm/tree/{}/crates/radio-mirror",
         mer3ly_radio_mirror::RETINUE_REVISION
     )));
     for firmware in ["RNode", "Meshtastic", "MeshCore"] {

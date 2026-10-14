@@ -28,7 +28,7 @@ pub use bench::{
 pub use lab::{LAB_PAGE, lab_screen};
 
 /// Where radio-mirror and radio-face come from.
-pub const RETINUE_REPOSITORY: &str = "https://github.com/merely-made/retinue";
+pub const RETINUE_REPOSITORY: &str = "https://github.com/merely-made/murm";
 /// The pinned retinue revision; `Cargo.toml` names the same one.
 pub const RETINUE_REVISION: &str = "6aa78fc0d0ddd30e94db59470f30f47e669321dc";
 /// The Heltec V4's panel, in radio-mirror's surface names.

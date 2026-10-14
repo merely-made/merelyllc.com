@@ -218,29 +218,18 @@
     },
     {
       "id": "retinue",
-      "github_slug": "merely-made/retinue",
-      "name": "retinue",
-      "description": "Managed cadre of mesh protocols. Reference-compatible Rust implementations of Reticulum, Meshtastic, and MeshCore.",
+      "github_slug": "merely-made/murm",
+      "name": "murm",
+      "description": "Experimental Rust transport and device management for the Merely stack: native P2P, radio protocols, conversations, and Signalman.",
       "homepage": null,
       "license": "mpl-2.0",
-      "updated_at": "2026-09-21T18:00:15Z",
-      "pushed_at": "2026-09-21T18:00:08Z",
+      "updated_at": "2026-10-14T00:01:11Z",
+      "pushed_at": "2026-10-13T23:56:15Z",
       "primary_language": "Rust",
-      "stargazer_count": 2,
+      "stargazer_count": 3,
       "archived": false,
       "fork": false,
-      "topics": [
-        "embedded",
-        "esp32",
-        "lora",
-        "mesh",
-        "meshcore",
-        "meshtastic",
-        "nrf",
-        "p2p",
-        "reticulum",
-        "rust"
-      ]
+      "topics": []
     },
     {
       "id": "smolweb",
