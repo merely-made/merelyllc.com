@@ -1141,6 +1141,23 @@ fn scan_public_text_policy(
 
     let github = Regex::new(r"(?i)https://github\.com/([a-z0-9_.-]+)(?:/([a-z0-9_.-]+))?")
         .expect("valid GitHub URL regex");
+    // The radio trace manifest records its original repository locator. The
+    // rename must not rewrite that historical evidence or admit old links in
+    // ordinary page content. Only the exact, independently validated manifest
+    // payload may retain its recorded URL.
+    let historical_trace_manifest = (relative_path == "radio.html")
+        .then(|| crate::retinue_traces::TraceSet::embedded().ok())
+        .flatten()
+        .and_then(|traces| message_path::manifest_embedded(&traces).ok())
+        .filter(|manifest| inline_json(text, message_path::MANIFEST_ID) == Some(manifest.as_str()));
+    let historical_span = historical_trace_manifest.as_ref().and_then(|manifest| {
+        let script = format!(
+            "<script id=\"{}\" type=\"application/json\">{}",
+            message_path::MANIFEST_ID,
+            manifest
+        );
+        text.find(&script).map(|start| start..start + script.len())
+    });
     for captures in github.captures_iter(text) {
         let owner = captures
             .get(1)
@@ -1154,7 +1171,14 @@ fn scan_public_text_policy(
                 (owner.as_str(), repository.as_deref()),
                 ("gfx-rs", Some("naga")) | ("linebender", Some("vello")) | ("google", Some("skia"))
             );
-        let approved = upstream_shader_reference
+        let recorded_trace_locator = captures.get(0).is_some_and(|capture| {
+            capture.as_str() == "https://github.com/merely-made/retinue"
+                && historical_span.as_ref().is_some_and(|span| {
+                    span.contains(&capture.start()) && capture.end() <= span.end
+                })
+        });
+        let approved = recorded_trace_locator
+            || upstream_shader_reference
             || owner == "merely-made"
                 && repository.as_ref().is_none_or(|repository| {
                     allowed_github_slugs.contains(&format!("{owner}/{repository}"))
@@ -1901,6 +1925,45 @@ fn sha256(bytes: &[u8]) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn historical_trace_locator_is_scoped_to_the_exact_manifest() {
+        let traces = crate::retinue_traces::TraceSet::embedded().unwrap();
+        let manifest = message_path::manifest_embedded(&traces).unwrap();
+        let document = format!(
+            "<script id=\"{}\" type=\"application/json\">{manifest}</script>",
+            message_path::MANIFEST_ID
+        );
+        let allowed = BTreeSet::new();
+        let mut errors = Vec::new();
+        scan_public_text("radio.html", &document, &allowed, &mut errors);
+        assert!(errors.is_empty(), "{errors:?}");
+        for (path, text) in [
+            ("index.html", document.clone()),
+            (
+                "radio.html",
+                format!(
+                    "{document}<a href=\"https://github.com/merely-made/retinue\">old link</a>"
+                ),
+            ),
+            (
+                "radio.html",
+                document.replace(
+                    "fa0d98b1562357e617062283be1de483f3dcd4d4",
+                    "0000000000000000000000000000000000000000",
+                ),
+            ),
+        ] {
+            errors.clear();
+            scan_public_text(path, &text, &allowed, &mut errors);
+            assert!(
+                errors
+                    .iter()
+                    .any(|error| error.contains("unapproved GitHub")),
+                "{errors:?}"
+            );
+        }
+    }
 
     #[test]
     fn viewer_binary_scanning_retains_private_boundaries() {
