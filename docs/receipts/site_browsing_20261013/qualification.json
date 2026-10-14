@@ -1,8 +1,8 @@
 {
   "schema": "mer3ly.site-browsing-qualification/v1",
   "recorded_utc": "2026-10-14T06:23:16.660725+00:00",
-  "status": "browser-qualified and pushed; deployment pending",
-  "live_site_deployed": false,
+  "status": "browser-qualified, pushed and deployed",
+  "live_site_deployed": true,
   "runtime_source": "56859e30292405e682f28f3841b76e4f141acf73",
   "site_acceptance_source": "e196aaa5521822908301b1fa1c5154d253c0d242",
   "seal_sha256": "6114468a012717f72ab13f652bd43a085ece8f98498bc81b4afec7e06a6c9e61",
@@ -101,7 +101,11 @@
     "viewer-touch-live.png": "3ca2320df3cd53360372a7c478a251be56b5fffc0e882b64fd7d1a1e10c6b636",
     "viewer-desktop.png": "6c103f7b0f1c489c5734d3ace56e353d5d7e49d3262f9bd1c92f5a8d97032b54",
     "independent-review.json": "5f75104635b83a56117770e6208bc72ef583b1e8bee36a67fe30608854b1cb3b",
-    "radio-ci-source-mapping.json": "77bdd50b1408532cb0d7e7ab9f81c5bd15882eb3354e8928be78012039203066"
+    "radio-ci-source-mapping.json": "77bdd50b1408532cb0d7e7ab9f81c5bd15882eb3354e8928be78012039203066",
+    "cloud-receipt.json": "8ba77994cd1bccaa3cb9667f8da6c823f5ecaf26f75c8454e49599f2c6d71967",
+    "cloud-desktop.png": "1625ce6e75f541f7e65ca8f68617d00ac122fffefd849120822b210e66aa319b",
+    "cloud-touch.png": "cc76b08084a82139f2808e323989d40cd9cd8c953dadb2f1161ef632b15146ad",
+    "deployment.json": "61d338170eef251a880fb0e42bc76b1b262550a4b35ef3483562e6ec96abdacd"
   },
   "deployment_attempts": [
     {
@@ -121,7 +125,43 @@
       "source": "30290762fb05fb641130d3725c2995a0b734a659",
       "result": "failed: desktop full-document screenshot timeout; interaction checks reached completion, no page or console errors",
       "fix": "5906f56e74f0fdd3bd9425d8e2f4d65db6d9eefa"
+    },
+    {
+      "run_id": 38528704226,
+      "source": "5906f56e74f0fdd3bd9425d8e2f4d65db6d9eefa",
+      "result": "failed: first component screenshot also timed out; longer full-page timeout was not reached",
+      "fix_under_test": "b4265be07b2399dae17f218b4eb62ffcaf09f27e"
+    },
+    {
+      "run_id": 38532067777,
+      "source": "b4265be07b2399dae17f218b4eb62ffcaf09f27e",
+      "result": "failed: component capture completed but strict layout check detected x232.5 to240; y and extent unchanged",
+      "fix_under_test": "51d90ddc0c425e5d5c747418d65d542240c792cb"
+    },
+    {
+      "run_id": 38535272301,
+      "source": "51d90ddc0c425e5d5c747418d65d542240c792cb",
+      "result": "capture and strict layout checks passed; navigation failed with no project selected",
+      "fix_under_test": "7ed26be8299777088b033ef771054a3fb6d20c07"
+    },
+    {
+      "run_id": 38538681926,
+      "source": "7ed26be8299777088b033ef771054a3fb6d20c07",
+      "result": "desktop, no-script, mobile, tablet passed; touch command paging exhausted while on page2",
+      "fix_under_test": "7273458179abc44e06b2cd5ea06da42042b6c3a5"
     }
   ],
-  "deployment_pending_run": 38528704226
+  "capture_investigation": "Configured Linux/SwiftShader capture and strict layout assertions passed with hidden scrollbars, explicitly paused physics, finite90s capturebudget. Changes are combined; timeout root cause not isolated. Local hardware qualification remains separate.",
+  "deployment_record": "deployment.json",
+  "cloud_acceptance": {
+    "run_id": 38542364193,
+    "site_source": "7273458179abc44e06b2cd5ea06da42042b6c3a5",
+    "browser": "Chromium 156.0.8078.4",
+    "configuration": "Linux headed SwiftShader, --hide-scrollbars, paused capture via real command state, 90s finite capture budget",
+    "viewer_cases": "13 passed",
+    "full_site": "pass",
+    "repositories": 22,
+    "relationships": 30,
+    "limitations": "Configured software-browser acceptance; does not claim ordinary-browser scrollbar parity or isolate the earlier screenshot timeout cause."
+  }
 }

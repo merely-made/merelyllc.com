@@ -91,7 +91,7 @@ then-unmerged S1 reader. Later progress entries record provider integration,
 portable artifacts, the three deployed surface replacements, and S2/S3 landing.
 The original receipt remains evidence for that earlier source.
 
-## Shared browsing mode candidate (2026-10-13)
+## Shared browsing mode deployed (2026-10-14)
 
 Mark requested the shared browsing mode and a quieter site, with static reading
 accessible and context-menu, keyboard and touch routes verified before removing
@@ -107,9 +107,9 @@ screens. This is subject to compact-layout and real browser touch-input checks;
 emulated touch is not physical-phone performance qualification. Browsers without
 WebGPU keep the static reading. Alternative renderers remain separate work.
 
-The implementation is isolated and not deployed. The current site's package and
-button row remain the accepted version until the new remapped release passes
-R157 size caps and source-bound browser acceptance. The acceptance driver adds
+The implementation passed R157 size caps and source-bound local and cloud
+browser acceptance, and is deployed. The button row is replaced by the shared
+Graph menu. The acceptance driver covers
 right-click, Control/Command+K, Shift+F10, command execution, dismissal focus,
 history disclosure, compact touch targets and no-script disclosure keys. These
 checks passed for desktop and no-script/mobile/tablet static reading in local
@@ -133,8 +133,18 @@ fallbacks. The headed Chrome run used the AMD adapter, closed its owned groups
 within its lease, and retained captures for visual review. See
 [the qualification record](receipts/site_browsing_20261013/qualification.json).
 Physical-phone performance and an alternative renderer are not qualified. The
-fitted project faces remain small. Publication is pending; the deployed row is
-unchanged until this candidate lands. Earlier failed runs remain failures.
+fitted project faces remain small. Earlier failed runs remain failures.
+
+Site source `7273458179abc44e06b2cd5ea06da42042b6c3a5` deployed through
+[run 38542364193](https://github.com/merely-made/merelyllc.com/actions/runs/38542364193).
+The cloud suite passed all 13 viewer cases and the full site smoke with 22
+repositories and 30 relationships. Its Linux/SwiftShader configuration hides
+scrollbars consistently before capture, verifies paused physics through the real
+command menu, and waits for selection and touch-page acknowledgements. This is
+separate from the earlier hardware qualification. Full hosted-byte verification
+matched all five viewer assets and the site mount script; actual served Wasm gzip
+is 3,317,891 bytes, below the 3,407,872-byte budget. See the
+[deployment receipt](receipts/site_browsing_20261013/deployment.json).
 
 
 ## Purpose

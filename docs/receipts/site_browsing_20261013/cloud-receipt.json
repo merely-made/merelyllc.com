@@ -1,0 +1,1136 @@
+{
+  "schema": "mer3ly.browser-smoke-receipt/v3",
+  "source_sha": "7273458179abc44e06b2cd5ea06da42042b6c3a5",
+  "browser": "Chromium 156.0.8078.4",
+  "browser_channel": "chromium",
+  "mode": "headed",
+  "routes": {
+    "/": {
+      "status": 200,
+      "horizontal_overflow": 0
+    },
+    "/radio.html": {
+      "status": 200,
+      "horizontal_overflow": 0
+    },
+    "/devices/": {
+      "status": 200,
+      "horizontal_overflow": 0
+    },
+    "/devices/v4-desktop-radio/": {
+      "status": 200,
+      "horizontal_overflow": 0
+    },
+    "/devices/t114-field-radio/": {
+      "status": 200,
+      "horizontal_overflow": 0
+    },
+    "/projects/mere/": {
+      "status": 200,
+      "horizontal_overflow": 0
+    },
+    "/projects/retinue/": {
+      "status": 200,
+      "horizontal_overflow": 0
+    }
+  },
+  "desktop": {
+    "repositories": 22,
+    "graph_edges": 30
+  },
+  "mobile": {},
+  "reduced_motion": {},
+  "fallback": {},
+  "showcase": {
+    "desktop": {
+      "cards": 5,
+      "images": 5,
+      "horizontal_overflow": 0
+    },
+    "mobile": {
+      "cards": 5,
+      "horizontal_overflow": 0
+    }
+  },
+  "message_path_lab": {
+    "desktop": {
+      "nodes": 5,
+      "edges": 5,
+      "traces": [
+        {
+          "id": "cold",
+          "events": 105,
+          "ledger_rows": 16
+        },
+        {
+          "id": "warm",
+          "events": 237,
+          "ledger_rows": 41
+        }
+      ],
+      "screen": "traffic",
+      "shared_step": true,
+      "retired_link_notice": true,
+      "horizontal_overflow": 0
+    },
+    "mobile": {
+      "width": 375,
+      "minimum_node_target": 44,
+      "x_span": 180,
+      "y_span": 245,
+      "horizontal_overflow": 0
+    },
+    "reduced_motion": "jumps-to-trace-end"
+  },
+  "radio_bench": {
+    "desktop": {
+      "runtime": "radio-mirror",
+      "scenarios": 3,
+      "firmware_images": 4,
+      "input_faces": 2,
+      "screens_reached": [
+        "status",
+        "power",
+        "menu:brightness:0",
+        "menu:verify:2",
+        "verify",
+        "display-off",
+        "handoff:meshtastic",
+        "fault",
+        "radio",
+        "traffic"
+      ],
+      "key_edges": "a-short, a-long",
+      "a_plus_b": "operable-on-two-button-face",
+      "horizontal_overflow": 0
+    },
+    "mobile": {
+      "width": 375,
+      "a_plus_b": "operable",
+      "horizontal_overflow": 0
+    },
+    "no_script": {
+      "screens": 11,
+      "text_projection": "alt"
+    }
+  },
+  "projects": {
+    "visual": {
+      "repository": "mere",
+      "showcase_images": 1,
+      "social_image": "https://merelyllc.com/showcase/mere.png",
+      "structured_type": "SoftwareSourceCode",
+      "horizontal_overflow": 0
+    },
+    "projection_proof": {
+      "nodes": 11,
+      "edges": 13,
+      "projections": 2,
+      "contract": "chirograph-capture-v2-scenotime-trace-incipit-shelfmark",
+      "capture_address": "3edea191912666309b25f6c1d3483982162847e9b5c84684a2f14cf95d25d7a9",
+      "initial_revision": 1,
+      "supplied_trace_steps": 7,
+      "shared_state": true,
+      "shared_trace": true,
+      "horizontal_overflow": 0,
+      "mobile": {
+        "width": 375,
+        "minimum_node_target": 44,
+        "swatch_controls_canvas": true,
+        "horizontal_overflow": 0
+      },
+      "reduced_motion": "jumps-to-final-state",
+      "fallback": "trace-reading-and-semantic-relations-remain",
+      "replay_failure": "notice-and-reading-remain",
+      "retired_link": "notice-and-default-trace",
+      "retired_fold_link": "notice-and-default-trace"
+    },
+    "text_only": {
+      "repository": "retinue",
+      "showcase_images": 0,
+      "social_image": "https://merelyllc.com/og.jpg",
+      "structured_type": "SoftwareSourceCode",
+      "horizontal_overflow": 0
+    }
+  },
+  "discovery": {
+    "sitemap_urls": 28,
+    "robots_policy": "allow-public",
+    "favicon": "favicon.svg"
+  },
+  "graph_sandbox": {},
+  "qualified_viewer": {
+    "cases": {
+      "desktop": "pass",
+      "no-script": "pass",
+      "mobile": "pass",
+      "tablet": "pass",
+      "touch-live": "pass",
+      "no-webgpu": "pass",
+      "no-adapter": "pass",
+      "legacy-share": "pass",
+      "startup-timeout": "pass",
+      "failure-forced": "pass",
+      "failure-history": "pass",
+      "failure-wasm": "pass",
+      "failure-stylesheet": "pass"
+    },
+    "screenshots": [
+      "viewer-desktop.png",
+      "viewer-desktop-component.png",
+      "viewer-desktop-viewport.png",
+      "viewer-mobile-static.png",
+      "viewer-touch-live.png"
+    ],
+    "repositories": 22,
+    "relationships": 30,
+    "selected_project": "https://merelyllc.com/projects/org-profile/",
+    "adapter": {
+      "vendor": "google",
+      "architecture": "swiftshader",
+      "device": "",
+      "description": ""
+    },
+    "browsing_routes": [
+      "Control+k",
+      "Meta+k",
+      "Shift+F10",
+      "keyboard-command-pages",
+      {
+        "route": "context-menu-fit-focus",
+        "fit_geometry": {
+          "fitted": [
+            {
+              "name": "+ dramatis",
+              "x": 260.90625,
+              "y": 333.59375,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Cleromancy",
+              "x": 309.546875,
+              "y": 289.03125,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Emblem",
+              "x": 317.703125,
+              "y": 196.109375,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Genet",
+              "x": 379.0625,
+              "y": 379.703125,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Isocosm",
+              "x": 179.640625,
+              "y": 266.0625,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Knot Editor",
+              "x": 434,
+              "y": 209.875,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Mer3ly",
+              "x": 267.609375,
+              "y": 445.0625,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Mere",
+              "x": 229.109375,
+              "y": 134.15625,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Merely organization profile",
+              "x": 397.953125,
+              "y": 100.109375,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Mora",
+              "x": 484.796875,
+              "y": 353.03125,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Murm",
+              "x": 111.84375,
+              "y": 174.46875,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Netrender",
+              "x": 126.640625,
+              "y": 364.546875,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Pipit",
+              "x": 375.015625,
+              "y": 497.78125,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Smolweb",
+              "x": 541.828125,
+              "y": 237.96875,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Turnstone",
+              "x": 167.609375,
+              "y": 490.9375,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Turquet",
+              "x": 276.71875,
+              "y": 35.6875,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Vano",
+              "x": 511.296875,
+              "y": 459.078125,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Wavicle",
+              "x": 37.8125,
+              "y": 300.265625,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ wgpu-graft",
+              "x": 507.90625,
+              "y": 91.640625,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ wgpu-scry",
+              "x": 296.265625,
+              "y": 576.25,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ wgpu-weld",
+              "x": 120.546875,
+              "y": 62.546875,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Woodshed",
+              "x": 609.125,
+              "y": 329.34375,
+              "width": 9.046875,
+              "height": 9.046875
+            }
+          ],
+          "changed": [
+            {
+              "name": "+ dramatis",
+              "x": 281.28125,
+              "y": 341.046875,
+              "width": 11.953125,
+              "height": 11.953125
+            },
+            {
+              "name": "~ Cleromancy",
+              "x": 345.59375,
+              "y": 282.109375,
+              "width": 11.953125,
+              "height": 11.953125
+            },
+            {
+              "name": "~ Emblem",
+              "x": 356.390625,
+              "y": 159.21875,
+              "width": 11.953125,
+              "height": 11.953125
+            },
+            {
+              "name": "~ Genet",
+              "x": 437.53125,
+              "y": 402.03125,
+              "width": 11.953125,
+              "height": 11.953125
+            },
+            {
+              "name": "~ Isocosm",
+              "x": 173.796875,
+              "y": 251.734375,
+              "width": 11.953125,
+              "height": 11.953125
+            },
+            {
+              "name": "~ Knot Editor",
+              "x": 510.1875,
+              "y": 177.421875,
+              "width": 11.953125,
+              "height": 11.953125
+            },
+            {
+              "name": "~ Mer3ly",
+              "x": 290.125,
+              "y": 488.46875,
+              "width": 11.953125,
+              "height": 11.953125
+            },
+            {
+              "name": "~ Mere",
+              "x": 239.21875,
+              "y": 77.296875,
+              "width": 11.953125,
+              "height": 11.953125
+            },
+            {
+              "name": "~ Merely organization profile",
+              "x": 462.515625,
+              "y": 32.265625,
+              "width": 11.953125,
+              "height": 11.953125
+            },
+            {
+              "name": "~ Mora",
+              "x": 577.359375,
+              "y": 366.75,
+              "width": 11.953125,
+              "height": 11.953125
+            },
+            {
+              "name": "~ Murm",
+              "x": 84.140625,
+              "y": 130.59375,
+              "width": 11.953125,
+              "height": 11.953125
+            },
+            {
+              "name": "~ Netrender",
+              "x": 103.703125,
+              "y": 381.96875,
+              "width": 11.953125,
+              "height": 11.953125
+            },
+            {
+              "name": "~ Pipit",
+              "x": 432.1875,
+              "y": 558.171875,
+              "width": 11.953125,
+              "height": 11.953125
+            },
+            {
+              "name": "~ Smolweb",
+              "x": 652.78125,
+              "y": 214.578125,
+              "width": 11.953125,
+              "height": 11.953125
+            },
+            {
+              "name": "~ Turnstone",
+              "x": 157.875,
+              "y": 549.125,
+              "width": 11.953125,
+              "height": 11.953125
+            },
+            {
+              "name": "~ Vano",
+              "x": 612.40625,
+              "y": 506.984375,
+              "width": 11.953125,
+              "height": 11.953125
+            },
+            {
+              "name": "~ wgpu-graft",
+              "x": 607.9375,
+              "y": 21.0625,
+              "width": 11.953125,
+              "height": 11.953125
+            }
+          ],
+          "restored": [
+            {
+              "name": "+ dramatis",
+              "x": 260.90625,
+              "y": 333.59375,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Cleromancy",
+              "x": 309.546875,
+              "y": 289.03125,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Emblem",
+              "x": 317.703125,
+              "y": 196.109375,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Genet",
+              "x": 379.0625,
+              "y": 379.703125,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Isocosm",
+              "x": 179.640625,
+              "y": 266.0625,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Knot Editor",
+              "x": 434,
+              "y": 209.875,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Mer3ly",
+              "x": 267.609375,
+              "y": 445.0625,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Mere",
+              "x": 229.109375,
+              "y": 134.15625,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Merely organization profile",
+              "x": 397.953125,
+              "y": 100.109375,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Mora",
+              "x": 484.796875,
+              "y": 353.03125,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Murm",
+              "x": 111.84375,
+              "y": 174.46875,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Netrender",
+              "x": 126.640625,
+              "y": 364.546875,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Pipit",
+              "x": 375.015625,
+              "y": 497.78125,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Smolweb",
+              "x": 541.828125,
+              "y": 237.96875,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Turnstone",
+              "x": 167.609375,
+              "y": 490.9375,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Turquet",
+              "x": 276.71875,
+              "y": 35.6875,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Vano",
+              "x": 511.296875,
+              "y": 459.078125,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Wavicle",
+              "x": 37.8125,
+              "y": 300.265625,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ wgpu-graft",
+              "x": 507.90625,
+              "y": 91.640625,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ wgpu-scry",
+              "x": 296.265625,
+              "y": 576.25,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ wgpu-weld",
+              "x": 120.546875,
+              "y": 62.546875,
+              "width": 9.046875,
+              "height": 9.046875
+            },
+            {
+              "name": "~ Woodshed",
+              "x": 609.125,
+              "y": 329.34375,
+              "width": 9.046875,
+              "height": 9.046875
+            }
+          ]
+        }
+      },
+      "keyboard-tools",
+      "history-disclosure",
+      {
+        "capture_state": "physics-paused",
+        "evidence": "Play physics offered; Pause physics absent"
+      }
+    ],
+    "capture_bounds": {
+      "x": 240,
+      "y": 836.703125,
+      "width": 960,
+      "height": 720
+    },
+    "resources": [
+      "http://127.0.0.1:36107/graphshell/9f38fcc1b74f/styles.css",
+      "http://127.0.0.1:36107/graphshell/9f38fcc1b74f/viewer.js",
+      "http://127.0.0.1:36107/graphshell/9f38fcc1b74f/mount.js",
+      "http://127.0.0.1:36107/graphshell/9f38fcc1b74f/pkg/graphshell_web.js",
+      "http://127.0.0.1:36107/graphshell/9f38fcc1b74f/pkg/graphshell_web_bg.wasm"
+    ],
+    "touch_routes": [
+      {
+        "route": "touch-menu-fit-focus",
+        "fit_geometry": {
+          "fitted": [
+            {
+              "name": "+ dramatis",
+              "x": 145.328125,
+              "y": 201.96875,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Cleromancy",
+              "x": 172.640625,
+              "y": 176.9375,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Emblem",
+              "x": 177.21875,
+              "y": 124.765625,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Genet",
+              "x": 211.671875,
+              "y": 227.859375,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Isocosm",
+              "x": 99.6875,
+              "y": 164.03125,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Knot Editor",
+              "x": 242.515625,
+              "y": 132.484375,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Mer3ly",
+              "x": 149.078125,
+              "y": 264.5625,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Mere",
+              "x": 127.46875,
+              "y": 89.96875,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Merely organization profile",
+              "x": 222.28125,
+              "y": 70.84375,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Mora",
+              "x": 271.046875,
+              "y": 212.890625,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Murm",
+              "x": 61.609375,
+              "y": 112.609375,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Netrender",
+              "x": 69.921875,
+              "y": 219.34375,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Pipit",
+              "x": 209.40625,
+              "y": 294.171875,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Smolweb",
+              "x": 303.078125,
+              "y": 148.265625,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Turnstone",
+              "x": 92.921875,
+              "y": 290.328125,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Turquet",
+              "x": 154.203125,
+              "y": 34.671875,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Vano",
+              "x": 285.9375,
+              "y": 272.421875,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Wavicle",
+              "x": 20.03125,
+              "y": 183.25,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ wgpu-graft",
+              "x": 284.03125,
+              "y": 66.09375,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ wgpu-scry",
+              "x": 165.171875,
+              "y": 338.234375,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ wgpu-weld",
+              "x": 66.5,
+              "y": 49.75,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Woodshed",
+              "x": 340.859375,
+              "y": 199.578125,
+              "width": 5.078125,
+              "height": 5.078125
+            }
+          ],
+          "changed": [
+            {
+              "name": "+ dramatis",
+              "x": 175.171875,
+              "y": 206.140625,
+              "width": 6.71875,
+              "height": 6.71875
+            },
+            {
+              "name": "~ Cleromancy",
+              "x": 211.296875,
+              "y": 173.0625,
+              "width": 6.71875,
+              "height": 6.71875
+            },
+            {
+              "name": "~ Emblem",
+              "x": 217.34375,
+              "y": 104.046875,
+              "width": 6.71875,
+              "height": 6.71875
+            },
+            {
+              "name": "~ Genet",
+              "x": 262.921875,
+              "y": 240.390625,
+              "width": 6.71875,
+              "height": 6.71875
+            },
+            {
+              "name": "~ Isocosm",
+              "x": 114.8125,
+              "y": 155.984375,
+              "width": 6.71875,
+              "height": 6.71875
+            },
+            {
+              "name": "~ Knot Editor",
+              "x": 303.71875,
+              "y": 114.265625,
+              "width": 6.71875,
+              "height": 6.71875
+            },
+            {
+              "name": "~ Mer3ly",
+              "x": 180.140625,
+              "y": 288.9375,
+              "width": 6.71875,
+              "height": 6.71875
+            },
+            {
+              "name": "~ Mere",
+              "x": 151.5625,
+              "y": 58.03125,
+              "width": 6.71875,
+              "height": 6.71875
+            },
+            {
+              "name": "~ Merely organization profile",
+              "x": 276.953125,
+              "y": 32.75,
+              "width": 6.71875,
+              "height": 6.71875
+            },
+            {
+              "name": "~ Mora",
+              "x": 341.4375,
+              "y": 220.59375,
+              "width": 6.71875,
+              "height": 6.71875
+            },
+            {
+              "name": "~ Murm",
+              "x": 64.46875,
+              "y": 87.96875,
+              "width": 6.71875,
+              "height": 6.71875
+            },
+            {
+              "name": "~ Netrender",
+              "x": 75.453125,
+              "y": 229.125,
+              "width": 6.71875,
+              "height": 6.71875
+            },
+            {
+              "name": "~ Pipit",
+              "x": 259.921875,
+              "y": 328.078125,
+              "width": 6.71875,
+              "height": 6.71875
+            },
+            {
+              "name": "~ Turnstone",
+              "x": 105.875,
+              "y": 323,
+              "width": 6.71875,
+              "height": 6.71875
+            },
+            {
+              "name": "~ Vano",
+              "x": 361.125,
+              "y": 299.34375,
+              "width": 6.71875,
+              "height": 6.71875
+            },
+            {
+              "name": "~ Wavicle",
+              "x": 9.484375,
+              "y": 181.40625,
+              "width": 6.71875,
+              "height": 6.71875
+            },
+            {
+              "name": "~ wgpu-graft",
+              "x": 358.609375,
+              "y": 26.453125,
+              "width": 6.71875,
+              "height": 6.71875
+            },
+            {
+              "name": "~ wgpu-weld",
+              "x": 70.921875,
+              "y": 4.84375,
+              "width": 6.71875,
+              "height": 6.71875
+            }
+          ],
+          "restored": [
+            {
+              "name": "+ dramatis",
+              "x": 145.328125,
+              "y": 201.96875,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Cleromancy",
+              "x": 172.640625,
+              "y": 176.9375,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Emblem",
+              "x": 177.21875,
+              "y": 124.765625,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Genet",
+              "x": 211.671875,
+              "y": 227.859375,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Isocosm",
+              "x": 99.6875,
+              "y": 164.03125,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Knot Editor",
+              "x": 242.515625,
+              "y": 132.484375,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Mer3ly",
+              "x": 149.078125,
+              "y": 264.5625,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Mere",
+              "x": 127.46875,
+              "y": 89.96875,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Merely organization profile",
+              "x": 222.28125,
+              "y": 70.84375,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Mora",
+              "x": 271.046875,
+              "y": 212.890625,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Murm",
+              "x": 61.609375,
+              "y": 112.609375,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Netrender",
+              "x": 69.921875,
+              "y": 219.34375,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Pipit",
+              "x": 209.40625,
+              "y": 294.171875,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Smolweb",
+              "x": 303.078125,
+              "y": 148.265625,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Turnstone",
+              "x": 92.921875,
+              "y": 290.328125,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Turquet",
+              "x": 154.203125,
+              "y": 34.671875,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Vano",
+              "x": 285.9375,
+              "y": 272.421875,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Wavicle",
+              "x": 20.03125,
+              "y": 183.25,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ wgpu-graft",
+              "x": 284.03125,
+              "y": 66.09375,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ wgpu-scry",
+              "x": 165.171875,
+              "y": 338.234375,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ wgpu-weld",
+              "x": 66.5,
+              "y": 49.75,
+              "width": 5.078125,
+              "height": 5.078125
+            },
+            {
+              "name": "~ Woodshed",
+              "x": 340.859375,
+              "y": 199.578125,
+              "width": 5.078125,
+              "height": 5.078125
+            }
+          ]
+        }
+      },
+      "touch-next-previous-close",
+      "touch-tools",
+      "touch-dismiss-focus",
+      {
+        "capture_state": "physics-paused",
+        "evidence": "Play physics offered; Pause physics absent"
+      }
+    ],
+    "startup_cancellation": {
+      "before": {
+        "connected": true,
+        "rafRequests": 0
+      },
+      "after": {
+        "ready": null,
+        "mountState": "cancelled",
+        "mirror": 0,
+        "fileInputs": 0,
+        "rafRequests": 0,
+        "deviceLost": {
+          "reason": "destroyed"
+        },
+        "adapter": {
+          "vendor": "google",
+          "architecture": "swiftshader",
+          "device": "",
+          "description": ""
+        },
+        "refusal": "the tree has not booted"
+      },
+      "deadline_ms": 45000
+    }
+  }
+}
