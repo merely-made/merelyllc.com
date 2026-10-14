@@ -1,0 +1,40 @@
+{
+  "recorded_utc": "2026-10-14T06:30:58.692281+00:00",
+  "receipt_sha256": "90c339d590b956657cba9aeca732dae7c2443bbdcfede1b0ae9979f1ec4b50fb",
+  "numeric_fit_review": [
+    {
+      "route": "context-menu-fit-focus",
+      "fitted_changed_restored_counts": [
+        21,
+        10,
+        21
+      ],
+      "common_subjects": 10,
+      "movement_px": 266.7421875,
+      "fit_effect_px": 266.7421875,
+      "restoration_error_px": 0.0,
+      "restored_complete_membership": true
+    },
+    {
+      "route": "touch-menu-fit-focus",
+      "fitted_changed_restored_counts": [
+        21,
+        5,
+        21
+      ],
+      "common_subjects": 5,
+      "movement_px": 217.6484375,
+      "fit_effect_px": 217.6484375,
+      "restoration_error_px": 0.0,
+      "restored_complete_membership": true
+    }
+  ],
+  "independent_coordinator_review": "Accepted receipt hashes, numeric Fit, desktop/touch captures and actual process group closure",
+  "reviewer_thread": "01a1195d-a29f-7d50-92dc-6864b439c1ac",
+  "limits": [
+    "No new GPU run; recalculation from original passing R5 evidence",
+    "No use of differing membership alone as numeric displacement evidence",
+    "Small fitted faces remain a visual limitation"
+  ],
+  "future_harness_refinement": "Compute movement on common stable subjects and require full restored membership, rather than Infinity for changed membership; original qualified harness preserved."
+}

@@ -1,7 +1,7 @@
 {
   "schema": "mer3ly.site-browsing-qualification/v1",
   "recorded_utc": "2026-10-14T06:23:16.660725+00:00",
-  "status": "browser-qualified locally; publication pending",
+  "status": "browser-qualified and pushed; deployment pending",
   "live_site_deployed": false,
   "runtime_source": "56859e30292405e682f28f3841b76e4f141acf73",
   "site_acceptance_source": "e196aaa5521822908301b1fa1c5154d253c0d242",
@@ -98,6 +98,30 @@
     "viewer-desktop-component.png": "e4bdd0668dd71e33a4c7347653d7f151b3bfa5e4612cfec491bc4f739a2b98fc",
     "viewer-mobile-static.png": "b8e2e78a291feaf27b73b998f43df84bc3ae157fdc8416196b008b3cf9cb70bd",
     "receipt.json": "90c339d590b956657cba9aeca732dae7c2443bbdcfede1b0ae9979f1ec4b50fb",
-    "viewer-touch-live.png": "3ca2320df3cd53360372a7c478a251be56b5fffc0e882b64fd7d1a1e10c6b636"
-  }
+    "viewer-touch-live.png": "3ca2320df3cd53360372a7c478a251be56b5fffc0e882b64fd7d1a1e10c6b636",
+    "viewer-desktop.png": "6c103f7b0f1c489c5734d3ace56e353d5d7e49d3262f9bd1c92f5a8d97032b54",
+    "independent-review.json": "5f75104635b83a56117770e6208bc72ef583b1e8bee36a67fe30608854b1cb3b",
+    "radio-ci-source-mapping.json": "77bdd50b1408532cb0d7e7ab9f81c5bd15882eb3354e8928be78012039203066"
+  },
+  "deployment_attempts": [
+    {
+      "run_id": 38522035812,
+      "source": "1f671e54d430a8732c84a80b3df6f980a1465261",
+      "result": "failed: missing Linux Fontconfig build dependency",
+      "fix": "8d68329d53ca14cb79c1fba3f15635447e148efd"
+    },
+    {
+      "run_id": 38523237736,
+      "source": "8d68329d53ca14cb79c1fba3f15635447e148efd",
+      "result": "failed: stale Retinue source expectations after Murm migration",
+      "fix": "30290762fb05fb641130d3725c2995a0b734a659"
+    },
+    {
+      "run_id": 38525522794,
+      "source": "30290762fb05fb641130d3725c2995a0b734a659",
+      "result": "failed: desktop full-document screenshot timeout; interaction checks reached completion, no page or console errors",
+      "fix": "5906f56e74f0fdd3bd9425d8e2f4d65db6d9eefa"
+    }
+  ],
+  "deployment_pending_run": 38528704226
 }
