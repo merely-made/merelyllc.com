@@ -211,8 +211,8 @@ fn v4_bench_states_where_its_screens_come_from() {
     assert!(!document.contains("accurate static example"));
     assert!(!document.contains("deterministic controller model"));
     assert!(document.contains(&devices::radio_mirror_source_statement()));
-    assert!(document.contains("at retinue revision 6aa78fc"));
-    assert_eq!(mer3ly_radio_mirror::short_revision(), "6aa78fc");
+    assert!(document.contains("at retinue revision b49df89"));
+    assert_eq!(mer3ly_radio_mirror::short_revision(), "b49df89");
     assert!(document.contains(&format!(
         "https://github.com/merely-made/murm/tree/{}/crates/radio-mirror",
         mer3ly_radio_mirror::RETINUE_REVISION

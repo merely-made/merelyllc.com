@@ -1,10 +1,10 @@
 //! The pin's two promises: the resolve holds no Reticulum-licensed crate
-//! (Ruling 127), and the copied fixtures are retinue's at the pinned revision.
+//! (Ruling 127), and the copied fixtures are Murm's at the pinned revision.
 
 use std::path::{Path, PathBuf};
 use std::process::Command;
 
-use mer3ly_radio_mirror::{HOST_FIXTURE, LOCAL_FIXTURE, RETINUE_REVISION};
+use mer3ly_radio_mirror::{HOST_FIXTURE, LOCAL_FIXTURE, RETINUE_REPOSITORY, RETINUE_REVISION};
 
 fn manifest_dir() -> &'static Path {
     Path::new(env!("CARGO_MANIFEST_DIR"))
@@ -25,7 +25,7 @@ fn the_lockfile_pins_radio_mirror_without_retinue_or_retinue_sim() {
             "{forbidden} entered the radio-mirror resolve"
         );
     }
-    let pinned = format!("retinue.git?rev={RETINUE_REVISION}#{RETINUE_REVISION}");
+    let pinned = format!("git+{RETINUE_REPOSITORY}.git?rev={RETINUE_REVISION}#{RETINUE_REVISION}");
     for package in ["radio-mirror", "radio-face", "embedded-graphics"] {
         let entry = packages
             .iter()
@@ -34,18 +34,22 @@ fn the_lockfile_pins_radio_mirror_without_retinue_or_retinue_sim() {
         assert!(
             entry["source"]
                 .as_str()
-                .is_some_and(|source| source.ends_with(&pinned)),
-            "{package} is not taken from retinue at the pinned revision"
+                .is_some_and(|source| source == pinned),
+            "{package} is not taken from Murm at the pinned revision"
         );
     }
     let manifest = std::fs::read_to_string(manifest_dir().join("Cargo.toml")).expect("Cargo.toml");
-    assert_eq!(
-        manifest
-            .matches(&format!("rev = \"{RETINUE_REVISION}\""))
-            .count(),
-        2,
-        "both radio-mirror entries name the pinned revision"
-    );
+    let manifest: toml::Value = toml::from_str(&manifest).expect("valid manifest");
+    for dependency in [
+        &manifest["dependencies"]["radio-mirror"],
+        &manifest["target"]["cfg(not(target_arch = \"wasm32\"))"]["dependencies"]["radio-mirror"],
+    ] {
+        assert_eq!(
+            dependency["git"].as_str(),
+            Some(format!("{RETINUE_REPOSITORY}.git").as_str())
+        );
+        assert_eq!(dependency["rev"].as_str(), Some(RETINUE_REVISION));
+    }
 }
 
 /// radio-mirror's source directory in Cargo's git checkout.
@@ -72,9 +76,8 @@ fn pinned_radio_mirror_dir() -> PathBuf {
         .find(|package| package["name"] == "radio-mirror")
         .expect("radio-mirror in the metadata");
     assert!(
-        package["source"]
-            .as_str()
-            .is_some_and(|source| source.ends_with(&format!("#{RETINUE_REVISION}"))),
+        package["source"].as_str().is_some_and(|source| source
+            == format!("git+{RETINUE_REPOSITORY}.git?rev={RETINUE_REVISION}#{RETINUE_REVISION}")),
         "radio-mirror source is not the pinned revision"
     );
     Path::new(package["manifest_path"].as_str().expect("manifest path"))
