@@ -32,6 +32,9 @@ and deploys on main pushes, manual dispatch, and a daily schedule.
   browser delivery, canvas stage unification, and
   [Graphshell as the site canvas](docs/2026-09-30_graphshell_site_canvas_plan.md)
   cover the replacement of the site-owned interactive surfaces.
+  The [family spec registry](docs/2026-10-18_family_spec_registry_plan.md)
+  plan covers `content/specs.toml`, which records every external spec each
+  repository implements, depends on or should follow.
 - P0 viewer review and provider integration are complete: the viewer cone and speed estimator are
   merged into Mere main at `ea9e6da7`, with fresh browser, accessibility and
   frame receipts. The six-asset plain viewer payload is 2,147,689 B brotli;
