@@ -1,8 +1,8 @@
 # Family spec registry
 
 **Date:** 2026-10-18
-**Status:** plan. R0 (seed) landed with this doc; R1–R5 await Mark's rulings on
-D1–D6.
+**Status:** in progress. R0 (seed) and R1 (validator) landed 2026-10-18; D1–D6
+ruled as proposed.
 **Data:** [`content/specs.toml`](../content/specs.toml)
 **Rendered view:** the Merely Spec Atlas,
 https://claude.ai/artifact/HFe3GfjV3SmvqyipkDzW5R (private until shared)
@@ -91,9 +91,10 @@ org listing, and the catalogs fetched that day.
 
 ## Model
 
-`content/specs.toml` holds three tables. Repository ids are the ones in
-`content/repositories.toml`. `family` is reserved for a verdict with no single
-consumer.
+`content/specs.toml` (schema `mer3ly.spec-registry/v1`) holds three tables.
+Repository ids are the migration-ledger ids in `ops/org-migration.toml`, which
+covers every organization repository; the site catalog is a subset of it.
+`family` is reserved for a verdict with no single consumer.
 
 ```toml
 # Illustrative.
@@ -114,7 +115,7 @@ relation = "implements"      # implements | via-dep | should | adjacent
 depth = "partial"            # full | partial | stub | planned | none
 verdict = "ADOPT"            # ADOPT | PULL | SKIP | WATCH (survey grammar) | split | open
 evidence = "one line: a test path, a file, or the reason"
-measured = { wpt_pass = 2016, wpt_total = 5901, on = "2026-09-29", engine = "vano", scope = "…" }
+measured = { on = "2026-09-29", scope = "…", engine = "vano", wpt_pass = 2016, wpt_total = 5901 }
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-7"]
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
@@ -177,14 +178,20 @@ attribution where the consumer text names several crates.
 ### R1: Validator
 
 `cargo run --bin authority -- validate` parses `content/specs.toml` and fails
-on any of these: duplicate spec ids; a claim whose spec or repo does not
-resolve; an enum value outside the lists above; a `measured` block without
-`on`; a duplicate (spec, repo, crate) claim; a malformed `suite`. bole,
-didgeridoo and dramatis are org repositories missing from
-`content/repositories.toml`, so they get catalog rows here.
+on any of these:
+
+- a duplicate spec id, or a malformed one;
+- a claim whose spec or repo does not resolve;
+- an enum value outside the lists above;
+- a `measured` block without `on`, `scope` or a count, or a count above its total;
+- a duplicate (spec, repo, crate) claim;
+- a malformed `suite`;
+- an `rfc` spec whose id is not `rfcNNNN`;
+- a spec with no claim.
 
 Done when validate passes on main, and a test with one bad row of each kind
-fails with that row's id.
+fails with that row's id. **Landed 2026-10-18**: `src/specs.rs`, wired into
+`authority validate`, and `tests/m12_spec_registry.rs` with ten tests.
 
 ### R2: One home
 
@@ -261,6 +268,15 @@ change. If D6 passes, the same run rebuilds the published atlas monthly.
   is a lean, not a ruling. Proposed: yes, after R2 clears the seed defects,
   rebuilt by R5's refresh on a monthly schedule beside the daily deploy.
 
+## Rulings
+
+- **2026-10-18, D1–D6.** Mark: "Accept D1–D6 as proposed in the registry plan,
+  and start R1, the validator." So: the registry lives in
+  `content/specs.toml` (D1); admission is spec-first (D2); the survey grammar
+  applies family-wide on claims (D3); claims are stale after 90 days (D4);
+  published house specs take `body = "merely"` (D5); and the site publishes the
+  atlas from the registry after R2, refreshed monthly by R5 (D6).
+
 ## Progress
 
 - 2026-10-18: R0. Seeded 404 specs and 585 claims into `content/specs.toml`
@@ -271,3 +287,13 @@ change. If D6 passes, the same run rebuilds the published atlas monthly.
   the "fails" row from Turnstone's plan status table, which predates U2. That
   row is a seed-defect class R2 should look for: status tables that later
   rulings have overtaken.
+- 2026-10-18: R1 landed. Repo ids resolve against the migration ledger, not
+  `content/repositories.toml`. A site repository needs a matching
+  `github-metadata.json` entry (`tests/m4_repositories.rs` asserts the counts
+  are equal), and that cache is refreshed only by the Pages workflow's
+  PowerShell script. The ledger already lists `boa-fork` (bole) and
+  `piccolo-fork` (didgeridoo), and the registry now uses those ids. dramatis was
+  in neither file, so it gained a ledger record from the GitHub API (head
+  `cf562f4`, MPL-2.0). The 91 `measured` blocks holding only IDL or CSS name
+  counts gained `on` and `scope`, which row rule 3 requires. The full test
+  suite, clippy and rustfmt pass.

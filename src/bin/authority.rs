@@ -5,6 +5,7 @@ use std::process::ExitCode;
 use mer3ly_site::artifact::validate_public_artifact;
 use mer3ly_site::repositories::{Authority, PublicMetadataCache, PublicSiteData};
 use mer3ly_site::retinue_traces::TraceSet;
+use mer3ly_site::specs::SpecRegistry;
 
 fn main() -> ExitCode {
     match run() {
@@ -42,6 +43,10 @@ fn run() -> Result<(), String> {
     // records the retinue revision, the commands and every file's hash.
     let traces = TraceSet::load(&root)
         .map_err(|errors| format!("retinue trace validation failed:\n{}", errors.join("\n")))?;
+    let specs = SpecRegistry::load(&root).map_err(|error| error.to_string())?;
+    specs
+        .validate(&authority)
+        .map_err(|errors| format!("spec registry validation failed:\n{}", errors.join("\n")))?;
 
     match command.as_str() {
         "validate" => {
@@ -66,6 +71,12 @@ fn run() -> Result<(), String> {
                     .collect::<Vec<_>>()
                     .join(", "),
                 traces.provenance.short_revision()
+            );
+            println!(
+                "spec registry valid: {} specs, {} claims across {} repositories",
+                specs.spec.len(),
+                specs.claim.len(),
+                specs.repositories().len()
             );
         }
         "summary" => {
