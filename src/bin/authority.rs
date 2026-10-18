@@ -5,6 +5,7 @@ use std::process::ExitCode;
 use mer3ly_site::artifact::validate_public_artifact;
 use mer3ly_site::repositories::{Authority, PublicMetadataCache, PublicSiteData};
 use mer3ly_site::retinue_traces::TraceSet;
+use mer3ly_site::spec_coverage::{CatalogSnapshot, Coverage, today};
 use mer3ly_site::specs::SpecRegistry;
 
 fn main() -> ExitCode {
@@ -27,7 +28,7 @@ fn run() -> Result<(), String> {
     let path_argument = arguments.next().map(PathBuf::from);
     if arguments.next().is_some() {
         return Err(
-            "usage: authority [validate|summary|inventory-targets|public-repositories|validate-metadata|validate-artifact] [root] [metadata-or-artifact-path]"
+            "usage: authority [validate|summary|specs|specs-json|inventory-targets|public-repositories|validate-metadata|validate-artifact] [root] [metadata-or-artifact-path]"
                 .to_owned(),
         );
     }
@@ -110,6 +111,21 @@ fn run() -> Result<(), String> {
                 authority.repositories.repository.len()
             );
         }
+        "specs" | "specs-json" => {
+            let catalog = CatalogSnapshot::load(&root).map_err(|error| error.to_string())?;
+            let coverage = Coverage::compute(&specs, &catalog, &today());
+            if command == "specs" {
+                print!("{coverage}");
+            } else {
+                // The atlas page is built from this one document.
+                let document = serde_json::json!({ "coverage": coverage, "registry": specs });
+                println!(
+                    "{}",
+                    serde_json::to_string_pretty(&document)
+                        .map_err(|error| format!("serialize spec coverage: {error}"))?
+                );
+            }
+        }
         "inventory-targets" => {
             println!(
                 "{}",
@@ -160,7 +176,7 @@ fn run() -> Result<(), String> {
         }
         _ => {
             return Err(format!(
-                "unknown command {command}; expected validate, summary, inventory-targets, public-repositories, validate-metadata, or validate-artifact"
+                "unknown command {command}; expected validate, summary, specs, specs-json, inventory-targets, public-repositories, validate-metadata, or validate-artifact"
             ));
         }
     }

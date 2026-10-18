@@ -1,0 +1,7604 @@
+{
+ "source": "https://github.com/w3c/browser-specs",
+ "version": "5.3.0",
+ "fetched_on": "2026-10-18",
+ "license": "CC0-1.0",
+ "spec": [
+  {
+   "shortname": "av1-avif",
+   "title": "AVIF",
+   "organization": "Alliance for Open Media",
+   "url": "https://aomediacodec.github.io/av1-avif/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "avif"
+   ]
+  },
+  {
+   "shortname": "av1-hdr10plus",
+   "title": "HDR10+ AV1 Metadata Handling",
+   "organization": "Alliance for Open Media",
+   "url": "https://aomediacodec.github.io/av1-hdr10plus/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "av1-isobmff",
+   "title": "AV1 Codec ISO Media File Format Binding",
+   "organization": "Alliance for Open Media",
+   "url": "https://aomediacodec.github.io/av1-isobmff/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "av1-mpeg2-ts",
+   "title": "Carriage of AV1 in MPEG-2 TS",
+   "organization": "Alliance for Open Media",
+   "url": "https://aomediacodec.github.io/av1-mpeg2-ts/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "av1-rtp-spec",
+   "title": "RTP Payload Format For AV1",
+   "organization": "Alliance for Open Media",
+   "url": "https://aomediacodec.github.io/av1-rtp-spec/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "av1-spec",
+   "title": "AV1 Bitstream & Decoding Process",
+   "organization": "Alliance for Open Media",
+   "url": "https://aomediacodec.github.io/av1-spec/av1-spec.pdf",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "compat",
+   "title": "Compatibility",
+   "organization": "WHATWG",
+   "url": "https://compat.spec.whatwg.org/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "compat"
+   ]
+  },
+  {
+   "shortname": "compression",
+   "title": "Compression",
+   "organization": "WHATWG",
+   "url": "https://compression.spec.whatwg.org/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "console",
+   "title": "Console",
+   "organization": "WHATWG",
+   "url": "https://console.spec.whatwg.org/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "console"
+   ]
+  },
+  {
+   "shortname": "cookiestore",
+   "title": "Cookie Store API",
+   "organization": "WHATWG",
+   "url": "https://cookiestore.spec.whatwg.org/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "cookiestore"
+   ]
+  },
+  {
+   "shortname": "partitioned-cookies",
+   "title": "Cookies Having Independent Partitioned State",
+   "organization": "IETF",
+   "url": "https://datatracker.ietf.org/doc/html/draft-cutler-httpbis-partitioned-cookies",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "client-hint-reliability",
+   "title": "Client Hint Reliability",
+   "organization": "IETF",
+   "url": "https://datatracker.ietf.org/doc/html/draft-davidben-http-client-hint-reliability",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "idempotency-key-header",
+   "title": "The Idempotency-Key HTTP Header Field",
+   "organization": "IETF",
+   "url": "https://datatracker.ietf.org/doc/html/draft-ietf-httpapi-idempotency-key-header/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "layered-cookies",
+   "title": "Cookies: HTTP State Management Mechanism",
+   "organization": "IETF",
+   "url": "https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-layered-cookies/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "no-vary-search",
+   "title": "The No-Vary-Search HTTP Caching Extension",
+   "organization": "IETF",
+   "url": "https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-no-vary-search",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc6265bis",
+   "title": "Cookies: HTTP State Management Mechanism",
+   "organization": "IETF",
+   "url": "https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-rfc6265bis",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "unencoded-digest",
+   "title": "HTTP Unencoded Digest",
+   "organization": "IETF",
+   "url": "https://datatracker.ietf.org/doc/html/draft-ietf-httpbis-unencoded-digest",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "dom",
+   "title": "DOM",
+   "organization": "WHATWG",
+   "url": "https://dom.spec.whatwg.org/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "dom",
+    "shadow-dom"
+   ]
+  },
+  {
+   "shortname": "css-typed-om-2",
+   "title": "CSS Typed OM 2",
+   "organization": "W3C",
+   "url": "https://drafts.css-houdini.org/css-typed-om-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-typed-om"
+   ]
+  },
+  {
+   "shortname": "font-metrics-api-1",
+   "title": "Font Metrics API 1",
+   "organization": "W3C",
+   "url": "https://drafts.css-houdini.org/font-metrics-api-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "animation-triggers-1",
+   "title": "Animation Triggers",
+   "organization": "W3C",
+   "url": "https://drafts.csswg.org/animation-triggers-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "compositing-2",
+   "title": "Compositing 2",
+   "organization": "W3C",
+   "url": "https://drafts.csswg.org/compositing-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "css-color-6",
+   "title": "CSS Color 6",
+   "organization": "W3C",
+   "url": "https://drafts.csswg.org/css-color-6/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-color"
+   ]
+  },
+  {
+   "shortname": "css-extensions-1",
+   "title": "CSS Extensions 1",
+   "organization": "W3C",
+   "url": "https://drafts.csswg.org/css-extensions-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "css-flexbox-2",
+   "title": "CSS Flexbox 2",
+   "organization": "W3C",
+   "url": "https://drafts.csswg.org/css-flexbox-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-flexbox"
+   ]
+  },
+  {
+   "shortname": "css-gcpm-4",
+   "title": "CSS GCPM 4",
+   "organization": "W3C",
+   "url": "https://drafts.csswg.org/css-gcpm-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-gcpm"
+   ]
+  },
+  {
+   "shortname": "css-images-5",
+   "title": "CSS Images 5",
+   "organization": "W3C",
+   "url": "https://drafts.csswg.org/css-images-5/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-images"
+   ]
+  },
+  {
+   "shortname": "css-link-params-1",
+   "title": "CSS Linked Parameters 1",
+   "organization": "W3C",
+   "url": "https://drafts.csswg.org/css-link-params-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "css-navigation-1",
+   "title": "CSS Route Matching",
+   "organization": "W3C",
+   "url": "https://drafts.csswg.org/css-navigation-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "css-shadow-1",
+   "title": "CSS Shadow 1",
+   "organization": "W3C",
+   "url": "https://drafts.csswg.org/css-shadow-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-shadow"
+   ]
+  },
+  {
+   "shortname": "css-shapes-2",
+   "title": "CSS Shapes 2",
+   "organization": "W3C",
+   "url": "https://drafts.csswg.org/css-shapes-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-shapes"
+   ]
+  },
+  {
+   "shortname": "css-size-adjust-1",
+   "title": "CSS Size Adjustment 1",
+   "organization": "W3C",
+   "url": "https://drafts.csswg.org/css-size-adjust-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-size-adjust"
+   ]
+  },
+  {
+   "shortname": "css-text-5",
+   "title": "CSS Text 5",
+   "organization": "W3C",
+   "url": "https://drafts.csswg.org/css-text-5/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-text"
+   ]
+  },
+  {
+   "shortname": "css-variables-2",
+   "title": "CSS Variables 2",
+   "organization": "W3C",
+   "url": "https://drafts.csswg.org/css-variables-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-variables"
+   ]
+  },
+  {
+   "shortname": "filter-effects-2",
+   "title": "Filter Effects 2",
+   "organization": "W3C",
+   "url": "https://drafts.csswg.org/filter-effects-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "pointer-animations-1",
+   "title": "Pointer-driven Animations 1",
+   "organization": "W3C",
+   "url": "https://drafts.csswg.org/pointer-animations-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "encoding",
+   "title": "Encoding",
+   "organization": "WHATWG",
+   "url": "https://encoding.spec.whatwg.org/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "encoding"
+   ]
+  },
+  {
+   "shortname": "fetch",
+   "title": "Fetch",
+   "organization": "WHATWG",
+   "url": "https://fetch.spec.whatwg.org/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "cors",
+    "fetch"
+   ]
+  },
+  {
+   "shortname": "fido-client-to-authenticator-protocol-v2.1",
+   "title": "CTAP",
+   "organization": "FIDO Alliance",
+   "url": "https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-errata-20220621.html",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "fido-client-to-authenticator-protocol-v2.2",
+   "title": "CTAP",
+   "organization": "FIDO Alliance",
+   "url": "https://fidoalliance.org/specs/fido-v2.2-ps-20250714/fido-client-to-authenticator-protocol-v2.2-ps-20250714.html",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "fs",
+   "title": "File System",
+   "organization": "WHATWG",
+   "url": "https://fs.spec.whatwg.org/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "fs"
+   ]
+  },
+  {
+   "shortname": "fullscreen",
+   "title": "Fullscreen API",
+   "organization": "WHATWG",
+   "url": "https://fullscreen.spec.whatwg.org/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "fullscreen"
+   ]
+  },
+  {
+   "shortname": "html",
+   "title": "HTML",
+   "organization": "WHATWG",
+   "url": "https://html.spec.whatwg.org/multipage/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "close-watcher",
+    "custom-elements",
+    "eventsource",
+    "html",
+    "imagebitmap-renderingcontext",
+    "import-maps",
+    "navigation-api",
+    "webmessaging",
+    "webstorage",
+    "workers",
+    "worklets",
+    "x-frame-options"
+   ]
+  },
+  {
+   "shortname": "anchors",
+   "title": "WebXR Anchors",
+   "organization": "W3C",
+   "url": "https://immersive-web.github.io/anchors/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webxr/anchors"
+   ]
+  },
+  {
+   "shortname": "body-tracking",
+   "title": "WebXR Body Tracking 1",
+   "organization": "W3C",
+   "url": "https://immersive-web.github.io/body-tracking/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "model-element",
+   "title": "The <model> element",
+   "organization": "W3C",
+   "url": "https://immersive-web.github.io/model-element/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webxr-plane-detection",
+   "title": "WebXR Plane Detection",
+   "organization": "W3C",
+   "url": "https://immersive-web.github.io/plane-detection/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webxr/plane-detection"
+   ]
+  },
+  {
+   "shortname": "raw-camera-access",
+   "title": "WebXR Raw Camera Access",
+   "organization": "W3C",
+   "url": "https://immersive-web.github.io/raw-camera-access/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "real-world-meshing",
+   "title": "WebXR Mesh Detection",
+   "organization": "W3C",
+   "url": "https://immersive-web.github.io/real-world-meshing/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "infra",
+   "title": "Infra",
+   "organization": "WHATWG",
+   "url": "https://infra.spec.whatwg.org/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "mimesniff",
+   "title": "MIME Sniffing",
+   "organization": "WHATWG",
+   "url": "https://mimesniff.spec.whatwg.org/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "mimesniff"
+   ]
+  },
+  {
+   "shortname": "notifications",
+   "title": "Notifications API",
+   "organization": "WHATWG",
+   "url": "https://notifications.spec.whatwg.org/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "notifications"
+   ]
+  },
+  {
+   "shortname": "nav-tracking-mitigations",
+   "title": "Navigational-Tracking Mitigations",
+   "organization": "W3C",
+   "url": "https://privacycg.github.io/nav-tracking-mitigations/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "nav-tracking-mitigations"
+   ]
+  },
+  {
+   "shortname": "private-click-measurement",
+   "title": "Private Click Measurement",
+   "organization": "W3C",
+   "url": "https://privacycg.github.io/private-click-measurement/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "saa-non-cookie-storage",
+   "title": "Extending Storage Access API to non-cookie storage",
+   "organization": "W3C",
+   "url": "https://privacycg.github.io/saa-non-cookie-storage/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "storage-access-headers",
+   "title": "Storage Access Headers",
+   "organization": "W3C",
+   "url": "https://privacycg.github.io/storage-access-headers/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "storage-access",
+   "title": "The Storage Access API",
+   "organization": "W3C",
+   "url": "https://privacycg.github.io/storage-access/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "storage-access-api"
+   ]
+  },
+  {
+   "shortname": "quirks",
+   "title": "Quirks Mode",
+   "organization": "WHATWG",
+   "url": "https://quirks.spec.whatwg.org/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "quirks"
+   ]
+  },
+  {
+   "shortname": "ESSL",
+   "title": "OpenGL ES® Shading Language 3.20",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/OpenGL/specs/es/3.2/GLSL_ES_Specification_3.20.html",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "ANGLE_instanced_arrays",
+   "title": "WebGL ANGLE_instanced_arrays Khronos Ratified Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/ANGLE_instanced_arrays/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "EXT_blend_minmax",
+   "title": "WebGL EXT_blend_minmax Khronos Ratified Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/EXT_blend_minmax/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "EXT_color_buffer_float",
+   "title": "WebGL EXT_color_buffer_float Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/EXT_color_buffer_float/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "EXT_color_buffer_half_float",
+   "title": "WebGL EXT_color_buffer_half_float Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/EXT_color_buffer_half_float/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "EXT_disjoint_timer_query_webgl2",
+   "title": "WebGL EXT_disjoint_timer_query_webgl2 Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/EXT_disjoint_timer_query_webgl2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "EXT_disjoint_timer_query",
+   "title": "WebGL EXT_disjoint_timer_query Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/EXT_disjoint_timer_query/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "EXT_float_blend",
+   "title": "WebGL EXT_float_blend Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/EXT_float_blend/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "EXT_frag_depth",
+   "title": "WebGL EXT_frag_depth Khronos Ratified Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/EXT_frag_depth/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "EXT_shader_texture_lod",
+   "title": "WebGL EXT_shader_texture_lod Khronos Ratified Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/EXT_shader_texture_lod/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "EXT_sRGB",
+   "title": "WebGL EXT_sRGB Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/EXT_sRGB/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "EXT_texture_compression_bptc",
+   "title": "WebGL EXT_texture_compression_bptc Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/EXT_texture_compression_bptc/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "EXT_texture_compression_rgtc",
+   "title": "WebGL EXT_texture_compression_rgtc Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/EXT_texture_compression_rgtc/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "EXT_texture_filter_anisotropic",
+   "title": "WebGL EXT_texture_filter_anisotropic Khronos Ratified Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/EXT_texture_filter_anisotropic/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "EXT_texture_norm16",
+   "title": "WebGL EXT_texture_norm16 Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/EXT_texture_norm16/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "KHR_parallel_shader_compile",
+   "title": "WebGL KHR_parallel_shader_compile Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/KHR_parallel_shader_compile/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "OES_draw_buffers_indexed",
+   "title": "WebGL OES_draw_buffers_indexed Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/OES_draw_buffers_indexed/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "OES_element_index_uint",
+   "title": "WebGL OES_element_index_uint Khronos Ratified Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/OES_element_index_uint/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "OES_fbo_render_mipmap",
+   "title": "WebGL OES_fbo_render_mipmap Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/OES_fbo_render_mipmap/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "OES_standard_derivatives",
+   "title": "WebGL OES_standard_derivatives Khronos Ratified Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/OES_standard_derivatives/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "OES_texture_float_linear",
+   "title": "WebGL OES_texture_float_linear Khronos Ratified Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/OES_texture_float_linear/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "OES_texture_float",
+   "title": "WebGL OES_texture_float Khronos Ratified Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/OES_texture_float/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "OES_texture_half_float_linear",
+   "title": "WebGL OES_texture_half_float_linear Khronos Ratified Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/OES_texture_half_float_linear/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "OES_texture_half_float",
+   "title": "WebGL OES_texture_half_float Khronos Ratified Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/OES_texture_half_float/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "OES_vertex_array_object",
+   "title": "WebGL OES_vertex_array_object Khronos Ratified Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/OES_vertex_array_object/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "OVR_multiview2",
+   "title": "WebGL OVR_multiview2 Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/OVR_multiview2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "WEBGL_blend_equation_advanced_coherent",
+   "title": "WebGL WEBGL_blend_equation_advanced_coherent Extension Draft",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/WEBGL_blend_equation_advanced_coherent/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "WEBGL_clip_cull_distance",
+   "title": "WebGL WEBGL_clip_cull_distance Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/WEBGL_clip_cull_distance/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "WEBGL_color_buffer_float",
+   "title": "WebGL WEBGL_color_buffer_float Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/WEBGL_color_buffer_float/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "WEBGL_compressed_texture_astc",
+   "title": "WebGL WEBGL_compressed_texture_astc Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_astc/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "WEBGL_compressed_texture_etc",
+   "title": "WebGL WEBGL_compressed_texture_etc Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_etc/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "WEBGL_compressed_texture_etc1",
+   "title": "WebGL WEBGL_compressed_texture_etc1 Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_etc1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "WEBGL_compressed_texture_pvrtc",
+   "title": "WebGL WEBGL_compressed_texture_pvrtc Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_pvrtc/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "WEBGL_compressed_texture_s3tc_srgb",
+   "title": "WebGL WEBGL_compressed_texture_s3tc_srgb Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_s3tc_srgb/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "WEBGL_compressed_texture_s3tc",
+   "title": "WebGL WEBGL_compressed_texture_s3tc Khronos Ratified Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/WEBGL_compressed_texture_s3tc/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "WEBGL_debug_renderer_info",
+   "title": "WebGL WEBGL_debug_renderer_info Khronos Ratified Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/WEBGL_debug_renderer_info/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "WEBGL_debug_shaders",
+   "title": "WebGL WEBGL_debug_shaders Khronos Ratified Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/WEBGL_debug_shaders/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "WEBGL_depth_texture",
+   "title": "WebGL WEBGL_depth_texture Khronos Ratified Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/WEBGL_depth_texture/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "WEBGL_draw_buffers",
+   "title": "WebGL WEBGL_draw_buffers Khronos Ratified Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/WEBGL_draw_buffers/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "WEBGL_draw_instanced_base_vertex_base_instance",
+   "title": "WebGL WEBGL_draw_instanced_base_vertex_base_instance Extension Draft",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/WEBGL_draw_instanced_base_vertex_base_instance/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "WEBGL_lose_context",
+   "title": "WebGL WEBGL_lose_context Khronos Ratified Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/WEBGL_lose_context/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "WEBGL_multi_draw_instanced_base_vertex_base_instance",
+   "title": "WebGL WEBGL_multi_draw_instanced_base_vertex_base_instance Extension Draft",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/WEBGL_multi_draw_instanced_base_vertex_base_instance/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "WEBGL_multi_draw",
+   "title": "WebGL WEBGL_multi_draw Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/WEBGL_multi_draw/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "WEBGL_provoking_vertex",
+   "title": "WebGL WEBGL_provoking_vertex Extension",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/extensions/WEBGL_provoking_vertex/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites"
+   ]
+  },
+  {
+   "shortname": "webgl1",
+   "title": "WebGL",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/specs/latest/1.0/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites/1.0.3"
+   ]
+  },
+  {
+   "shortname": "webgl2",
+   "title": "WebGL 2.0",
+   "organization": "Khronos Group",
+   "url": "https://registry.khronos.org/webgl/specs/latest/2.0/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "conformance-suites/2.0.0"
+   ]
+  },
+  {
+   "shortname": "captured-mouse-events",
+   "title": "Captured Mouse Events",
+   "organization": "W3C",
+   "url": "https://screen-share.github.io/captured-mouse-events/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "captured-mouse-events"
+   ]
+  },
+  {
+   "shortname": "element-capture",
+   "title": "Element Capture",
+   "organization": "W3C",
+   "url": "https://screen-share.github.io/element-capture/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "storage",
+   "title": "Storage",
+   "organization": "WHATWG",
+   "url": "https://storage.spec.whatwg.org/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "storage"
+   ]
+  },
+  {
+   "shortname": "streams",
+   "title": "Streams",
+   "organization": "WHATWG",
+   "url": "https://streams.spec.whatwg.org/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "streams"
+   ]
+  },
+  {
+   "shortname": "svg-animations",
+   "title": "SVG Animations 2",
+   "organization": "W3C",
+   "url": "https://svgwg.org/specs/animations/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "ecmascript",
+   "title": "ECMAScript",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/ecma262/multipage/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "test"
+   ]
+  },
+  {
+   "shortname": "ecma-402",
+   "title": "ECMAScript® 2027 Internationalization API",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/ecma402/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "test/intl402"
+   ]
+  },
+  {
+   "shortname": "ecma-426",
+   "title": "Source map format",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/ecma426/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-async-explicit-resource-management",
+   "title": "ECMAScript Async Explicit Resource Management",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-async-explicit-resource-management/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-atomics-microwait",
+   "title": "Atomics.pause",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-atomics-microwait/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-canonical-tz",
+   "title": "Time Zone Canonicalization",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-canonical-tz/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-decorators",
+   "title": "Decorators",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-decorators/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-defer-import-eval",
+   "title": "Deferred Imports Evaluation",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-defer-import-eval/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-dynamic-code-brand-checks",
+   "title": "Dynamic Code Brand Checks",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-dynamic-code-brand-checks/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-error-stack-accessor",
+   "title": "Error Stack Accessor",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-error-stack-accessor/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-explicit-resource-management",
+   "title": "ECMAScript Explicit Resource Management",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-explicit-resource-management/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-import-text",
+   "title": "Import Text",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-import-text/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-intl-duration-format",
+   "title": "Intl.DurationFormat",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-intl-duration-format/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-intl-era-monthcode",
+   "title": "Intl era and monthCode",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-intl-era-monthcode/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-intl-keep-trailing-zeros",
+   "title": "Keep trailing zeros in Intl.NumberFormat and Intl.PluralRules",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-intl-keep-trailing-zeros/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-intl-locale-info",
+   "title": "Intl Locale Info",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-intl-locale-info/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-iterator-chunking",
+   "title": "Iterator Chunking",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-iterator-chunking/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-iterator-includes",
+   "title": "Iterator Includes",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-iterator-includes/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-iterator-join",
+   "title": "Proposal Iterator Join",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-iterator-join/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-joint-iteration",
+   "title": "Joint Iteration",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-joint-iteration/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-json-parse-with-source",
+   "title": "JSON.parse source text access",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-json-parse-with-source/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-nonextensible-applies-to-private",
+   "title": "Disallow Adding New Private Fields to Non-extensible Objects",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-nonextensible-applies-to-private/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-regexp-buffer-boundaries",
+   "title": "Regular Expression Buffer Boundaries for ECMAScript",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-regexp-buffer-boundaries/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-shadowrealm",
+   "title": "ShadowRealm API",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-shadowrealm/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-source-phase-imports",
+   "title": "Source Phase Imports",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-source-phase-imports/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "tc39-temporal",
+   "title": "Temporal",
+   "organization": "Ecma International",
+   "url": "https://tc39.es/proposal-temporal/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "testutils",
+   "title": "Test Utils",
+   "organization": "WHATWG",
+   "url": "https://testutils.spec.whatwg.org/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "url",
+   "title": "URL",
+   "organization": "WHATWG",
+   "url": "https://url.spec.whatwg.org/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "url"
+   ]
+  },
+  {
+   "shortname": "urlpattern",
+   "title": "URL Pattern",
+   "organization": "WHATWG",
+   "url": "https://urlpattern.spec.whatwg.org/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "urlpattern"
+   ]
+  },
+  {
+   "shortname": "web-nfc",
+   "title": "Web NFC",
+   "organization": "W3C",
+   "url": "https://w3c-cg.github.io/web-nfc/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "web-nfc"
+   ]
+  },
+  {
+   "shortname": "login-status",
+   "title": "Login Status API",
+   "organization": "W3C",
+   "url": "https://w3c-fedid.github.io/login-status/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "at-driver",
+   "title": "AT Driver",
+   "organization": "W3C",
+   "url": "https://w3c.github.io/at-driver/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "css-aam",
+   "title": "CSS Accessibility API Mappings 1.0",
+   "organization": "W3C",
+   "url": "https://w3c.github.io/css-aam/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "element-timing",
+   "title": "Element Timing API",
+   "organization": "W3C",
+   "url": "https://w3c.github.io/element-timing/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "gamepad-extensions",
+   "title": "Gamepad Extensions",
+   "organization": "W3C",
+   "url": "https://w3c.github.io/gamepad/extensions.html",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "mathml-aam",
+   "title": "MathML Accessibility API Mappings 1.0",
+   "organization": "W3C",
+   "url": "https://w3c.github.io/mathml-aam/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "media-playback-quality",
+   "title": "Media Playback Quality",
+   "organization": "W3C",
+   "url": "https://w3c.github.io/media-playback-quality/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "media-playback-quality"
+   ]
+  },
+  {
+   "shortname": "mediacapture-automation",
+   "title": "Media Capture Automation",
+   "organization": "W3C",
+   "url": "https://w3c.github.io/mediacapture-automation/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "mediacapture-handle-actions",
+   "title": "The Capture-Handle Actions Mechanism",
+   "organization": "W3C",
+   "url": "https://w3c.github.io/mediacapture-handle/actions/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "mediacapture-surface-control",
+   "title": "Captured Surface Control",
+   "organization": "W3C",
+   "url": "https://w3c.github.io/mediacapture-surface-control/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "permissions-registry",
+   "title": "Permissions Registry",
+   "organization": "W3C",
+   "url": "https://w3c.github.io/permissions-registry/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "network-reporting",
+   "title": "Network Reporting API",
+   "organization": "W3C",
+   "url": "https://w3c.github.io/reporting/network-reporting.html",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "web-share-target",
+   "title": "Web Share Target API",
+   "organization": "W3C",
+   "url": "https://w3c.github.io/web-share-target/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webextensions",
+   "title": "Web Extensions",
+   "organization": "W3C",
+   "url": "https://w3c.github.io/webextensions/specification/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "web-extensions"
+   ]
+  },
+  {
+   "shortname": "webrtc-ice",
+   "title": "IceTransport Extensions for WebRTC",
+   "organization": "W3C",
+   "url": "https://w3c.github.io/webrtc-ice/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webrtc-ice"
+   ]
+  },
+  {
+   "shortname": "wasm-core-2-fork-branch-hinting",
+   "title": "WebAssembly Core: Branch Hinting",
+   "organization": "W3C",
+   "url": "https://webassembly.github.io/branch-hinting/core/bikeshed/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "wasm-core-2-fork-compact-import-section",
+   "title": "WebAssembly Core: Compact Import Section",
+   "organization": "W3C",
+   "url": "https://webassembly.github.io/compact-import-section/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "wasm-js-api-2-fork-content-security-policy",
+   "title": "WebAssembly JavaScript Interface: Content Security Policy",
+   "organization": "W3C",
+   "url": "https://webassembly.github.io/content-security-policy/js-api/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "wasm-core-2-fork-custom-descriptors",
+   "title": "WebAssembly Core: Custom Descriptors and JS Interop",
+   "organization": "W3C",
+   "url": "https://webassembly.github.io/custom-descriptors/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "wasm-js-api-2-fork-esm-integration",
+   "title": "WebAssembly JavaScript Interface: ESM Integration",
+   "organization": "W3C",
+   "url": "https://webassembly.github.io/esm-integration/js-api/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "wasm-js-api-2-fork-exception-handling",
+   "title": "WebAssembly JavaScript Interface: Exception Handling",
+   "organization": "W3C",
+   "url": "https://webassembly.github.io/exception-handling/js-api/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "wasm-core-2-fork-extended-const",
+   "title": "WebAssembly Core: Extended Const Expressions",
+   "organization": "W3C",
+   "url": "https://webassembly.github.io/extended-const/core/bikeshed/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "wasm-core-2-fork-function-references",
+   "title": "WebAssembly Core: Function Reference Types",
+   "organization": "W3C",
+   "url": "https://webassembly.github.io/function-references/core/bikeshed/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "wasm-core-2-fork-gc",
+   "title": "WebAssembly Core: Garbage Collection",
+   "organization": "W3C",
+   "url": "https://webassembly.github.io/gc/core/bikeshed/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "wasm-js-api-2-fork-js-promise-integration",
+   "title": "WebAssembly JavaScript Interface: Promise Integration",
+   "organization": "W3C",
+   "url": "https://webassembly.github.io/js-promise-integration/js-api/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "wasm-js-api-2-fork-js-string-builtins",
+   "title": "WebAssembly JavaScript Interface: JS String Builtins",
+   "organization": "W3C",
+   "url": "https://webassembly.github.io/js-string-builtins/js-api/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "wasm-js-api-2-fork-js-types",
+   "title": "WebAssembly JavaScript Interface: Type Reflection",
+   "organization": "W3C",
+   "url": "https://webassembly.github.io/js-types/js-api/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "wasm-core-2-fork-memory64",
+   "title": "WebAssembly Core: Memory64",
+   "organization": "W3C",
+   "url": "https://webassembly.github.io/memory64/core/bikeshed/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "wasm-core-2-fork-multi-memory",
+   "title": "WebAssembly Core: Multi Memory",
+   "organization": "W3C",
+   "url": "https://webassembly.github.io/multi-memory/core/bikeshed/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "wasm-core-2-fork-tail-call",
+   "title": "WebAssembly Core: Tail Call",
+   "organization": "W3C",
+   "url": "https://webassembly.github.io/tail-call/core/bikeshed/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "wasm-core-2-fork-threads",
+   "title": "WebAssembly Core: Threading",
+   "organization": "W3C",
+   "url": "https://webassembly.github.io/threads/core/bikeshed/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "wasm-js-api-2-fork-threads",
+   "title": "WebAssembly JavaScript Interface: Threading",
+   "organization": "W3C",
+   "url": "https://webassembly.github.io/threads/js-api/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "wasm-core-2-fork-wide-arithmetic",
+   "title": "WebAssembly Core: Wide Arithmetic",
+   "organization": "W3C",
+   "url": "https://webassembly.github.io/wide-arithmetic/core/bikeshed/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "speech-api",
+   "title": "Web Speech API",
+   "organization": "W3C",
+   "url": "https://webaudio.github.io/web-speech-api/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "web-bluetooth",
+   "title": "Web Bluetooth",
+   "organization": "W3C",
+   "url": "https://webbluetoothcg.github.io/web-bluetooth/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "bluetooth"
+   ]
+  },
+  {
+   "shortname": "web-bluetooth-scanning",
+   "title": "Web Bluetooth Scanning",
+   "organization": "W3C",
+   "url": "https://webbluetoothcg.github.io/web-bluetooth/scanning.html",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webidl",
+   "title": "Web IDL",
+   "organization": "WHATWG",
+   "url": "https://webidl.spec.whatwg.org/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webidl"
+   ]
+  },
+  {
+   "shortname": "prompt-api",
+   "title": "Prompt API",
+   "organization": "W3C",
+   "url": "https://webmachinelearning.github.io/prompt-api/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "proofreader-api",
+   "title": "Proofreader API",
+   "organization": "W3C",
+   "url": "https://webmachinelearning.github.io/proofreader-api/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "translation-api",
+   "title": "Translator and Language Detector APIs",
+   "organization": "W3C",
+   "url": "https://webmachinelearning.github.io/translation-api/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webmcp",
+   "title": "WebMCP",
+   "organization": "W3C",
+   "url": "https://webmachinelearning.github.io/webmcp/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "writing-assistance-apis",
+   "title": "Writing Assistance APIs",
+   "organization": "W3C",
+   "url": "https://webmachinelearning.github.io/writing-assistance-apis/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "websockets",
+   "title": "WebSockets",
+   "organization": "WHATWG",
+   "url": "https://websockets.spec.whatwg.org/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "websockets"
+   ]
+  },
+  {
+   "shortname": "anonymous-iframe",
+   "title": "Iframe credentialless",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/anonymous-iframe/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "autofill-event",
+   "title": "Autofill Event",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/autofill-event/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "background-fetch",
+   "title": "Background Fetch",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/background-fetch/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "background-fetch"
+   ]
+  },
+  {
+   "shortname": "background-sync",
+   "title": "Background Sync",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/background-sync/spec/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "background-sync"
+   ]
+  },
+  {
+   "shortname": "capability-delegation",
+   "title": "Capability Delegation",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/capability-delegation/spec.html",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "client-hints-infrastructure",
+   "title": "Client Hints Infrastructure",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/client-hints-infrastructure/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "client-hints"
+   ]
+  },
+  {
+   "shortname": "connection-allowlists",
+   "title": "Connection Allowlists",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/connection-allowlists/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "container-timing",
+   "title": "Container Timing API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/container-timing/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "content-index",
+   "title": "Content Index",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/content-index/spec/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "content-index"
+   ]
+  },
+  {
+   "shortname": "crash-reporting",
+   "title": "Crash Reporting",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/crash-reporting/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "csp-next",
+   "title": "Scripting Policy",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/csp-next/scripting-policy.html",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "css-parser-api",
+   "title": "CSS Parser API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/css-parser-api/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-parser-api"
+   ]
+  },
+  {
+   "shortname": "datacue",
+   "title": "DataCue API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/datacue/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "deprecation-reporting",
+   "title": "Deprecation Reporting",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/deprecation-reporting/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "deprecation-reporting"
+   ]
+  },
+  {
+   "shortname": "digital-goods",
+   "title": "Digital Goods API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/digital-goods/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "document-isolation-policy",
+   "title": "Document-Isolation-Policy",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/document-isolation-policy/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "document-picture-in-picture",
+   "title": "Document Picture-in-Picture",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/document-picture-in-picture/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "document-picture-in-picture"
+   ]
+  },
+  {
+   "shortname": "document-policy",
+   "title": "Document Policy",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/document-policy/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "document-policy"
+   ]
+  },
+  {
+   "shortname": "entries-api",
+   "title": "File and Directory Entries API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/entries-api/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "entries-api"
+   ]
+  },
+  {
+   "shortname": "explicit-javascript-compile-hints-file-based",
+   "title": "Explicit JavaScript Compile Hints (File-based)",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/explicit-javascript-compile-hints-file-based/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "eyedropper-api",
+   "title": "EyeDropper API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/eyedropper-api/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "fenced-frame",
+   "title": "Fenced Frame",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/fenced-frame/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "fenced-frame"
+   ]
+  },
+  {
+   "shortname": "file-system-access",
+   "title": "File System Access",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/file-system-access/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "file-system-access"
+   ]
+  },
+  {
+   "shortname": "first-party-sets",
+   "title": "User Agent Interaction with Related Website Sets",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/first-party-sets/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "get-installed-related-apps",
+   "title": "Get Installed Related Apps API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/get-installed-related-apps/spec/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "installedapp"
+   ]
+  },
+  {
+   "shortname": "handwriting-recognition",
+   "title": "Handwriting Recognition API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/handwriting-recognition/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "idle-detection",
+   "title": "Idle Detection API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/idle-detection/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "idle-detection"
+   ]
+  },
+  {
+   "shortname": "iframe-media-pausing",
+   "title": "Iframe Media Pausing",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/iframe-media-pausing/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "ink-enhancement",
+   "title": "Ink API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/ink-enhancement/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "input-device-capabilities",
+   "title": "Input Device Capabilities",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/input-device-capabilities/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "input-device-capabilities"
+   ]
+  },
+  {
+   "shortname": "intervention-reporting",
+   "title": "Intervention Reporting",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/intervention-reporting/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "intervention-reporting"
+   ]
+  },
+  {
+   "shortname": "is-input-pending",
+   "title": "Early detection of input events",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/is-input-pending/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "is-input-pending"
+   ]
+  },
+  {
+   "shortname": "js-self-profiling",
+   "title": "JS Self-Profiling API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/js-self-profiling/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "js-self-profiling"
+   ]
+  },
+  {
+   "shortname": "keyboard-lock",
+   "title": "Keyboard Lock",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/keyboard-lock/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "keyboard-lock"
+   ]
+  },
+  {
+   "shortname": "keyboard-map",
+   "title": "Keyboard Map",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/keyboard-map/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "keyboard-map"
+   ]
+  },
+  {
+   "shortname": "layout-instability",
+   "title": "Layout Instability API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/layout-instability/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "layout-instability"
+   ]
+  },
+  {
+   "shortname": "local-font-access",
+   "title": "Local Font Access API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/local-font-access/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "font-access"
+   ]
+  },
+  {
+   "shortname": "local-network-access",
+   "title": "Local Network Access",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/local-network-access/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "fetch/local-network-access"
+   ]
+  },
+  {
+   "shortname": "manifest-incubations",
+   "title": "Manifest Incubations",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/manifest-incubations/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "media-feeds",
+   "title": "Media Feeds",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/media-feeds/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "prefetch",
+   "title": "Prefetch",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/nav-speculation/prefetch.html",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "prerendering-revamped",
+   "title": "Prerendering Revamped",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/nav-speculation/prerendering.html",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "netinfo",
+   "title": "Network Information API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/netinfo/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "netinfo"
+   ]
+  },
+  {
+   "shortname": "observable",
+   "title": "Observable",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/observable/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "overscroll-scrollend-events",
+   "title": "overscroll and scrollend events",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/overscroll-scrollend-events/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "page-lifecycle",
+   "title": "Page Lifecycle",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/page-lifecycle/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "page-lifecycle"
+   ]
+  },
+  {
+   "shortname": "paymentlink",
+   "title": "Facilitated Payment Link Type in HTML",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/paymentlink/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "geolocation-element",
+   "title": "The HTML Geolocation Element",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/PEPC/geolocation-element.html",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "performance-measure-memory",
+   "title": "Measure Memory API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/performance-measure-memory/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "measure-memory"
+   ]
+  },
+  {
+   "shortname": "periodic-background-sync",
+   "title": "Web Periodic Background Synchronization",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/periodic-background-sync/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "periodic-background-sync"
+   ]
+  },
+  {
+   "shortname": "permissions-request",
+   "title": "Requesting Permissions",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/permissions-request/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "permissions-request"
+   ]
+  },
+  {
+   "shortname": "permissions-revoke",
+   "title": "Relinquishing Permissions",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/permissions-revoke/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "permissions-revoke"
+   ]
+  },
+  {
+   "shortname": "portals",
+   "title": "Portals",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/portals/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "prefer-current-tab",
+   "title": "preferCurrentTab",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/prefer-current-tab/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "responsive-image-client-hints",
+   "title": "Responsive Image Client Hints",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/responsive-image-client-hints/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "savedata",
+   "title": "Save Data API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/savedata/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "savedata"
+   ]
+  },
+  {
+   "shortname": "scheduling-apis",
+   "title": "Prioritized Task Scheduling",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/scheduling-apis/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "scheduler"
+   ]
+  },
+  {
+   "shortname": "scroll-to-text-fragment",
+   "title": "URL Fragment Text Directives",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/scroll-to-text-fragment/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "scroll-to-text-fragment"
+   ]
+  },
+  {
+   "shortname": "serial",
+   "title": "Web Serial API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/serial/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "serial"
+   ]
+  },
+  {
+   "shortname": "shape-detection-api",
+   "title": "Accelerated Shape Detection in Images",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/shape-detection-api/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "shape-detection"
+   ]
+  },
+  {
+   "shortname": "text-detection-api",
+   "title": "Accelerated Text Detection in Images",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/shape-detection-api/text.html",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "signature-based-sri",
+   "title": "Signature-based Integrity",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/signature-based-sri/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "sms-one-time-codes",
+   "title": "SMS One-Time Codes",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/sms-one-time-codes/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "storage-buckets",
+   "title": "Storage Buckets API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/storage-buckets/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "storage/buckets"
+   ]
+  },
+  {
+   "shortname": "trust-token-api",
+   "title": "Private State Token API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/trust-token-api/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "trust-tokens"
+   ]
+  },
+  {
+   "shortname": "ua-client-hints",
+   "title": "User-Agent Client Hints",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/ua-client-hints/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "ua-client-hints"
+   ]
+  },
+  {
+   "shortname": "user-preference-media-features-headers",
+   "title": "User Preference Media Features Client Hints Headers",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/user-preference-media-features-headers/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "video-rvfc",
+   "title": "HTMLVideoElement.requestVideoFrameCallback()",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/video-rvfc/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "video-rvfc"
+   ]
+  },
+  {
+   "shortname": "web-app-launch",
+   "title": "Web App Launch Handler API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/web-app-launch/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "web-otp",
+   "title": "WebOTP API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/web-otp/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "web-otp"
+   ]
+  },
+  {
+   "shortname": "device-attributes",
+   "title": "Device Attributes API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/WebApiDevice/device_attributes/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "managed-configuration",
+   "title": "Managed Configuration API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/WebApiDevice/managed_config/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "managed"
+   ]
+  },
+  {
+   "shortname": "webcrypto-modern-algos",
+   "title": "Modern Algorithms in the Web Cryptography API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/webcrypto-modern-algos/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webcrypto-secure-curves",
+   "title": "Secure Curves in the Web Cryptography API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/webcrypto-secure-curves/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webhid",
+   "title": "WebHID API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/webhid/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webhid"
+   ]
+  },
+  {
+   "shortname": "webpackage",
+   "title": "Loading Signed Exchanges",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/webpackage/loading.html",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webusb",
+   "title": "WebUSB API",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/webusb/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webusb"
+   ]
+  },
+  {
+   "shortname": "window-controls-overlay",
+   "title": "Window Controls Overlay",
+   "organization": "W3C",
+   "url": "https://wicg.github.io/window-controls-overlay/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "iso10918-5",
+   "title": "JPEG",
+   "organization": "ISO/IEC",
+   "url": "https://www.iso.org/standard/54989.html",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "iso18181-2",
+   "title": "JPEG XL: File Format",
+   "organization": "ISO/IEC",
+   "url": "https://www.iso.org/standard/85253.html",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "iso14496-22",
+   "title": "Open Font Format",
+   "organization": "ISO/IEC",
+   "url": "https://www.iso.org/standard/87621.html",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc2397",
+   "title": "The \"data\" URL scheme",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc2397/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc4120",
+   "title": "Kerberos",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc4120/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc5861",
+   "title": "HTTP Cache-Control Extensions for Stale Content",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc5861/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc6265",
+   "title": "HTTP State Management Mechanism",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc6265/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc6266",
+   "title": "Content-Disposition in HTTP",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc6266/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc6386",
+   "title": "VP8 Data Format and Decoding Guide",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc6386/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc6454",
+   "title": "The Web Origin Concept",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc6454/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc6455",
+   "title": "The WebSocket Protocol",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc6455/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc6797",
+   "title": "HSTS",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc6797/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc7034",
+   "title": "HTTP Header Field X-Frame-Options",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc7034/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc7239",
+   "title": "Forwarded HTTP Extension",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc7239/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc7240",
+   "title": "Prefer Header for HTTP",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc7240/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc7469",
+   "title": "Public Key Pinning Extension for HTTP",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc7469/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc7578",
+   "title": "Returning Values from Forms: multipart/form-data",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc7578/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc7616",
+   "title": "HTTP Digest Access Authentication",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc7616/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc7617",
+   "title": "The 'Basic' HTTP Authentication Scheme",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc7617/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc7725",
+   "title": "An HTTP Status Code to Report Legal Obstacles",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc7725/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc7838",
+   "title": "HTTP Alternative Services",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc7838/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc7932",
+   "title": "Brotli Compressed Data Format",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc7932/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc8246",
+   "title": "HTTP Immutable Responses",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc8246/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc8288",
+   "title": "Web Linking",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc8288/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc8297",
+   "title": "An HTTP Status Code for Indicating Hints",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc8297/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc8470",
+   "title": "Using Early Data in HTTP",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc8470/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc8610",
+   "title": "CDDL",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc8610/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc8878",
+   "title": "Zstandard Compression and the 'application/zstd' Media Type",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc8878/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc8942",
+   "title": "HTTP Client Hints",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc8942/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc9110",
+   "title": "HTTP Semantics",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc9110/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc9111",
+   "title": "HTTP Caching",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc9111/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc9112",
+   "title": "HTTP/1.1",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc9112/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc9113",
+   "title": "HTTP/2",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc9113/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc9114",
+   "title": "HTTP/3",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc9114/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc9163",
+   "title": "Expect-CT Extension for HTTP",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc9163/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc9218",
+   "title": "Extensible Prioritization Scheme for HTTP",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc9218/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc9421",
+   "title": "HTTP Message Signatures",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc9421/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc9530",
+   "title": "Digest Fields",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc9530/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc9649",
+   "title": "WebP Image Format",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc9649/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc9659",
+   "title": "Window Sizing for Zstandard Content Encoding",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc9659/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "rfc9842",
+   "title": "Compression Dictionary Transport",
+   "organization": "IETF",
+   "url": "https://www.rfc-editor.org/info/rfc9842/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "GIF",
+   "title": "GIF",
+   "organization": "CompuServe Incorporated",
+   "url": "https://www.w3.org/Graphics/GIF/spec-gif89a.txt",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "gif"
+   ]
+  },
+  {
+   "shortname": "w3c-process",
+   "title": "W3C Process Document",
+   "organization": "W3C",
+   "url": "https://www.w3.org/policies/process/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "accelerometer",
+   "title": "Accelerometer",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/accelerometer/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "accelerometer"
+   ]
+  },
+  {
+   "shortname": "accname-1.2",
+   "title": "Accessible Name and Description Computation 1.2",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/accname-1.2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "accname"
+   ]
+  },
+  {
+   "shortname": "ambient-light",
+   "title": "Ambient Light Sensor",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/ambient-light/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "ambient-light"
+   ]
+  },
+  {
+   "shortname": "appmanifest",
+   "title": "Web Application Manifest",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/appmanifest/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "appmanifest"
+   ]
+  },
+  {
+   "shortname": "attribution",
+   "title": "Attribution 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/attribution/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "audio-output",
+   "title": "Audio Output Devices API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/audio-output/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "audio-output"
+   ]
+  },
+  {
+   "shortname": "audio-session",
+   "title": "Audio Session",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/audio-session/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "autoplay-detection",
+   "title": "Autoplay Policy Detection",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/autoplay-detection/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "autoplay-policy-detection"
+   ]
+  },
+  {
+   "shortname": "badging",
+   "title": "Badging API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/badging/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "badging"
+   ]
+  },
+  {
+   "shortname": "battery-status",
+   "title": "Battery Status API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/battery-status/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "battery-status"
+   ]
+  },
+  {
+   "shortname": "beacon",
+   "title": "Beacon",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/beacon/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "beacon"
+   ]
+  },
+  {
+   "shortname": "capture-handle-identity",
+   "title": "Capture Handle - Bootstrapping Collaboration when Screensharing",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/capture-handle-identity/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "change-password-url",
+   "title": "A Well-Known URL for Changing Passwords",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/change-password-url/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "clear-site-data",
+   "title": "Clear Site Data",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/clear-site-data/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "clear-site-data"
+   ]
+  },
+  {
+   "shortname": "clipboard-apis",
+   "title": "Clipboard API and events",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/clipboard-apis/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "clipboard-apis"
+   ]
+  },
+  {
+   "shortname": "compositing-1",
+   "title": "Compositing 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/compositing-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "compute-pressure",
+   "title": "Compute Pressure 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/compute-pressure/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "compute-pressure"
+   ]
+  },
+  {
+   "shortname": "contact-picker",
+   "title": "Contact Picker API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/contact-picker/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "core-aam-1.2",
+   "title": "Core Accessibility API Mappings 1.2",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/core-aam-1.2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "core-aam"
+   ]
+  },
+  {
+   "shortname": "credential-management-1",
+   "title": "Credential Management 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/credential-management-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "credential-management"
+   ]
+  },
+  {
+   "shortname": "csp-embedded-enforcement",
+   "title": "Content Security Policy: Embedded Enforcement",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/csp-embedded-enforcement/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "content-security-policy/embedded-enforcement"
+   ]
+  },
+  {
+   "shortname": "CSP3",
+   "title": "Content Security Policy 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/CSP3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "content-security-policy"
+   ]
+  },
+  {
+   "shortname": "css-2022",
+   "title": "CSS Snapshot 2022",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-2022/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "css-2023",
+   "title": "CSS Snapshot 2023",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-2023/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "css-2024",
+   "title": "CSS Snapshot 2024",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-2024/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "css-2025",
+   "title": "CSS Snapshot 2025",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-2025/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "css-2026",
+   "title": "CSS Snapshot 2026",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-2026/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "css-align-3",
+   "title": "CSS Box Alignment 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-align-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-align"
+   ]
+  },
+  {
+   "shortname": "css-anchor-position-1",
+   "title": "CSS Anchor Positioning 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-anchor-position-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-anchor-position"
+   ]
+  },
+  {
+   "shortname": "css-anchor-position-2",
+   "title": "CSS Anchor Positioning 2",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-anchor-position-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-anchor-position"
+   ]
+  },
+  {
+   "shortname": "css-animation-worklet-1",
+   "title": "CSS Animation Worklet API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-animation-worklet-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "animation-worklet"
+   ]
+  },
+  {
+   "shortname": "css-animations-1",
+   "title": "CSS Animations 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-animations-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-animations"
+   ]
+  },
+  {
+   "shortname": "css-animations-2",
+   "title": "CSS Animations 2",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-animations-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-animations"
+   ]
+  },
+  {
+   "shortname": "css-backgrounds-3",
+   "title": "CSS Backgrounds 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-backgrounds-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-backgrounds"
+   ]
+  },
+  {
+   "shortname": "css-backgrounds-4",
+   "title": "CSS Backgrounds 4",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-backgrounds-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-backgrounds"
+   ]
+  },
+  {
+   "shortname": "css-borders-4",
+   "title": "CSS Borders and Box Decorations 4",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-borders-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-borders"
+   ]
+  },
+  {
+   "shortname": "css-box-3",
+   "title": "CSS Box Model 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-box-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-box"
+   ]
+  },
+  {
+   "shortname": "css-box-4",
+   "title": "CSS Box Model 4",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-box-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-box"
+   ]
+  },
+  {
+   "shortname": "css-break-3",
+   "title": "CSS Fragmentation 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-break-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-break"
+   ]
+  },
+  {
+   "shortname": "css-break-4",
+   "title": "CSS Fragmentation 4",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-break-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-break"
+   ]
+  },
+  {
+   "shortname": "css-cascade-3",
+   "title": "CSS Cascading 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-cascade-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-cascade"
+   ]
+  },
+  {
+   "shortname": "css-cascade-4",
+   "title": "CSS Cascading 4",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-cascade-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-cascade"
+   ]
+  },
+  {
+   "shortname": "css-cascade-5",
+   "title": "CSS Cascading 5",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-cascade-5/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-cascade"
+   ]
+  },
+  {
+   "shortname": "css-cascade-6",
+   "title": "CSS Cascading 6",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-cascade-6/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-cascade"
+   ]
+  },
+  {
+   "shortname": "css-color-3",
+   "title": "CSS Color 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-color-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-color"
+   ]
+  },
+  {
+   "shortname": "css-color-4",
+   "title": "CSS Color 4",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-color-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-color"
+   ]
+  },
+  {
+   "shortname": "css-color-5",
+   "title": "CSS Color 5",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-color-5/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-color"
+   ]
+  },
+  {
+   "shortname": "css-color-adjust-1",
+   "title": "CSS Color Adjustment 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-color-adjust-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-color-adjust"
+   ]
+  },
+  {
+   "shortname": "css-color-hdr-1",
+   "title": "CSS Color HDR 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-color-hdr-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-color-hdr"
+   ]
+  },
+  {
+   "shortname": "css-conditional-3",
+   "title": "CSS Conditional 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-conditional-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-conditional"
+   ]
+  },
+  {
+   "shortname": "css-conditional-4",
+   "title": "CSS Conditional 4",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-conditional-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-conditional"
+   ]
+  },
+  {
+   "shortname": "css-conditional-5",
+   "title": "CSS Conditional 5",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-conditional-5/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-conditional"
+   ]
+  },
+  {
+   "shortname": "css-contain-1",
+   "title": "CSS Containment 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-contain-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-contain"
+   ]
+  },
+  {
+   "shortname": "css-contain-2",
+   "title": "CSS Containment 2",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-contain-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-contain"
+   ]
+  },
+  {
+   "shortname": "css-contain-3",
+   "title": "CSS Containment 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-contain-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-contain"
+   ]
+  },
+  {
+   "shortname": "css-content-3",
+   "title": "CSS Generated Content 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-content-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-content"
+   ]
+  },
+  {
+   "shortname": "css-counter-styles-3",
+   "title": "CSS Counter Styles 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-counter-styles-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-counter-styles"
+   ]
+  },
+  {
+   "shortname": "css-display-3",
+   "title": "CSS Display 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-display-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-display"
+   ]
+  },
+  {
+   "shortname": "css-display-4",
+   "title": "CSS Display 4",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-display-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-display"
+   ]
+  },
+  {
+   "shortname": "css-easing-1",
+   "title": "CSS Easing Functions 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-easing-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-easing"
+   ]
+  },
+  {
+   "shortname": "css-easing-2",
+   "title": "CSS Easing Functions 2",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-easing-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-easing"
+   ]
+  },
+  {
+   "shortname": "css-env-1",
+   "title": "CSS Environment Variables 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-env-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-env"
+   ]
+  },
+  {
+   "shortname": "css-flexbox-1",
+   "title": "CSS Flexbox 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-flexbox-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-flexbox"
+   ]
+  },
+  {
+   "shortname": "css-font-loading-3",
+   "title": "CSS Font Loading 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-font-loading-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-font-loading"
+   ]
+  },
+  {
+   "shortname": "css-fonts-4",
+   "title": "CSS Fonts 4",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-fonts-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-fonts"
+   ]
+  },
+  {
+   "shortname": "css-fonts-5",
+   "title": "CSS Fonts 5",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-fonts-5/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-fonts"
+   ]
+  },
+  {
+   "shortname": "css-forms-1",
+   "title": "CSS Form Control Styling 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-forms-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "css-gaps-1",
+   "title": "CSS Gap Decorations 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-gaps-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-gaps"
+   ]
+  },
+  {
+   "shortname": "css-gcpm-3",
+   "title": "CSS GCPM 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-gcpm-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-gcpm"
+   ]
+  },
+  {
+   "shortname": "css-grid-1",
+   "title": "CSS Grid Layout 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-grid-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-grid"
+   ]
+  },
+  {
+   "shortname": "css-grid-2",
+   "title": "CSS Grid Layout 2",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-grid-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-grid"
+   ]
+  },
+  {
+   "shortname": "css-grid-3",
+   "title": "CSS Grid Layout 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-grid-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-grid"
+   ]
+  },
+  {
+   "shortname": "css-highlight-api-1",
+   "title": "CSS Custom Highlight API 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-highlight-api-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-highlight-api"
+   ]
+  },
+  {
+   "shortname": "css-image-animation-1",
+   "title": "CSS Image Animation 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-image-animation-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "css-images-3",
+   "title": "CSS Images 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-images-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-images"
+   ]
+  },
+  {
+   "shortname": "css-images-4",
+   "title": "CSS Images 4",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-images-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-images"
+   ]
+  },
+  {
+   "shortname": "css-inline-3",
+   "title": "CSS Inline Layout 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-inline-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-inline"
+   ]
+  },
+  {
+   "shortname": "css-layout-api-1",
+   "title": "CSS Layout API 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-layout-api-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-layout-api"
+   ]
+  },
+  {
+   "shortname": "css-line-grid-1",
+   "title": "CSS Line Grid 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-line-grid-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "css-lists-3",
+   "title": "CSS Lists 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-lists-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-lists"
+   ]
+  },
+  {
+   "shortname": "css-logical-1",
+   "title": "CSS Logical Properties 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-logical-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-logical"
+   ]
+  },
+  {
+   "shortname": "css-masking-1",
+   "title": "CSS Masking 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-masking-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "css-mixins-1",
+   "title": "CSS Functions and Mixins",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-mixins-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-mixins"
+   ]
+  },
+  {
+   "shortname": "css-multicol-1",
+   "title": "CSS Multicol 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-multicol-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-multicol"
+   ]
+  },
+  {
+   "shortname": "css-multicol-2",
+   "title": "CSS Multicol 2",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-multicol-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-multicol"
+   ]
+  },
+  {
+   "shortname": "css-namespaces-3",
+   "title": "CSS Namespaces 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-namespaces-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-namespaces"
+   ]
+  },
+  {
+   "shortname": "css-nav-1",
+   "title": "CSS Spatial Navigation 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-nav-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "css-nesting-1",
+   "title": "CSS Nesting 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-nesting-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-nesting"
+   ]
+  },
+  {
+   "shortname": "css-overflow-3",
+   "title": "CSS Overflow 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-overflow-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-overflow"
+   ]
+  },
+  {
+   "shortname": "css-overflow-4",
+   "title": "CSS Overflow 4",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-overflow-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-overflow"
+   ]
+  },
+  {
+   "shortname": "css-overflow-5",
+   "title": "CSS Overflow 5",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-overflow-5/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-overflow"
+   ]
+  },
+  {
+   "shortname": "css-overscroll-1",
+   "title": "CSS Overscroll Behavior 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-overscroll-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-overscroll-behavior"
+   ]
+  },
+  {
+   "shortname": "css-page-3",
+   "title": "CSS Paged Media 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-page-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-page"
+   ]
+  },
+  {
+   "shortname": "css-page-floats-3",
+   "title": "CSS Page Floats",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-page-floats-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "css-paint-api-1",
+   "title": "CSS Painting API 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-paint-api-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-paint-api"
+   ]
+  },
+  {
+   "shortname": "css-position-3",
+   "title": "CSS Positioned Layout 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-position-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-position"
+   ]
+  },
+  {
+   "shortname": "css-position-4",
+   "title": "CSS Positioned Layout 4",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-position-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-position"
+   ]
+  },
+  {
+   "shortname": "css-properties-values-api-1",
+   "title": "CSS Properties and Values API 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-properties-values-api-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-properties-values-api"
+   ]
+  },
+  {
+   "shortname": "css-pseudo-4",
+   "title": "CSS Pseudo-Elements 4",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-pseudo-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-pseudo"
+   ]
+  },
+  {
+   "shortname": "css-regions-1",
+   "title": "CSS Regions 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-regions-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "css-rhythm-1",
+   "title": "CSS Rhythmic Sizing 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-rhythm-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-rhythm"
+   ]
+  },
+  {
+   "shortname": "css-round-display-1",
+   "title": "CSS Round Display 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-round-display-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-round-display"
+   ]
+  },
+  {
+   "shortname": "css-ruby-1",
+   "title": "CSS Ruby Annotation Layout 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-ruby-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-ruby"
+   ]
+  },
+  {
+   "shortname": "css-scroll-anchoring-1",
+   "title": "CSS Scroll Anchoring 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-scroll-anchoring-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-scroll-anchoring"
+   ]
+  },
+  {
+   "shortname": "css-scroll-snap-1",
+   "title": "CSS Scroll Snap 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-scroll-snap-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-scroll-snap"
+   ]
+  },
+  {
+   "shortname": "css-scroll-snap-2",
+   "title": "CSS Scroll Snap 2",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-scroll-snap-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-scroll-snap"
+   ]
+  },
+  {
+   "shortname": "css-scrollbars-1",
+   "title": "CSS Scrollbars Styling 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-scrollbars-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-scrollbars"
+   ]
+  },
+  {
+   "shortname": "css-shapes-1",
+   "title": "CSS Shapes 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-shapes-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-shapes"
+   ]
+  },
+  {
+   "shortname": "css-sizing-3",
+   "title": "CSS Sizing 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-sizing-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-sizing"
+   ]
+  },
+  {
+   "shortname": "css-sizing-4",
+   "title": "CSS Sizing 4",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-sizing-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-sizing"
+   ]
+  },
+  {
+   "shortname": "css-speech-1",
+   "title": "CSS Speech 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-speech-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-speech"
+   ]
+  },
+  {
+   "shortname": "css-style-attr",
+   "title": "CSS Style Attributes",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-style-attr/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-style-attr"
+   ]
+  },
+  {
+   "shortname": "css-syntax-3",
+   "title": "CSS Syntax 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-syntax-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-syntax"
+   ]
+  },
+  {
+   "shortname": "css-tables-3",
+   "title": "CSS Table 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-tables-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-tables"
+   ]
+  },
+  {
+   "shortname": "css-text-3",
+   "title": "CSS Text 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-text-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-text"
+   ]
+  },
+  {
+   "shortname": "css-text-4",
+   "title": "CSS Text 4",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-text-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-text"
+   ]
+  },
+  {
+   "shortname": "css-text-decor-3",
+   "title": "CSS Text Decoration 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-text-decor-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-text-decor"
+   ]
+  },
+  {
+   "shortname": "css-text-decor-4",
+   "title": "CSS Text Decoration 4",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-text-decor-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-text-decor"
+   ]
+  },
+  {
+   "shortname": "css-transforms-1",
+   "title": "CSS Transforms 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-transforms-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-transforms"
+   ]
+  },
+  {
+   "shortname": "css-transforms-2",
+   "title": "CSS Transforms 2",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-transforms-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-transforms"
+   ]
+  },
+  {
+   "shortname": "css-transitions-1",
+   "title": "CSS Transitions 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-transitions-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-transitions"
+   ]
+  },
+  {
+   "shortname": "css-transitions-2",
+   "title": "CSS Transitions 2",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-transitions-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-transitions"
+   ]
+  },
+  {
+   "shortname": "css-typed-om-1",
+   "title": "CSS Typed OM 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-typed-om-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-typed-om"
+   ]
+  },
+  {
+   "shortname": "css-ui-3",
+   "title": "CSS User Interface 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-ui-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-ui"
+   ]
+  },
+  {
+   "shortname": "css-ui-4",
+   "title": "CSS User Interface 4",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-ui-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-ui"
+   ]
+  },
+  {
+   "shortname": "css-values-3",
+   "title": "CSS Values 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-values-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-values"
+   ]
+  },
+  {
+   "shortname": "css-values-4",
+   "title": "CSS Values 4",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-values-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-values"
+   ]
+  },
+  {
+   "shortname": "css-values-5",
+   "title": "CSS Values 5",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-values-5/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-values"
+   ]
+  },
+  {
+   "shortname": "css-variables-1",
+   "title": "CSS Variables 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-variables-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-variables"
+   ]
+  },
+  {
+   "shortname": "css-view-transitions-1",
+   "title": "CSS View Transitions 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-view-transitions-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-view-transitions"
+   ]
+  },
+  {
+   "shortname": "css-view-transitions-2",
+   "title": "CSS View Transitions 2",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-view-transitions-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-view-transitions"
+   ]
+  },
+  {
+   "shortname": "css-viewport-1",
+   "title": "CSS Viewport 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-viewport-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-viewport"
+   ]
+  },
+  {
+   "shortname": "css-will-change-1",
+   "title": "CSS Will Change 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-will-change-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-will-change"
+   ]
+  },
+  {
+   "shortname": "css-writing-modes-3",
+   "title": "CSS Writing Modes 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-writing-modes-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-writing-modes"
+   ]
+  },
+  {
+   "shortname": "css-writing-modes-4",
+   "title": "CSS Writing Modes 4",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css-writing-modes-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-writing-modes"
+   ]
+  },
+  {
+   "shortname": "CSS2",
+   "title": "CSS 2",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/CSS2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/CSS2"
+   ]
+  },
+  {
+   "shortname": "css3-exclusions",
+   "title": "CSS Exclusions 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/css3-exclusions/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/css-exclusions"
+   ]
+  },
+  {
+   "shortname": "cssom-1",
+   "title": "CSSOM",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/cssom-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/cssom"
+   ]
+  },
+  {
+   "shortname": "cssom-view-1",
+   "title": "CSSOM View",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/cssom-view-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/cssom-view"
+   ]
+  },
+  {
+   "shortname": "dbsc-1",
+   "title": "Device Bound Session Credentials",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/dbsc-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "device-memory-1",
+   "title": "Device Memory API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/device-memory-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "device-memory"
+   ]
+  },
+  {
+   "shortname": "device-posture",
+   "title": "Device Posture API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/device-posture/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "device-posture"
+   ]
+  },
+  {
+   "shortname": "digital-credentials",
+   "title": "Digital Credentials",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/digital-credentials/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "DOM-Parsing",
+   "title": "DOM Parsing and Serialization",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/DOM-Parsing/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "domparsing"
+   ]
+  },
+  {
+   "shortname": "edit-context",
+   "title": "EditContext API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/edit-context/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "eme-hdcp-version-registry",
+   "title": "Encrypted Media Extensions HDCP Version Registry",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/eme-hdcp-version-registry/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "eme-initdata-cenc",
+   "title": "\"cenc\" Initialization Data Format",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/eme-initdata-cenc/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "eme-initdata-keyids",
+   "title": "\"keyids\" Initialization Data Format",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/eme-initdata-keyids/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "eme-initdata-registry",
+   "title": "Encrypted Media Extensions Initialization Data Format Registry",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/eme-initdata-registry/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "eme-initdata-webm",
+   "title": "\"webm\" Initialization Data Format",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/eme-initdata-webm/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "eme-stream-mp4",
+   "title": "ISO Common Encryption Protection Scheme for ISO Base Media File Format Stream Format",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/eme-stream-mp4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "eme-stream-registry",
+   "title": "Encrypted Media Extensions Stream Format Registry",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/eme-stream-registry/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "eme-stream-webm",
+   "title": "WebM Stream Format",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/eme-stream-webm/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "encrypted-media-2",
+   "title": "Encrypted Media Extensions",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/encrypted-media-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "encrypted-media"
+   ]
+  },
+  {
+   "shortname": "event-timing",
+   "title": "Event Timing API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/event-timing/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "fedcm-1",
+   "title": "Federated Credential Management API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/fedcm-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "fetch-metadata",
+   "title": "Fetch Metadata",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/fetch-metadata/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "fetch/metadata"
+   ]
+  },
+  {
+   "shortname": "FileAPI",
+   "title": "File API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/FileAPI/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "FileAPI"
+   ]
+  },
+  {
+   "shortname": "fill-stroke-3",
+   "title": "CSS Fill and Stroke 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/fill-stroke-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "filter-effects-1",
+   "title": "Filter Effects 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/filter-effects-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "fingerprinting-guidance",
+   "title": "Mitigating Browser Fingerprinting in Web Specifications",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/fingerprinting-guidance/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "gamepad",
+   "title": "Gamepad",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/gamepad/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "gamepad"
+   ]
+  },
+  {
+   "shortname": "generic-sensor",
+   "title": "Generic Sensor API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/generic-sensor/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "generic-sensor"
+   ]
+  },
+  {
+   "shortname": "geolocation",
+   "title": "Geolocation",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/geolocation/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "geometry-1",
+   "title": "Geometry Interfaces 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/geometry-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "gpc",
+   "title": "GPC",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/gpc/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "graphics-aam-1.0",
+   "title": "Graphics Accessibility API Mappings",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/graphics-aam-1.0/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "graphics-aam"
+   ]
+  },
+  {
+   "shortname": "graphics-aria-1.0",
+   "title": "WAI-ARIA Graphics",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/graphics-aria-1.0/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "graphics-aria"
+   ]
+  },
+  {
+   "shortname": "gyroscope",
+   "title": "Gyroscope",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/gyroscope/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "gyroscope"
+   ]
+  },
+  {
+   "shortname": "hr-time-3",
+   "title": "High Resolution Time",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/hr-time-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "hr-time"
+   ]
+  },
+  {
+   "shortname": "html-aam-1.0",
+   "title": "HTML Accessibility API Mappings 1.0",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/html-aam-1.0/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "html-aam"
+   ]
+  },
+  {
+   "shortname": "html-aria",
+   "title": "ARIA in HTML",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/html-aria/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "html-media-capture",
+   "title": "HTML Media Capture",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/html-media-capture/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "html-media-capture"
+   ]
+  },
+  {
+   "shortname": "html-ruby-extensions",
+   "title": "HTML Ruby Markup Extensions",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/html-ruby-extensions/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "IFT",
+   "title": "Incremental Font Transfer",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/IFT/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "image-capture",
+   "title": "MediaStream Image Capture",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/image-capture/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "mediacapture-image"
+   ]
+  },
+  {
+   "shortname": "image-resource",
+   "title": "Image Resource",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/image-resource/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "IndexedDB-3",
+   "title": "Indexed DB 3.0",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/IndexedDB-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "IndexedDB"
+   ]
+  },
+  {
+   "shortname": "input-events-2",
+   "title": "Input Events 2",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/input-events-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "input-events"
+   ]
+  },
+  {
+   "shortname": "intersection-observer",
+   "title": "Intersection Observer",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/intersection-observer/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "intersection-observer"
+   ]
+  },
+  {
+   "shortname": "largest-contentful-paint",
+   "title": "Largest Contentful Paint",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/largest-contentful-paint/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "largest-contentful-paint"
+   ]
+  },
+  {
+   "shortname": "long-animation-frames",
+   "title": "Long Animation Frames API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/long-animation-frames/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "long-animation-frame"
+   ]
+  },
+  {
+   "shortname": "longtasks-1",
+   "title": "Long Tasks API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/longtasks-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "longtask-timing"
+   ]
+  },
+  {
+   "shortname": "magnetometer",
+   "title": "Magnetometer",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/magnetometer/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "magnetometer"
+   ]
+  },
+  {
+   "shortname": "manifest-app-info",
+   "title": "Web App Manifest - Application Information",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/manifest-app-info/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "mathml-core",
+   "title": "MathML Core",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/mathml-core/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "mathml"
+   ]
+  },
+  {
+   "shortname": "media-capabilities",
+   "title": "Media Capabilities",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/media-capabilities/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "media-capabilities"
+   ]
+  },
+  {
+   "shortname": "media-source-2",
+   "title": "Media Source Extensions™",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/media-source-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "media-source"
+   ]
+  },
+  {
+   "shortname": "mediacapture-fromelement",
+   "title": "Media Capture from DOM Elements",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/mediacapture-fromelement/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "mediacapture-fromelement"
+   ]
+  },
+  {
+   "shortname": "mediacapture-region",
+   "title": "Region Capture",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/mediacapture-region/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "mediacapture-streams",
+   "title": "Media Capture and Streams",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/mediacapture-streams/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "mediacapture-streams"
+   ]
+  },
+  {
+   "shortname": "mediacapture-transform",
+   "title": "MediaStreamTrack Insertable Media Processing using Streams",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/mediacapture-transform/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "mediacapture-insertable-streams"
+   ]
+  },
+  {
+   "shortname": "mediacapture-viewport",
+   "title": "Viewport Capture",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/mediacapture-viewport/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "mediaqueries-3",
+   "title": "Media Queries 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/mediaqueries-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/mediaqueries"
+   ]
+  },
+  {
+   "shortname": "mediaqueries-4",
+   "title": "Media Queries 4",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/mediaqueries-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/mediaqueries"
+   ]
+  },
+  {
+   "shortname": "mediaqueries-5",
+   "title": "Media Queries 5",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/mediaqueries-5/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/mediaqueries"
+   ]
+  },
+  {
+   "shortname": "mediasession",
+   "title": "Media Session",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/mediasession/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "mediasession"
+   ]
+  },
+  {
+   "shortname": "mediastream-recording",
+   "title": "MediaStream Recording",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/mediastream-recording/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "mediacapture-record"
+   ]
+  },
+  {
+   "shortname": "mixed-content",
+   "title": "Mixed Content",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/mixed-content/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "mixed-content"
+   ]
+  },
+  {
+   "shortname": "motion-1",
+   "title": "Motion Path 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/motion-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "mse-byte-stream-format-isobmff",
+   "title": "ISO BMFF Byte Stream Format",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/mse-byte-stream-format-isobmff/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "mse-byte-stream-format-mp2t",
+   "title": "MPEG-2 TS Byte Stream Format",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/mse-byte-stream-format-mp2t/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "mse-byte-stream-format-mpeg-audio",
+   "title": "MPEG Audio Byte Stream Format",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/mse-byte-stream-format-mpeg-audio/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "mse-byte-stream-format-registry",
+   "title": "Media Source Extensions Byte Stream Format Registry",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/mse-byte-stream-format-registry/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "mse-byte-stream-format-webm",
+   "title": "WebM Byte Stream Format",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/mse-byte-stream-format-webm/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "mst-content-hint",
+   "title": "MediaStreamTrack Content Hints",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/mst-content-hint/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "mst-content-hint"
+   ]
+  },
+  {
+   "shortname": "navigation-timing-2",
+   "title": "Navigation Timing 2",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/navigation-timing-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "navigation-timing"
+   ]
+  },
+  {
+   "shortname": "network-error-logging",
+   "title": "Network Error Logging",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/network-error-logging/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "network-error-logging"
+   ]
+  },
+  {
+   "shortname": "openscreen-application",
+   "title": "Open Screen Application Protocol",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/openscreen-application/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "openscreen-network",
+   "title": "Open Screen Network Protocol",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/openscreen-network/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "orientation-event",
+   "title": "Device Orientation and Motion",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/orientation-event/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "orientation-event"
+   ]
+  },
+  {
+   "shortname": "orientation-sensor",
+   "title": "Orientation Sensor",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/orientation-sensor/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "orientation-sensor"
+   ]
+  },
+  {
+   "shortname": "paint-timing",
+   "title": "Paint Timing",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/paint-timing/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "paint-timing"
+   ]
+  },
+  {
+   "shortname": "passkey-endpoints-1",
+   "title": "A Well-Known URL for Relying Party Passkey Endpoints",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/passkey-endpoints-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "payment-method-id",
+   "title": "Payment Method Identifiers",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/payment-method-id/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "payment-method-id"
+   ]
+  },
+  {
+   "shortname": "payment-method-manifest",
+   "title": "Payment Method Manifest",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/payment-method-manifest/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "payment-request",
+   "title": "Payment Request API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/payment-request/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "payment-request"
+   ]
+  },
+  {
+   "shortname": "performance-timeline",
+   "title": "Performance Timeline",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/performance-timeline/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "performance-timeline"
+   ]
+  },
+  {
+   "shortname": "permissions-policy-1",
+   "title": "Permissions Policy",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/permissions-policy-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "permissions-policy"
+   ]
+  },
+  {
+   "shortname": "permissions",
+   "title": "Permissions",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/permissions/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "permissions"
+   ]
+  },
+  {
+   "shortname": "picture-in-picture",
+   "title": "Picture-in-Picture",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/picture-in-picture/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "picture-in-picture"
+   ]
+  },
+  {
+   "shortname": "png-3",
+   "title": "PNG",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/png-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "pointerevents3",
+   "title": "Pointer Events",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/pointerevents3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "pointerevents4",
+   "title": "Pointer Events",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/pointerevents4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "pointerevents"
+   ]
+  },
+  {
+   "shortname": "pointerlock-2",
+   "title": "Pointer Lock 2.0",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/pointerlock-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "pointerlock"
+   ]
+  },
+  {
+   "shortname": "presentation-api",
+   "title": "Presentation API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/presentation-api/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "presentation-api"
+   ]
+  },
+  {
+   "shortname": "proximity",
+   "title": "Proximity Sensor",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/proximity/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "proximity"
+   ]
+  },
+  {
+   "shortname": "push-api",
+   "title": "Push API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/push-api/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "push-api"
+   ]
+  },
+  {
+   "shortname": "referrer-policy",
+   "title": "Referrer Policy",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/referrer-policy/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "referrer-policy"
+   ]
+  },
+  {
+   "shortname": "remote-playback",
+   "title": "Remote Playback API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/remote-playback/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "remote-playback"
+   ]
+  },
+  {
+   "shortname": "reporting-1",
+   "title": "Reporting API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/reporting-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "reporting"
+   ]
+  },
+  {
+   "shortname": "requestidlecallback",
+   "title": "requestIdleCallback()",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/requestidlecallback/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "requestidlecallback"
+   ]
+  },
+  {
+   "shortname": "resize-observer-1",
+   "title": "Resize Observer",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/resize-observer-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "resize-observer"
+   ]
+  },
+  {
+   "shortname": "resource-timing",
+   "title": "Resource Timing",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/resource-timing/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "resource-timing"
+   ]
+  },
+  {
+   "shortname": "screen-capture",
+   "title": "Screen Capture",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/screen-capture/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "screen-capture"
+   ]
+  },
+  {
+   "shortname": "screen-orientation",
+   "title": "Screen Orientation",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/screen-orientation/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "screen-orientation"
+   ]
+  },
+  {
+   "shortname": "screen-wake-lock",
+   "title": "Screen Wake Lock API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/screen-wake-lock/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "screen-wake-lock"
+   ]
+  },
+  {
+   "shortname": "scroll-animations-1",
+   "title": "Scroll-driven Animations",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/scroll-animations-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "scroll-animations"
+   ]
+  },
+  {
+   "shortname": "secure-contexts",
+   "title": "Secure Contexts",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/secure-contexts/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "secure-contexts"
+   ]
+  },
+  {
+   "shortname": "secure-payment-confirmation",
+   "title": "Secure Payment Confirmation",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/secure-payment-confirmation/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "secure-payment-confirmation"
+   ]
+  },
+  {
+   "shortname": "selection-api",
+   "title": "Selection API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/selection-api/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "selection"
+   ]
+  },
+  {
+   "shortname": "selectors-3",
+   "title": "Selectors 3",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/selectors-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/selectors"
+   ]
+  },
+  {
+   "shortname": "selectors-4",
+   "title": "Selectors 4",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/selectors-4/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/selectors"
+   ]
+  },
+  {
+   "shortname": "selectors-5",
+   "title": "Selectors 5",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/selectors-5/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/selectors"
+   ]
+  },
+  {
+   "shortname": "server-timing",
+   "title": "Server Timing",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/server-timing/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "server-timing"
+   ]
+  },
+  {
+   "shortname": "service-workers",
+   "title": "Service Workers Nightly",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/service-workers/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "service-workers"
+   ]
+  },
+  {
+   "shortname": "sri-2",
+   "title": "SRI",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/sri-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "subresource-integrity"
+   ]
+  },
+  {
+   "shortname": "svg-aam-1.0",
+   "title": "SVG Accessibility API Mappings",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/svg-aam-1.0/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "svg-aam"
+   ]
+  },
+  {
+   "shortname": "svg-integration",
+   "title": "SVG Integration",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/svg-integration/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "svg-paths",
+   "title": "SVG Paths",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/svg-paths/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "svg-strokes",
+   "title": "SVG Strokes",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/svg-strokes/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "SVG11",
+   "title": "SVG",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/SVG11/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "SVG2",
+   "title": "SVG 2",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/SVG2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "svg"
+   ]
+  },
+  {
+   "shortname": "timing-entrytypes-registry",
+   "title": "Timing Entry Names Registry",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/timing-entrytypes-registry/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "timing-entrytypes-registry"
+   ]
+  },
+  {
+   "shortname": "touch-events",
+   "title": "Touch Events",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/touch-events/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "touch-events"
+   ]
+  },
+  {
+   "shortname": "trusted-types",
+   "title": "Trusted Types",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/trusted-types/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "trusted-types"
+   ]
+  },
+  {
+   "shortname": "uievents-code",
+   "title": "UI Events KeyboardEvent code Values",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/uievents-code/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "uievents-key",
+   "title": "UI Events KeyboardEvent key Values",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/uievents-key/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "uievents",
+   "title": "UI Events",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/uievents/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "uievents"
+   ]
+  },
+  {
+   "shortname": "upgrade-insecure-requests",
+   "title": "Upgrade Insecure Requests",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/upgrade-insecure-requests/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "upgrade-insecure-requests"
+   ]
+  },
+  {
+   "shortname": "user-timing",
+   "title": "User Timing",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/user-timing/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "user-timing"
+   ]
+  },
+  {
+   "shortname": "vibration",
+   "title": "Vibration API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/vibration/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "vibration"
+   ]
+  },
+  {
+   "shortname": "virtual-keyboard",
+   "title": "VirtualKeyboard API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/virtual-keyboard/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "wai-aria-1.2",
+   "title": "WAI-ARIA",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/wai-aria-1.2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "wai-aria"
+   ]
+  },
+  {
+   "shortname": "wai-aria-1.3",
+   "title": "WAI-ARIA",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/wai-aria-1.3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "wai-aria"
+   ]
+  },
+  {
+   "shortname": "wasm-core-2",
+   "title": "WebAssembly Core",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/wasm-core-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "test/core"
+   ]
+  },
+  {
+   "shortname": "wasm-js-api-2",
+   "title": "WebAssembly JavaScript Interface",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/wasm-js-api-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "wasm/jsapi"
+   ]
+  },
+  {
+   "shortname": "wasm-web-api-2",
+   "title": "WebAssembly Web API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/wasm-web-api-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "wasm/webapi"
+   ]
+  },
+  {
+   "shortname": "web-animations-1",
+   "title": "Web Animations",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/web-animations-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "web-animations"
+   ]
+  },
+  {
+   "shortname": "web-animations-2",
+   "title": "Web Animations 2",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/web-animations-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "web-animations"
+   ]
+  },
+  {
+   "shortname": "web-based-payment-handler",
+   "title": "Web-based Payment Handler API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/web-based-payment-handler/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "web-based-payment-handler"
+   ]
+  },
+  {
+   "shortname": "web-locks",
+   "title": "Web Locks API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/web-locks/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "web-locks"
+   ]
+  },
+  {
+   "shortname": "web-share",
+   "title": "Web Share API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/web-share/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "web-share"
+   ]
+  },
+  {
+   "shortname": "webaudio-1.0",
+   "title": "Web Audio API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webaudio-1.0/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webaudio"
+   ]
+  },
+  {
+   "shortname": "webaudio-1.1",
+   "title": "Web Audio API 1.1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webaudio-1.1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webaudio"
+   ]
+  },
+  {
+   "shortname": "webauthn-3",
+   "title": "Web Authentication",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webauthn-3/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webauthn"
+   ]
+  },
+  {
+   "shortname": "webcodecs-aac-codec-registration",
+   "title": "AAC WebCodecs Registration",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webcodecs-aac-codec-registration/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webcodecs-alaw-codec-registration",
+   "title": "A-law PCM WebCodecs Registration",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webcodecs-alaw-codec-registration/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webcodecs-av1-codec-registration",
+   "title": "AV1 WebCodecs Registration",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webcodecs-av1-codec-registration/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webcodecs-avc-codec-registration",
+   "title": "H.264",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webcodecs-avc-codec-registration/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webcodecs-codec-registry",
+   "title": "WebCodecs Codec Registry",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webcodecs-codec-registry/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webcodecs-flac-codec-registration",
+   "title": "FLAC WebCodecs Registration",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webcodecs-flac-codec-registration/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webcodecs-hevc-codec-registration",
+   "title": "H.265",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webcodecs-hevc-codec-registration/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webcodecs-mp3-codec-registration",
+   "title": "MP3 WebCodecs Registration",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webcodecs-mp3-codec-registration/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webcodecs-opus-codec-registration",
+   "title": "Opus WebCodecs Registration",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webcodecs-opus-codec-registration/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webcodecs-pcm-codec-registration",
+   "title": "Linear PCM WebCodecs Registration",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webcodecs-pcm-codec-registration/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webcodecs-ulaw-codec-registration",
+   "title": "u-law PCM WebCodecs Registration",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webcodecs-ulaw-codec-registration/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webcodecs-video-frame-metadata-registry",
+   "title": "WebCodecs VideoFrame Metadata Registry",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webcodecs-video-frame-metadata-registry/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webcodecs-vorbis-codec-registration",
+   "title": "Vorbis WebCodecs Registration",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webcodecs-vorbis-codec-registration/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webcodecs-vp8-codec-registration",
+   "title": "VP8 WebCodecs Registration",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webcodecs-vp8-codec-registration/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webcodecs-vp9-codec-registration",
+   "title": "VP9 WebCodecs Registration",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webcodecs-vp9-codec-registration/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webcodecs",
+   "title": "WebCodecs",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webcodecs/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webcodecs"
+   ]
+  },
+  {
+   "shortname": "webcrypto-2",
+   "title": "Web Cryptography 2",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webcrypto-2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "WebCryptoAPI"
+   ]
+  },
+  {
+   "shortname": "webdriver-bidi",
+   "title": "WebDriver BiDi",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webdriver-bidi/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webdriver2",
+   "title": "WebDriver",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webdriver2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webdriver"
+   ]
+  },
+  {
+   "shortname": "webgpu",
+   "title": "WebGPU",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webgpu/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "src/webgpu"
+   ]
+  },
+  {
+   "shortname": "webmidi",
+   "title": "Web MIDI API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webmidi/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webmidi"
+   ]
+  },
+  {
+   "shortname": "webnn",
+   "title": "Web Neural Network API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webnn/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webrtc-encoded-transform",
+   "title": "WebRTC Encoded Transform",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webrtc-encoded-transform/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webrtc-encoded-transform"
+   ]
+  },
+  {
+   "shortname": "webrtc-identity",
+   "title": "Identity for WebRTC 1.0",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webrtc-identity/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webrtc-identity"
+   ]
+  },
+  {
+   "shortname": "webrtc-priority",
+   "title": "WebRTC Priority Control API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webrtc-priority/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webrtc-priority"
+   ]
+  },
+  {
+   "shortname": "webrtc-stats",
+   "title": "WebRTC Statistics",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webrtc-stats/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webrtc-stats"
+   ]
+  },
+  {
+   "shortname": "webrtc-svc",
+   "title": "SVC",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webrtc-svc/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webrtc-svc"
+   ]
+  },
+  {
+   "shortname": "webrtc",
+   "title": "WebRTC 1.0",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webrtc/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webrtc"
+   ]
+  },
+  {
+   "shortname": "webtransport",
+   "title": "WebTransport",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webtransport/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webtransport"
+   ]
+  },
+  {
+   "shortname": "webvtt1",
+   "title": "WebVTT: The Web Video Text Tracks Format",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webvtt1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webvtt"
+   ]
+  },
+  {
+   "shortname": "webxr-ar-module-1",
+   "title": "WebXR Augmented Reality 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webxr-ar-module-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webxr/ar-module"
+   ]
+  },
+  {
+   "shortname": "webxr-depth-sensing-1",
+   "title": "WebXR Depth Sensing",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webxr-depth-sensing-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webxr-dom-overlays-1",
+   "title": "WebXR DOM Overlays",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webxr-dom-overlays-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webxr/dom-overlay"
+   ]
+  },
+  {
+   "shortname": "webxr-gamepads-module-1",
+   "title": "WebXR Gamepads 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webxr-gamepads-module-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webxr/gamepads-module"
+   ]
+  },
+  {
+   "shortname": "webxr-hand-input-1",
+   "title": "WebXR Hand Input 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webxr-hand-input-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webxr/hand-input"
+   ]
+  },
+  {
+   "shortname": "webxr-hit-test-1",
+   "title": "WebXR Hit Test",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webxr-hit-test-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webxr/hit-test"
+   ]
+  },
+  {
+   "shortname": "webxr-lighting-estimation-1",
+   "title": "WebXR Lighting Estimation API 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webxr-lighting-estimation-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "webxr",
+   "title": "WebXR Device API",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webxr/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webxr"
+   ]
+  },
+  {
+   "shortname": "webxrlayers-1",
+   "title": "WebXR Layers API 1",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/webxrlayers-1/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "webxr/layers"
+   ]
+  },
+  {
+   "shortname": "WGSL",
+   "title": "WebGPU Shading Language",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/WGSL/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": []
+  },
+  {
+   "shortname": "window-management",
+   "title": "Window Management",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/window-management/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "window-management"
+   ]
+  },
+  {
+   "shortname": "WOFF",
+   "title": "WOFF 1.0",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/WOFF/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "woff1/tests"
+   ]
+  },
+  {
+   "shortname": "WOFF2",
+   "title": "WOFF 2.0",
+   "organization": "W3C",
+   "url": "https://www.w3.org/TR/WOFF2/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "css/WOFF2"
+   ]
+  },
+  {
+   "shortname": "xhr",
+   "title": "XMLHttpRequest",
+   "organization": "WHATWG",
+   "url": "https://xhr.spec.whatwg.org/",
+   "categories": [
+    "browser"
+   ],
+   "standing": "good",
+   "test_paths": [
+    "xhr"
+   ]
+  }
+ ]
+}
