@@ -1,8 +1,8 @@
 # Family spec registry
 
 **Date:** 2026-10-18
-**Status:** in progress. R0 (seed) and R1 (validator) landed 2026-10-18; D1–D6
-ruled as proposed.
+**Status:** in progress. R0 (seed), R1 (validator) and R2 (one home) landed
+2026-10-18; D1–D6 ruled as proposed. R3 is next.
 **Data:** [`content/specs.toml`](../content/specs.toml)
 **Rendered view:** the Merely Spec Atlas,
 https://claude.ai/artifact/HFe3GfjV3SmvqyipkDzW5R (private until shared)
@@ -205,7 +205,10 @@ fails with that row's id. **Landed 2026-10-18**: `src/specs.rs`, wired into
   `split` verdicts ruled.
 
 Done when the survey holds no verdict table, every ledger row names a
-registry id, and no seeded bundle or `split` remains.
+registry id, and no seeded bundle or `split` remains. **Landed 2026-10-18**:
+mere `224fa70d6` (survey §7 and §7.1 point here) and `9bb2ad801` (review
+note), genet `b2667f664b8` and `1141804b62c` (ledger registry column, admission
+rule retired).
 
 ### R3: Coverage report
 
@@ -297,3 +300,24 @@ change. If D6 passes, the same run rebuilds the published atlas monthly.
   `cf562f4`, MPL-2.0). The 91 `measured` blocks holding only IDL or CSS name
   counts gained `on` and `scope`, which row rule 3 requires. The full test
   suite, clippy and rustfmt pass.
+- 2026-10-18: R2 landed. The registry was regenerated from the same inputs
+  plus mere's W3C review, with the hand corrections since R0 carried forward.
+  It now holds 503 specs and 735 claims. Verdicts: 284 open, 176 ADOPT,
+  128 PULL, 92 SKIP, 55 WATCH, none split.
+  - Every survey row has a curated mapping. About fifty bundled rows split into
+    one spec each, taking §7.1's per-part grades (WebRTC ADOPT / SIP SKIP;
+    KISS ADOPT / AX.25 and APRS SKIP; RIFF/WAVE ADOPT / BWF and BW64 PULL;
+    did:key and did:plc ADOPT / did:web PULL).
+  - The RFC-number rule had filed "Audio metadata tag formats" under FLAC's
+    RFC 9639, because the row cites Vorbis comments' RFC section. It is now
+    APEv2, Vorbis comments and ID3v2.
+  - The MLS rows separate castellan's SKIP from the transport's ADOPT.
+  - Merge rule: a ruled verdict beats `open`. Between ruled verdicts the later
+    verification wins (DOC_POLICY §2, newer is more authoritative), so the
+    survey's grades override the review's.
+  - Kept as one spec each, because each is one document or one model used as a
+    whole: Gemini and gemtext, Scroll and scrolltext, IAU 2006/2000A, TLE with
+    SGP4, the TT/UT1/UTC/TAI time scales, WebKitGTK with WPE, DMA-BUF with DRM
+    fourcc.
+  - The R2 generator is not committed: it reads catalogs fetched for the atlas.
+    From here the registry is edited by hand, and R5 owns catalog diffs.
