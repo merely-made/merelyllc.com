@@ -4370,7 +4370,8 @@ repo = "vano"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-evidence = "test262 40,998 / 50,733, CI-gated"
+measured = { on = "2026-10-18", scope = "test262 e0d8f66a, tests/metrics.json; the 3,326 skipped (all of annexB and intl402, plus the RegExp property-escape suites and a list of slow or known tests) count in the total", engine = "vano", wpt_pass = 40998, wpt_total = 50733 }
+evidence = "tests/metrics.json in vano, CI-gated; wpt_pass and wpt_total hold the test262 pass and total. Annex B alone, run once with annex-b on: 576 / 1,086, in tests/metrics-skipped.json, not gated"
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -4389,7 +4390,8 @@ repo = "vano"
 relation = "should"
 depth = "none"
 verdict = "open"
-evidence = "no plans upstream"
+measured = { on = "2026-10-18", scope = "test262 e0d8f66a, intl402 only, run once with skip.json's intl402 entry removed; not CI-gated", engine = "vano", wpt_pass = 25, wpt_total = 1592 }
+evidence = "tests/metrics-skipped.json in vano; wpt_pass and wpt_total hold the test262 pass and total. No Intl object, no plans upstream"
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -4408,7 +4410,8 @@ repo = "boa-fork"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-evidence = "upstream reports more than 90%; no in-repo number"
+measured = { on = "2026-10-18", scope = "test262 d86b2294, whole test/ tree incl. Annex B and intl402, with Intl; 1,781 ignored (features in test262_config.toml) count in the total", engine = "bole", wpt_pass = 51225, wpt_total = 53578 }
+evidence = "docs/test262.md in bole (boa_tester, release); wpt_pass and wpt_total hold the test262 pass and total. Without Intl: 50,550 / 53,578"
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -4418,7 +4421,8 @@ repo = "boa-fork"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-evidence = "no DisplayNames, RelativeTimeFormat, DurationFormat"
+measured = { on = "2026-10-18", scope = "test262 d86b2294, intl402 only, with Intl; 342 ignored (Intl.DisplayNames, RelativeTimeFormat, DurationFormat, Locale-info, enumeration) count in the total", engine = "bole", wpt_pass = 2624, wpt_total = 3357 }
+evidence = "docs/test262.md in bole; wpt_pass and wpt_total hold the test262 pass and total. Without Intl the same suite passes 1,950"
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
