@@ -733,3 +733,24 @@ publication_gate_status = "not-applicable"
 pages_status = "none"
 packages_status = "not-inventoried"
 actions_workflows = 1
+
+# Dramatis was created in the organization on 2026-10-10, after the historical
+# migration review. The spec registry needs its id; this does not claim the
+# historical migration review covered this project.
+[[migration]]
+id = "dramatis"
+current_slug = "merely-made/dramatis"
+target_slug = "merely-made/dramatis"
+classification = "platform"
+batch = "platform"
+disposition = "already-in-org"
+visibility = "public"
+default_branch = "main"
+head = "cf562f47f33ab0b6ad0db1c5ac3123775769979e"
+license_status = "MPL-2.0"
+provenance_status = "not-assessed-in-historical-migration"
+sensitive_information_status = "not-assessed-in-historical-migration"
+publication_gate_status = "not-applicable"
+pages_status = "none"
+packages_status = "not-inventoried"
+actions_workflows = 1

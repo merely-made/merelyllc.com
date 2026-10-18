@@ -5,7 +5,7 @@
 # mere's standards survey; edited by hand from here. repo = "family" marks a
 # family-wide verdict with no single consumer.
 
-schema = 1
+schema = "mer3ly.spec-registry/v1"
 
 # Repositories whose scope is a whole catalog: catalog specs without a claim are
 # reported as unclaimed rather than listed here.
@@ -3597,7 +3597,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "ecma262"
-repo = "bole"
+repo = "boa-fork"
 relation = "implements"
 depth = "partial"
 verdict = "open"
@@ -3607,7 +3607,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "ecma402"
-repo = "bole"
+repo = "boa-fork"
 relation = "implements"
 depth = "partial"
 verdict = "open"
@@ -3617,7 +3617,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "wintertc-min-common-api"
-repo = "bole"
+repo = "boa-fork"
 relation = "implements"
 depth = "partial"
 verdict = "open"
@@ -3626,7 +3626,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "fetch"
-repo = "bole"
+repo = "boa-fork"
 relation = "implements"
 depth = "partial"
 verdict = "open"
@@ -3635,7 +3635,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "url"
-repo = "bole"
+repo = "boa-fork"
 relation = "implements"
 depth = "partial"
 verdict = "open"
@@ -3644,7 +3644,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "console"
-repo = "bole"
+repo = "boa-fork"
 relation = "implements"
 depth = "partial"
 verdict = "open"
@@ -3653,7 +3653,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "encoding"
-repo = "bole"
+repo = "boa-fork"
 relation = "implements"
 depth = "partial"
 verdict = "open"
@@ -3662,7 +3662,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "lua-5.4"
-repo = "didgeridoo"
+repo = "piccolo-fork"
 relation = "implements"
 depth = "partial"
 verdict = "open"
@@ -5693,7 +5693,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 10, wpt_total = 51, files_all_pass = 2, files = 21, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 1, idl_total = 1 }
+measured = { wpt_pass = 10, wpt_total = 51, files_all_pass = 2, files = 21, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 1, idl_total = 1 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5703,7 +5703,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 4 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 4 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5713,7 +5713,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 5297, wpt_total = 9771, files_all_pass = 290, files = 1012, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 33, idl_total = 34 }
+measured = { wpt_pass = 5297, wpt_total = 9771, files_all_pass = 290, files = 1012, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 33, idl_total = 34 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-6", "genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-14"]
@@ -5724,7 +5724,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 2, idl_total = 3 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 2, idl_total = 3 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5734,7 +5734,7 @@ repo = "genet"
 relation = "implements"
 depth = "full"
 verdict = "open"
-measured = { css_props_named = 3, css_props_total = 3 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 3, css_props_total = 3 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5744,7 +5744,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 7, css_props_total = 8 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 7, css_props_total = 8 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5754,7 +5754,7 @@ repo = "genet"
 relation = "implements"
 depth = "full"
 verdict = "open"
-measured = { idl_named = 0, idl_total = 27, css_props_named = 1, css_props_total = 1 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 0, idl_total = 27, css_props_named = 1, css_props_total = 1 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5764,7 +5764,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 7561, wpt_total = 35303, files_all_pass = 4, files = 1313, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 2, idl_total = 4 }
+measured = { wpt_pass = 7561, wpt_total = 35303, files_all_pass = 4, files = 1313, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 2, idl_total = 4 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-8"]
@@ -5775,7 +5775,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 2016, wpt_total = 5901, files_all_pass = 87, files = 564, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 3, idl_total = 4 }
+measured = { wpt_pass = 2016, wpt_total = 5901, files_all_pass = 87, files = 564, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 3, idl_total = 4 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5785,7 +5785,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-measured = { wpt_pass = 7574, wpt_total = 35445, files_all_pass = 880, files = 10669, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 104, idl_total = 161 }
+measured = { wpt_pass = 7574, wpt_total = 35445, files_all_pass = 880, files = 10669, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 104, idl_total = 161 }
 source = "catalog-join-2026-10-18 mere-survey-2026-08-24#7.28 mere-survey-2026-08-24#7.52"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-11", "genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-12", "genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-14"]
@@ -5796,7 +5796,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 6, idl_total = 12 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 6, idl_total = 12 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5806,7 +5806,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 547, wpt_total = 2389, files_all_pass = 14, files = 168, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 13, idl_total = 13 }
+measured = { wpt_pass = 547, wpt_total = 2389, files_all_pass = 14, files = 168, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 13, idl_total = 13 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5816,7 +5816,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 514, wpt_total = 814, files_all_pass = 18, files = 77, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 2, idl_total = 2 }
+measured = { wpt_pass = 514, wpt_total = 814, files_all_pass = 18, files = 77, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 2, idl_total = 2 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-7"]
@@ -5827,7 +5827,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 6, idl_total = 8 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 6, idl_total = 8 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5837,7 +5837,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 6, idl_total = 8 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 6, idl_total = 8 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5847,7 +5847,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 6, idl_total = 8 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 6, idl_total = 8 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5857,7 +5857,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 6, idl_total = 8 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 6, idl_total = 8 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5867,7 +5867,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 6, idl_total = 8 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 6, idl_total = 8 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5877,7 +5877,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 6, idl_total = 8 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 6, idl_total = 8 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5887,7 +5887,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 6, idl_total = 8 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 6, idl_total = 8 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5897,7 +5897,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 2, idl_total = 2 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 2, idl_total = 2 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5907,7 +5907,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 4 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 4 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5917,7 +5917,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 876, wpt_total = 2012, files_all_pass = 78, files = 729, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 2, idl_total = 2 }
+measured = { wpt_pass = 876, wpt_total = 2012, files_all_pass = 78, files = 729, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 2, idl_total = 2 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5927,7 +5927,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 1 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 1 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5937,7 +5937,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 1 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 1 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5947,7 +5947,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 1 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 1 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5957,7 +5957,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 2 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 2 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5967,7 +5967,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 2 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 2 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5977,7 +5977,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 2 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 2 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5987,7 +5987,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 2, idl_total = 4 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 2, idl_total = 4 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5997,7 +5997,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 175, wpt_total = 3479, files_all_pass = 64, files = 823, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 0, idl_total = 1 }
+measured = { wpt_pass = 175, wpt_total = 3479, files_all_pass = 64, files = 823, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 0, idl_total = 1 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6007,7 +6007,7 @@ repo = "genet"
 relation = "implements"
 depth = "full"
 verdict = "open"
-measured = { css_props_named = 9, css_props_total = 9 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 9, css_props_total = 9 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6017,7 +6017,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { idl_named = 0, idl_total = 2, css_props_named = 2, css_props_total = 8 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 0, idl_total = 2, css_props_named = 2, css_props_total = 8 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6027,7 +6027,7 @@ repo = "genet"
 relation = "implements"
 depth = "full"
 verdict = "open"
-measured = { idl_named = 3, idl_total = 3, css_props_named = 7, css_props_total = 7 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 3, idl_total = 3, css_props_named = 7, css_props_total = 7 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6037,7 +6037,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { idl_named = 0, idl_total = 1, css_props_named = 4, css_props_total = 6 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 0, idl_total = 1, css_props_named = 4, css_props_total = 6 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6047,7 +6047,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 11, css_props_total = 18 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 11, css_props_total = 18 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6057,7 +6057,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 73, css_props_total = 120 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 73, css_props_total = 120 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6067,7 +6067,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 10, css_props_total = 11 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 10, css_props_total = 11 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6077,7 +6077,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 5, css_props_total = 7 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 5, css_props_total = 7 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6087,7 +6087,7 @@ repo = "genet"
 relation = "implements"
 depth = "full"
 verdict = "open"
-measured = { idl_named = 0, idl_total = 2, css_props_named = 1, css_props_total = 1 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 0, idl_total = 2, css_props_named = 1, css_props_total = 1 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6097,7 +6097,7 @@ repo = "genet"
 relation = "implements"
 depth = "full"
 verdict = "ADOPT"
-measured = { css_props_named = 2, css_props_total = 2 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 2, css_props_total = 2 }
 source = "catalog-join-2026-10-18 mere-survey-2026-08-24#7.72 mere-survey-2026-08-24#7.159"
 verified_on = "2026-10-18"
 
@@ -6107,7 +6107,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 1, css_props_total = 4 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 1, css_props_total = 4 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6117,7 +6117,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 3 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 3 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6127,7 +6127,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 3 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 3 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6137,7 +6137,7 @@ repo = "genet"
 relation = "implements"
 depth = "full"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 2, css_props_named = 3, css_props_total = 3 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 2, css_props_named = 3, css_props_total = 3 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6147,7 +6147,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { idl_named = 0, idl_total = 1, css_props_named = 1, css_props_total = 2 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 0, idl_total = 1, css_props_named = 1, css_props_total = 2 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6157,7 +6157,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 2, css_props_total = 6 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 2, css_props_total = 6 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6167,7 +6167,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 3, css_props_total = 5 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 3, css_props_total = 5 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6177,7 +6177,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 8 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 8 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6187,7 +6187,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { idl_named = 0, idl_total = 3, css_props_named = 17, css_props_total = 25 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 0, idl_total = 3, css_props_named = 17, css_props_total = 25 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6197,7 +6197,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 2, css_props_named = 0, css_props_total = 1 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 2, css_props_named = 0, css_props_total = 1 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6207,7 +6207,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 4, css_props_total = 45 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 4, css_props_total = 45 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6217,7 +6217,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 12, css_props_total = 15 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 12, css_props_total = 15 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6227,7 +6227,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 2 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 2 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6237,7 +6237,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 2, css_props_total = 3 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 2, css_props_total = 3 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6247,7 +6247,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 1, css_props_total = 2 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 1, css_props_total = 2 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6257,7 +6257,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 5, css_props_total = 14 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 5, css_props_total = 14 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6267,7 +6267,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 2, idl_total = 9 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 2, idl_total = 9 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6277,7 +6277,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 7, css_props_total = 8 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 7, css_props_total = 8 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6287,7 +6287,7 @@ repo = "genet"
 relation = "implements"
 depth = "full"
 verdict = "open"
-measured = { css_props_named = 12, css_props_total = 12 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 12, css_props_total = 12 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6297,7 +6297,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { idl_named = 0, idl_total = 2, css_props_named = 12, css_props_total = 20 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 0, idl_total = 2, css_props_named = 12, css_props_total = 20 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6307,7 +6307,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 4, css_props_total = 6 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 4, css_props_total = 6 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6317,7 +6317,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 5, css_props_total = 7 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 5, css_props_total = 7 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6327,7 +6327,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 2, css_props_total = 17 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 2, css_props_total = 17 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6337,7 +6337,7 @@ repo = "genet"
 relation = "implements"
 depth = "full"
 verdict = "open"
-measured = { css_props_named = 1, css_props_total = 1 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 1, css_props_total = 1 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6347,7 +6347,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 2, css_props_total = 5 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 2, css_props_total = 5 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6357,7 +6357,7 @@ repo = "genet"
 relation = "implements"
 depth = "full"
 verdict = "open"
-measured = { css_props_named = 12, css_props_total = 12 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 12, css_props_total = 12 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6367,7 +6367,7 @@ repo = "genet"
 relation = "implements"
 depth = "full"
 verdict = "open"
-measured = { css_props_named = 1, css_props_total = 1 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 1, css_props_total = 1 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6377,7 +6377,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 1, css_props_total = 3 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 1, css_props_total = 3 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6387,7 +6387,7 @@ repo = "genet"
 relation = "implements"
 depth = "full"
 verdict = "open"
-measured = { css_props_named = 14, css_props_total = 14 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 14, css_props_total = 14 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6397,7 +6397,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 3, css_props_total = 11 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 3, css_props_total = 11 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6407,7 +6407,7 @@ repo = "genet"
 relation = "implements"
 depth = "full"
 verdict = "open"
-measured = { css_props_named = 5, css_props_total = 5 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 5, css_props_total = 5 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6417,7 +6417,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 16, css_props_total = 34 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 16, css_props_total = 34 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6427,7 +6427,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 5, css_props_total = 19 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 5, css_props_total = 19 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6437,7 +6437,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 2, css_props_total = 3 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 2, css_props_total = 3 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6447,7 +6447,7 @@ repo = "genet"
 relation = "implements"
 depth = "full"
 verdict = "open"
-measured = { css_props_named = 7, css_props_total = 7 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 7, css_props_total = 7 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-15"]
@@ -6458,7 +6458,7 @@ repo = "genet"
 relation = "implements"
 depth = "full"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 1, css_props_named = 5, css_props_total = 5 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 1, css_props_named = 5, css_props_total = 5 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6468,7 +6468,7 @@ repo = "genet"
 relation = "implements"
 depth = "full"
 verdict = "open"
-measured = { idl_named = 0, idl_total = 2, css_props_named = 1, css_props_total = 1 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 0, idl_total = 2, css_props_named = 1, css_props_total = 1 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6478,7 +6478,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 8, css_props_total = 24 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 8, css_props_total = 24 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6488,7 +6488,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { idl_named = 0, idl_total = 3, css_props_named = 2, css_props_total = 4 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 0, idl_total = 3, css_props_named = 2, css_props_total = 4 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6498,7 +6498,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 1 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 1 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6508,7 +6508,7 @@ repo = "genet"
 relation = "implements"
 depth = "full"
 verdict = "open"
-measured = { css_props_named = 1, css_props_total = 1 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 1, css_props_total = 1 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6518,7 +6518,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 3, css_props_total = 6 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 3, css_props_total = 6 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6528,7 +6528,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 1, css_props_total = 4 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 1, css_props_total = 4 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6538,7 +6538,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 16, idl_total = 16 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 16, idl_total = 16 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6548,7 +6548,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 2, idl_total = 5 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 2, idl_total = 5 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6568,7 +6568,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 435, wpt_total = 953, files_all_pass = 7, files = 111, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 3, idl_total = 5 }
+measured = { wpt_pass = 435, wpt_total = 953, files_all_pass = 7, files = 111, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 3, idl_total = 5 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6578,7 +6578,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { idl_named = 0, idl_total = 27, css_props_named = 1, css_props_total = 5 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 0, idl_total = 27, css_props_named = 1, css_props_total = 5 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6588,7 +6588,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 8 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 8 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6598,7 +6598,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 13, wpt_total = 26, files_all_pass = 3, files = 17, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 1, idl_total = 1 }
+measured = { wpt_pass = 13, wpt_total = 26, files_all_pass = 3, files = 17, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 1, idl_total = 1 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-5"]
@@ -6609,7 +6609,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 10, wpt_total = 1711, files_all_pass = 2, files = 445, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 0, idl_total = 12 }
+measured = { wpt_pass = 10, wpt_total = 1711, files_all_pass = 2, files = 445, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 0, idl_total = 12 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-9"]
@@ -6620,7 +6620,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 50, wpt_total = 575, files_all_pass = 6, files = 579, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 0, idl_total = 1 }
+measured = { wpt_pass = 50, wpt_total = 575, files_all_pass = 6, files = 579, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 0, idl_total = 1 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6630,7 +6630,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 7 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 7 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6640,7 +6640,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 2, idl_total = 8 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 2, idl_total = 8 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6660,7 +6660,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { css_props_named = 1, css_props_total = 6 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 1, css_props_total = 6 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6670,7 +6670,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 86, wpt_total = 124, files_all_pass = 15, files = 56, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 2, idl_total = 4 }
+measured = { wpt_pass = 86, wpt_total = 124, files_all_pass = 15, files = 56, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 2, idl_total = 4 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6680,7 +6680,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 70, wpt_total = 115, files_all_pass = 38, files = 72, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 3, idl_total = 3 }
+measured = { wpt_pass = 70, wpt_total = 115, files_all_pass = 38, files = 72, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 3, idl_total = 3 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-5"]
@@ -6691,7 +6691,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 2 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 2 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6701,7 +6701,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 3, idl_total = 3 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 3, idl_total = 3 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6711,7 +6711,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 145, wpt_total = 655, files_all_pass = 8, files = 265, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 3, idl_total = 3 }
+measured = { wpt_pass = 145, wpt_total = 655, files_all_pass = 8, files = 265, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 3, idl_total = 3 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6721,7 +6721,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 8 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 8 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6741,7 +6741,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 11, wpt_total = 284, files_all_pass = 6, files = 147, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 0, idl_total = 1 }
+measured = { wpt_pass = 11, wpt_total = 284, files_all_pass = 6, files = 147, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 0, idl_total = 1 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6751,7 +6751,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 323, wpt_total = 1922, files_all_pass = 0, files = 242, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 0, idl_total = 2, css_props_named = 2, css_props_total = 11 }
+measured = { wpt_pass = 323, wpt_total = 1922, files_all_pass = 0, files = 242, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 0, idl_total = 2, css_props_named = 2, css_props_total = 11 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6761,7 +6761,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 6214, wpt_total = 6672, files_all_pass = 27, files = 161, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 1, idl_total = 1 }
+measured = { wpt_pass = 6214, wpt_total = 6672, files_all_pass = 27, files = 161, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 1, idl_total = 1 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-2"]
@@ -6772,7 +6772,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 3, wpt_total = 1631, files_all_pass = 0, files = 304, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 2, idl_total = 14 }
+measured = { wpt_pass = 3, wpt_total = 1631, files_all_pass = 0, files = 304, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 2, idl_total = 14 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6782,7 +6782,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 60 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 60 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6792,7 +6792,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "PULL"
-measured = { wpt_pass = 305, wpt_total = 2909, files_all_pass = 37, files = 1640, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 1, idl_total = 60 }
+measured = { wpt_pass = 305, wpt_total = 2909, files_all_pass = 37, files = 1640, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 1, idl_total = 60 }
 source = "catalog-join-2026-10-18 mere-survey-2026-08-24#7.164+7.1"
 verified_on = "2026-10-18"
 
@@ -6802,7 +6802,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 3, idl_total = 3 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 3, idl_total = 3 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6812,7 +6812,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 19, wpt_total = 117, files_all_pass = 8, files = 76, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 2, idl_total = 6 }
+measured = { wpt_pass = 19, wpt_total = 117, files_all_pass = 8, files = 76, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 2, idl_total = 6 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6822,7 +6822,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 244, wpt_total = 306, files_all_pass = 42, files = 59, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 2, idl_total = 2 }
+measured = { wpt_pass = 244, wpt_total = 306, files_all_pass = 42, files = 59, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 2, idl_total = 2 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6832,7 +6832,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 6, idl_total = 8 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 6, idl_total = 8 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6842,7 +6842,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 64, wpt_total = 1449, files_all_pass = 1, files = 174, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 1, idl_total = 5 }
+measured = { wpt_pass = 64, wpt_total = 1449, files_all_pass = 1, files = 174, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 1, idl_total = 5 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6852,7 +6852,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 64, wpt_total = 1449, files_all_pass = 1, files = 174, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 0, idl_total = 5 }
+measured = { wpt_pass = 64, wpt_total = 1449, files_all_pass = 1, files = 174, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 0, idl_total = 5 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6862,7 +6862,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 698, wpt_total = 1514, files_all_pass = 0, files = 276, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 23, idl_total = 39 }
+measured = { wpt_pass = 698, wpt_total = 1514, files_all_pass = 0, files = 276, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 23, idl_total = 39 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6872,7 +6872,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 698, wpt_total = 1514, files_all_pass = 0, files = 276, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 23, idl_total = 39 }
+measured = { wpt_pass = 698, wpt_total = 1514, files_all_pass = 0, files = 276, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 23, idl_total = 39 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6882,7 +6882,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 2, idl_total = 12 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 2, idl_total = 12 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6892,7 +6892,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 107, wpt_total = 9652, files_all_pass = 6, files = 274, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 2, idl_total = 3 }
+measured = { wpt_pass = 107, wpt_total = 9652, files_all_pass = 6, files = 274, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 2, idl_total = 3 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-10"]
@@ -6903,7 +6903,7 @@ repo = "genet"
 relation = "implements"
 depth = "stub"
 verdict = "open"
-measured = { idl_named = 1, idl_total = 41 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 1, idl_total = 41 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6913,7 +6913,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "split"
-measured = { idl_named = 3, idl_total = 21 }
+measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", idl_named = 3, idl_total = 21 }
 source = "catalog-join-2026-10-18 mere-survey-2026-08-24#7.108+7.1"
 verified_on = "2026-10-18"
 evidence = "WebRTC is already built as `murm/native/crates/webrtc-carrier`. SIP has no consumer; calls ride WebRTC"
@@ -6924,7 +6924,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-measured = { wpt_pass = 361, wpt_total = 1578, files_all_pass = 92, files = 425, on = "2026-09-29", engine = "vano", scope = "disk-mode census, 82 shards", idl_named = 5, idl_total = 5 }
+measured = { wpt_pass = 361, wpt_total = 1578, files_all_pass = 92, files = 425, on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", idl_named = 5, idl_total = 5 }
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 
