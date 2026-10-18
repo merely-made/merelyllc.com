@@ -239,7 +239,7 @@ superseded designators such as RFC 8446 → RFC 9846. Validate never touches the
 network.
 
 Done when the diff runs as one command and names the registry rows it would
-change.
+change. If D6 passes, the same run rebuilds the published atlas monthly.
 
 ## Decisions for Mark
 
@@ -255,11 +255,19 @@ change.
 - **D5. House specs.** Proposed: chirograph, scenograph and the other
   published wires get `body = "merely"` rows when they ship a written spec, so
   the family's own formats are held to the same rules.
-- **D6. Site.** Should repo pages on merelyllc.com show their spec claims?
-  Proposed: not before R2, so the public page never shows seed defects.
+- **D6. Site.** Should merelyllc.com publish the atlas from the registry?
+  Mark, 2026-10-18, on the atlas: "i am tempted to say, we should have this on
+  merelyllc.com and refresh it monthly. but eh. there may be some errors". That
+  is a lean, not a ruling. Proposed: yes, after R2 clears the seed defects,
+  rebuilt by R5's refresh on a monthly schedule beside the daily deploy.
 
 ## Progress
 
 - 2026-10-18: R0. Seeded 404 specs and 585 claims into `content/specs.toml`
   from the atlas, the catalog join, genet's ledger and mere's survey. The file
   parses with `toml` 0.9; nothing reads it yet.
+- 2026-10-18: corrected Misfin. smolweb and mere's errand and comms implement
+  it, and Turnstone takes it through comms by ruling U2. The atlas had copied
+  the "fails" row from Turnstone's plan status table, which predates U2. That
+  row is a seed-defect class R2 should look for: status tables that later
+  rulings have overtaken.
