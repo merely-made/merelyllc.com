@@ -1,8 +1,8 @@
 # Family spec registry
 
 **Date:** 2026-10-18
-**Status:** in progress. R0 (seed), R1 (validator) and R2 (one home) landed
-2026-10-18; D1–D6 ruled as proposed. R3 is next.
+**Status:** in progress. R0 (seed), R1 (validator), R2 (one home) and R3
+(coverage report) landed 2026-10-18; D1–D6 ruled as proposed. R4 is next.
 **Data:** [`content/specs.toml`](../content/specs.toml)
 **Rendered view:** the Merely Spec Atlas,
 https://claude.ai/artifact/HFe3GfjV3SmvqyipkDzW5R (private until shared)
@@ -223,7 +223,14 @@ rule retired).
 The atlas page is regenerated from this output.
 
 Done when the report runs without network and the atlas's §3 and §4 tables
-come from it.
+come from it. **Landed 2026-10-18**:
+- `authority specs` prints the report and `authority specs-json` emits it with
+  the parsed registry (`src/spec_coverage.rs`). Unclaimed specs come from a
+  committed browser-specs 5.3.0 snapshot, `content/spec-catalogs/browser-specs.json`
+  (CC0-1.0), which R5 refreshes.
+- `scripts/spec-atlas/build.py` turns that JSON into the atlas page, and its
+  output is byte-identical to the published atlas.
+- `tests/m13_spec_coverage.rs` has four tests, plus a date round-trip unit test.
 
 ### R4: Suite wiring
 
@@ -321,3 +328,14 @@ change. If D6 passes, the same run rebuilds the published atlas monthly.
     fourcc.
   - The R2 generator is not committed: it reads catalogs fetched for the atlas.
     From here the registry is edited by hand, and R5 owns catalog diffs.
+- 2026-10-18: R3 landed. The first report (registry plus the browser-specs 5.3.0
+  snapshot) finds:
+  - 446 of genet's 623 in-scope browser specs unclaimed;
+  - one registry id the catalog dropped (`sanitizer-api`, gone between
+    browser-specs 4 and 5.3.0);
+  - 30 stale claims, all W3C-review verdicts dated 2026-07-05;
+  - 219 full or partial claims on specs with no suite;
+  - 65 specs whose suite no claim measures. These are R4's candidate list:
+    test262 and `intl402` for vano and bole, the Lua 5.4 tests, the Unicode
+    break tests, the WebGL CTS, Djot's and CommonMark's reference tests, the
+    W3C RDF suites, and reference-peer vectors for the radio protocols.

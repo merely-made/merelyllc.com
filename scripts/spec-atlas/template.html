@@ -1,0 +1,273 @@
+<title>Merely Spec Atlas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,650&family=Public+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column with wide data tables; status chips borrow the spec-maturity vocabulary (REC / CR / WD) */
+:root{
+  --bg:#f6f7f4; --panel:#ffffff; --ink:#1b2321; --muted:#5c6762; --rule:#d9ddd6;
+  --accent:#1f6f62; --accent-soft:#e1efeb;
+  --full:#2d7a4a; --partial:#b07a16; --none:#a5432f; --plan:#5b5fa8;
+  --display:"Newsreader",Georgia,"Times New Roman",serif;
+  --body:"Public Sans",-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141917; --panel:#1b211f; --ink:#e4e9e5; --muted:#9aa59f; --rule:#2f3834;
+  --accent:#6cc3ad; --accent-soft:#1f3530;
+  --full:#6cc38a; --partial:#e0b357; --none:#e98a72; --plan:#a4a8ef; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141917; --panel:#1b211f; --ink:#e4e9e5; --muted:#9aa59f; --rule:#2f3834;
+  --accent:#6cc3ad; --accent-soft:#1f3530;
+  --full:#6cc38a; --partial:#e0b357; --none:#e98a72; --plan:#a4a8ef; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font:15px/1.6 var(--body)}
+.wrap{max-width:1120px;margin:0 auto;padding-block:40px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:44px}
+h1,h2,h3{font-family:var(--display);font-weight:650;text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(30px,5vw,46px)}
+h2{font-size:28px}
+h3{font-size:19px}
+p{margin:0;max-width:68ch}
+.eyebrow{font:600 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.lede{font-size:18px;max-width:64ch}
+section{display:grid;gap:16px}
+.sec-head{display:grid;gap:6px;border-top:1px solid var(--rule);padding-top:22px}
+.sec-head .num{font:600 13px var(--mono);color:var(--muted)}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+code,.mono{font-family:var(--mono);font-size:.88em}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.stat{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px 16px;display:grid;gap:2px}
+.stat b{font:600 26px var(--mono);font-variant-numeric:tabular-nums}
+.stat span{font-size:13px;color:var(--muted)}
+.verdict{display:grid;gap:12px;background:var(--accent-soft);border-radius:6px;padding:20px 22px}
+.verdict ul{margin:0;padding-left:20px;display:grid;gap:6px;max-width:80ch}
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.tier{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:16px;display:grid;gap:8px;align-content:start}
+.tier h3{font-size:17px}
+.tier .repos{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font:600 11.5px var(--mono);padding:2px 7px;border-radius:3px;border:1px solid var(--rule);white-space:nowrap}
+.scroll{overflow-x:auto;background:var(--panel);border:1px solid var(--rule);border-radius:6px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font:600 11.5px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);position:sticky;top:0;background:var(--panel)}
+td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+th.n{text-align:right}
+tr.grp td{background:var(--accent-soft);font:600 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.chip{display:inline-block;font:600 10.5px/1.5 var(--mono);padding:0 6px;border-radius:3px;letter-spacing:.04em;white-space:nowrap}
+.d-full{background:color-mix(in srgb,var(--full) 18%,transparent);color:var(--full)}
+.d-partial{background:color-mix(in srgb,var(--partial) 20%,transparent);color:var(--partial)}
+.d-stub,.d-none{background:color-mix(in srgb,var(--none) 16%,transparent);color:var(--none)}
+.d-planned{background:color-mix(in srgb,var(--plan) 18%,transparent);color:var(--plan)}
+.rel{font:11px var(--mono);color:var(--muted)}
+.body-W3C{color:var(--accent)} .body-WHATWG{color:var(--accent)}
+.matrix td.dot{text-align:center;font-family:var(--mono)}
+.dotv{display:inline-block;min-width:22px;border-radius:3px;padding:0 4px;font-weight:600}
+.bar{height:8px;background:var(--rule);border-radius:4px;overflow:hidden;min-width:80px}
+.bar i{display:block;height:100%;background:var(--accent)}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.controls input,.controls select{font:14px var(--body);padding:6px 9px;border:1px solid var(--rule);border-radius:4px;background:var(--panel);color:var(--ink);min-width:0}
+.controls input[type=search]{flex:1 1 220px}
+.controls label{font-size:13px;display:flex;gap:6px;align-items:center}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.two>*{min-width:0}
+.list{margin:0;padding-left:18px;display:grid;gap:8px}
+.list b{font-weight:600}
+.note{border-left:3px solid var(--rule);padding-left:14px}
+#specTable tbody tr:hover{background:var(--accent-soft)}
+.count{font:13px var(--mono);color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){.bar i{transition:width .3s}}
+</style>
+
+<div class="wrap">
+<header style="display:grid;gap:14px">
+  <div class="eyebrow">Merely family · standards survey · 2026-10-18</div>
+  <h1>Merely Spec Atlas</h1>
+  <p class="lede">Every repo in the merely-made family checked against the specs it implements, depends on, or ought to follow. Genet is also measured against the whole web platform: __NCAT__ browser specs joined to its WPT census, IDL and CSS property coverage.</p>
+</header>
+
+<section>
+  <div class="verdict">
+    <h2 style="font-size:24px">Is every app built on a spec? Yes, with three qualifications.</h2>
+    <ul>
+      <li><b>Every repo has at least one relevant spec</b>, and for about half the family a spec is the product itself: genet, netfetcher, vano, bole, smolweb, turquet, wavicle and emblem. Specs don't reach the house-grammar crates: scenograph, chirograph, platen, servitor, armillary and the UI internals. Those formats are Merely's own and ought to be published as specs.</li>
+      <li><b>“W3C” is too narrow a word for it.</b> The core of the web engine is WHATWG (HTML, DOM, Fetch, URL, Encoding, Streams): about three-quarters of genet's passing WPT subtests (24,756 of 33,824 in the 2026-09-29 census). Outside the browser, most of what the apps implement is IETF RFCs or community specs (Gemini, Reticulum, LXMF, Meshtastic, Djot, WavPack, IconVG), plus IAU/IERS for the sky.</li>
+      <li><b>W3C's distinctive share is data, identity and annotation.</b> mere already ships JSON-LD, RDF 1.2, SPARQL 1.2, Web Annotation and DTCG tokens, and dramatis speaks <code>did:key</code>. The unused fits are a short list: RDFC-1.0, SHACL, VC 2.0, PROV-O as a model, ActivityPub, WebSub, Webmention, PLS, MusicXML and WCAG statements.</li>
+    </ul>
+  </div>
+  <div class="stats" id="stats"></div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="num">§1</span><h2>How each repo relates to its specs</h2>
+  <p class="muted">Repos grouped by how central a spec is to what they ship.</p></div>
+  <div class="tiers" id="tiers"></div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="num">§2</span><h2>Which bodies each repo answers to</h2>
+  <p class="muted">Count of key specs per repo by publishing body, from the per-repo tables in §3. Darker cells hold more specs.</p></div>
+  <div class="scroll"><table class="matrix" id="matrix"></table></div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="num">§3</span><h2>Spec map by repo</h2>
+  <p class="muted">Every claim in the registry, grouped by repo. Relation: <code>impl</code> implements it, <code>dep</code> through a dependency, <code>should</code> the product needs it, <code>adj</code> adjacent.</p></div>
+  <div class="controls">
+    <input type="search" id="repoQ" placeholder="Filter specs or repos, e.g. JSON-LD, RFC 8032, turnstone" aria-label="Filter spec map">
+    <select id="repoBody" aria-label="Filter by body"><option value="">All bodies</option></select>
+    <select id="repoDepth" aria-label="Filter by depth"><option value="">Any depth</option><option>full</option><option>partial</option><option>stub</option><option>planned</option><option>none</option></select>
+    <span class="count" id="repoCount"></span>
+  </div>
+  <div class="scroll"><table id="repoTable"><thead><tr><th>Spec</th><th>Body</th><th>Rel.</th><th>Depth</th><th>Verdict</th><th>Note</th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="num">§4</span><h2>Genet against the web platform</h2>
+  <p class="muted">All 615 specs in the w3c/browser-specs catalog, joined to three measures of genet: WPT subtests from the 2026-09-29 Vano census (82 shards, disk mode, CSS not included), how many of the spec's WebIDL interfaces are named in <code>components/</code>, and how many of its CSS properties Livery's source names. “Touched” means at least one of the three is nonzero.</p></div>
+  <div class="scroll"><table id="famTable"><thead><tr><th>Family</th><th class="n">Specs</th><th class="n">Touched</th><th style="min-width:120px">Share touched</th><th class="n">WPT subtests</th></tr></thead><tbody></tbody></table></div>
+  <p class="small muted note">Rows at zero are mostly not genet's to carry. IETF HTTP and cookies live in netfetcher, ECMAScript in vano (test262: 40,998 / 50,733 passing), and WebGPU/WGSL in wgpu under netrender. Media formats, Khronos extensions, devices and sensors are where genet itself is blank.</p>
+  <div class="controls">
+    <input type="search" id="specQ" placeholder="Search __NCAT__ specs, e.g. css-grid, observer, fetch" aria-label="Search specs">
+    <select id="specFam" aria-label="Filter by family"><option value="">All families</option></select>
+    <select id="specOrg" aria-label="Filter by organization"><option value="">All bodies</option></select>
+    <label><input type="checkbox" id="specTouched"> Touched only</label>
+    <span class="count" id="specCount"></span>
+  </div>
+  <div class="scroll" style="max-height:620px"><table id="specTable"><thead><tr><th>Spec</th><th>Body</th><th>Family</th><th class="n">WPT subtests</th><th class="n">Files all-pass</th><th class="n">IDL named</th><th class="n">CSS props</th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="num">§5</span><h2>W3C beyond the browser</h2>
+  <p class="muted">The W3C TR catalog lists 1,720 documents: 318 Recommendations, 528 Notes and 333 retired. About 414 live documents fall outside the browser-specs catalog. Keyword families below, with the repos each one fits.</p></div>
+  <div class="scroll"><table id="trTable"><thead><tr><th>Family</th><th class="n">Live docs</th><th>Examples</th><th>Fits</th></tr></thead><tbody></tbody></table></div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="num">§6</span><h2>Where the leverage is</h2></div>
+  <div class="two">
+    <div style="display:grid;gap:10px">
+      <h3>Strong fits nobody has adopted</h3>
+      <ul class="list">
+        <li><b>RDFC-1.0 + Data Integrity</b> for mere-linked-data. It already promises byte-stable normalized datasets; canonicalization would make graph exports signable with insigne keys.</li>
+        <li><b>SHACL</b> as the ingest validator, replacing eidetic's own JSON-schema codicils and the open-IRI “recognized core”.</li>
+        <li><b>PROV-O as a model, not seven constants.</b> It fits mere statements, cleromancy's reading receipts and isocosm's chronicles.</li>
+        <li><b>VC 2.0 / DID Core</b> for insigne delegation certificates, which are already VC-shaped. gaz already parses <code>did:key</code> and <code>did:plc</code>.</li>
+        <li><b>WebSub, Webmention, ActivityPub</b> for turnstone feeds and peer places. <b>WARC</b> (ISO 28500) for page capture.</li>
+        <li><b>PLS</b> (W3C Rec) as mora's lexicon format; <b>MusicXML/MNX</b> and Standard MIDI Files for woodshed.</li>
+        <li><b>Web Serial, WebUSB, Web Bluetooth</b> for a browser-hosted Signalman and Linkboy.</li>
+      </ul>
+    </div>
+    <div style="display:grid;gap:10px">
+      <h3>Conformance suites that exist but aren't wired</h3>
+      <ul class="list">
+        <li><b>WPT <code>fetch/</code></b> against netfetcher directly. It claims Fetch, CORS, SRI and Referrer Policy, but has no suite run of its own.</li>
+        <li><b>Official Lua 5.4 tests</b> for didgeridoo; today it has a hand-kept matrix of roughly 62 implemented functions to 80 unimplemented.</li>
+        <li><b>test262 <code>intl402</code> and Annex B</b>: skipped in vano and bole runs, so ES coverage is understated and Intl unmeasured.</li>
+        <li><b>WebGL CTS</b> for netrender's WebGL2 route, and a CSS reftest census for genet newer than the 2026-08-24 map (that map is on o-pc).</li>
+        <li><b>Djot reference tests</b> for knot and nematic; the <b>Web Annotation test suite</b> for fleece and woodshed's Redshank export.</li>
+        <li><b>Spec-derived vectors</b> for retinue, outrider, sennet and tucket, which today qualify only against pinned reference peers.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note" style="display:grid;gap:8px">
+    <h3>From atlas to registry</h3>
+    <p>Genet's <a href="https://github.com/merely-made/genet/blob/main/design_docs/2026-09-07_standards_to_features_ledger.md">standards-to-features ledger</a> admits a row only when a consumer asks: “A feature nobody has asked for is not a row.” mere has its own 174-verdict standards survey and a W3C architecture review. If the stack's purpose is implementing specs, the inverse ledger is a family-wide registry: every relevant spec as a row, with owner repo, depth and the suite that measures it, and the consumers filling in a “why now” column. That registry now exists: <code>content/specs.toml</code> in merelyllc.com, with its plan in <code>docs/2026-10-18_family_spec_registry_plan.md</code>.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="num">§7</span><h2>Method and limits</h2></div>
+  <ul class="list small">
+    <li>Catalogs: <code>browser-specs@4</code> (615 specs with WPT paths), W3C API <code>/specifications</code> (1,720 TR docs), <code>@webref/css</code> 8.7.7 (758 properties). Fetched 2026-10-18.</li>
+    <li>Genet measures: WPT outcomes from <code>design_docs/receipts/2026-09-29_vano_wpt_census</code>, joined to each spec's <code>testPaths</code>. Overlapping paths can count toward more than one spec. IDL and CSS coverage are name-mention heuristics over genet <code>components/</code> at <code>6f00922</code>. They show footprint, not conformance: shorthands and generated names can be missed, and common words like <code>Range</code> can over-count.</li>
+    <li>Repo maps: read-only surveys of READMEs, manifests, design docs and source greps across 25 repos: the 23 code repos in merely-made, plus hocket and netfetcher. Nothing was built or run. Depth reflects each repo's own receipts and docs.</li>
+    <li>Local <code>repos/retinue</code> is the murm repository (same origin). mere's tables reflect main as of today.</li>
+  </ul>
+</section>
+</div>
+
+<script>
+const ROWS=__ROWS__;
+const REPOS=__REPOS__;
+const TIERS=[
+ {k:"spec",h:"The spec is the product",p:"Conformance to an external spec is the job, measured or measurable."},
+ {k:"dep",h:"Specs arrive through dependencies",p:"The repo composes engines that carry the specs; its own surface is vendor APIs or glue."},
+ {k:"thin",h:"Thin or mostly planned",p:"A few format or crypto RFCs; the product's own logic has no external standard."}];
+const TR=[
+ ["Semantic web / RDF",117,"RDF 1.2, SPARQL, OWL 2, SKOS, SHACL, PROV, DCAT, JSON-LD","mere-linked-data, fleece, cleromancy"],
+ ["XML family",86,"XML, XPath, XSLT, XQuery, XML Schema, EXI","genet (xpath, XHTML); little else"],
+ ["Accessibility guidelines",30,"WCAG 2.2/3.0, ARIA 1.1, AccName, Core-AAM, ATAG, ACT Rules","every UI: cambium, turnstone, knot, scry, site"],
+ ["Media & timed text",30,"TTML2, IMSC, WebVTT, SSML, PLS, SMIL, MSE, EME","woodshed (WebVTT), mora (PLS, SSML)"],
+ ["Identity & credentials",27,"DID 1.1, VC 2.0/2.1, Data Integrity, Controlled Identifiers, WebAuthn","dramatis (insigne, gaz, chatelaine)"],
+ ["Graphics & fonts",17,"PNG 3rd ed., SVG Tiny 1.2, MathML 4, WOFF","genet, netrender, emblem"],
+ ["Architecture & practice",12,"Architecture of the WWW, Data on the Web Best Practices, Ethical Web Principles","family-wide design reference"],
+ ["Internationalization",9,"Character Model, Language Tags, ITS 2.0, text layout requirements","genet text, mora, knot"],
+ ["Web of Things",8,"Thing Description 2.0, Discovery, Binding Registry","murm devices, radio-hand (adjacent)"],
+ ["Publishing",6,"EPUB 3.4, EPUB Reading Systems, Annotations","knot (export), turnstone (reading)"],
+ ["Social web",5,"ActivityStreams 2.0, ActivityPub, WebSub, Webmention, Micropub","turnstone, moot, gaz"],
+ ["Privacy & security",4,"CSP 2, Privacy Principles","netfetcher, site"],
+ ["Other",90,"Web Annotation, CSVW, SRI, WebAssembly Core, DOM Level 3, SOAP","fleece, woodshed, script, netfetcher"]];
+
+const el=(t,a={},...c)=>{const e=document.createElement(t);for(const[k,v]of Object.entries(a))k==="class"?e.className=v:k==="html"?e.innerHTML=v:e.setAttribute(k,v);for(const x of c)e.append(x);return e};
+const fmt=n=>n.toLocaleString("en-US");
+const chip=d=>el("span",{class:"chip d-"+d},d);
+
+// Stats
+const touched=r=>(r.sp>0)||r.ih>0||(r.ch||0)>0;
+const allSpecs=REPOS.flatMap(r=>r.specs);
+[[String(REPOS.filter(r=>r.id!=="family").length),"repos in the registry"],[fmt(allSpecs.length),"claims: a spec and a repo"],[ROWS.filter(touched).length+" / "+ROWS.length,"browser specs genet touches"],["33,824 / 144,238","WPT subtests passing, 2026-09-29 census"],[fmt(ROWS.reduce((a,r)=>a+(r.ch||0),0))+" / "+fmt(ROWS.reduce((a,r)=>a+(r.ct||0),0)),"CSS property names in Livery source"]]
+ .forEach(([b,s])=>document.getElementById("stats").append(el("div",{class:"stat"},el("b",{},b),el("span",{},s))));
+
+// Tiers
+const tiers=document.getElementById("tiers");
+TIERS.forEach(t=>{const box=el("div",{class:"tier"},el("h3",{},t.h),el("p",{class:"small muted"},t.p));const rp=el("div",{class:"repos"});REPOS.filter(r=>r.tier===t.k).forEach(r=>rp.append(el("span",{class:"tag"},r.label||r.id)));box.append(rp);tiers.append(box)});
+
+// Matrix
+const BODIES=["W3C","WHATWG","IETF","Ecma","Khronos","Unicode","ISO/IEC","IAU/IERS","NIST","ITU","FIDO","freedesktop","community","vendor"];
+const m=document.getElementById("matrix");
+m.append(el("thead",{},el("tr",{},el("th",{},"Repo"),...BODIES.map(b=>el("th",{class:"n"},b)))));
+const mb=el("tbody");let lastG="";
+REPOS.forEach(r=>{if(r.g!==lastG){mb.append(el("tr",{class:"grp"},el("td",{colspan:BODIES.length+1},r.g)));lastG=r.g}
+ const tr=el("tr",{},el("td",{class:"mono"},r.label||r.id));
+ BODIES.forEach(b=>{const n=r.specs.filter(s=>s.b===b).length;const td=el("td",{class:"dot"});if(n){const v=el("span",{class:"dotv"},String(n));v.style.background=`color-mix(in srgb,var(--accent) ${Math.min(14+n*14,70)}%,transparent)`;if(n>=4)v.style.color="var(--bg)";td.append(v)}else td.append(el("span",{class:"muted"},"·"));tr.append(td)});
+ mb.append(tr)});
+m.append(mb);
+
+// Repo table
+const rb=document.querySelector("#repoTable tbody"),rq=document.getElementById("repoQ"),rbody=document.getElementById("repoBody"),rdepth=document.getElementById("repoDepth");
+BODIES.forEach(b=>rbody.append(el("option",{},b)));
+function drawRepos(){const q=rq.value.toLowerCase().trim(),bf=rbody.value,df=rdepth.value;rb.textContent="";let n=0;
+ REPOS.forEach(r=>{const rows=r.specs.filter(s=>(!bf||s.b===bf)&&(!df||s.d===df)&&(!q||((r.label||r.id)+" "+s.n+" "+s.b+" "+s.v+" "+s.x).toLowerCase().includes(q)));if(!rows.length)return;
+  rb.append(el("tr",{class:"grp"},el("td",{colspan:6},(r.label||r.id)+" · "+r.g)));
+  rows.forEach(s=>{n++;rb.append(el("tr",{},el("td",{},s.n),el("td",{class:"mono small"},s.b),el("td",{class:"rel"},s.r),el("td",{},chip(s.d)),el("td",{class:"mono small"},s.v),el("td",{class:"small muted"},s.x)))})});
+ document.getElementById("repoCount").textContent=n+" claims"}
+[rq,rbody,rdepth].forEach(x=>x.addEventListener("input",drawRepos));drawRepos();
+
+// Family table
+const fams={};ROWS.forEach(r=>{const f=fams[r.f]||(fams[r.f]={n:0,t:0,sp:0,st:0});f.n++;f.t+=touched(r);f.sp+=r.sp;f.st+=r.stt});
+const fb=document.querySelector("#famTable tbody");
+Object.entries(fams).sort((a,b)=>b[1].n-a[1].n).forEach(([k,f])=>{const bar=el("div",{class:"bar"},el("i"));bar.firstChild.style.width=(100*f.t/f.n).toFixed(0)+"%";
+ fb.append(el("tr",{},el("td",{},k),el("td",{class:"n"},String(f.n)),el("td",{class:"n"},String(f.t)),el("td",{},bar),el("td",{class:"n"},f.st?fmt(f.sp)+" / "+fmt(f.st):"—")))});
+
+// Spec table
+const sq=document.getElementById("specQ"),sf=document.getElementById("specFam"),so=document.getElementById("specOrg"),stc=document.getElementById("specTouched"),sb=document.querySelector("#specTable tbody");
+Object.keys(fams).sort().forEach(f=>sf.append(el("option",{},f)));
+[...new Set(ROWS.map(r=>r.o))].sort().forEach(o=>so.append(el("option",{},o)));
+const ratio=(a,b)=>b?fmt(a)+" / "+fmt(b):"—";
+function drawSpecs(){const q=sq.value.toLowerCase().trim();sb.textContent="";let n=0;
+ const rows=ROWS.filter(r=>(!sf.value||r.f===sf.value)&&(!so.value||r.o===so.value)&&(!stc.checked||touched(r))&&(!q||(r.s+" "+r.t).toLowerCase().includes(q)))
+  .sort((a,b)=>(b.stt-a.stt)||((b.ct||0)-(a.ct||0))||(b.it-a.it)||a.s.localeCompare(b.s));
+ const frag=document.createDocumentFragment();
+ rows.forEach(r=>{n++;const a=el("a",{href:r.u,target:"_blank",rel:"noopener"},r.t);
+  frag.append(el("tr",{},el("td",{},a,el("div",{class:"rel"},r.s)),el("td",{class:"mono small"},r.o),el("td",{class:"small muted"},r.f),
+   el("td",{class:"n"},r.m==="yes"?ratio(r.sp,r.stt):(r.m==="out-of-scope"?"not run":"—")),el("td",{class:"n"},r.fi?ratio(r.pf,r.fi):"—"),
+   el("td",{class:"n"},r.it?r.ih+" / "+r.it:"—"),el("td",{class:"n"},r.ct?r.ch+" / "+r.ct:"—")))});
+ sb.append(frag);document.getElementById("specCount").textContent=n+" of "+ROWS.length}
+[sq,sf,so,stc].forEach(x=>x.addEventListener("input",drawSpecs));drawSpecs();
+
+// TR table
+const tb=document.querySelector("#trTable tbody");
+TR.forEach(([f,n,e,fit])=>tb.append(el("tr",{},el("td",{},f),el("td",{class:"n"},String(n)),el("td",{class:"small"},e),el("td",{class:"small muted"},fit))));
+</script>

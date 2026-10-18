@@ -166,6 +166,31 @@ pub enum Verdict {
     Open,
 }
 
+impl Depth {
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Self::Full => "full",
+            Self::Partial => "partial",
+            Self::Stub => "stub",
+            Self::Planned => "planned",
+            Self::None => "none",
+        }
+    }
+}
+
+impl Verdict {
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Self::ADOPT => "ADOPT",
+            Self::PULL => "PULL",
+            Self::SKIP => "SKIP",
+            Self::WATCH => "WATCH",
+            Self::Split => "split",
+            Self::Open => "open",
+        }
+    }
+}
+
 impl SpecRegistry {
     pub fn load(root: impl AsRef<Path>) -> Result<Self, AuthorityError> {
         let path = root.as_ref().join(SPEC_REGISTRY_PATH);
