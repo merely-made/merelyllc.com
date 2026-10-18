@@ -339,3 +339,7 @@ change. If D6 passes, the same run rebuilds the published atlas monthly.
     test262 and `intl402` for vano and bole, the Lua 5.4 tests, the Unicode
     break tests, the WebGL CTS, Djot's and CommonMark's reference tests, the
     W3C RDF suites, and reference-peer vectors for the radio protocols.
+- 2026-10-18: R4 lane landed: Lua 5.4 tests for didgeridoo. lua-5.4.9-tests run
+  per file from `cargo test --test lua_suite` (didgeridoo 63928fa). 32 files:
+  1 pass, 1 skips itself without ltests, 22 fail, 8 cannot-load. The
+  `lua-5.4`/`piccolo-fork` claim carries `files_all_pass = 1, files = 32`.
