@@ -37,8 +37,8 @@ was written to answer:
 None of them can answer "which specs does repo X answer to, how deep is it,
 and what measures it". The registry answers that for every repo, spec-first:
 a spec is in the registry because a repo's product falls within its scope,
-whether or not a consumer has asked for it yet. Consumers still order the
-work; they no longer gate which specs are recorded.
+whether or not a consumer has asked for it yet. Consumer relationships explain
+why a spec may matter; they neither gate its recording nor impose a work order.
 
 ## Findings
 
@@ -132,7 +132,9 @@ ITU, FIDO, freedesktop, vendor, community, and `merely` for a published house
 spec (D5).
 
 **Verdicts** use the survey's grammar unchanged, including Mark's 2026-09-23
-PULL: "design for it now, implement in order". `split` marks a seeded row whose
+PULL: "design for it now, implement in order". This preserves the dated design
+judgment and its rationale, without assigning an implementation sequence.
+`split` marks a seeded row whose
 source graded parts of a bundle differently. `open` means nobody has ruled yet.
 
 ## Row rules
@@ -149,7 +151,8 @@ source graded parts of a bundle differently. `open` means nobody has ruled yet.
 5. Every claim carries `verified_on`. The survey's §1 lesson is that a
    standards inventory decays silently in months; R3 reports claims older than
    the D4 window.
-6. Consumers order the work (R4). They don't decide whether a row exists.
+6. Consumers supply relevance and dependency cues (R4), not a work order or
+   an admission gate.
 7. Evidence is a test, a file or a copied count, never a receipt file.
 
 ## Seed (R0)
@@ -174,7 +177,7 @@ KISS + APRS, the nine unspecified small-web protocols, the post-quantum set),
 slug ids on survey rows that have no catalog shortname, and inferred repo
 attribution where the consumer text names several crates.
 
-## Phases
+## Implementation history and remaining possibilities
 
 ### R1: Validator
 
@@ -258,10 +261,14 @@ against the registry. It reports new specs inside a scope, status changes, and
 superseded designators such as RFC 8446 → RFC 9846. Validate never touches the
 network.
 
-Done when the diff runs as one command and names the registry rows it would
-change. If D6 passes, the same run rebuilds the published atlas monthly.
+A useful refresh would expose the registry rows affected by a catalog change.
+The accepted monthly-publication direction could use that output. This records
+a possible mechanism, without assigning the implementation or installing a schedule.
 
-## Decisions for Mark
+## Decision record
+
+The following proposals were accepted on 2026-10-18 (see Rulings). Their original
+wording is retained as decision history rather than a fresh request.
 
 - **D1. Home.** Proposed: `merelyllc.com/content/specs.toml`, beside
   `repositories.toml` and `relations.toml`, guarded by `authority validate`.
