@@ -343,3 +343,33 @@ change. If D6 passes, the same run rebuilds the published atlas monthly.
   per file from `cargo test --test lua_suite` (didgeridoo 63928fa). 32 files:
   1 pass, 1 skips itself without ltests, 22 fail, 8 cannot-load. The
   `lua-5.4`/`piccolo-fork` claim carries `files_all_pass = 1, files = 32`.
+
+## Picking up one item
+
+2026-10-19: Mark prefers a durable queue over spawning a set of spec-coverage
+lanes. The registry and this plan are sufficient to resume the analysis in a
+fresh conversation. No new sessions or scheduling are needed.
+
+1. Run `cargo run --bin authority -- specs` in merelyllc.com. The report reads
+   the committed registry and catalog offline. `specs-json` includes the rows.
+2. Choose one named spec and consuming repo from R4 or the report. Inspect the
+   current implementation and its suite before treating an old depth or grade
+   as current. Prioritize a real consumer and a bounded next change.
+3. Keep the implementation plan in the owning repo. Record fresh measurements
+   in the registry with their date, engine and exact scope; preserve the
+   distinction between full-file results and assertions within a file.
+4. Run `authority validate` after editing claims. Build the atlas with
+   `scripts/spec-atlas/build.py` when its displayed data needs updating.
+
+A useful fresh-conversation cue is: "Read the family spec registry plan in
+merelyllc.com, run authority specs, and pick up [spec/repo] as one bounded task."
+For Lua, the next task is G0 in `didgeridoo/LUA54_GAP_PLAN.md`. The local clone
+is `crates/piccolo`; the registry repo id remains `piccolo-fork`. Its 1/32 raw
+file result needs interpretation: early missing APIs mask later assertions.
+The gap plan orders diagnostics, environment/string behavior, pure libraries,
+loading, weak tables, closing semantics, UTF-8 and host policy.
+
+The registry, survey reasoning in mere, genet's linked ledger, committed
+catalog snapshot, offline report and atlas builder are the durable output of
+this analysis. R5 and monthly site publication remain work in this plan; they
+are not an installed schedule.
