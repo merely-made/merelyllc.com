@@ -4478,7 +4478,7 @@ relation = "implements"
 depth = "partial"
 verdict = "open"
 measured = { on = "2026-10-18", scope = "official lua-5.4.9-tests, per file; all.lua excluded, 1 further file skips itself without ltests", files_all_pass = 1, files = 32 }
-evidence = "tests/lua_suite.rs in didgeridoo (cargo test --test lua_suite); about 62 stdlib functions implemented, 80 not"
+evidence = "tests/lua_suite.rs in didgeridoo (cargo test --test lua_suite); about 62 stdlib functions implemented, 80 not; findings per gap in didgeridoo LUA54_GAP_PLAN.md"
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
