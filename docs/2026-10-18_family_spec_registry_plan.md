@@ -2,7 +2,8 @@
 
 **Date:** 2026-10-18
 **Status:** in progress. R0 (seed), R1 (validator), R2 (one home) and R3
-(coverage report) landed 2026-10-18; D1–D6 ruled as proposed. R4 is next.
+(coverage report) landed 2026-10-18; D1–D6 ruled as proposed. R4 has partial
+measurements; the remaining sections describe possibilities and dependencies.
 **Data:** [`content/specs.toml`](../content/specs.toml)
 **Rendered view:** the Merely Spec Atlas,
 https://claude.ai/artifact/HFe3GfjV3SmvqyipkDzW5R (private until shared)
@@ -234,7 +235,9 @@ come from it. **Landed 2026-10-18**:
 
 ### R4: Suite wiring
 
-One lane per suite, owned in the repo that runs it:
+Suites identified in the investigation, with execution belonging to the repo
+that implements the relevant behavior. This list records opportunities, without
+assigning lanes or an order:
 
 - WPT `fetch/` against netfetcher;
 - Lua 5.4 tests for didgeridoo;
@@ -245,8 +248,8 @@ One lane per suite, owned in the repo that runs it:
 - the W3C RDF test suites for mere-linked-data;
 - a fresh CSS reftest census for genet.
 
-Done per lane when the suite runs in that repo's test gate and the claim's
-`measured` block holds the copied count.
+A suite wired into its owning repo's test gate, with a copied count in the
+claim's `measured` block, supplies durable evidence for that claim.
 
 ### R5: Catalog refresh
 
@@ -344,32 +347,33 @@ change. If D6 passes, the same run rebuilds the published atlas monthly.
   1 pass, 1 skips itself without ltests, 22 fail, 8 cannot-load. The
   `lua-5.4`/`piccolo-fork` claim carries `files_all_pass = 1, files = 32`.
 
-## Picking up one item
+## Recovering the analysis
 
-2026-10-19: Mark prefers a durable queue over spawning a set of spec-coverage
-lanes. The registry and this plan are sufficient to resume the analysis in a
-fresh conversation. No new sessions or scheduling are needed.
+2026-10-19: Mark clarified the purpose of preserving this analysis: future
+judgment benefits from recoverable findings and dependencies, without inheriting
+assignments or a prescribed order. The registry is a map of claims and evidence,
+not a queue. The unfinished possibilities in this document carry no commitment
+to implement them. ADOPT/PULL/SKIP/WATCH record design judgments under their
+existing definitions and verification dates; they do not schedule future work.
 
-1. Run `cargo run --bin authority -- specs` in merelyllc.com. The report reads
-   the committed registry and catalog offline. `specs-json` includes the rows.
-2. Choose one named spec and consuming repo from R4 or the report. Inspect the
-   current implementation and its suite before treating an old depth or grade
-   as current. Prioritize a real consumer and a bounded next change.
-3. Keep the implementation plan in the owning repo. Record fresh measurements
-   in the registry with their date, engine and exact scope; preserve the
-   distinction between full-file results and assertions within a file.
-4. Run `authority validate` after editing claims. Build the atlas with
-   `scripts/spec-atlas/build.py` when its displayed data needs updating.
+The durable material is in these locations:
 
-A useful fresh-conversation cue is: "Read the family spec registry plan in
-merelyllc.com, run authority specs, and pick up [spec/repo] as one bounded task."
-For Lua, the next task is G0 in `didgeridoo/LUA54_GAP_PLAN.md`. The local clone
-is `crates/piccolo`; the registry repo id remains `piccolo-fork`. Its 1/32 raw
-file result needs interpretation: early missing APIs mask later assertions.
-The gap plan orders diagnostics, environment/string behavior, pure libraries,
-loading, weak tables, closing semantics, UTF-8 and host policy.
+- `content/specs.toml`: spec identities, consumers, dated claims and measurements.
+- `cargo run --bin authority -- specs`: offline coverage report using the
+  committed catalog. `specs-json` includes the underlying registry rows.
+- `authority validate`: checks registry structure and references.
+- `scripts/spec-atlas/build.py`: renders the report data as the atlas.
+- Mere's standards survey and W3C review: the reasoning behind the verdicts.
+- Genet's standards ledger: consumer relationships and historical WPT counts.
+- `didgeridoo/LUA54_GAP_PLAN.md`: Lua findings, interpretation and dependencies.
+  The local clone is `crates/piccolo`, and its registry repo id is `piccolo-fork`.
+  Its 1/32 raw file result is limited by early missing APIs that mask later tests.
 
-The registry, survey reasoning in mere, genet's linked ledger, committed
-catalog snapshot, offline report and atlas builder are the durable output of
-this analysis. R5 and monthly site publication remain work in this plan; they
-are not an installed schedule.
+An entry point for another conversation is: "Read the family spec registry and
+its analysis notes; show me the evidence and dependencies around [spec/repo]."
+The source and dates make it possible to reassess a claim without repeating the
+whole survey. They do not determine what is worth doing at that later moment.
+
+R5 describes how a catalog refresh could work. Monthly site publication was
+accepted as a design direction; neither an installed schedule nor a future
+assignment follows from these notes.
