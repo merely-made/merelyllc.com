@@ -71,6 +71,10 @@ pub struct ClaimRecord {
     pub evidence: Option<String>,
     #[serde(default)]
     pub measured: Option<Measured>,
+    /// A results file in the owning repository that supplies `measured`; the
+    /// site fetches it at its latest commit (see `spec_results`).
+    #[serde(default)]
+    pub measured_from: Option<MeasuredFrom>,
     #[serde(default)]
     pub consumers: Vec<String>,
     /// What closing this claim's gap would make possible.
@@ -78,6 +82,32 @@ pub struct ClaimRecord {
     pub unlocks: Vec<Unlock>,
     pub source: String,
     pub verified_on: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct MeasuredFrom {
+    /// Repository holding the file; defaults to the claim's repository.
+    #[serde(default)]
+    pub repo: Option<String>,
+    pub path: String,
+    pub format: ResultFormat,
+    /// Branch to read; defaults to the migration ledger's default branch.
+    #[serde(default, rename = "ref")]
+    pub git_ref: Option<String>,
+    /// Section of the file, for formats that hold several suites.
+    #[serde(default)]
+    pub key: Option<String>,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub enum ResultFormat {
+    /// `merely.spec-results/v1`: one `[[result]]` per spec, each with a
+    /// `measured` block in the registry's own shape.
+    SpecResults,
+    /// test262 runner metrics: `{ "results": { "pass": … }, "total": … }`.
+    Test262Metrics,
 }
 
 /// A feature a claim makes possible, and the consumer that exists or the plan
@@ -353,6 +383,24 @@ impl SpecRegistry {
             if let Some(measured) = &claim.measured {
                 check_measured(&label, measured, &mut errors);
             }
+            if let Some(from) = &claim.measured_from {
+                if claim.measured.is_some() {
+                    errors.push(format!(
+                        "{label} has both measured and measured_from; the results file supplies the counts"
+                    ));
+                }
+                if from.repo.as_deref().is_some_and(|r| !repos.contains(r)) {
+                    errors.push(format!("{label} measured_from names an unknown repo"));
+                }
+                if from.path.trim().is_empty()
+                    || from.path.starts_with('/')
+                    || from.path.contains("..")
+                {
+                    errors.push(format!(
+                        "{label} measured_from path is not a repository path"
+                    ));
+                }
+            }
         }
 
         for spec in &self.spec {
@@ -373,7 +421,7 @@ impl SpecRegistry {
     }
 }
 
-fn check_measured(label: &str, measured: &Measured, errors: &mut Vec<String>) {
+pub(crate) fn check_measured(label: &str, measured: &Measured, errors: &mut Vec<String>) {
     check_date(&format!("{label} measured.on"), &measured.on, errors);
     if measured.scope.trim().is_empty() {
         errors.push(format!("{label} measured block has no scope"));

@@ -84,6 +84,13 @@ jobs:
       - name: Validate refreshed public metadata
         run: cargo run --locked --bin authority -- validate-metadata
 
+      - name: Refresh spec results from the repositories that run each suite
+        shell: bash
+        run: cargo run --locked --bin authority -- spec-sources | python3 scripts/refresh-spec-results.py
+
+      - name: Validate the registry with refreshed spec results
+        run: cargo run --locked --bin authority -- validate
+
       - name: Verify Rust source and behavior
         shell: pwsh
         run: |
