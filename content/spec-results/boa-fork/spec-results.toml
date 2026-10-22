@@ -1,0 +1,12 @@
+# Counts the family spec registry reads (merelyllc.com content/specs.toml,
+# claims ecma262 and ecma402 / boa-fork, measured_from). They mirror the tables
+# in docs/test262.md; update both when test262 is rerun.
+schema = "merely.spec-results/v1"
+
+[[result]]
+spec = "ecma262"
+measured = { on = "2026-10-18", scope = "test262 d86b2294, whole test/ tree incl. Annex B and intl402, with Intl; 1,781 ignored (features in test262_config.toml) count in the total", engine = "bole", wpt_pass = 51225, wpt_total = 53578 }
+
+[[result]]
+spec = "ecma402"
+measured = { on = "2026-10-18", scope = "test262 d86b2294, intl402 only, with Intl; 342 ignored (Intl.DisplayNames, RelativeTimeFormat, DurationFormat, Locale-info, enumeration) count in the total", engine = "bole", wpt_pass = 2624, wpt_total = 3357 }

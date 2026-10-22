@@ -6,6 +6,7 @@ use mer3ly_site::artifact::validate_public_artifact;
 use mer3ly_site::repositories::{Authority, PublicMetadataCache, PublicSiteData};
 use mer3ly_site::retinue_traces::TraceSet;
 use mer3ly_site::spec_coverage::{CatalogSnapshot, Coverage, today};
+use mer3ly_site::spec_results;
 use mer3ly_site::specs::SpecRegistry;
 
 fn main() -> ExitCode {
@@ -28,7 +29,7 @@ fn run() -> Result<(), String> {
     let path_argument = arguments.next().map(PathBuf::from);
     if arguments.next().is_some() {
         return Err(
-            "usage: authority [validate|summary|specs|specs-json|inventory-targets|public-repositories|validate-metadata|validate-artifact] [root] [metadata-or-artifact-path]"
+            "usage: authority [validate|summary|specs|specs-json|spec-sources|inventory-targets|public-repositories|validate-metadata|validate-artifact] [root] [metadata-or-artifact-path]"
                 .to_owned(),
         );
     }
@@ -44,11 +45,17 @@ fn run() -> Result<(), String> {
     // records the retinue revision, the commands and every file's hash.
     let traces = TraceSet::load(&root)
         .map_err(|errors| format!("retinue trace validation failed:\n{}", errors.join("\n")))?;
-    let specs = SpecRegistry::load(&root).map_err(|error| error.to_string())?;
+    let mut specs = SpecRegistry::load(&root).map_err(|error| error.to_string())?;
     let catalog = CatalogSnapshot::load(&root).map_err(|error| error.to_string())?;
     specs
         .validate(&authority, &catalog)
         .map_err(|errors| format!("spec registry validation failed:\n{}", errors.join("\n")))?;
+    // Fetched counts are build input for every command but the one that lists
+    // what to fetch.
+    if command != "spec-sources" {
+        spec_results::apply(&mut specs, &authority, &root)
+            .map_err(|errors| format!("spec results failed:\n{}", errors.join("\n")))?;
+    }
 
     match command.as_str() {
         "validate" => {
@@ -111,6 +118,17 @@ fn run() -> Result<(), String> {
                 "{} public site repositories; {candidates} transfer candidates; {personal_forks} maintained forks kept personal; {holds} unresolved fork-review holds",
                 authority.repositories.repository.len()
             );
+        }
+        "spec-sources" => {
+            for source in
+                spec_results::sources(&specs, &authority).map_err(|errors| errors.join("\n"))?
+            {
+                println!(
+                    "{}",
+                    serde_json::to_string(&source)
+                        .map_err(|error| format!("serialize spec source: {error}"))?
+                );
+            }
         }
         "specs" | "specs-json" => {
             let coverage = Coverage::compute(&specs, &catalog, &today());
@@ -176,7 +194,7 @@ fn run() -> Result<(), String> {
         }
         _ => {
             return Err(format!(
-                "unknown command {command}; expected validate, summary, specs, specs-json, inventory-targets, public-repositories, validate-metadata, or validate-artifact"
+                "unknown command {command}; expected validate, summary, specs, specs-json, spec-sources, inventory-targets, public-repositories, validate-metadata, or validate-artifact"
             ));
         }
     }

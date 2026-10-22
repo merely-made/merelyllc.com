@@ -118,6 +118,7 @@ depth = "partial"            # full | partial | stub | planned | none
 verdict = "ADOPT"            # ADOPT | PULL | SKIP | WATCH (survey grammar) | split | open
 evidence = "one line: a test path, a file, or the reason"
 measured = { on = "2026-09-29", scope = "…", engine = "vano", wpt_pass = 2016, wpt_total = 5901 }
+measured_from = { path = "spec-results.toml", format = "spec-results" }  # instead of measured; see below
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-7"]
 unlocks = [{ feature = "page identity from canonical URLs", consumer = "mere: search surface wiring plan" }]
 source = "atlas-2026-10-18"
@@ -415,3 +416,38 @@ would improve, and `requires` connects gaps to the features they hold back.
   catalog's 90th percentile, and HTML has 139. Its references aren't read as
   prerequisites of its features, which would otherwise put CSP and Mixed
   Content behind HTML workers. Hand-written `requires` always count.
+
+## Counts that arrive by themselves (2026-10-22)
+
+Mark asked for a roadmap that "automatically and predictably updates and
+shows the progress as we make commits", and chose to begin with the counts.
+
+- A claim's `measured_from` names a results file in the repository that runs
+  the suite: `{ path, format, ref?, key?, repo? }`. Two formats are read.
+  `spec-results` (`merely.spec-results/v1`) is one `[[result]]` per spec, with
+  a `measured` block in the registry's shape. `test262-metrics` is the test262
+  runner's `{ results: { pass }, total }`. A claim with `measured_from` may not
+  also carry `measured`.
+- `authority spec-sources` lists the files, resolving slug and branch through
+  the migration ledger. `scripts/refresh-spec-results.py` fetches each one at
+  the latest commit that touched it into `content/spec-results/`.
+  `sources.json` records that commit and its date. The Pages workflow runs the
+  refresh after the metadata refresh on every push and daily build, then
+  validates. The committed cache is the baseline for local builds.
+- Every command but `spec-sources` fills those claims from the cache. Each
+  count's `on` is the source commit's date, and its scope names the slug,
+  path and commit.
+- Five claims read this way:
+  - vano: `ecma262` from `tests/metrics.json` (CI-gated) and `ecma402` from
+    `tests/metrics-skipped.json#intl402`;
+  - bole: `ecma262` and `ecma402` from `spec-results.toml` on its `genet` branch
+    (`4f50841e`), mirroring `docs/test262.md`;
+  - didgeridoo: `lua-5.4` from `spec-results.toml` (`a2648e4`).
+- didgeridoo's suite test fails when its file disagrees with a run, and
+  `LUA_SUITE_RECORD=1` rewrites it. So its published count follows every tested
+  commit, not someone's memory to copy it.
+- Still hand-copied: genet's WPT census and name counts, whose sources are
+  long runs and session-time joins. They have no small results file yet.
+- `tests/m14_spec_results.rs` has five tests: the committed cache applies, a
+  fixture overlay carries its source commit, a missing source fails, sources
+  resolve through the ledger, and `measured` with `measured_from` is rejected.
