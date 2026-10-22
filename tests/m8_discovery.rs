@@ -2,7 +2,7 @@ use std::collections::BTreeSet;
 use std::path::{Path, PathBuf};
 
 use mer3ly_site::discovery::{ROBOTS_TXT, canonical_urls, sitemap};
-use mer3ly_site::pages::{devices, home, projects, radio, repositories};
+use mer3ly_site::pages::{devices, home, projects, radio, repositories, roadmap};
 use mer3ly_site::repositories::PublicSiteData;
 use mer3ly_site::site::{
     DEFAULT_SOCIAL_IMAGE_ALT, DEFAULT_SOCIAL_IMAGE_URL, ORGANIZATION_ID, WEBSITE_ID,
@@ -43,7 +43,7 @@ fn sitemap_projects_exact_canonical_authority_without_fake_freshness() {
 
     assert_eq!(
         expected.len(),
-        4 + data.authority.repositories.repository.len() + data.devices.ordered().len()
+        5 + data.authority.repositories.repository.len() + data.devices.ordered().len()
     );
     assert_eq!(actual, expected);
     assert_eq!(actual.iter().collect::<BTreeSet<_>>().len(), actual.len());
@@ -73,6 +73,9 @@ fn every_html_document_links_the_discovery_identity() {
         repositories::document(&workspace_root()).expect("render repository page"),
         radio::document(),
         devices::index_document_for(&data.devices),
+        roadmap::page(&workspace_root())
+            .expect("render roadmap page")
+            .html,
     ];
     documents.extend(
         projects::documents(&data)
@@ -87,7 +90,7 @@ fn every_html_document_links_the_discovery_identity() {
 
     assert_eq!(
         documents.len(),
-        4 + data.authority.repositories.repository.len() + data.devices.ordered().len()
+        5 + data.authority.repositories.repository.len() + data.devices.ordered().len()
     );
     for document in documents {
         assert_eq!(
