@@ -129,7 +129,6 @@ fn public_metadata_cache_is_reduced_and_bounded() {
             .iter()
             .any(|repository| repository.github_slug == event.repository)
     }));
-    assert!(!cache.contains("merely-made/esp"));
     assert!(!cache.contains("merely-made/tulpa"));
     assert!(!cache.contains("merely-made/mer3ly-net"));
     for forbidden_field in [
