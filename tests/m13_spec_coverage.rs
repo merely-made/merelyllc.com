@@ -74,6 +74,7 @@ fn catalog_spec(shortname: &str, categories: &[&str]) -> CatalogSpec {
         categories: categories.iter().map(|c| (*c).to_owned()).collect(),
         standing: "good".to_owned(),
         test_paths: Vec::new(),
+        references: Vec::new(),
     }
 }
 
@@ -84,6 +85,7 @@ fn coverage() -> Coverage {
         version: "0".to_owned(),
         fetched_on: "2026-10-18".to_owned(),
         license: "CC0-1.0".to_owned(),
+        references_source: None,
         spec: vec![
             catalog_spec("fetch", &["browser"]),
             catalog_spec("url", &["browser"]),
@@ -149,5 +151,67 @@ fn committed_registry_reports_against_the_committed_snapshot() {
         coverage
             .to_string()
             .starts_with("spec coverage on 2026-10-18")
+    );
+}
+
+#[test]
+fn a_gap_is_a_cue_when_it_holds_back_a_named_feature() {
+    let registry = SpecRegistry::parse(
+        r#"
+schema = "mer3ly.spec-registry/v1"
+
+[[spec]]
+id = "lxmf"
+name = "LXMF"
+body = "community"
+catalog = "none"
+suite = "none"
+requires = ["reticulum"]
+
+[[spec]]
+id = "reticulum"
+name = "Reticulum"
+body = "community"
+catalog = "none"
+suite = "none"
+
+[[claim]]
+spec = "lxmf"
+repo = "retinue"
+relation = "implements"
+depth = "full"
+verdict = "ADOPT"
+unlocks = [{ feature = "store-and-forward mail", consumer = "signalman" }]
+source = "test"
+verified_on = "2026-10-21"
+
+[[claim]]
+spec = "reticulum"
+repo = "retinue"
+relation = "implements"
+depth = "partial"
+verdict = "ADOPT"
+source = "test"
+verified_on = "2026-10-21"
+"#,
+    )
+    .expect("fixture parses");
+    let catalog = CatalogSnapshot {
+        source: "test".to_owned(),
+        version: "0".to_owned(),
+        fetched_on: "2026-10-21".to_owned(),
+        license: "CC0-1.0".to_owned(),
+        references_source: None,
+        spec: Vec::new(),
+    };
+    let coverage = Coverage::compute(&registry, &catalog, "2026-10-21");
+    // The full claim carries the unlock but has no gap; the partial prerequisite does.
+    assert_eq!(coverage.cues.len(), 1);
+    let cue = &coverage.cues[0];
+    assert_eq!((cue.spec.as_str(), cue.depth), ("reticulum", "partial"));
+    assert_eq!(cue.prerequisite_for[0].spec, "lxmf");
+    assert_eq!(
+        cue.prerequisite_for[0].unlocks[0].feature,
+        "store-and-forward mail"
     );
 }

@@ -45,8 +45,9 @@ fn run() -> Result<(), String> {
     let traces = TraceSet::load(&root)
         .map_err(|errors| format!("retinue trace validation failed:\n{}", errors.join("\n")))?;
     let specs = SpecRegistry::load(&root).map_err(|error| error.to_string())?;
+    let catalog = CatalogSnapshot::load(&root).map_err(|error| error.to_string())?;
     specs
-        .validate(&authority)
+        .validate(&authority, &catalog)
         .map_err(|errors| format!("spec registry validation failed:\n{}", errors.join("\n")))?;
 
     match command.as_str() {
@@ -112,7 +113,6 @@ fn run() -> Result<(), String> {
             );
         }
         "specs" | "specs-json" => {
-            let catalog = CatalogSnapshot::load(&root).map_err(|error| error.to_string())?;
             let coverage = Coverage::compute(&specs, &catalog, &today());
             if command == "specs" {
                 print!("{coverage}");

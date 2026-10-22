@@ -201,6 +201,7 @@ designator = "rdf12-n-quads"
 catalog = "none"
 url = "https://www.w3.org/TR/rdf12-n-quads/"
 suite = "w3c:rdf-tests"
+requires = ["rdf12-concepts"]
 
 [[spec]]
 id = "trig"
@@ -210,6 +211,7 @@ designator = "rdf12-trig"
 catalog = "none"
 url = "https://www.w3.org/TR/rdf12-trig/"
 suite = "w3c:rdf-tests"
+requires = ["rdf12-concepts"]
 
 [[spec]]
 id = "owl2"
@@ -262,6 +264,7 @@ name = "Titan upload protocol"
 body = "community"
 catalog = "none"
 suite = "none"
+requires = ["gemini"]
 
 [[spec]]
 id = "spartan"
@@ -343,6 +346,7 @@ name = "NomadNet pages"
 body = "community"
 catalog = "none"
 suite = "none"
+requires = ["reticulum", "micron"]
 
 [[spec]]
 id = "rss-2.0"
@@ -384,6 +388,7 @@ name = "p2panda DCGKA group encryption"
 body = "community"
 catalog = "none"
 suite = "none"
+requires = ["p2panda"]
 
 [[spec]]
 id = "wasm-component-model"
@@ -429,6 +434,7 @@ designator = "W3C CCG"
 catalog = "none"
 url = "https://w3c-ccg.github.io/did-key-spec/"
 suite = "none"
+requires = ["did-1.1"]
 
 [[spec]]
 id = "openssh-certs"
@@ -744,6 +750,7 @@ body = "community"
 designator = "LXMF 1.2.0"
 catalog = "none"
 suite = "reference:lxmf-1.2.0"
+requires = ["reticulum"]
 
 [[spec]]
 id = "meshtastic"
@@ -1438,6 +1445,7 @@ body = "W3C"
 catalog = "w3c-tr"
 url = "https://www.w3.org/TR/json-ld11/"
 suite = "none"
+requires = ["rdf12-concepts"]
 
 [[spec]]
 id = "rdf12-concepts"
@@ -1454,6 +1462,7 @@ body = "W3C"
 catalog = "w3c-tr"
 url = "https://www.w3.org/TR/sparql12-query/"
 suite = "none"
+requires = ["rdf12-concepts"]
 
 [[spec]]
 id = "annotation-model"
@@ -1462,6 +1471,7 @@ body = "W3C"
 catalog = "w3c-tr"
 url = "https://www.w3.org/TR/annotation-model/"
 suite = "none"
+requires = ["json-ld11"]
 
 [[spec]]
 id = "WCAG22"
@@ -1478,6 +1488,7 @@ body = "W3C"
 catalog = "w3c-tr"
 url = "https://www.w3.org/TR/prov-o/"
 suite = "none"
+requires = ["rdf12-concepts"]
 
 [[spec]]
 id = "skos-reference"
@@ -1494,6 +1505,7 @@ body = "W3C"
 catalog = "w3c-tr"
 url = "https://www.w3.org/TR/rdf-canon/"
 suite = "none"
+requires = ["rdf12-concepts"]
 
 [[spec]]
 id = "shacl"
@@ -1502,6 +1514,7 @@ body = "W3C"
 catalog = "w3c-tr"
 url = "https://www.w3.org/TR/shacl/"
 suite = "none"
+requires = ["rdf12-concepts"]
 
 [[spec]]
 id = "accname-1.2"
@@ -1526,6 +1539,7 @@ body = "W3C"
 catalog = "w3c-tr"
 url = "https://www.w3.org/TR/vc-data-model-2.0/"
 suite = "none"
+requires = ["json-ld11"]
 
 [[spec]]
 id = "webauthn-3"
@@ -1574,6 +1588,7 @@ body = "W3C"
 catalog = "w3c-tr"
 url = "https://www.w3.org/TR/activitypub/"
 suite = "none"
+requires = ["activitystreams-core", "json-ld11"]
 
 [[spec]]
 id = "epub-33"
@@ -3440,6 +3455,7 @@ body = "W3C"
 designator = "W3C CCG"
 catalog = "none"
 suite = "none"
+requires = ["did-1.1"]
 
 [[spec]]
 id = "nip-05"
@@ -4824,6 +4840,9 @@ repo = "mere"
 relation = "should"
 depth = "none"
 verdict = "open"
+unlocks = [
+  { feature = "signed, content-addressed graph exports with insigne keys", consumer = "mere-linked-data's byte-stable normalized-dataset promise" },
+]
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -4833,6 +4852,9 @@ repo = "mere"
 relation = "should"
 depth = "none"
 verdict = "open"
+unlocks = [
+  { feature = "shape validation at ingest in place of eidetic's own JSON-schema codicils", consumer = "eidetic-core ingest" },
+]
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -4843,6 +4865,9 @@ relation = "should"
 depth = "none"
 verdict = "open"
 evidence = "uxtree stops at AccessKit roles"
+unlocks = [
+  { feature = "screen-reader names and roles for Cambium widgets beyond AccessKit roles", consumer = "mere:design_docs/mere_docs/research/2026-07-05_w3c_standards_architecture_review.md C10" },
+]
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5071,6 +5096,9 @@ relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
 evidence = "CORRECTED 2026-08-24: no current consumer. crates/dramatis/insigne is a 23-line 0.0.1 name reservation; VC 2.0 is its plausible eventual shape, not a shipped dependency"
+unlocks = [
+  { feature = "insigne delegation certificates as verifiable credentials", consumer = "dramatis insigne" },
+]
 source = "atlas-2026-10-18 mere-survey-2026-08-24#7.99"
 verified_on = "2026-10-18"
 
@@ -5348,6 +5376,9 @@ repo = "turnstone"
 relation = "should"
 depth = "none"
 verdict = "open"
+unlocks = [
+  { feature = "push updates for followed feeds instead of polling", consumer = "turnstone:design_docs/2026-03-28_rss_feed_graph_model.md" },
+]
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5357,6 +5388,9 @@ repo = "turnstone"
 relation = "should"
 depth = "none"
 verdict = "open"
+unlocks = [
+  { feature = "inbound links arriving as graph edges", consumer = "turnstone:design_docs/2026-03-28_rss_feed_graph_model.md" },
+]
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5366,6 +5400,9 @@ repo = "turnstone"
 relation = "should"
 depth = "none"
 verdict = "open"
+unlocks = [
+  { feature = "peer places that interoperate with the fediverse", consumer = "turnstone peer-web places" },
+]
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5385,6 +5422,9 @@ relation = "should"
 depth = "none"
 verdict = "open"
 evidence = "capture is PNG plus a provenance envelope"
+unlocks = [
+  { feature = "page capture in an archival interchange format", consumer = "turnstone page capture" },
+]
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5459,6 +5499,9 @@ repo = "knot-editor"
 relation = "should"
 depth = "none"
 verdict = "open"
+unlocks = [
+  { feature = "clips and mark-read as portable annotations", consumer = "knot capture" },
+]
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -5621,6 +5664,9 @@ relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
 evidence = "repos/woodshed — crates/woodshedding (chord.rs, scale.rs, arpeggio.rs, fretboard.rs, tuning.rs) plus woodshed-core/src/song.rs. Woodshed's theory …"
+unlocks = [
+  { feature = "chord charts and song-mode interchange with notation tools", consumer = "woodshed song mode" },
+]
 source = "atlas-2026-10-18 mere-survey-2026-08-24#7.125"
 verified_on = "2026-10-18"
 
@@ -5640,6 +5686,9 @@ repo = "woodshed"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
+unlocks = [
+  { feature = "export a progression and import a backing track", consumer = "woodshed sequencer" },
+]
 source = "atlas-2026-10-18 mere-survey-2026-08-24#7.123+7.1"
 verified_on = "2026-10-18"
 evidence = "woodshed's Set/Rehearsal model keeps tempo, time signature and tick resolution representable as SMF"
@@ -5820,6 +5869,9 @@ repo = "cleromancy"
 relation = "should"
 depth = "none"
 verdict = "open"
+unlocks = [
+  { feature = "reading receipts as a PROV entity, activity and agent graph", consumer = "cleromancy:design_docs/2026-08-03_a5_field_provenance.md" },
+]
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6247,6 +6299,9 @@ repo = "mora"
 relation = "should"
 depth = "none"
 verdict = "open"
+unlocks = [
+  { feature = "a standards-body pronunciation lexicon as input, with IPA phones", consumer = "mora (no lexicon ships today)" },
+]
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6441,6 +6496,9 @@ repo = "retinue"
 relation = "should"
 depth = "none"
 verdict = "open"
+unlocks = [
+  { feature = "a browser-hosted Signalman talking to radios over USB serial", consumer = "linkboy plan, Web Serial note" },
+]
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6450,6 +6508,9 @@ repo = "retinue"
 relation = "should"
 depth = "none"
 verdict = "open"
+unlocks = [
+  { feature = "flashing firmware from a browser page", consumer = "linkboy" },
+]
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -6618,6 +6679,10 @@ relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
 measured = { on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", wpt_pass = 5297, wpt_total = 9771, files_all_pass = 290, files = 1012, idl_named = 33, idl_total = 34 }
+unlocks = [
+  { feature = "re-extract body text on SPA navigation so the index tracks what was read", consumer = "mere:design_docs/mere_docs/implementation_strategy/2026-08-12_search_surface_wiring_plan.md" },
+  { feature = "Cambium widgets hosted inside web documents", consumer = "genet:design_docs/2026-09-07_standards_to_features_ledger.md row 14 (custom elements, shadow DOM)" },
+]
 source = "catalog-join-2026-10-18 mere-w3c-review-2026-07-05#C1"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-6", "genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-14"]
@@ -6670,6 +6735,9 @@ relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
 measured = { on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", wpt_pass = 7561, wpt_total = 35303, files_all_pass = 4, files = 1313, idl_named = 2, idl_total = 4 }
+unlocks = [
+  { feature = "history and bookmark import from every browser's export", consumer = "genet:design_docs/2026-09-07_standards_to_features_ledger.md row 8" },
+]
 source = "catalog-join-2026-10-18 mere-w3c-review-2026-07-05#S1"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-8"]
@@ -6693,6 +6761,12 @@ relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
 measured = { on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", wpt_pass = 7574, wpt_total = 35445, files_all_pass = 880, files = 10669, idl_named = 104, idl_total = 161 }
+unlocks = [
+  { feature = "indexing and embedding off the document thread", consumer = "genet:design_docs/2026-09-07_standards_to_features_ledger.md row 11 (workers)" },
+  { feature = "esp in the browser", consumer = "genet:design_docs/2026-09-07_standards_to_features_ledger.md row 11 (workers)" },
+  { feature = "graphshell's remote-projection wire planes hosted in-page", consumer = "genet:design_docs/2026-09-07_standards_to_features_ledger.md row 12 (web messaging)" },
+  { feature = "Cambium widgets hosted inside web documents", consumer = "genet:design_docs/2026-09-07_standards_to_features_ledger.md row 14 (custom elements, shadow DOM)" },
+]
 source = "catalog-join-2026-10-18 mere-survey-2026-08-24#7.28 mere-survey-2026-08-24#7.52 mere-w3c-review-2026-07-05#S2"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-11", "genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-12", "genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-14"]
@@ -6726,6 +6800,10 @@ relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
 measured = { on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", wpt_pass = 514, wpt_total = 814, files_all_pass = 18, files = 77, idl_named = 2, idl_total = 2 }
+unlocks = [
+  { feature = "page identity from canonical URLs", consumer = "mere:design_docs/mere_docs/implementation_strategy/2026-08-12_search_surface_wiring_plan.md" },
+  { feature = "browser-history import that matches ours", consumer = "mere:design_docs/mere_docs/implementation_strategy/2026-08-12_search_surface_wiring_plan.md" },
+]
 source = "catalog-join-2026-10-18 mere-w3c-review-2026-07-05#S1"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-7"]
@@ -7370,6 +7448,9 @@ relation = "implements"
 depth = "full"
 verdict = "open"
 measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 7, css_props_total = 7 }
+unlocks = [
+  { feature = "the games wing's live voxel faces and per-part rotation", consumer = "isocosm:mesocosm/design_docs/2026-09-11_orthographic_voxel_presentation_plan.md L1 and L5" },
+]
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-15"]
@@ -7522,6 +7603,11 @@ relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
 measured = { on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", wpt_pass = 13, wpt_total = 26, files_all_pass = 3, files = 17, idl_named = 1, idl_total = 1 }
+unlocks = [
+  { feature = "dwell_ms filled honestly", consumer = "mere:design_docs/mere_docs/implementation_strategy/2026-08-12_search_surface_wiring_plan.md" },
+  { feature = "page-load timing", consumer = "mere:design_docs/mere_docs/implementation_strategy/2026-08-12_search_surface_wiring_plan.md" },
+  { feature = "the timing half of the capture record", consumer = "mere:design_docs/mere_docs/implementation_strategy/2026-08-12_search_surface_wiring_plan.md" },
+]
 source = "catalog-join-2026-10-18 mere-w3c-review-2026-07-05#S12"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-5"]
@@ -7534,6 +7620,10 @@ relation = "implements"
 depth = "partial"
 verdict = "PULL"
 measured = { on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", wpt_pass = 10, wpt_total = 1711, files_all_pass = 2, files = 445, idl_named = 0, idl_total = 12 }
+unlocks = [
+  { feature = "muniment's OPFS lane hosted by our own engine", consumer = "mere:design_docs/eidetic_docs/implementation_strategy/2026-08-22_redb_opfs_feasibility_plan.md" },
+  { feature = "browsing memory in the browser", consumer = "mere:design_docs/eidetic_docs/implementation_strategy/2026-08-22_redb_opfs_feasibility_plan.md" },
+]
 source = "catalog-join-2026-10-18 mere-w3c-review-2026-07-05#C9"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-9"]
@@ -7608,6 +7698,11 @@ relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
 measured = { on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", wpt_pass = 70, wpt_total = 115, files_all_pass = 38, files = 72, idl_named = 3, idl_total = 3 }
+unlocks = [
+  { feature = "dwell_ms filled honestly", consumer = "mere:design_docs/mere_docs/implementation_strategy/2026-08-12_search_surface_wiring_plan.md" },
+  { feature = "page-load timing", consumer = "mere:design_docs/mere_docs/implementation_strategy/2026-08-12_search_surface_wiring_plan.md" },
+  { feature = "the timing half of the capture record", consumer = "mere:design_docs/mere_docs/implementation_strategy/2026-08-12_search_surface_wiring_plan.md" },
+]
 source = "catalog-join-2026-10-18 mere-w3c-review-2026-07-05#S12"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-5"]
@@ -7694,6 +7789,11 @@ relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
 measured = { on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", wpt_pass = 6214, wpt_total = 6672, files_all_pass = 27, files = 161, idl_named = 1, idl_total = 1 }
+unlocks = [
+  { feature = "web clip as a real gesture", consumer = "mere:design_docs/mere_docs/implementation_strategy/2026-06-26_capture_provenance_consent_plan.md" },
+  { feature = "quote with provenance", consumer = "mere:design_docs/mere_docs/implementation_strategy/2026-06-26_capture_provenance_consent_plan.md" },
+  { feature = "find-in-page highlighting", consumer = "mere:design_docs/mere_docs/implementation_strategy/2026-06-26_capture_provenance_consent_plan.md" },
+]
 source = "catalog-join-2026-10-18 mere-w3c-review-2026-07-05#C6"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-2"]
@@ -7832,6 +7932,10 @@ relation = "implements"
 depth = "partial"
 verdict = "open"
 measured = { on = "2026-09-29", engine = "vano", scope = "WPT from the 2026-09-29 disk-mode census (82 shards); IDL and CSS names in genet components/ at 6f00922", wpt_pass = 107, wpt_total = 9652, files_all_pass = 6, files = 274, idl_named = 2, idl_total = 3 }
+unlocks = [
+  { feature = "pack signing and sealing in the browser lane", consumer = "genet:design_docs/2026-09-07_standards_to_features_ledger.md row 10" },
+  { feature = "personae in a web host", consumer = "genet:design_docs/2026-09-07_standards_to_features_ledger.md row 10" },
+]
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-10"]
@@ -7875,6 +7979,13 @@ relation = "implements"
 depth = "full"
 verdict = "ADOPT"
 evidence = "shared text boundaries; official break fixtures pass"
+unlocks = [
+  { feature = "mere's search tokenizer", consumer = "mere:design_docs/mere_docs/implementation_strategy/2026-08-12_search_surface_wiring_plan.md" },
+  { feature = "find-in-page word mode", consumer = "mere:design_docs/mere_docs/implementation_strategy/2026-08-12_search_surface_wiring_plan.md" },
+  { feature = "esp lexical features", consumer = "mere:design_docs/mere_docs/implementation_strategy/2026-08-12_search_surface_wiring_plan.md" },
+  { feature = "reading time", consumer = "mere:design_docs/mere_docs/implementation_strategy/2026-08-12_search_surface_wiring_plan.md" },
+  { feature = "selection by word", consumer = "mere:design_docs/mere_docs/implementation_strategy/2026-08-12_search_surface_wiring_plan.md" },
+]
 source = "atlas-2026-10-18 mere-w3c-review-2026-07-05#S9"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-1"]
@@ -7906,6 +8017,11 @@ relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
 evidence = "bounded name and description algorithm"
+unlocks = [
+  { feature = "field-weighted recall index from the reader's model", consumer = "genet:design_docs/2026-09-07_standards_to_features_ledger.md row 3" },
+  { feature = "agent-driven pages", consumer = "genet:design_docs/2026-09-07_standards_to_features_ledger.md row 3" },
+  { feature = "the inspector as a test oracle", consumer = "genet:design_docs/2026-09-07_standards_to_features_ledger.md row 3" },
+]
 source = "atlas-2026-10-18 mere-w3c-review-2026-07-05#C10"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-3"]
@@ -7916,6 +8032,11 @@ repo = "genet"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
+unlocks = [
+  { feature = "field-weighted recall index from the reader's model", consumer = "genet:design_docs/2026-09-07_standards_to_features_ledger.md row 3" },
+  { feature = "agent-driven pages", consumer = "genet:design_docs/2026-09-07_standards_to_features_ledger.md row 3" },
+  { feature = "the inspector as a test oracle", consumer = "genet:design_docs/2026-09-07_standards_to_features_ledger.md row 3" },
+]
 source = "genet-ledger-2026-09-07 mere-survey-2026-08-24#7.53 mere-w3c-review-2026-07-05#C10"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-3"]
@@ -7927,6 +8048,11 @@ repo = "genet"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
+unlocks = [
+  { feature = "dwell and interesting-interaction signals for frecency", consumer = "mere:design_docs/mere_docs/implementation_strategy/2026-08-12_search_surface_wiring_plan.md" },
+  { feature = "lazy media", consumer = "mere:design_docs/mere_docs/implementation_strategy/2026-08-12_search_surface_wiring_plan.md" },
+  { feature = "attention receipts for the trail pane", consumer = "mere:design_docs/mere_docs/implementation_strategy/2026-08-12_search_surface_wiring_plan.md" },
+]
 source = "genet-ledger-2026-09-07 mere-w3c-review-2026-07-05#C8"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-4"]
@@ -7938,6 +8064,10 @@ repo = "genet"
 relation = "should"
 depth = "none"
 verdict = "ADOPT"
+unlocks = [
+  { feature = "muniment's OPFS lane hosted by our own engine", consumer = "mere:design_docs/eidetic_docs/implementation_strategy/2026-08-22_redb_opfs_feasibility_plan.md" },
+  { feature = "browsing memory in the browser", consumer = "mere:design_docs/eidetic_docs/implementation_strategy/2026-08-22_redb_opfs_feasibility_plan.md" },
+]
 source = "genet-ledger-2026-09-07 mere-w3c-review-2026-07-05#C9"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-9"]
@@ -7949,6 +8079,9 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
+unlocks = [
+  { feature = "mere-linked-data ingest straight from visited pages", consumer = "genet:design_docs/2026-09-07_standards_to_features_ledger.md row 13" },
+]
 source = "genet-ledger-2026-09-07 mere-survey-2026-08-24#7.44"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-13"]
@@ -7960,6 +8093,9 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
+unlocks = [
+  { feature = "mere-linked-data ingest straight from visited pages", consumer = "genet:design_docs/2026-09-07_standards_to_features_ledger.md row 13" },
+]
 source = "genet-ledger-2026-09-07 mere-survey-2026-08-24#7.45"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-13"]
