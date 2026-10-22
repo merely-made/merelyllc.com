@@ -10,11 +10,15 @@ use std::time::{SystemTime, UNIX_EPOCH};
 use serde::{Deserialize, Serialize};
 
 use crate::repositories::AuthorityError;
-use crate::specs::{Catalog, Depth, SpecRegistry};
+use crate::specs::{Catalog, Depth, SpecRegistry, Unlock};
 
 pub const BROWSER_SPECS_PATH: &str = "content/spec-catalogs/browser-specs.json";
 /// Ruling D4: a claim not verified for this long is reported stale.
 pub const STALE_AFTER_DAYS: i64 = 90;
+/// A spec with more normative references than this (the catalog's 90th
+/// percentile; HTML has 139) is an umbrella, so its references are not read
+/// as prerequisites of its features. Hand-written `requires` always count.
+pub const BROAD_REFERENCE_LIMIT: usize = 25;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
@@ -23,6 +27,8 @@ pub struct CatalogSnapshot {
     pub version: String,
     pub fetched_on: String,
     pub license: String,
+    #[serde(default)]
+    pub references_source: Option<String>,
     pub spec: Vec<CatalogSpec>,
 }
 
@@ -39,6 +45,9 @@ pub struct CatalogSpec {
     pub standing: String,
     #[serde(default)]
     pub test_paths: Vec<String>,
+    /// Normative references, as registry or catalog ids.
+    #[serde(default)]
+    pub references: Vec<String>,
 }
 
 impl CatalogSnapshot {
@@ -68,6 +77,25 @@ pub struct Coverage {
     pub depth_without_suite: Vec<ClaimRef>,
     /// Specs with a known suite that no claim has measured.
     pub suite_unmeasured: Vec<SuiteGap>,
+    /// Claims short of `full` whose gap holds back a named feature, directly or
+    /// as a prerequisite of another spec the same repository claims.
+    pub cues: Vec<Cue>,
+}
+
+#[derive(Clone, Debug, Serialize)]
+pub struct Cue {
+    pub spec: String,
+    pub repo: String,
+    pub crate_name: Option<String>,
+    pub depth: &'static str,
+    pub unlocks: Vec<Unlock>,
+    pub prerequisite_for: Vec<Dependent>,
+}
+
+#[derive(Clone, Debug, Serialize)]
+pub struct Dependent {
+    pub spec: String,
+    pub unlocks: Vec<Unlock>,
 }
 
 #[derive(Clone, Debug, Serialize)]
@@ -220,6 +248,55 @@ impl Coverage {
             })
             .collect();
 
+        let mut requires: BTreeMap<&str, BTreeSet<&str>> = BTreeMap::new();
+        for spec in catalog
+            .spec
+            .iter()
+            .filter(|spec| spec.references.len() <= BROAD_REFERENCE_LIMIT)
+        {
+            requires
+                .entry(spec.shortname.as_str())
+                .or_default()
+                .extend(spec.references.iter().map(String::as_str));
+        }
+        for spec in &registry.spec {
+            requires
+                .entry(spec.id.as_str())
+                .or_default()
+                .extend(spec.requires.iter().map(String::as_str));
+        }
+        let cues = registry
+            .claim
+            .iter()
+            .filter(|claim| claim.depth != Depth::Full)
+            .filter_map(|claim| {
+                let mut prerequisite_for: Vec<Dependent> = registry
+                    .claim
+                    .iter()
+                    .filter(|other| other.repo == claim.repo && other.spec != claim.spec)
+                    .filter(|other| !other.unlocks.is_empty())
+                    .filter(|other| {
+                        requires
+                            .get(other.spec.as_str())
+                            .is_some_and(|set| set.contains(claim.spec.as_str()))
+                    })
+                    .map(|other| Dependent {
+                        spec: other.spec.clone(),
+                        unlocks: other.unlocks.clone(),
+                    })
+                    .collect();
+                prerequisite_for.dedup_by(|a, b| a.spec == b.spec);
+                (!claim.unlocks.is_empty() || !prerequisite_for.is_empty()).then(|| Cue {
+                    spec: claim.spec.clone(),
+                    repo: claim.repo.clone(),
+                    crate_name: claim.crate_name.clone(),
+                    depth: claim.depth.as_str(),
+                    unlocks: claim.unlocks.clone(),
+                    prerequisite_for,
+                })
+            })
+            .collect();
+
         Self {
             on: on.to_owned(),
             catalog_version: catalog.version.clone(),
@@ -231,6 +308,7 @@ impl Coverage {
             stale,
             depth_without_suite,
             suite_unmeasured,
+            cues,
         }
     }
 }
@@ -302,6 +380,35 @@ impl fmt::Display for Coverage {
         )?;
         for gap in &self.suite_unmeasured {
             writeln!(f, "  {:<40} {}", gap.spec, gap.suite)?;
+        }
+        writeln!(
+            f,
+            "\ncues (a gap and what closing it unlocks): {}",
+            self.cues.len()
+        )?;
+        for cue in &self.cues {
+            let crate_name = cue
+                .crate_name
+                .as_deref()
+                .map(|c| format!(" / {c}"))
+                .unwrap_or_default();
+            writeln!(
+                f,
+                "  {} / {}{crate_name} ({})",
+                cue.spec, cue.repo, cue.depth
+            )?;
+            for unlock in &cue.unlocks {
+                writeln!(f, "    unlocks {} ({})", unlock.feature, unlock.consumer)?;
+            }
+            for dependent in &cue.prerequisite_for {
+                for unlock in &dependent.unlocks {
+                    writeln!(
+                        f,
+                        "    via {}: {} ({})",
+                        dependent.spec, unlock.feature, unlock.consumer
+                    )?;
+                }
+            }
         }
         Ok(())
     }

@@ -107,6 +107,7 @@ designator = "…"             # version, RFC number or pin, when the id doesn't
 catalog = "browser-specs"    # browser-specs | w3c-tr | rfc | none
 url = "https://fetch.spec.whatwg.org/"
 suite = "wpt:fetch"          # wpt:<paths> | test262[:dir] | <name> | reference:<peer> | none
+requires = ["streams"]       # optional: prerequisites beyond the catalog's normative references
 
 [[claim]]
 spec = "fetch"
@@ -118,6 +119,7 @@ verdict = "ADOPT"            # ADOPT | PULL | SKIP | WATCH (survey grammar) | sp
 evidence = "one line: a test path, a file, or the reason"
 measured = { on = "2026-09-29", scope = "…", engine = "vano", wpt_pass = 2016, wpt_total = 5901 }
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-7"]
+unlocks = [{ feature = "page identity from canonical URLs", consumer = "mere: search surface wiring plan" }]
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -154,6 +156,11 @@ source graded parts of a bundle differently. `open` means nobody has ruled yet.
 6. Consumers supply relevance and dependency cues (R4), not a work order or
    an admission gate.
 7. Evidence is a test, a file or a copied count, never a receipt file.
+8. An `unlocks` entry names a feature and the consumer that exists, or the
+   plan that names it (genet's ledger rule for its "Unlocks" column).
+   Prerequisites are spec-level facts: the catalog snapshot carries each
+   browser spec's normative references (from webref), and `requires` adds
+   edges the catalogs don't know.
 
 ## Seed (R0)
 
@@ -384,3 +391,27 @@ whole survey. They do not determine what is worth doing at that later moment.
 R5 describes how a catalog refresh could work. Monthly site publication was
 accepted as a design direction; neither an installed schedule nor a future
 assignment follows from these notes.
+
+## Cues: prerequisites and unlocks (2026-10-21)
+
+Mark, 2026-10-21, on how findings should read: "telling yourself to do work in
+the future is less appealing than telling them what's wrong and what would
+improve the stack." A claim already says what is wrong; `unlocks` says what
+would improve, and `requires` connects gaps to the features they hold back.
+
+- The snapshot gained each catalog spec's normative references from
+  w3c/webref `ed/refs` at 14d0b42 (MIT): 501 of 623 specs. They are mapped to
+  catalog and registry ids, without RFC 2119 and RFC 8174, which define
+  requirement keywords, not prerequisites.
+- 16 specs carry hand-written `requires`, for example LXMF needs Reticulum and
+  ActivityPub needs Activity Streams and JSON-LD.
+- 32 claims carry `unlocks`. They are seeded from genet's ledger column, with
+  its consumers on record, and from the atlas's strong fits, each naming an
+  existing consumer.
+- `authority specs` lists cues. A cue is a claim short of `full` whose gap
+  holds back a named feature, either directly or as a prerequisite of another
+  spec the same repository claims. The first report lists 63.
+- A spec with more than 25 normative references is an umbrella; 25 is the
+  catalog's 90th percentile, and HTML has 139. Its references aren't read as
+  prerequisites of its features, which would otherwise put CSP and Mixed
+  Content behind HTML workers. Hand-written `requires` always count.

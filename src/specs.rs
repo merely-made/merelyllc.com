@@ -9,6 +9,7 @@ use std::path::Path;
 use serde::{Deserialize, Serialize};
 
 use crate::repositories::{Authority, AuthorityError};
+use crate::spec_coverage::CatalogSnapshot;
 
 pub const SPEC_REGISTRY_PATH: &str = "content/specs.toml";
 pub const SPEC_REGISTRY_SCHEMA: &str = "mer3ly.spec-registry/v1";
@@ -50,6 +51,10 @@ pub struct SpecRecord {
     #[serde(default)]
     pub url: Option<String>,
     pub suite: String,
+    /// Specs this one depends on, beyond the normative references the catalog
+    /// snapshot already carries. The report derives "prerequisite for" from both.
+    #[serde(default)]
+    pub requires: Vec<String>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -68,8 +73,20 @@ pub struct ClaimRecord {
     pub measured: Option<Measured>,
     #[serde(default)]
     pub consumers: Vec<String>,
+    /// What closing this claim's gap would make possible.
+    #[serde(default)]
+    pub unlocks: Vec<Unlock>,
     pub source: String,
     pub verified_on: String,
+}
+
+/// A feature a claim makes possible, and the consumer that exists or the plan
+/// that names it (genet's ledger rule for its "Unlocks" column).
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(deny_unknown_fields)]
+pub struct Unlock {
+    pub feature: String,
+    pub consumer: String,
 }
 
 /// Counts copied from a measurement, never estimated; each block carries its date
@@ -206,7 +223,11 @@ impl SpecRegistry {
         })
     }
 
-    pub fn validate(&self, authority: &Authority) -> Result<(), Vec<String>> {
+    pub fn validate(
+        &self,
+        authority: &Authority,
+        catalog: &CatalogSnapshot,
+    ) -> Result<(), Vec<String>> {
         let mut errors = Vec::new();
         if self.schema != SPEC_REGISTRY_SCHEMA {
             errors.push(format!(
@@ -262,6 +283,25 @@ impl SpecRegistry {
             }
         }
 
+        let known: BTreeSet<&str> = ids
+            .iter()
+            .copied()
+            .chain(catalog.spec.iter().map(|spec| spec.shortname.as_str()))
+            .collect();
+        for spec in &self.spec {
+            let mut seen = BTreeSet::new();
+            for required in &spec.requires {
+                if required == &spec.id {
+                    errors.push(format!("spec {} requires itself", spec.id));
+                } else if !known.contains(required.as_str()) {
+                    errors.push(format!("spec {} requires unknown spec {required}", spec.id));
+                }
+                if !seen.insert(required) {
+                    errors.push(format!("spec {} requires {required} twice", spec.id));
+                }
+            }
+        }
+
         let mut keys = BTreeSet::new();
         let mut claimed = BTreeSet::new();
         for claim in &self.claim {
@@ -297,6 +337,13 @@ impl SpecRegistry {
             }
             if claim.consumers.iter().any(|c| c.trim().is_empty()) {
                 errors.push(format!("{label} has an empty consumer"));
+            }
+            for unlock in &claim.unlocks {
+                if unlock.feature.trim().is_empty() || unlock.consumer.trim().is_empty() {
+                    errors.push(format!(
+                        "{label} has an unlock without a feature and a consumer"
+                    ));
+                }
             }
             check_date(
                 &format!("{label} verified_on"),

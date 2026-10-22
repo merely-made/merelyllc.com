@@ -1,6 +1,7 @@
 use std::path::{Path, PathBuf};
 
 use mer3ly_site::repositories::Authority;
+use mer3ly_site::spec_coverage::CatalogSnapshot;
 use mer3ly_site::specs::SpecRegistry;
 
 fn workspace_root() -> PathBuf {
@@ -9,6 +10,10 @@ fn workspace_root() -> PathBuf {
 
 fn authority() -> Authority {
     Authority::load(workspace_root()).expect("authority loads")
+}
+
+fn catalog() -> CatalogSnapshot {
+    CatalogSnapshot::load(workspace_root()).expect("catalog snapshot loads")
 }
 
 const VALID: &str = r#"
@@ -54,7 +59,10 @@ verified_on = "2026-10-18"
 fn errors(text: &str) -> Vec<String> {
     match SpecRegistry::parse(text) {
         Err(error) => vec![error.to_string()],
-        Ok(registry) => registry.validate(&authority()).err().unwrap_or_default(),
+        Ok(registry) => registry
+            .validate(&authority(), &catalog())
+            .err()
+            .unwrap_or_default(),
     }
 }
 
@@ -69,7 +77,9 @@ fn assert_rejected(text: &str, needle: &str) {
 #[test]
 fn committed_registry_validates() {
     let registry = SpecRegistry::load(workspace_root()).expect("registry parses");
-    registry.validate(&authority()).expect("registry validates");
+    registry
+        .validate(&authority(), &catalog())
+        .expect("registry validates");
     assert!(registry.spec.len() > 300);
     assert!(registry.repositories().contains("genet"));
 }
@@ -162,4 +172,49 @@ fn bad_verified_on_is_rejected() {
         &text,
         "claim fetch / genet / netfetcher verified_on is not YYYY-MM-DD",
     );
+}
+
+#[test]
+fn requires_must_resolve_and_not_loop() {
+    let with = |requires: &str| {
+        VALID.replace(
+            "suite = \"wpt:fetch\"",
+            &format!("suite = \"wpt:fetch\"\nrequires = {requires}"),
+        )
+    };
+    assert_eq!(
+        errors(&with(r#"["rfc9846", "streams"]"#)),
+        Vec::<String>::new()
+    );
+    assert_rejected(
+        &with(r#"["nowhere"]"#),
+        "spec fetch requires unknown spec nowhere",
+    );
+    assert_rejected(&with(r#"["fetch"]"#), "spec fetch requires itself");
+    assert_rejected(
+        &with(r#"["rfc9846", "rfc9846"]"#),
+        "spec fetch requires rfc9846 twice",
+    );
+}
+
+#[test]
+fn unlock_needs_a_feature_and_a_consumer() {
+    let with = |unlock: &str| {
+        VALID.replacen(
+            "source = \"test\"",
+            &format!("unlocks = [{unlock}]\nsource = \"test\""),
+            1,
+        )
+    };
+    assert_eq!(
+        errors(&with(
+            r#"{ feature = "streamed extraction", consumer = "mere: capture plan" }"#
+        )),
+        Vec::<String>::new()
+    );
+    assert_rejected(
+        &with(r#"{ feature = "streamed extraction", consumer = "" }"#),
+        "claim fetch / genet / netfetcher has an unlock without a feature and a consumer",
+    );
+    assert_rejected(&with(r#"{ feature = "x" }"#), "missing field `consumer`");
 }
