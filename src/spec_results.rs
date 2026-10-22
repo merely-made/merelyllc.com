@@ -120,18 +120,19 @@ pub fn sources(registry: &SpecRegistry, authority: &Authority) -> Result<Vec<Sou
     }
 }
 
-/// Fill each `measured_from` claim's `measured` block from the cached files.
+/// Fill each `measured_from` claim's `measured` block from the cached files,
+/// returning what was fetched for each such claim, by claim index.
 pub fn apply(
     registry: &mut SpecRegistry,
     authority: &Authority,
     root: impl AsRef<Path>,
-) -> Result<(), Vec<String>> {
+) -> Result<BTreeMap<usize, Fetched>, Vec<String>> {
     let root = root.as_ref();
     let wanted = sources(registry, authority)?;
     let manifest: SourcesManifest = match fs::read_to_string(root.join(SOURCES_FILE)) {
         Ok(text) => serde_json::from_str(&text)
             .map_err(|error| vec![format!("parse {SOURCES_FILE}: {error}")])?,
-        Err(_) if wanted.is_empty() => return Ok(()),
+        Err(_) if wanted.is_empty() => return Ok(BTreeMap::new()),
         Err(error) => {
             return Err(vec![format!(
                 "read {SOURCES_FILE}: {error}; run scripts/refresh-spec-results.py"
@@ -162,7 +163,8 @@ pub fn apply(
         .iter()
         .map(|record| (record.id.as_str(), record))
         .collect();
-    for claim in &mut registry.claim {
+    let mut provenance = BTreeMap::new();
+    for (index, claim) in registry.claim.iter_mut().enumerate() {
         let Some(from) = claim.measured_from.clone() else {
             continue;
         };
@@ -178,6 +180,7 @@ pub fn apply(
             path: from.path.clone(),
         };
         let entry = fetched[&source];
+        provenance.insert(index, entry.clone());
         let label = format!("claim {} / {}", claim.spec, claim.repo);
         let file = root.join(RESULTS_DIR).join(&repo).join(&from.path);
         let text = match fs::read_to_string(&file) {
@@ -212,7 +215,7 @@ pub fn apply(
         }
     }
     if errors.is_empty() {
-        Ok(())
+        Ok(provenance)
     } else {
         Err(errors)
     }

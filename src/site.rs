@@ -23,6 +23,7 @@ pub enum ActivePage {
     Devices,
     Radio,
     Repositories,
+    Roadmap,
 }
 
 pub struct PageMetadata {
@@ -162,6 +163,15 @@ pub fn shell(active: ActivePage, main: SiteView) -> SiteView {
     } else {
         vec![("href", "/repos/"), ("class", "nav-link")]
     };
+    let roadmap_attrs = if active == ActivePage::Roadmap {
+        vec![
+            ("href", "/roadmap/"),
+            ("aria-current", "page"),
+            ("class", "nav-link is-current"),
+        ]
+    } else {
+        vec![("href", "/roadmap/"), ("class", "nav-link")]
+    };
 
     let header = element(
         "header",
@@ -195,6 +205,11 @@ pub fn shell(active: ActivePage, main: SiteView) -> SiteView {
                             "li",
                             &[],
                             vec![element("a", &repositories_attrs, vec![txt("repositories")])],
+                        ),
+                        element(
+                            "li",
+                            &[],
+                            vec![element("a", &roadmap_attrs, vec![txt("roadmap")])],
                         ),
                         element(
                             "li",

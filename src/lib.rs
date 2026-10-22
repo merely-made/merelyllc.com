@@ -14,5 +14,6 @@ pub mod retinue_traces;
 pub mod site;
 pub mod spec_coverage;
 pub mod spec_results;
+pub mod spec_roadmap;
 pub mod specs;
 pub mod viewer;
