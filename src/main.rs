@@ -6,11 +6,12 @@ use mer3ly_site::discovery::{ROBOTS_TXT, sitemap};
 use mer3ly_site::host_dataset::{HOST_DATASET_FILE, repository_host_dataset_json};
 use mer3ly_site::host_history::HOST_HISTORY_FILE;
 use mer3ly_site::message_path;
-use mer3ly_site::pages::{devices, home, projects, radio, repositories};
+use mer3ly_site::pages::{devices, home, projects, radio, repositories, roadmap};
 use mer3ly_site::projection_proof::ProjectionProof;
 use mer3ly_site::repositories::PublicSiteData;
 use mer3ly_site::retinue_traces::TraceSet;
 use mer3ly_site::site::{DEVICE_CSS, SITE_CSS};
+use mer3ly_site::spec_roadmap::ROADMAP_DATASET_FILE;
 
 const FAVICON: &[u8] = include_bytes!("../assets/favicon.svg");
 const GRAPH_SANDBOX_MOUNT: &[u8] = include_bytes!("../assets/graph-sandbox-mount.js");
@@ -68,6 +69,17 @@ fn build_site(output: &Path) -> std::io::Result<()> {
         fs::remove_dir_all(viewer_assets)?;
     }
     fs::create_dir_all(output.join("repos"))?;
+    fs::create_dir_all(output.join("roadmap"))?;
+    let roadmap_page = roadmap::page(root).map_err(std::io::Error::other)?;
+    fs::write(
+        output.join("roadmap").join("index.html"),
+        &roadmap_page.html,
+    )?;
+    fs::write(
+        output.join(ROADMAP_DATASET_FILE),
+        &roadmap_page.dataset_json,
+    )?;
+    fs::write(output.join(roadmap::MOUNT_FILE), roadmap::MOUNT_SCRIPT)?;
     fs::create_dir_all(output.join("projects"))?;
     fs::create_dir_all(output.join("devices"))?;
     fs::write(output.join("index.html"), home::document_for(&data))?;

@@ -3729,3 +3729,38 @@ tbody tr:last-child td {
 .graph-sandbox-frozen details { margin: .75rem 0; }
 .graph-sandbox-frozen summary { cursor: pointer; min-height: 44px; padding: .6rem 0; font-weight: 600; }
 .graph-sandbox-frozen summary:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+
+/* /roadmap/: each feature with its chain of specs. Depth reads in color:
+   complete specs in lake, specs nobody has started muted. */
+.roadmap-feature {
+  margin-top: 30px;
+}
+
+.roadmap-feature h3 {
+  margin: 0 0 4px;
+}
+
+.roadmap-feature-meta,
+.roadmap-role {
+  color: var(--muted);
+  font: 500 0.66rem/1.5 var(--font-mono);
+}
+
+.roadmap-feature-meta {
+  margin: 0 0 12px;
+}
+
+.roadmap-feature tr[data-depth="full"] td {
+  color: var(--lake);
+}
+
+.roadmap-feature tr[data-depth="none"] td,
+.roadmap-feature tr[data-depth="planned"] td {
+  color: var(--muted);
+}
+
+.roadmap-sources {
+  display: grid;
+  gap: 6px;
+  padding-left: 1.2em;
+}

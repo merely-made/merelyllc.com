@@ -24,6 +24,7 @@ use crate::retinue_traces::{TRACE_DIRECTORY, TraceSet};
 use crate::site::{
     DEFAULT_SOCIAL_IMAGE_ALT, DEFAULT_SOCIAL_IMAGE_URL, ORGANIZATION_ID, WEBSITE_ID,
 };
+use crate::spec_roadmap::ROADMAP_DATASET_FILE;
 
 const RECEIPT_SCHEMA: &str = "mer3ly.public-artifact-receipt/v1";
 const GRAPH_SCHEMA: &str = "mer3ly.repo-graph/v1";
@@ -50,6 +51,9 @@ const BASE_FILES: &[&str] = &[
     HOST_DATASET_FILE,
     HOST_HISTORY_FILE,
     "repos/index.html",
+    "roadmap/index.html",
+    ROADMAP_DATASET_FILE,
+    crate::pages::roadmap::MOUNT_FILE,
     "robots.txt",
     "sitemap.xml",
     "site.css",
@@ -347,6 +351,30 @@ pub fn validate_public_artifact(
     if let Err(error) = validate_repository_host_dataset(&host_dataset, authority, metadata) {
         errors.push(error);
     }
+    // The roadmap is rebuilt from the same registry and fetched results; the
+    // published bytes must match exactly.
+    let roadmap = read_text(artifact_root, "roadmap/index.html", &mut errors);
+    let roadmap_dataset = read_text(artifact_root, ROADMAP_DATASET_FILE, &mut errors);
+    match crate::pages::roadmap::page(source_root) {
+        Ok(expected) => {
+            if roadmap != expected.html {
+                errors.push("roadmap page differs from the registry it is built from".to_owned());
+            }
+            if roadmap_dataset != expected.dataset_json {
+                errors
+                    .push("roadmap dataset differs from the registry it is built from".to_owned());
+            }
+        }
+        Err(error) => errors.push(format!("roadmap could not be rebuilt: {error}")),
+    }
+    validate_fixed_metadata(
+        &roadmap,
+        "https://merelyllc.com/roadmap/",
+        DEFAULT_SOCIAL_IMAGE_URL,
+        "image/jpeg",
+        DEFAULT_SOCIAL_IMAGE_ALT,
+        &mut errors,
+    );
     let device_index = read_text(artifact_root, "devices/index.html", &mut errors);
     let robots = read_text(artifact_root, "robots.txt", &mut errors);
     let sitemap = read_text(artifact_root, "sitemap.xml", &mut errors);

@@ -451,3 +451,35 @@ shows the progress as we make commits", and chose to begin with the counts.
 - `tests/m14_spec_results.rs` has five tests: the committed cache applies, a
   fixture overlay carries its source commit, a missing source fails, sources
   resolve through the ledger, and `measured` with `measured_from` is rejected.
+
+## The roadmap page (2026-10-22)
+
+`/roadmap/` reads the registry as features. Each `unlocks` entry is a feature.
+Its chain is the claim that unlocks it plus that spec's prerequisites claimed by
+the same repository, under the same rule as the cues. The page and its data are
+rebuilt on every deploy from `content/specs.toml` and the fetched results, so a
+commit that changes a claim or a suite's results file shows on the next deploy.
+
+- **First view.** A frozen scene: the roadmap graph solved by the repository
+  graph's solver (`mer3ly_repo_graph`) and read by graphshell-client's frozen
+  reader, styled like `/repos/`'s. Below it sit the features with their chains
+  (depth, counts, registry lines, consumer plans), every count with its source
+  commit, and coverage by repository.
+- **Live map.** Graphshell's qualified viewer, loaded on request where WebGPU
+  exists, draws `spec-roadmap-dataset.json`, a `scenomise.host-dataset/v1`
+  envelope. Repositories claim specs, specs require specs and specs unlock
+  features. `detail_url` and `source_url` link each node to its spec document,
+  its registry line or the plan that names it.
+- **Sizes.** First seed: 46 features on 64 specs, of which 5 are complete; 119
+  scene items and 194 relationships. The page is about 18 KB gzip, under
+  Ruling 157's 64 KiB first-load cap, and the dataset about 15 KB.
+- **Publication rule.** Links follow the artifact gate. GitHub links go only to
+  catalogued merely-made repositories, so bole's and didgeridoo's source commits
+  show as text. `validate-artifact` rebuilds the page and dataset and requires
+  the published bytes to match.
+- **Code.** `src/spec_roadmap.rs` (model, scene, dataset),
+  `src/pages/roadmap.rs`, `assets/roadmap-mount.js`, and
+  `tests/m15_roadmap.rs` (three tests).
+- **Out of scope:** a history slider over registry checkpoints, like
+  `/repos/`'s v2 history, and the live viewer's generic "project" wording in its
+  inspector.

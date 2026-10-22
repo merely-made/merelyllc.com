@@ -248,23 +248,7 @@ impl Coverage {
             })
             .collect();
 
-        let mut requires: BTreeMap<&str, BTreeSet<&str>> = BTreeMap::new();
-        for spec in catalog
-            .spec
-            .iter()
-            .filter(|spec| spec.references.len() <= BROAD_REFERENCE_LIMIT)
-        {
-            requires
-                .entry(spec.shortname.as_str())
-                .or_default()
-                .extend(spec.references.iter().map(String::as_str));
-        }
-        for spec in &registry.spec {
-            requires
-                .entry(spec.id.as_str())
-                .or_default()
-                .extend(spec.requires.iter().map(String::as_str));
-        }
+        let requires = requirements(registry, catalog);
         let cues = registry
             .claim
             .iter()
@@ -311,6 +295,33 @@ impl Coverage {
             cues,
         }
     }
+}
+
+/// Each spec's prerequisites: the catalog's normative references, except for
+/// umbrella specs (see [`BROAD_REFERENCE_LIMIT`]), plus the registry's own
+/// `requires`.
+pub fn requirements<'a>(
+    registry: &'a SpecRegistry,
+    catalog: &'a CatalogSnapshot,
+) -> BTreeMap<&'a str, BTreeSet<&'a str>> {
+    let mut requires: BTreeMap<&str, BTreeSet<&str>> = BTreeMap::new();
+    for spec in catalog
+        .spec
+        .iter()
+        .filter(|spec| spec.references.len() <= BROAD_REFERENCE_LIMIT)
+    {
+        requires
+            .entry(spec.shortname.as_str())
+            .or_default()
+            .extend(spec.references.iter().map(String::as_str));
+    }
+    for spec in &registry.spec {
+        requires
+            .entry(spec.id.as_str())
+            .or_default()
+            .extend(spec.requires.iter().map(String::as_str));
+    }
+    requires
 }
 
 impl fmt::Display for Coverage {

@@ -14,6 +14,7 @@ pub fn canonical_urls_from_authority_and_devices(
     let mut urls = vec![
         "https://merelyllc.com/".to_owned(),
         "https://merelyllc.com/repos/".to_owned(),
+        "https://merelyllc.com/roadmap/".to_owned(),
         "https://merelyllc.com/radio.html".to_owned(),
         "https://merelyllc.com/devices/".to_owned(),
     ];
