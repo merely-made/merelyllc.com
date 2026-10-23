@@ -3270,10 +3270,10 @@ mod tests {
                 owner.master_public_key().to_bytes(),
                 subject,
                 insigne::delegation::CapabilityScope {
-                    domain: graphshell::admission::GRAPHSHELL_DOMAIN.into(),
+                    domain: graphshell_host::admission::GRAPHSHELL_DOMAIN.into(),
                     resource: FT7_NETWORK.0.to_vec(),
-                    path_prefix: graphshell::admission::PROJECTION_SERVICE.into(),
-                    actions: [graphshell::admission::CONNECT_ACTION.to_owned()]
+                    path_prefix: graphshell_host::admission::PROJECTION_SERVICE.into(),
+                    actions: [graphshell_host::admission::CONNECT_ACTION.to_owned()]
                         .into_iter()
                         .collect(),
                 },
@@ -3290,7 +3290,7 @@ mod tests {
     fn ft7_policy() -> notochord::LocalNetworkPolicy {
         use personae::IdentityProvider as _;
 
-        graphshell::carrier::projection_policy(
+        graphshell_host::carrier::projection_policy(
             FT7_NETWORK,
             vec![notochord::TrustedRoot {
                 authority: FT7_ROOT_AUTHORITY,
@@ -3304,14 +3304,14 @@ mod tests {
     #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
     async fn one_matrix_mapping_survives_local_remote_and_frozen_realizations() {
         use chirograph::Carrier;
-        use graphshell::admission::open_session;
-        use graphshell::carrier::accept_projection_session;
-        use graphshell::lifecycle::SessionAuthority;
-        use graphshell::network_carrier::{
+        use graphshell_client::{RetainedEndpointSession, frozen::FrozenScene};
+        use graphshell_host::admission::open_session;
+        use graphshell_host::carrier::accept_projection_session;
+        use graphshell_host::lifecycle::SessionAuthority;
+        use graphshell_host::network_carrier::{
             CarrierRuntime, NetworkCarrier, dial_projection_session, projection_binding,
         };
-        use graphshell::session_notices::serve_admitted_session_notifying;
-        use graphshell_client::{RetainedEndpointSession, frozen::FrozenScene};
+        use graphshell_host::session_notices::serve_admitted_session_notifying;
         use notochord::{RevocationLedger, TrafficClass};
         use personae::IdentityProvider as _;
         use std::sync::RwLock;

@@ -3,7 +3,7 @@
 //!
 //! The Mere profile's proof used to carry its own copies of this stack logic in
 //! JavaScript: a replay of `SceneTrace`, BLAKE3, a lossless JSON reader and a
-//! mirror of `edit_history::History`. They retire into this session, which the
+//! mirror of `backstep::History`. They retire into this session, which the
 //! page reaches through the site's existing graph Wasm on first interaction.
 //!
 //! - Opening runs [`read_portable_projection`]'s checks unchanged: chirograph
@@ -12,7 +12,7 @@
 //!   the scene's epoch must be the authority generation (Ruling 132), and the
 //!   trace deserializes through scenotime with its chain checked.
 //! - Replay is `SceneTrace::snapshot_at`.
-//! - Position, undo, redo and truncate-on-commit are `edit_history::History`
+//! - Position, undo, redo and truncate-on-commit are `backstep::History`
 //!   over a `SceneTrace` (Ruling 133). The step bound is host policy (Ruling
 //!   15), refused here rather than capped.
 //! - The epoch and generation leave as decimal strings: they exceed 2^53.
@@ -26,7 +26,7 @@
 //! The JavaScript keeps rendering, controls, labels from the host dataset, and
 //! the share link's text.
 
-use edit_history::History;
+use backstep::History;
 use scenotime::{SceneOp, SceneTrace, TraceStep};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
