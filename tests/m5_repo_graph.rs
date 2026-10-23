@@ -278,14 +278,20 @@ fn graph_assets_and_responsive_styles_are_bounded() {
     // (opt-level "z", fat LTO) and the runtime 452,481 B, against 437,734 B
     // and about 458,400 B before the session moved in. The bounds keep about
     // 30 KiB of headroom each.
+    //
+    // On 2026-10-23 the move to mere a6d44855 (the eidetic aa94fe22 cohort)
+    // grew the scene crates the module links (scenomise, scenograph, the new
+    // hest, seiche, chirograph, cartography) with the crate set unchanged: the
+    // module measured 692,148 B gzip and the runtime about 714,200 B. The
+    // ceilings rose to 705 and 730 KiB ("705 / 730 KiB"), the same headroom.
     let wasm = gzip(GRAPH_WASM);
     let runtime = gzip(GRAPH_SANDBOX.as_bytes()) + gzip(GRAPH_GLUE.as_bytes()) + wasm;
     assert!(
-        wasm < 450 * 1024,
+        wasm < 705 * 1024,
         "graph + physics + portable projection Wasm is {wasm} bytes gzip"
     );
     assert!(
-        runtime < 475 * 1024,
+        runtime < 730 * 1024,
         "graph + physics + portable projection runtime is {runtime} bytes gzip"
     );
 

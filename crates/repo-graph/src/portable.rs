@@ -225,6 +225,9 @@ fn solve_capture(
             points: vec![from_point, to_point],
             kind: Some(edge.kind.clone()),
             weight: Some(1.0),
+            link_key: None,
+            marks: Default::default(),
+            strength: None,
         });
     }
     scene.relations.extend(relations);
