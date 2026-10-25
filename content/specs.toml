@@ -4730,7 +4730,7 @@ repo = "mere"
 relation = "implements"
 depth = "full"
 verdict = "open"
-evidence = "mere-linked-data via oxjsonld"
+evidence = "mere-rdf via oxjsonld"
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -4841,7 +4841,7 @@ relation = "should"
 depth = "none"
 verdict = "open"
 unlocks = [
-  { feature = "signed, content-addressed graph exports with insigne keys", consumer = "mere-linked-data's byte-stable normalized-dataset promise" },
+  { feature = "signed, content-addressed graph exports with insigne keys", consumer = "mere-rdf's byte-stable normalized-dataset promise" },
 ]
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
@@ -8080,7 +8080,7 @@ relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
 unlocks = [
-  { feature = "mere-linked-data ingest straight from visited pages", consumer = "genet:design_docs/2026-09-07_standards_to_features_ledger.md row 13" },
+  { feature = "mere-rdf ingest straight from visited pages", consumer = "genet:design_docs/2026-09-07_standards_to_features_ledger.md row 13" },
 ]
 source = "genet-ledger-2026-09-07 mere-survey-2026-08-24#7.44"
 verified_on = "2026-10-18"
@@ -8094,7 +8094,7 @@ relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
 unlocks = [
-  { feature = "mere-linked-data ingest straight from visited pages", consumer = "genet:design_docs/2026-09-07_standards_to_features_ledger.md row 13" },
+  { feature = "mere-rdf ingest straight from visited pages", consumer = "genet:design_docs/2026-09-07_standards_to_features_ledger.md row 13" },
 ]
 source = "genet-ledger-2026-09-07 mere-survey-2026-08-24#7.45"
 verified_on = "2026-10-18"
