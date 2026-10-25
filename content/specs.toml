@@ -10520,7 +10520,7 @@ crate = "graphshell-mcp"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-evidence = "crates/graphshell/graphshell-mcp (mere e515f9bb6): stdio server over an admitted Graphshell route, revision 2026-07-28 plus the initialize-era revisions (Claude Code 2.1.308 probes server/discover, then initializes); server/discover, resources/list|read, tools/list|call; no prompts, completion, subscriptions, tasks or HTTP; tests/server.rs drives it against a mock route, not yet a live resident. The Alembic consume half stays unbuilt."
+evidence = "crates/graphshell/graphshell-mcp (mere e515f9bb6): stdio server over an admitted Graphshell route, revision 2026-07-28 plus the initialize-era revisions (Claude Code 2.1.308 probes server/discover, then initializes); server/discover, resources/list|read, tools/list|call; no prompts, completion, subscriptions, tasks or HTTP; tests/server.rs drives it against a mock route, and ports/djinn/src/resident_mere/tests/mcp.rs (mere fb3e1224b) serves it over djinn's real mere route; the socket path and a model-driven session are unrun. The Alembic consume half stays unbuilt."
 source = "mere-mcp-native-graph-plan-2026-10-25"
 verified_on = "2026-10-25"
 
