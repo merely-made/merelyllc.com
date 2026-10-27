@@ -9,4 +9,4 @@ const server=createServer(async(req,res)=>{try{const u=new URL(req.url,'http://l
 await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 const base=`http://127.0.0.1:${server.address().port}`;
 const browser=await chromium.launch({headless:false,args:browserArguments({headless:false,softwareGpu:true})});
-try { const result=await checkQualifiedViewer(browser,base,out); await writeFile(path.join(out,'capture-suite.json'),JSON.stringify({browser:browser.version(),fixture:'retained R9 authority with this checkout's viewer assets; see source-binding.json',result},null,2)); console.log(JSON.stringify(result)); } finally { await browser.close(); await new Promise(resolve=>server.close(resolve)); }
+try { const result=await checkQualifiedViewer(browser,base,out); await writeFile(path.join(out,'capture-suite.json'),JSON.stringify({browser:browser.version(),fixture:'retained R9 authority with viewer assets from this checkout; see source-binding.json',result},null,2)); console.log(JSON.stringify(result)); } finally { await browser.close(); await new Promise(resolve=>server.close(resolve)); }
