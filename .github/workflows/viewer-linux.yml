@@ -1,7 +1,7 @@
 name: Diagnose viewer Linux rendering
 on:
   push:
-    branches: [main, codex/site-viewer-linux]
+    branches: [codex/site-viewer-linux]
     paths:
       - '.github/workflows/viewer-linux.yml'
       - 'scripts/*viewer*.mjs'
