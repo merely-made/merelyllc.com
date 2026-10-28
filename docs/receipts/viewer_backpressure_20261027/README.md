@@ -24,7 +24,9 @@ frame acceptance.
 
 The browser regression delays quality-map delivery by five seconds, requires
 bounded pending downloads and resumed progress, and observes Rust unmapping the
-completed counters. The full viewer suite runs separately without injected delay.
+completed counters. The full viewer suite runs separately without injected delay on the generated
+site pages in `tests/fixtures/viewer-site-20261027`; all thirteen cases pass.
+The historical fixture remains unchanged for the dedicated regression.
 The source-bound qualification record names the exact package hashes, browser,
 run and results. Linux Chromium with SwiftShader is software-GPU browser evidence;
 it does not establish physical GPU or Windows acceptance.
@@ -32,3 +34,7 @@ it does not establish physical GPU or Windows acceptance.
 The site builder's stale Mere revision was separately replaced with its exact
 history-rewrite twin (`d20eb555` to `9bba595c`); their source trees are identical.
 No dependency package versions were changed by that pin repair.
+
+Accepted run: [40625364082](https://github.com/merely-made/merelyllc.com/actions/runs/40625364082).
+The native site suite passes 110 tests. The Wasm gzip6 size is 3,280,694 bytes
+against the unchanged 3,407,872-byte limit.
