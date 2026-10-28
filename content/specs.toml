@@ -7449,7 +7449,7 @@ depth = "full"
 verdict = "open"
 measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 7, css_props_total = 7 }
 unlocks = [
-  { feature = "the games wing's live voxel faces and per-part rotation", consumer = "isocosm:mesocosm/design_docs/2026-09-11_orthographic_voxel_presentation_plan.md L1 and L5" },
+  { feature = "the games wing's live voxel faces and per-part rotation", consumer = "isocosm:mesocosm/design_docs/2026-10-28_orthographic_voxel_presentation_plan.md L1 and L5" },
 ]
 source = "catalog-join-2026-10-18"
 verified_on = "2026-10-18"
