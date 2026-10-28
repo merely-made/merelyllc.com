@@ -44,6 +44,7 @@ jobs:
             'runtime': json.loads(Path('assets/graphshell/provenance.json').read_text()),
             'asset_source': 'this checkout; served-inputs.json binds exact bytes',
           }, indent=2))
+      - run: xvfb-run --auto-servernum node scripts/diagnose-viewer-quality.mjs
       - run: xvfb-run --auto-servernum node scripts/diagnose-viewer-capture.mjs
         env:
           DEBUG: pw:browser
