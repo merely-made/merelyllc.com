@@ -256,7 +256,7 @@ packages_status = "none-detected"
 actions_workflows = 1
 old_owner_files = 2
 old_owner_manifests = 0
-local_locator = "repos/retinue"
+local_locator = "repos/murm"
 source_aliases = ["mark-ik/retinue"]
 
 [[migration]]
