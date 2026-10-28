@@ -12,11 +12,11 @@ parser.add_argument('--out-dir', type=Path, required=True)
 parser.add_argument('--wasm-bindgen', default='wasm-bindgen')
 args = parser.parse_args()
 source = args.source.resolve()
-runtime = '56859e30292405e682f28f3841b76e4f141acf73'
+runtime = '14b91e3df2e239924bdb3d7b88a58d00f40871ae'
 assert not subprocess.check_output(['git', 'status', '--porcelain'], cwd=source).strip(), 'source must be clean'
 changed = subprocess.check_output(['git', 'diff', '--name-only', runtime, 'HEAD'], cwd=source, text=True).splitlines()
 assert all(name.startswith(('design_docs/', 'docs/', 'ports/graphshell/docs/', 'support/doc-audit/')) for name in changed), 'runtime differs from qualified source'
-compiler = Path(subprocess.check_output(['rustup', 'which', '--toolchain', '1.99.1', 'rustc'], text=True).strip()).parent
+compiler = Path(subprocess.check_output(['rustup', 'which', '--toolchain', '1.99.0', 'rustc'], text=True).strip()).parent
 # Preserve the pinned web workspace's target flags when adding public paths.
 # CARGO_ENCODED_RUSTFLAGS replaces, rather than extends, configured rustflags.
 flags = ['--cfg', 'getrandom_backend="wasm_js"', '-C', 'link-arg=-zstack-size=4194304',
