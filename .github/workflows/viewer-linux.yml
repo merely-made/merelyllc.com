@@ -7,6 +7,8 @@ on:
       - 'scripts/*viewer*.mjs'
       - 'scripts/browser-launch.mjs'
       - 'tests/fixtures/viewer-linux/**'
+      - 'tests/fixtures/viewer-site-20261027/**'
+      - 'scripts/prepare-viewer-linux.py'
       - 'assets/graphshell/**'
   workflow_dispatch:
 permissions:
@@ -23,31 +25,14 @@ jobs:
           cache: npm
       - run: npm ci --ignore-scripts
       - run: npx playwright install --with-deps chromium
-      - name: Prepare the source-bound reproduction
-        shell: python
-        run: |
-          from pathlib import Path
-          import hashlib,json,shutil
-          root=Path('.tmp/viewer-linux-site');(root/'repos').mkdir(parents=True)
-          shutil.copyfile('tests/fixtures/viewer-linux/repos.html',root/'repos/index.html')
-          shutil.copyfile('tests/fixtures/viewer-linux/history.json',root/'repository-host-history.json')
-          (root/'projects/org-profile').mkdir(parents=True)
-          shutil.copyfile('tests/fixtures/viewer-linux/org-profile.html',root/'projects/org-profile/index.html')
-          for name in ['site.css','graph-sandbox-mount.js','favicon.svg']:
-            shutil.copyfile('assets/'+name,root/name)
-          shutil.copytree('assets/graphshell',root/'graphshell/56d0cc1465a0')
-          manifest={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in root.rglob('*') if p.is_file()}
-          Path('.tmp/viewer-linux').mkdir()
-          Path('.tmp/viewer-linux/served-inputs.json').write_text(json.dumps(manifest,indent=2))
-          Path('.tmp/viewer-linux/source-binding.json').write_text(json.dumps({
-            'fixture': 'retained 2026-10-13 site authority; not current public-site content',
-            'runtime': json.loads(Path('assets/graphshell/provenance.json').read_text()),
-            'asset_source': 'this checkout; served-inputs.json binds exact bytes',
-          }, indent=2))
+      - name: Prepare source-bound regression and product pages
+        run: python3 scripts/prepare-viewer-linux.py
       - run: xvfb-run --auto-servernum node scripts/diagnose-viewer-quality.mjs
       - run: xvfb-run --auto-servernum node scripts/diagnose-viewer-capture.mjs
         env:
           DEBUG: pw:browser
+          MER3LY_VIEWER_FIXTURE_DIR: .tmp/viewer-current-site
+          MER3LY_VIEWER_FIXTURE_LABEL: site page built from b799b481; exact inputs in product-source-binding.json
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
         if: always()
         with:
