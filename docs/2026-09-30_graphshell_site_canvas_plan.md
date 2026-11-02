@@ -3143,7 +3143,7 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
     `mere/design_docs/mere_docs/design/2026-09-23_ambiance_design.md` §10;
     it separates selected subjects, inspected material, view retention,
     owner saving and held placement. The browser-sidecar proposal lives in
-    `turnstone/design_docs/2026-10-06_unusual_protocols_browser_plan.md` §6;
+    `turnstone/design_docs/archive_docs/2026-11-02/2026-10-06_unusual_protocols_browser_plan.md` §6;
     local/attached session authority and PWA/extension capabilities remain
     independent. Both preserve earlier rulings and label new choices as
     proposals. Native Turnstone implementation retains its existing owner.
