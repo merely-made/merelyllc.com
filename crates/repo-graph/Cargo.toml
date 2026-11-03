@@ -53,6 +53,12 @@ all = "warn"
 # 337,563 B brotli). Seiche ticks measured about 0.065 ms against 0.043 ms in a
 # browser, well inside a frame. wasm-opt shrinks raw bytes but grows both
 # compressed sizes, so it stays out.
+missing_errors_doc = "warn"
+missing_panics_doc = "warn"
+missing_safety_doc = "warn"
+undocumented_unsafe_blocks = "warn"
+too_many_lines = "warn"
+
 [profile.release]
 codegen-units = 1
 lto = "fat"
@@ -208,3 +214,10 @@ luggage = { git = "https://www.github.com/merely-made/eidetic.git", rev = "aa94f
 mere-proofs = { git = "https://www.github.com/merely-made/eidetic.git", rev = "aa94fe22eea29e9b54e01ed21e6991536ed4f208" }
 muniment = { git = "https://www.github.com/merely-made/eidetic.git", rev = "aa94fe22eea29e9b54e01ed21e6991536ed4f208" }
 stickleback = { git = "https://www.github.com/merely-made/eidetic.git", rev = "aa94fe22eea29e9b54e01ed21e6991536ed4f208" }
+
+[workspace.lints.clippy]
+missing_errors_doc = "warn"
+missing_panics_doc = "warn"
+missing_safety_doc = "warn"
+undocumented_unsafe_blocks = "warn"
+too_many_lines = "warn"
