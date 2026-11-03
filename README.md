@@ -118,3 +118,12 @@ Enable the commit checks with `prek install --allow-missing-config`; run
 `prek run --all-files` alongside the existing local gates. Check definitions
 live in `.pre-commit-config.yaml`, with source-size exclusions and exceptions
 in `line-ceiling.toml`. Shared house style and rollout: `mere/design_docs/mere_docs/implementation_strategy/2026-10-30_house_style_plan.md`.
+
+Dependency receiving (2026-11-03): the three Rust build roots follow Mere's
+source cut `f673d313`, Eidetic `1014cf4`, and the renamed Distillery supplier
+`6610858`. Native locked checks pass for all three roots; both browser clients
+also compile for wasm32, and the site library's 40 tests pass. Obsolete unused
+`command-menu` and Taffy patch rows were retired during the intake. Source and
+receiving evidence is coordinated in
+`mere/design_docs/mere_docs/implementation_strategy/2026-10-31_distillery_extraction_plan.md`.
+These source checks do not replace the Pages workflow's browser-smoke gate.
