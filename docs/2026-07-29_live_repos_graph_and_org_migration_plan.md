@@ -732,4 +732,4 @@ firmware index and generated trace/provenance bytes are unchanged; public
 links are projected onto the canonical home after verification. Existing
 headed viewer/deployment receipts retain their recorded sources. The family
 cutover and open implementation work are owned by
-`murm/design_docs/2026-10-13_murm_family_move_plan.md`.
+`murm/design_docs/2026-11-02_murm_family_move_plan.md`.

@@ -490,6 +490,8 @@ Put in two rounds after S8 was verified.
   (Recommended)".
 - **Ruling 38 (F8, CI):** "Add a wasm32 CI job (Recommended)".
 
+Current locator for the historical Murm source: `murm/design_docs/archive_docs/2026-11-02/2026-07-06_retinue_v0_plan.md`.
+
 ### Incident (2026-10-01): Python RNS source was read, against retinue's discipline
 
 *Corrected 2026-10-02 (Ruling 47):* the "discipline" quoted below was
@@ -918,6 +920,8 @@ vocabulary crate". What follows: `radio_hand::control` and `region` move into
 a new publishable crate, which radio-hand re-exports and postilion depends on.
 It is assessed first, needs a family name (the tier rule, with a crates.io
 check), and then publishes before postilion 0.2.0.
+
+Current locator for the historical Murm source: `murm/design_docs/archive_docs/2026-11-02/2026-08-30_wall_node_management_plan.md`.
 
 ### Rulings 92-95 (2026-10-03): Ruling 91 reopened, and the 1.5.6 pin
 
