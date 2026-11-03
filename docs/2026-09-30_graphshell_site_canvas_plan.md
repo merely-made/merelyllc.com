@@ -1174,7 +1174,7 @@ Assessment facts:
   takes it up at the next genet pin.
   *2026-10-05:* landed in genet as `37cf5d82db8` (local; genet's push waits on
   Mark), under genet's own rulings 1-3
-  (`genet/design_docs/2026-10-05_image_decode_feature_plan.md`):
+  (`genet/design_docs/archive_docs/2026-11-03/2026-10-05_image_decode_feature_plan.md`):
   - genet-livery decodes in one private place (`image_decode.rs`), behind a
     default-on `image-decode` feature;
   - all five genet crates that depend on genet-livery forward it.
