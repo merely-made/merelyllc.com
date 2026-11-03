@@ -702,6 +702,9 @@ Each answer was the recommended option.
 
 ### Rulings 62-63 (2026-10-02): where retinue records this batch
 
+Current archive for this completed batch:
+`murm/design_docs/archive_docs/2026-11-02/2026-10-02_node_link_lifecycle_plan.md`.
+
 - **Ruling 62, the plan's home.** Options: a new 0.2.0 link-lifecycle plan;
   fold it into retinue-sim's plan; put it into the wire compatibility plan.
   Mark: "New 0.2.0 link-lifecycle plan (Recommended)". Written as retinue's
