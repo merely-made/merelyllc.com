@@ -73,7 +73,8 @@ if (root) {
         if (controller.signal.aborted) return;
         surface.style.visibility = '';
         root.dataset.sandboxState = 'ready';
-        root.querySelector('[data-static-reading]').open = false;
+        const reading = root.querySelector('[data-static-reading]');
+        if (reading) reading.open = false;
         open.hidden = true;
         say('Live graph ready. The static reading below remains available.');
         viewer.scrollIntoView({block: 'nearest'});

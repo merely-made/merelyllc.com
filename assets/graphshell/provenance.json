@@ -1,15 +1,15 @@
 {
-  "runtime_source": "56859e30292405e682f28f3841b76e4f141acf73",
+  "runtime_source": "14b91e3df2e239924bdb3d7b88a58d00f40871ae",
   "files": {
     "viewer.js": "d36f0c879683b0f18e27d31b67162055fab268377ad04c2d0039f1aaf116419f",
     "mount.js": "88dafd9520fd2619aeef21aeacc183d49bf6e7f977155a3bc50c13a785913b13",
     "styles.css": "a0944b06a83a7249fc69239ecffc8cab543f7556ffc95f2446b33ce3b5cd0bfd",
-    "pkg/graphshell_web.js": "157c5c2574754fa552abe5930a7920143578ceba0c3d010936b8e008cb530c5a",
-    "pkg/graphshell_web_bg.wasm": "a6e094bca4e274bb9476e00051891178a7ec8509ef2ee71ddf883ea2e812215e"
+    "pkg/graphshell_web.js": "d05f60d85c8aca2779d181d73df953d8afc0a9cc0eb92709fcb171295f9b7e81",
+    "pkg/graphshell_web_bg.wasm": "cbe148bce26990274974a23bedcc6b32b80611deaa3b4766a2aac6e0568c255e"
   },
-  "build_source": "56859e30292405e682f28f3841b76e4f141acf73",
+  "build_source": "14b91e3df2e239924bdb3d7b88a58d00f40871ae",
   "build_adjustment": "Public diagnostic paths; preserve configured wasm_js backend and 4 MiB linear stack.",
-  "toolchain": "rustc 1.99.0 (b940084d7 2026-09-28); wasm-bindgen 0.2.129; viewer profile; no default features",
+  "toolchain": "rustc 1.99.0; wasm-bindgen 0.2.129; viewer profile; no default features",
   "rustflags": [
     "--cfg",
     "getrandom_backend=\"wasm_js\"",
@@ -17,7 +17,9 @@
     "link-arg=-zstack-size=4194304",
     "--remap-path-prefix=<build-host-home>=/build"
   ],
-  "acceptance_record": "docs/receipts/site_browsing_20261013/qualification.json",
-  "previous_published_runtime_source": "377a0e30c84e2059a945583833008e84ae045fce",
-  "runtime_adjustment": "Opt-in shared browsing presenter on current Mere main. Fresh package-bound acceptance required; no inherited runtime qualification."
+  "acceptance_record": "docs/receipts/viewer_backpressure_20261027/qualification.json",
+  "previous_published_runtime_source": "56859e30292405e682f28f3841b76e4f141acf73",
+  "runtime_adjustment": "Bound browser frame submissions by draining the previous curve-quality readbacks; original viewer dependency pins retained.",
+  "runtime_baseline": "56859e30292405e682f28f3841b76e4f141acf73",
+  "mapped_baseline": "0e360eacca7d71541a50f9f0f3a4f043ae39e3b6"
 }

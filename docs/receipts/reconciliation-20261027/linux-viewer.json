@@ -1,0 +1,22 @@
+{
+  "branch_head": "b6d235056ac4092441586e23f72a156e4e53b279",
+  "ci_run": "https://github.com/merely-made/merelyllc.com/actions/runs/40598476845",
+  "status": "gate_not_passed",
+  "cause": "Unchanged main viewer runtime panics: CurveQualityReadbackBacklog { limit: 256 }",
+  "uncaught_errors": [
+    "RuntimeError: unreachable"
+  ],
+  "completed_cases": {},
+  "main_source": "8cb22b986541487ffe33db77e5eb17902ebcfe2d",
+  "preserved_new_paths": [
+    ".github/workflows/viewer-linux.yml",
+    "scripts/diagnose-viewer-capture.mjs",
+    "scripts/diagnose-viewer-linux.mjs",
+    "tests/fixtures/viewer-linux/history.json",
+    "tests/fixtures/viewer-linux/org-profile.html",
+    "tests/fixtures/viewer-linux/repos.html"
+  ],
+  "runtime_modified": false,
+  "existing_browser_launch_capture_and_suite_modified": false,
+  "scope": "Retained diagnostic harness; current runtime acceptance remains gate_not_passed."
+}

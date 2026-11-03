@@ -1,0 +1,243 @@
+{
+  "browser": "156.0.8078.4",
+  "errors": [],
+  "initial": {
+    "state": "ready",
+    "now": 1633.800000000003,
+    "probe": {
+      "started": 38.30000000000291,
+      "submissions": 6,
+      "maps": 3,
+      "resolved": 1,
+      "rejected": 0,
+      "unmaps": 2,
+      "drained": 0,
+      "pending": 2,
+      "peak": 2,
+      "first": [
+        {
+          "n": 1,
+          "label": "",
+          "size": 32,
+          "at": 769.5,
+          "done": 773.1000000000058
+        },
+        {
+          "n": 2,
+          "label": "download",
+          "size": 32,
+          "at": 1570.800000000003
+        },
+        {
+          "n": 3,
+          "label": "download",
+          "size": 32,
+          "at": 1577.699999999997
+        }
+      ],
+      "last": [
+        {
+          "n": 1,
+          "label": "",
+          "size": 32,
+          "at": 769.5,
+          "done": 773.1000000000058
+        },
+        {
+          "n": 2,
+          "label": "download",
+          "size": 32,
+          "at": 1570.800000000003
+        },
+        {
+          "n": 3,
+          "label": "download",
+          "size": 32,
+          "at": 1577.699999999997
+        }
+      ],
+      "failures": [],
+      "devices": [
+        {
+          "reason": "destroyed",
+          "message": "Device was destroyed."
+        }
+      ],
+      "samples": []
+    }
+  },
+  "settled": {
+    "state": "ready",
+    "now": 41669.000000000015,
+    "probe": {
+      "started": 38.30000000000291,
+      "submissions": 21,
+      "maps": 9,
+      "resolved": 7,
+      "rejected": 0,
+      "unmaps": 11,
+      "drained": 6,
+      "pending": 2,
+      "peak": 2,
+      "first": [
+        {
+          "n": 1,
+          "label": "",
+          "size": 32,
+          "at": 769.5,
+          "done": 773.1000000000058
+        },
+        {
+          "n": 2,
+          "label": "download",
+          "size": 32,
+          "at": 1570.800000000003,
+          "done": 20194.5
+        },
+        {
+          "n": 3,
+          "label": "download",
+          "size": 32,
+          "at": 1577.699999999997,
+          "done": 20194.699999999997
+        },
+        {
+          "n": 4,
+          "label": "download",
+          "size": 32,
+          "at": 20201.699999999997,
+          "done": 27979.899999999994
+        },
+        {
+          "n": 5,
+          "label": "download",
+          "size": 32,
+          "at": 20203.300000000003,
+          "done": 27980
+        },
+        {
+          "n": 6,
+          "label": "download",
+          "size": 32,
+          "at": 27984.29999999999,
+          "done": 35804.5
+        },
+        {
+          "n": 7,
+          "label": "download",
+          "size": 32,
+          "at": 27985.899999999994,
+          "done": 35804.5
+        },
+        {
+          "n": 8,
+          "label": "download",
+          "size": 32,
+          "at": 35817
+        },
+        {
+          "n": 9,
+          "label": "download",
+          "size": 32,
+          "at": 35819.100000000006
+        }
+      ],
+      "last": [
+        {
+          "n": 1,
+          "label": "",
+          "size": 32,
+          "at": 769.5,
+          "done": 773.1000000000058
+        },
+        {
+          "n": 2,
+          "label": "download",
+          "size": 32,
+          "at": 1570.800000000003,
+          "done": 20194.5
+        },
+        {
+          "n": 3,
+          "label": "download",
+          "size": 32,
+          "at": 1577.699999999997,
+          "done": 20194.699999999997
+        },
+        {
+          "n": 4,
+          "label": "download",
+          "size": 32,
+          "at": 20201.699999999997,
+          "done": 27979.899999999994
+        },
+        {
+          "n": 5,
+          "label": "download",
+          "size": 32,
+          "at": 20203.300000000003,
+          "done": 27980
+        },
+        {
+          "n": 6,
+          "label": "download",
+          "size": 32,
+          "at": 27984.29999999999,
+          "done": 35804.5
+        },
+        {
+          "n": 7,
+          "label": "download",
+          "size": 32,
+          "at": 27985.899999999994,
+          "done": 35804.5
+        },
+        {
+          "n": 8,
+          "label": "download",
+          "size": 32,
+          "at": 35817
+        },
+        {
+          "n": 9,
+          "label": "download",
+          "size": 32,
+          "at": 35819.100000000006
+        }
+      ],
+      "failures": [],
+      "devices": [
+        {
+          "reason": "destroyed",
+          "message": "Device was destroyed."
+        }
+      ],
+      "samples": [
+        {
+          "at": 11607.600000000006,
+          "maps": 3,
+          "resolved": 1,
+          "pending": 2
+        },
+        {
+          "at": 21618.100000000006,
+          "maps": 5,
+          "resolved": 3,
+          "pending": 2
+        },
+        {
+          "at": 31621.399999999994,
+          "maps": 7,
+          "resolved": 5,
+          "pending": 2
+        },
+        {
+          "at": 41629.399999999994,
+          "maps": 9,
+          "resolved": 7,
+          "pending": 2
+        }
+      ]
+    }
+  }
+}

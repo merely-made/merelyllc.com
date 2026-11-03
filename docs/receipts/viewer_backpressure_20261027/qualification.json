@@ -1,0 +1,95 @@
+{
+  "schema": "viewer-backpressure-qualification/v1",
+  "site_test_source": "0781d3c6902c58684dee791323541784375b89ab",
+  "run": "https://github.com/merely-made/merelyllc.com/actions/runs/40625364082",
+  "result": "passed",
+  "runtime_source": "14b91e3df2e239924bdb3d7b88a58d00f40871ae",
+  "mere_main_merge": "b3c8ab1ddb4a5a576b32046517907b4039c5eb7f",
+  "runtime_files": {
+    "viewer.js": "d36f0c879683b0f18e27d31b67162055fab268377ad04c2d0039f1aaf116419f",
+    "mount.js": "88dafd9520fd2619aeef21aeacc183d49bf6e7f977155a3bc50c13a785913b13",
+    "styles.css": "a0944b06a83a7249fc69239ecffc8cab543f7556ffc95f2446b33ce3b5cd0bfd",
+    "pkg/graphshell_web.js": "d05f60d85c8aca2779d181d73df953d8afc0a9cc0eb92709fcb171295f9b7e81",
+    "pkg/graphshell_web_bg.wasm": "cbe148bce26990274974a23bedcc6b32b80611deaa3b4766a2aac6e0568c255e"
+  },
+  "compiler": "rustc 1.99.0; wasm-bindgen 0.2.129",
+  "browser": "156.0.8078.4",
+  "adapter": {
+    "vendor": "google",
+    "architecture": "swiftshader",
+    "device": "",
+    "description": ""
+  },
+  "cases": {
+    "desktop": "pass",
+    "no-script": "pass",
+    "mobile": "pass",
+    "tablet": "pass",
+    "touch-live": "pass",
+    "no-webgpu": "pass",
+    "no-adapter": "pass",
+    "legacy-share": "pass",
+    "startup-timeout": "pass",
+    "failure-forced": "pass",
+    "failure-history": "pass",
+    "failure-wasm": "pass",
+    "failure-stylesheet": "pass"
+  },
+  "delayed_readbacks": {
+    "injected_delay_ms": 5000,
+    "peak_pending": 2,
+    "maps": 9,
+    "resolved": 7,
+    "consumed_by_rust": 6,
+    "pending_at_active_animation_snapshot": 2,
+    "errors": []
+  },
+  "package_sizes": {
+    "graphshell_web_bg.wasm": {
+      "raw_bytes": 9242524,
+      "sha256": "cbe148bce26990274974a23bedcc6b32b80611deaa3b4766a2aac6e0568c255e",
+      "gzip6": 3280694,
+      "gzip9": 3266695,
+      "cap": 3407872
+    },
+    "graphshell_web.js": {
+      "raw_bytes": 126509,
+      "sha256": "d05f60d85c8aca2779d181d73df953d8afc0a9cc0eb92709fcb171295f9b7e81",
+      "gzip6": 19877,
+      "gzip9": 19321,
+      "cap": 20480
+    }
+  },
+  "native_site_tests": {
+    "passed": 110,
+    "failed": 0,
+    "ignored": 0,
+    "toolchain": "1.99.1"
+  },
+  "current_main_webgpu_check": "passed with Rust 1.99.1",
+  "site_artifact_validation": "passed; 21 repositories, 30 relationships, 14 history checkpoints",
+  "site_build_pin": {
+    "previous": "d20eb5555710ccba62220cf34434ca3f0ea659e7",
+    "replacement": "9bba595c26a4a71ad6a4906bf1073b827f199721",
+    "tree": "79e77b15e037ec9f6bf8c379b30b7b2d4933e308",
+    "tree_equal": true,
+    "source_changes": false
+  },
+  "raw_evidence_sha256": {
+    "viewer-progress.json": "99653bb550f68eb5a94994cce0751a14701159ac56f70acd98590a2033551a88",
+    "source-binding.json": "13ac8ab660b45551e0fec99fb2c4bb78f24062cdef9d735fe731685742675cb2",
+    "viewer-desktop-viewport.png": "f03afdf2f843258b633c6ddb24ff156012481e0a3bb10b4cdb7a99b8edcf2bb2",
+    "quality-readback-diagnosis.json": "1c53035623e8b3cda4ad1a0a3b8682e1196104f0cd348f2b87b67a4f50f82f2f",
+    "viewer-desktop.png": "43800af8d5449831e30416f34c1eca2d2b8805ae9b0b3f123995ca2125aaba47",
+    "viewer-desktop-component.png": "d9b5562c847547542e1c1d1da506266dbfd7f0a834257f52d2a6a65876631780",
+    "viewer-mobile-static.png": "a5803781c6db001ccb21b9e5a4c6e359ff3a9bf65a855828033bbc9ec2516aea",
+    "product-source-binding.json": "aa94a5fc1fdfbe874ff971849155aa58628b5966306089a23735c10187660f10",
+    "viewer-touch-live.png": "21c6a4cc9fe9bdace8c2dbf8b4f6a9d7beb18f1b04cf049fc7ad3ceb51a1bb83",
+    "capture-suite.json": "4fcb75d81ae487c9e901a2d40aa42ded82e068b2fde7ed0a74bbe30c97be47c8"
+  },
+  "limits": [
+    "Linux Chromium with SwiftShader; no Windows or physical-GPU acceptance claimed.",
+    "Regression uses preserved historical data; product suite uses pages generated from b799b481 and committed authority without refreshing metadata.",
+    "The delayed probe samples an active animation with two pending downloads; it proves bounded progress, not a zero-pending final-frame receipt."
+  ]
+}

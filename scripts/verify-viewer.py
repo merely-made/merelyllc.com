@@ -8,9 +8,9 @@ from pathlib import Path
 root = Path(__file__).resolve().parents[1]
 assets = root / 'assets/graphshell'
 provenance = json.loads((assets / 'provenance.json').read_text())
-assert provenance['runtime_source'] == '56859e30292405e682f28f3841b76e4f141acf73'
-assert provenance['files']['pkg/graphshell_web_bg.wasm'] == 'a6e094bca4e274bb9476e00051891178a7ec8509ef2ee71ddf883ea2e812215e'
-assert provenance['files']['pkg/graphshell_web.js'] == '157c5c2574754fa552abe5930a7920143578ceba0c3d010936b8e008cb530c5a'
+assert provenance['runtime_source'] == '14b91e3df2e239924bdb3d7b88a58d00f40871ae'
+assert provenance['files']['pkg/graphshell_web_bg.wasm'] == 'cbe148bce26990274974a23bedcc6b32b80611deaa3b4766a2aac6e0568c255e'
+assert provenance['files']['pkg/graphshell_web.js'] == 'd05f60d85c8aca2779d181d73df953d8afc0a9cc0eb92709fcb171295f9b7e81'
 for name, expected in provenance['files'].items():
     assert hashlib.sha256((assets / name).read_bytes()).hexdigest() == expected, name
 assert provenance['files']['pkg/graphshell_web_bg.wasm'] in (root / 'src/viewer.rs').read_text()
