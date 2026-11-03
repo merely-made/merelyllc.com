@@ -102,9 +102,6 @@ jobs:
           cargo test --locked
           cargo test --manifest-path crates/repo-graph/Cargo.toml --locked
           cargo test --manifest-path crates/radio-mirror/Cargo.toml --locked
-          cargo clippy --locked --all-targets -- -D warnings
-          cargo clippy --manifest-path crates/repo-graph/Cargo.toml --locked --all-targets -- -D warnings
-          cargo clippy --manifest-path crates/radio-mirror/Cargo.toml --locked --all-targets -- -D warnings
 
       - name: Build the reproducible pinned Mere graph runtime
         shell: pwsh

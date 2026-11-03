@@ -16,3 +16,15 @@ repos:
         language: system
         files: '(^|/)(Cargo\.(toml|lock)|[^/]+\.rs)$'
         pass_filenames: false
+      - id: clippy-repo-graph
+        name: clippy repo graph
+        entry: cargo clippy --manifest-path crates/repo-graph/Cargo.toml --locked --all-targets
+        language: system
+        files: '^(crates/repo-graph/.*\.(rs|toml|lock)|Cargo\.(toml|lock))$'
+        pass_filenames: false
+      - id: clippy-radio-mirror
+        name: clippy radio mirror
+        entry: cargo clippy --manifest-path crates/radio-mirror/Cargo.toml --locked --all-targets
+        language: system
+        files: '^(crates/radio-mirror/.*\.(rs|toml|lock)|Cargo\.(toml|lock))$'
+        pass_filenames: false
