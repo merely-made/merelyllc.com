@@ -17,7 +17,7 @@ antenna = "A complete antenna recipe and placement receipt are still open"
 enclosure = "No Merely enclosure file or mechanical receipt is approved"
 recipe_state = "Board-level development specimen. The published firmware ledger below records the exact V4 installation and recovery evidence; enclosure, power, antenna, and assembled-product work remain open."
 source_repository = "https://github.com/merely-made/murm"
-source_document = "design_docs/2026-07-31_retinue_small_plan.md"
+source_document = "design_docs/archive_docs/2026-11-02/2026-07-31_retinue_small_plan.md"
 
 [device.authorization]
 state = "open"
@@ -101,7 +101,7 @@ antenna = "A complete antenna recipe and placement receipt are still open"
 enclosure = "No Merely handheld enclosure file or mechanical receipt is approved"
 recipe_state = "Board-level development specimen. The published firmware ledger below records the Windows Retinue installation and recovery evidence; enclosure, power, antenna, and assembled-product work remain open."
 source_repository = "https://github.com/merely-made/murm"
-source_document = "design_docs/2026-07-31_retinue_small_plan.md"
+source_document = "design_docs/archive_docs/2026-11-02/2026-07-31_retinue_small_plan.md"
 
 [device.authorization]
 state = "open"
