@@ -20,12 +20,12 @@ crate-type = ["cdylib", "rlib"]
 # Reticulum-licensed `retinue` and `retinue-sim` crates must never enter this
 # resolve (Ruling 127), which `tests/pin.rs` checks against Cargo.lock.
 [dependencies]
-radio-mirror = { git = "https://www.github.com/merely-made/murm.git", rev = "ce53cebb2ae9f420de5a0dcaa5a9768c639910af" }
+radio-mirror = { git = "https://github.com/merely-made/murm.git", rev = "b49df894635bac95823284efee6c445885eaf62a" }
 
 # Build-time PNGs and status documents are native only, so the Wasm runtime
 # carries neither the PNG encoder nor a second JSON stack.
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-radio-mirror = { git = "https://www.github.com/merely-made/murm.git", rev = "ce53cebb2ae9f420de5a0dcaa5a9768c639910af", features = ["png"] }
+radio-mirror = { git = "https://github.com/merely-made/murm.git", rev = "b49df894635bac95823284efee6c445885eaf62a", features = ["png"] }
 serde_json = "1"
 
 [dev-dependencies]
@@ -55,8 +55,8 @@ rust-version = "1.97.1"
 # Root patches are not inherited from the imported Murm suppliers.
 [patch."https://github.com/merely-made/mere.git"]
 
-distillery = { git = "https://www.github.com/merely-made/distillery.git", rev = "52a4ca1704889638d8acb89f392ccb7e3c458c96" }
-mere-mesh = { git = "https://www.github.com/merely-made/distillery.git", rev = "52a4ca1704889638d8acb89f392ccb7e3c458c96" }
+distillery = { git = "https://www.github.com/merely-made/distillery.git", rev = "6346f087bb87d879cc9367dfb3d20fa00a8cbb9d" }
+mere-mesh = { git = "https://www.github.com/merely-made/distillery.git", rev = "6346f087bb87d879cc9367dfb3d20fa00a8cbb9d" }
 
 
 [patch.crates-io]
@@ -81,10 +81,10 @@ mere-proofs = { git = "https://www.github.com/merely-made/eidetic.git", rev = "7
 # Compatibility source keys for immutable suppliers published before the
 # repository rename. Targets and current direct dependencies use Murm.
 [patch."https://github.com/merely-made/retinue.git"]
-embedded-graphics = { git = "https://www.github.com/merely-made/murm.git", rev = "ce53cebb2ae9f420de5a0dcaa5a9768c639910af" }
-embedded-graphics-core = { git = "https://www.github.com/merely-made/murm.git", rev = "ce53cebb2ae9f420de5a0dcaa5a9768c639910af" }
-radio-face = { git = "https://www.github.com/merely-made/murm.git", rev = "ce53cebb2ae9f420de5a0dcaa5a9768c639910af" }
-radio-mirror = { git = "https://www.github.com/merely-made/murm.git", rev = "ce53cebb2ae9f420de5a0dcaa5a9768c639910af" }
+embedded-graphics = { git = "https://github.com/merely-made/murm.git", rev = "b49df894635bac95823284efee6c445885eaf62a" }
+embedded-graphics-core = { git = "https://github.com/merely-made/murm.git", rev = "b49df894635bac95823284efee6c445885eaf62a" }
+radio-face = { git = "https://github.com/merely-made/murm.git", rev = "b49df894635bac95823284efee6c445885eaf62a" }
+radio-mirror = { git = "https://github.com/merely-made/murm.git", rev = "b49df894635bac95823284efee6c445885eaf62a" }
 
 [workspace.lints.clippy]
 missing_errors_doc = "warn"
@@ -94,19 +94,11 @@ undocumented_unsafe_blocks = "warn"
 too_many_lines = "warn"
 
 [patch."https://github.com/merely-made/distillery.git"]
-esp = { git = "https://www.github.com/merely-made/distillery.git", rev = "52a4ca1704889638d8acb89f392ccb7e3c458c96" }
-esp-testkit = { git = "https://www.github.com/merely-made/distillery.git", rev = "52a4ca1704889638d8acb89f392ccb7e3c458c96" }
-distillery = { git = "https://www.github.com/merely-made/distillery.git", rev = "52a4ca1704889638d8acb89f392ccb7e3c458c96" }
-mere-mesh = { git = "https://www.github.com/merely-made/distillery.git", rev = "52a4ca1704889638d8acb89f392ccb7e3c458c96" }
+esp = { git = "https://www.github.com/merely-made/distillery.git", rev = "6346f087bb87d879cc9367dfb3d20fa00a8cbb9d" }
+esp-testkit = { git = "https://www.github.com/merely-made/distillery.git", rev = "6346f087bb87d879cc9367dfb3d20fa00a8cbb9d" }
+distillery = { git = "https://www.github.com/merely-made/distillery.git", rev = "6346f087bb87d879cc9367dfb3d20fa00a8cbb9d" }
+mere-mesh = { git = "https://www.github.com/merely-made/distillery.git", rev = "6346f087bb87d879cc9367dfb3d20fa00a8cbb9d" }
 
 [patch."https://github.com/merely-made/murm.git".murm-sync]
-git = "https://www.github.com/merely-made/murm.git"
-rev = "ce53cebb2ae9f420de5a0dcaa5a9768c639910af"
-
-[patch."https://github.com/merely-made/murm.git".radio-face]
-git = "https://www.github.com/merely-made/murm.git"
-rev = "ce53cebb2ae9f420de5a0dcaa5a9768c639910af"
-
-[patch."https://github.com/merely-made/murm.git".radio-mirror]
 git = "https://www.github.com/merely-made/murm.git"
 rev = "ce53cebb2ae9f420de5a0dcaa5a9768c639910af"
