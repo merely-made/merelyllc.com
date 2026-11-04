@@ -28,7 +28,7 @@ and deploys on main pushes, manual dispatch, and a daily schedule.
 - An authority binary validates content manifests, the metadata cache, and
   the exact Pages artifact (file set, structured data, absence of secrets
   and personal data), emitting SHA-256 JSON receipts.
-- Eight dated plans live in `docs/`. The first five cover the shipped site;
+- Dated plans live in `docs/`. The first five cover the shipped site;
   browser delivery, canvas stage unification, and
   [Graphshell as the site canvas](docs/2026-09-30_graphshell_site_canvas_plan.md)
   cover the replacement of the site-owned interactive surfaces.
@@ -127,3 +127,9 @@ also compile for wasm32, and the site library's 40 tests pass. Obsolete unused
 receiving evidence is coordinated in
 `mere/design_docs/mere_docs/implementation_strategy/2026-10-31_distillery_extraction_plan.md`.
 These source checks do not replace the Pages workflow's browser-smoke gate.
+
+- [Source splits, H7](docs/2026-11-03_source_splits_plan.md): 12 responsibility and fixture-group splits; landed, with owning gates and bounded receipts.
+
+For source moves, preserve the facade's cfg as well as the moved body's cfg.
+Keep public export paths and Wasm entry points stable, and review ordered
+validation/error collection alongside literal and type-layout comparisons.

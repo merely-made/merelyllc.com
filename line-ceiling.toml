@@ -34,60 +34,12 @@ path = "assets/site.css"
 reason = "Site. Existing source-size debt; a responsibility split must preserve existing entry points, fixture identity and module visibility."
 
 [[exception]]
-path = "crates/repo-graph/src/lib.rs"
-reason = "Src lib. Existing source-size debt; a responsibility split must preserve GraphInput, GraphNodeInput, GraphEdge and existing module visibility."
-
-[[exception]]
-path = "crates/repo-graph/src/portable.rs"
-reason = "The projection proof's portable artifacts (site canvas plan, Rulings 18 and 130-136). Existing source-size debt; a responsibility split must preserve PortableProjection, ProjectionReceipt, CapturedRelation and existing module visibility."
-
-[[exception]]
 path = "scripts/audit-publication-gate.ps1"
 reason = "Audit publication gate. Existing source-size debt; a responsibility split must preserve existing entry points, fixture identity and module visibility."
 
 [[exception]]
 path = "scripts/smoke-site.mjs"
 reason = "Smoke site. Existing source-size debt; a responsibility split must preserve existing entry points, fixture identity and module visibility."
-
-[[exception]]
-path = "src/artifact.rs"
-reason = "Artifact. Existing source-size debt; a responsibility split must preserve ArtifactReceipt, ArtifactFileReceipt, GraphPayload and existing module visibility."
-
-[[exception]]
-path = "src/devices.rs"
-reason = "Devices. Existing source-size debt; a responsibility split must preserve DeviceCatalog, DeviceRecord, DeviceStatus and existing module visibility."
-
-[[exception]]
-path = "src/pages/devices.rs"
-reason = "Devices. Existing source-size debt; a responsibility split must preserve existing entry points, fixture identity and module visibility."
-
-[[exception]]
-path = "src/pages/projects.rs"
-reason = "Projects. Existing source-size debt; a responsibility split must preserve existing entry points, fixture identity and module visibility."
-
-[[exception]]
-path = "src/pages/radio.rs"
-reason = "Radio. Existing source-size debt; a responsibility split must preserve LabState and existing module visibility."
-
-[[exception]]
-path = "src/pages/repositories.rs"
-reason = "Repositories. Existing source-size debt; a responsibility split must preserve RepositoriesPage and existing module visibility."
-
-[[exception]]
-path = "src/repositories.rs"
-reason = "Repositories. Existing source-size debt; a responsibility split must preserve RepositoryManifest, RepositoryRecord, ShowcaseManifest and existing module visibility."
-
-[[exception]]
-path = "src/repository_history.rs"
-reason = "Public repository-graph snapshots sourced from immutable Git authority checkpoints. Existing source-size debt; a responsibility split must preserve RepositoryGraph, RepositoryGraphNode, RepositoryGraphEdge and existing module visibility."
-
-[[exception]]
-path = "src/retinue_traces.rs"
-reason = "retinue-sim's generated route traces and face tracks, committed under content/retinue-traces/ with their provenance (Ruling 127). Existing source-size debt; a responsibility split must preserve Provenance, TraceProvenance, RouteTrace and existing module visibility."
-
-[[exception]]
-path = "src/site.rs"
-reason = "Site. Existing source-size debt; a responsibility split must preserve SiteView, ActivePage, PageMetadata and existing module visibility."
 
 [[exception]]
 path = "tests/fixtures/viewer-linux/repos.html"
