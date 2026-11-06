@@ -56,7 +56,7 @@ dependencies = [
 [[package]]
 name = "embedded-graphics"
 version = "0.8.2"
-source = "git+https://github.com/merely-made/murm.git?rev=0aaf4b16d3d265a7d0af09f083d622284f5846d7#0aaf4b16d3d265a7d0af09f083d622284f5846d7"
+source = "git+https://github.com/merely-made/murm.git?branch=main#e4d4e94d37988bfa2ecfab3d5d8dd63d4ff49ea2"
 dependencies = [
  "az",
  "byteorder",
@@ -68,7 +68,7 @@ dependencies = [
 [[package]]
 name = "embedded-graphics-core"
 version = "0.4.1"
-source = "git+https://github.com/merely-made/murm.git?rev=0aaf4b16d3d265a7d0af09f083d622284f5846d7#0aaf4b16d3d265a7d0af09f083d622284f5846d7"
+source = "git+https://github.com/merely-made/murm.git?branch=main#e4d4e94d37988bfa2ecfab3d5d8dd63d4ff49ea2"
 dependencies = [
  "az",
  "byteorder",
@@ -221,7 +221,7 @@ dependencies = [
 [[package]]
 name = "radio-face"
 version = "0.0.1"
-source = "git+https://github.com/merely-made/murm.git?rev=0aaf4b16d3d265a7d0af09f083d622284f5846d7#0aaf4b16d3d265a7d0af09f083d622284f5846d7"
+source = "git+https://github.com/merely-made/murm.git?branch=main#e4d4e94d37988bfa2ecfab3d5d8dd63d4ff49ea2"
 dependencies = [
  "embedded-graphics",
 ]
@@ -229,7 +229,7 @@ dependencies = [
 [[package]]
 name = "radio-mirror"
 version = "0.0.1"
-source = "git+https://github.com/merely-made/murm.git?rev=0aaf4b16d3d265a7d0af09f083d622284f5846d7#0aaf4b16d3d265a7d0af09f083d622284f5846d7"
+source = "git+https://github.com/merely-made/murm.git?branch=main#e4d4e94d37988bfa2ecfab3d5d8dd63d4ff49ea2"
 dependencies = [
  "embedded-graphics",
  "png",
@@ -421,78 +421,3 @@ name = "zmij"
 version = "1.0.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "29666d0abbfad1e3dc4dcf6144730dd3a3ab225bbbdac83319345b1b44ccfc1b"
-
-[[patch.unused]]
-name = "distillery"
-version = "0.0.1"
-source = "git+https://www.github.com/merely-made/distillery.git?rev=27fd59188c5036627aec0f85feaa59907c7ba53f#27fd59188c5036627aec0f85feaa59907c7ba53f"
-
-[[patch.unused]]
-name = "mere-mesh"
-version = "0.0.1"
-source = "git+https://www.github.com/merely-made/distillery.git?rev=27fd59188c5036627aec0f85feaa59907c7ba53f#27fd59188c5036627aec0f85feaa59907c7ba53f"
-
-[[patch.unused]]
-name = "distillery"
-version = "0.0.1"
-source = "git+https://www.github.com/merely-made/distillery.git?rev=27fd59188c5036627aec0f85feaa59907c7ba53f#27fd59188c5036627aec0f85feaa59907c7ba53f"
-
-[[patch.unused]]
-name = "esp"
-version = "0.1.0"
-source = "git+https://www.github.com/merely-made/distillery.git?rev=27fd59188c5036627aec0f85feaa59907c7ba53f#27fd59188c5036627aec0f85feaa59907c7ba53f"
-
-[[patch.unused]]
-name = "esp-testkit"
-version = "0.1.0"
-source = "git+https://www.github.com/merely-made/distillery.git?rev=27fd59188c5036627aec0f85feaa59907c7ba53f#27fd59188c5036627aec0f85feaa59907c7ba53f"
-
-[[patch.unused]]
-name = "mere-mesh"
-version = "0.0.1"
-source = "git+https://www.github.com/merely-made/distillery.git?rev=27fd59188c5036627aec0f85feaa59907c7ba53f#27fd59188c5036627aec0f85feaa59907c7ba53f"
-
-[[patch.unused]]
-name = "murm-sync"
-version = "0.0.1"
-source = "git+https://www.github.com/merely-made/murm.git?rev=0aaf4b16d3d265a7d0af09f083d622284f5846d7#0aaf4b16d3d265a7d0af09f083d622284f5846d7"
-
-[[patch.unused]]
-name = "chartulary"
-version = "0.3.0"
-source = "git+https://www.github.com/merely-made/eidetic.git?rev=5182e4e244c85b1008182a1be6b822f65a8efe50#5182e4e244c85b1008182a1be6b822f65a8efe50"
-
-[[patch.unused]]
-name = "eidetic"
-version = "0.0.3"
-source = "git+https://www.github.com/merely-made/eidetic.git?rev=5182e4e244c85b1008182a1be6b822f65a8efe50#5182e4e244c85b1008182a1be6b822f65a8efe50"
-
-[[patch.unused]]
-name = "hagiograph"
-version = "0.0.1"
-source = "git+https://www.github.com/merely-made/eidetic.git?rev=5182e4e244c85b1008182a1be6b822f65a8efe50#5182e4e244c85b1008182a1be6b822f65a8efe50"
-
-[[patch.unused]]
-name = "luggage"
-version = "0.1.0"
-source = "git+https://www.github.com/merely-made/eidetic.git?rev=5182e4e244c85b1008182a1be6b822f65a8efe50#5182e4e244c85b1008182a1be6b822f65a8efe50"
-
-[[patch.unused]]
-name = "mere-proofs"
-version = "0.1.0"
-source = "git+https://www.github.com/merely-made/eidetic.git?rev=5182e4e244c85b1008182a1be6b822f65a8efe50#5182e4e244c85b1008182a1be6b822f65a8efe50"
-
-[[patch.unused]]
-name = "muniment"
-version = "0.2.1"
-source = "git+https://www.github.com/merely-made/eidetic.git?rev=5182e4e244c85b1008182a1be6b822f65a8efe50#5182e4e244c85b1008182a1be6b822f65a8efe50"
-
-[[patch.unused]]
-name = "servitor"
-version = "0.0.3"
-source = "git+https://www.github.com/merely-made/eidetic.git?rev=5182e4e244c85b1008182a1be6b822f65a8efe50#5182e4e244c85b1008182a1be6b822f65a8efe50"
-
-[[patch.unused]]
-name = "stickleback"
-version = "0.2.0"
-source = "git+https://www.github.com/merely-made/eidetic.git?rev=5182e4e244c85b1008182a1be6b822f65a8efe50#5182e4e244c85b1008182a1be6b822f65a8efe50"

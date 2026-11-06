@@ -63,25 +63,9 @@ too_many_lines = "warn"
 
 [patch."https://github.com/merely-made/mere.git"]
 # Promoted sources shared with immutable older Mere suppliers.
-commons-spine = { git = "https://github.com/merely-made/gemot.git", branch = "main" }
-eidetic = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
-errand = { git = "https://github.com/merely-made/errand.git", branch = "main" }
-esp = { git = "https://github.com/merely-made/distillery.git", branch = "main" }
-gemot = { git = "https://github.com/merely-made/gemot.git", branch = "main" }
-hagiograph = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
-luggage = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
-mere-proofs = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
-mien = { git = "https://github.com/merely-made/gemot.git", branch = "main" }
-moothold = { git = "https://github.com/merely-made/gemot.git", branch = "main" }
-mooting = { git = "https://github.com/merely-made/gemot.git", branch = "main" }
-servitor = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
-stickleback = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
 chartulary = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
 muniment = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
 armillary = { git = "https://github.com/merely-made/armillary.git", branch = "main" }
-
-distillery = { git = "https://github.com/merely-made/distillery.git", branch = "main" }
-mere-mesh = { git = "https://github.com/merely-made/distillery.git", branch = "main" }
 
 [patch.crates-io]
 # Producer contracts use the same Mere source as the host.
@@ -89,50 +73,17 @@ sceno = { git = "https://github.com/merely-made/mere.git", branch = "main" }
 scenotime = { git = "https://github.com/merely-made/mere.git", branch = "main" }
 scenograph = { git = "https://github.com/merely-made/mere.git", branch = "main" }
 scenomise = { git = "https://github.com/merely-made/mere.git", branch = "main" }
-graphshell-endpoint = { git = "https://github.com/merely-made/mere.git", branch = "main" }
 incipit = { git = "https://github.com/merely-made/mere.git", branch = "main" }
 chirograph = { git = "https://github.com/merely-made/mere.git", branch = "main" }
 mere-surface-api = { git = "https://github.com/merely-made/mere.git", branch = "main" }
 workbench = { git = "https://github.com/merely-made/mere.git", branch = "main" }
 hest = { git = "https://github.com/merely-made/mere.git", branch = "main" }
 sprigging = { git = "https://github.com/merely-made/mere.git", branch = "main" }
-script-wire = { git = "https://github.com/merely-made/mere.git", branch = "main" }
-script-witgen = { git = "https://github.com/merely-made/mere.git", branch = "main" }
 # Promoted sources shared with immutable older Mere suppliers.
-commons-spine = { git = "https://github.com/merely-made/gemot.git", branch = "main" }
-dict-protocol = { git = "https://github.com/merely-made/errand.git", branch = "main" }
-errand = { git = "https://github.com/merely-made/errand.git", branch = "main" }
-esp = { git = "https://github.com/merely-made/distillery.git", branch = "main" }
-finger-protocol = { git = "https://github.com/merely-made/errand.git", branch = "main" }
-fsp-protocol = { git = "https://github.com/merely-made/errand.git", branch = "main" }
-gemini-protocol = { git = "https://github.com/merely-made/errand.git", branch = "main" }
-gemot = { git = "https://github.com/merely-made/gemot.git", branch = "main" }
-gopher-protocol = { git = "https://github.com/merely-made/errand.git", branch = "main" }
-guppy-protocol = { git = "https://github.com/merely-made/errand.git", branch = "main" }
-kepler-protocol = { git = "https://github.com/merely-made/errand.git", branch = "main" }
-mien = { git = "https://github.com/merely-made/gemot.git", branch = "main" }
-misfin = { git = "https://github.com/merely-made/errand.git", branch = "main" }
-moothold = { git = "https://github.com/merely-made/gemot.git", branch = "main" }
-mooting = { git = "https://github.com/merely-made/gemot.git", branch = "main" }
-nex-protocol = { git = "https://github.com/merely-made/errand.git", branch = "main" }
-scorpion-protocol = { git = "https://github.com/merely-made/errand.git", branch = "main" }
-scroll-protocol = { git = "https://github.com/merely-made/errand.git", branch = "main" }
-spartan-protocol = { git = "https://github.com/merely-made/errand.git", branch = "main" }
-text-protocol = { git = "https://github.com/merely-made/errand.git", branch = "main" }
 # Canonical promoted families; keep registry and Git consumers type-identical.
 armillary = { git = "https://github.com/merely-made/armillary.git", branch = "main" }
 chartulary = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
-eidetic = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
-hagiograph = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
-luggage = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
-servitor = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
-stickleback = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
-netrender_device = { git = "https://github.com/merely-made/netrender.git", branch = "main" }
-netrender-vello = { git = "https://github.com/mark-ik/vello", rev = "276b46648c08f3d2062e70559afa999842e1873c" }
-vello_encoding = { git = "https://github.com/mark-ik/vello", rev = "276b46648c08f3d2062e70559afa999842e1873c" }
-vello_shaders = { git = "https://github.com/mark-ik/vello", rev = "276b46648c08f3d2062e70559afa999842e1873c" }
 genet-scripted-dom = { git = "https://github.com/merely-made/genet.git", branch = "main", version = "=0.1.2" }
 layout-dom-api = { git = "https://github.com/merely-made/genet.git", branch = "main", version = "=0.1.1" }
 cambium = { git = "https://github.com/merely-made/mere.git", branch = "main" }
 muniment = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
-mere-proofs = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
