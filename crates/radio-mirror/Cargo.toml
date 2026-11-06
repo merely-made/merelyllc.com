@@ -20,12 +20,12 @@ crate-type = ["cdylib", "rlib"]
 # Reticulum-licensed `retinue` and `retinue-sim` crates must never enter this
 # resolve (Ruling 127), which `tests/pin.rs` checks against Cargo.lock.
 [dependencies]
-radio-mirror = { git = "https://github.com/merely-made/murm.git", rev = "0aaf4b16d3d265a7d0af09f083d622284f5846d7" }
+radio-mirror = { git = "https://github.com/merely-made/murm.git", branch = "main" }
 
 # Build-time PNGs and status documents are native only, so the Wasm runtime
 # carries neither the PNG encoder nor a second JSON stack.
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-radio-mirror = { git = "https://github.com/merely-made/murm.git", rev = "0aaf4b16d3d265a7d0af09f083d622284f5846d7", features = ["png"] }
+radio-mirror = { git = "https://github.com/merely-made/murm.git", branch = "main", features = ["png"] }
 serde_json = "1"
 
 [dev-dependencies]
@@ -55,27 +55,27 @@ rust-version = "1.97.1"
 # Root patches are not inherited from the imported Murm suppliers.
 [patch."https://github.com/merely-made/mere.git"]
 
-distillery = { git = "https://www.github.com/merely-made/distillery.git", rev = "27fd59188c5036627aec0f85feaa59907c7ba53f" }
-mere-mesh = { git = "https://www.github.com/merely-made/distillery.git", rev = "27fd59188c5036627aec0f85feaa59907c7ba53f" }
+distillery = { git = "https://github.com/merely-made/distillery.git", branch = "main" }
+mere-mesh = { git = "https://github.com/merely-made/distillery.git", branch = "main" }
 
 [patch.crates-io]
 # Canonical promoted families; keep registry and Git consumers type-identical.
-chartulary = { git = "https://www.github.com/merely-made/eidetic.git", rev = "5182e4e244c85b1008182a1be6b822f65a8efe50" }
-eidetic = { git = "https://www.github.com/merely-made/eidetic.git", rev = "5182e4e244c85b1008182a1be6b822f65a8efe50" }
-hagiograph = { git = "https://www.github.com/merely-made/eidetic.git", rev = "5182e4e244c85b1008182a1be6b822f65a8efe50" }
-luggage = { git = "https://www.github.com/merely-made/eidetic.git", rev = "5182e4e244c85b1008182a1be6b822f65a8efe50" }
-servitor = { git = "https://www.github.com/merely-made/eidetic.git", rev = "5182e4e244c85b1008182a1be6b822f65a8efe50" }
-stickleback = { git = "https://www.github.com/merely-made/eidetic.git", rev = "5182e4e244c85b1008182a1be6b822f65a8efe50" }
-muniment = { git = "https://www.github.com/merely-made/eidetic.git", rev = "5182e4e244c85b1008182a1be6b822f65a8efe50" }
-mere-proofs = { git = "https://www.github.com/merely-made/eidetic.git", rev = "5182e4e244c85b1008182a1be6b822f65a8efe50" }
+chartulary = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
+eidetic = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
+hagiograph = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
+luggage = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
+servitor = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
+stickleback = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
+muniment = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
+mere-proofs = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
 
 # Compatibility source keys for immutable suppliers published before the
 # repository rename. Targets and current direct dependencies use Murm.
 [patch."https://github.com/merely-made/retinue.git"]
-embedded-graphics = { git = "https://github.com/merely-made/murm.git", rev = "0aaf4b16d3d265a7d0af09f083d622284f5846d7" }
-embedded-graphics-core = { git = "https://github.com/merely-made/murm.git", rev = "0aaf4b16d3d265a7d0af09f083d622284f5846d7" }
-radio-face = { git = "https://github.com/merely-made/murm.git", rev = "0aaf4b16d3d265a7d0af09f083d622284f5846d7" }
-radio-mirror = { git = "https://github.com/merely-made/murm.git", rev = "0aaf4b16d3d265a7d0af09f083d622284f5846d7" }
+embedded-graphics = { git = "https://github.com/merely-made/murm.git", branch = "main" }
+embedded-graphics-core = { git = "https://github.com/merely-made/murm.git", branch = "main" }
+radio-face = { git = "https://github.com/merely-made/murm.git", branch = "main" }
+radio-mirror = { git = "https://github.com/merely-made/murm.git", branch = "main" }
 
 [workspace.lints.clippy]
 missing_errors_doc = "warn"
@@ -84,12 +84,3 @@ missing_safety_doc = "warn"
 undocumented_unsafe_blocks = "warn"
 too_many_lines = "warn"
 
-[patch."https://github.com/merely-made/distillery.git"]
-esp = { git = "https://www.github.com/merely-made/distillery.git", rev = "27fd59188c5036627aec0f85feaa59907c7ba53f" }
-esp-testkit = { git = "https://www.github.com/merely-made/distillery.git", rev = "27fd59188c5036627aec0f85feaa59907c7ba53f" }
-distillery = { git = "https://www.github.com/merely-made/distillery.git", rev = "27fd59188c5036627aec0f85feaa59907c7ba53f" }
-mere-mesh = { git = "https://www.github.com/merely-made/distillery.git", rev = "27fd59188c5036627aec0f85feaa59907c7ba53f" }
-
-[patch."https://github.com/merely-made/murm.git".murm-sync]
-git = "https://www.github.com/merely-made/murm.git"
-rev = "0aaf4b16d3d265a7d0af09f083d622284f5846d7"
