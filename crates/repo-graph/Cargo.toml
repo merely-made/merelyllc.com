@@ -17,13 +17,13 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 cartography = { package = "mere-cartography", git = "https://github.com/merely-made/mere.git", branch = "main" }
-chirograph = { git = "https://github.com/merely-made/mere.git", branch = "main" }
+chirograph = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 backstep = { git = "https://github.com/merely-made/mere.git", branch = "main" }
 euclid = { version = "0.22", features = ["serde"] }
 incipit = { git = "https://github.com/merely-made/mere.git", branch = "main" }
-sceno = { git = "https://github.com/merely-made/mere.git", branch = "main" }
+sceno = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 scenomise = { git = "https://github.com/merely-made/mere.git", branch = "main" }
-scenotime = { git = "https://github.com/merely-made/mere.git", branch = "main" }
+scenotime = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 seiche = { git = "https://github.com/merely-made/mere.git", branch = "main" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
@@ -33,8 +33,8 @@ wasm-bindgen = "=0.2.129"
 
 [dev-dependencies]
 graphshell-host = { git = "https://github.com/merely-made/mere.git", branch = "main", features = ["native"] }
-graphshell-client = { git = "https://github.com/merely-made/mere.git", branch = "main" }
-graphshell-endpoint = { git = "https://github.com/merely-made/mere.git", branch = "main", features = ["local"] }
+graphshell-client = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
+graphshell-endpoint = { git = "https://github.com/merely-made/graphshell.git", branch = "main", features = ["local"] }
 insigne = { git = "https://github.com/merely-made/dramatis.git", branch = "main" }
 notochord = { git = "https://github.com/merely-made/dramatis.git", branch = "main", features = ["tokio"] }
 personae = { git = "https://github.com/merely-made/dramatis.git", branch = "main" }
@@ -71,14 +71,14 @@ strip = "symbols"
 # with Mere's root manifest at the pinned revision.
 [patch.crates-io]
 # Producer contracts use the same Mere source as the host.
-sceno = { git = "https://github.com/merely-made/mere.git", branch = "main" }
-scenotime = { git = "https://github.com/merely-made/mere.git", branch = "main" }
+sceno = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
+scenotime = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 scenograph = { git = "https://github.com/merely-made/mere.git", branch = "main" }
 scenomise = { git = "https://github.com/merely-made/mere.git", branch = "main" }
-graphshell-endpoint = { git = "https://github.com/merely-made/mere.git", branch = "main" }
+graphshell-endpoint = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 incipit = { git = "https://github.com/merely-made/mere.git", branch = "main" }
-chirograph = { git = "https://github.com/merely-made/mere.git", branch = "main" }
-hest = { git = "https://github.com/merely-made/mere.git", branch = "main" }
+chirograph = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
+hest = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 # Promoted sources shared with immutable older Mere suppliers.
 # Canonical promoted families; keep registry and Git consumers type-identical.
 armillary = { git = "https://github.com/merely-made/armillary.git", branch = "main" }

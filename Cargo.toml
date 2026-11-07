@@ -26,19 +26,19 @@ cambium = "0.6.0"
 # shared two-reading-matrix adapter (S2), and the default reading's capture
 # decoded for the frozen reader. Native only, as graphshell-client is.
 cartography = { package = "mere-cartography", git = "https://github.com/merely-made/mere.git", branch = "main" }
-chirograph = { git = "https://github.com/merely-made/mere.git", branch = "main" }
+chirograph = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 genet-scripted-dom = "0.1.2"
 # The shared frozen reader: the no-script reading lists the proof's fold as
 # its group (site canvas plan, S5). Native only; the graph Wasm does not link it.
-graphshell-client = { git = "https://github.com/merely-made/mere.git", branch = "main" }
+graphshell-client = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 layout-dom-api = "0.1.1"
 mer3ly-radio-mirror = { path = "crates/radio-mirror" }
 mer3ly-repo-graph = { path = "crates/repo-graph" }
 regex = "1"
-sceno = { git = "https://github.com/merely-made/mere.git", branch = "main" }
+sceno = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 scenograph = { git = "https://github.com/merely-made/mere.git", branch = "main" }
 scenomise = { git = "https://github.com/merely-made/mere.git", branch = "main" }
-scenotime = { git = "https://github.com/merely-made/mere.git", branch = "main" }
+scenotime = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 sha2 = "0.10"
@@ -69,15 +69,15 @@ armillary = { git = "https://github.com/merely-made/armillary.git", branch = "ma
 
 [patch.crates-io]
 # Producer contracts use the same Mere source as the host.
-sceno = { git = "https://github.com/merely-made/mere.git", branch = "main" }
-scenotime = { git = "https://github.com/merely-made/mere.git", branch = "main" }
+sceno = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
+scenotime = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 scenograph = { git = "https://github.com/merely-made/mere.git", branch = "main" }
 scenomise = { git = "https://github.com/merely-made/mere.git", branch = "main" }
 incipit = { git = "https://github.com/merely-made/mere.git", branch = "main" }
-chirograph = { git = "https://github.com/merely-made/mere.git", branch = "main" }
+chirograph = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 mere-surface-api = { git = "https://github.com/merely-made/mere.git", branch = "main" }
 workbench = { git = "https://github.com/merely-made/mere.git", branch = "main" }
-hest = { git = "https://github.com/merely-made/mere.git", branch = "main" }
+hest = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 sprigging = { git = "https://github.com/merely-made/mere.git", branch = "main" }
 # Promoted sources shared with immutable older Mere suppliers.
 # Canonical promoted families; keep registry and Git consumers type-identical.

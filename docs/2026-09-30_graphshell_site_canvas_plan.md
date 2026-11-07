@@ -2234,7 +2234,7 @@ not available to attribute the size.
 **The neutral schema may not need a new type.** Each field of the site's
 artifact already has a neutral home:
 - names in `chirograph::ProjectionCaptureV1`
-  (`crates/chirograph/src/lib.rs:448`);
+  (`graphshell/crates/chirograph/src/lib.rs:448`);
 - selection in `SelectionTarget`;
 - diffs in `SceneDiff`;
 - authority and generation in incipit's shelfmark types;
