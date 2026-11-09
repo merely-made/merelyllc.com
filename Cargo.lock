@@ -455,6 +455,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "emblem"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d12e04cca0dd88d231c840c3ffec8862b8cc235df91386c1773b201ec8accfb6"
+
+[[package]]
+name = "emblem"
+version = "0.2.0"
+source = "git+https://github.com/merely-made/emblem.git?branch=main#4630fab62cca1a6f48dae920c29d6d43a54b01b6"
+
+[[package]]
 name = "ena"
 version = "0.14.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1106,6 +1117,7 @@ version = "0.1.0"
 dependencies = [
  "cambium",
  "chirograph",
+ "emblem 0.2.0 (git+https://github.com/merely-made/emblem.git?branch=main)",
  "flate2",
  "genet-scripted-dom",
  "graphshell-client",
@@ -1113,6 +1125,7 @@ dependencies = [
  "mer3ly-radio-mirror",
  "mer3ly-repo-graph",
  "mere-cartography",
+ "pictograph",
  "regex",
  "sceno",
  "scenograph",
@@ -1557,6 +1570,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c6fd9027e2d9319be6349febd1db4e8d02aa544921200c9b777720ac34a3aa89"
 dependencies = [
  "siphasher",
+]
+
+[[package]]
+name = "pictograph"
+version = "0.2.0"
+source = "git+https://github.com/merely-made/mere.git?rev=18c0f24a55a842f6204a5a4012c9fd203481947a#18c0f24a55a842f6204a5a4012c9fd203481947a"
+dependencies = [
+ "emblem 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]

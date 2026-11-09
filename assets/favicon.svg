@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
-  <title>Merely</title>
-  <rect width="64" height="64" rx="12" fill="#8b1511"/>
-  <text x="32" y="47" fill="#f0ebdd" font-family="Georgia, 'Times New Roman', serif" font-size="48" font-weight="700" text-anchor="middle">m</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-38 -38 76 76">
+<rect x="-38" y="-38" width="76" height="76" rx="14" fill="#8b1511"/>
+<path d="M-12 -30 L-6 -24 L-12 -18 L-18 -24 L-12 -30 Z M12 -30 L18 -24 L12 -18 L6 -24 L12 -30 Z M-24 -18 L-18 -12 L-24 -6 L-30 -12 L-24 -18 Z M24 -18 L30 -12 L24 -6 L18 -12 L24 -18 Z M-12 -6 L-6 0 L-12 6 L-18 0 L-12 -6 Z M12 -6 L18 0 L12 6 L6 0 L12 -6 Z M0 6 L6 12 L0 18 L-6 12 L0 6 Z M-24 18 L-18 24 L-24 30 L-30 24 L-24 18 Z M-12 18 L-6 24 L-12 30 L-18 24 L-12 18 Z M0 18 L6 24 L0 30 L-6 24 L0 18 Z M12 18 L18 24 L12 30 L6 24 L12 18 Z M24 18 L30 24 L24 30 L18 24 L24 18 Z" fill="#f0ebdd" fill-rule="nonzero"/>
+<path d="M0 -18 L6 -12 L0 -6 L-6 -12 L0 -18 Z" fill="#f0ebdd" fill-rule="nonzero"/>
 </svg>
