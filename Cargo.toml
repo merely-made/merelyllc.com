@@ -47,8 +47,8 @@ toml = "0.9"
 [dev-dependencies]
 # The favicon is a derived face, regenerated and checked by tests/favicon.rs.
 emblem = { git = "https://github.com/merely-made/emblem.git", branch = "main", features = ["svg"] }
-# Pinned to the mere commit the rest of the lock uses (seiche has since left mere main).
-pictograph = { git = "https://github.com/merely-made/mere.git", rev = "18c0f24a55a842f6204a5a4012c9fd203481947a", default-features = false }
+# Same Mere source as the rest of the lock.
+pictograph = { git = "https://github.com/merely-made/mere.git", branch = "main", default-features = false }
 # The m5 payload bounds are stated in gzip bytes, what a visitor downloads.
 flate2 = "1.1.10"
 
