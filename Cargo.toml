@@ -25,7 +25,7 @@ cambium = "0.6.0"
 # The /repos/ frozen first view (Ruling 157): the default matrix through the
 # shared two-reading-matrix adapter (S2), and the default reading's capture
 # decoded for the frozen reader. Native only, as graphshell-client is.
-cartography = { package = "mere-cartography", git = "https://github.com/merely-made/mere.git", branch = "main" }
+cartography = { package = "mere-cartography", git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 chirograph = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 genet-scripted-dom = "0.1.2"
 # The shared frozen reader: the no-script reading lists the proof's fold as
@@ -36,8 +36,8 @@ mer3ly-radio-mirror = { path = "crates/radio-mirror" }
 mer3ly-repo-graph = { path = "crates/repo-graph" }
 regex = "1"
 sceno = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
-scenograph = { git = "https://github.com/merely-made/mere.git", branch = "main" }
-scenomise = { git = "https://github.com/merely-made/mere.git", branch = "main" }
+scenograph = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
+scenomise = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 scenotime = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
@@ -47,8 +47,8 @@ toml = "0.9"
 [dev-dependencies]
 # The favicon is a derived face, regenerated and checked by tests/favicon.rs.
 emblem = { git = "https://github.com/merely-made/emblem.git", branch = "main", features = ["svg"] }
-# Same Mere source as the rest of the lock.
-pictograph = { git = "https://github.com/merely-made/mere.git", branch = "main", default-features = false }
+# The faces crate, from the emblem repository since the engine split.
+pictograph = { git = "https://github.com/merely-made/emblem.git", branch = "main", default-features = false }
 # The m5 payload bounds are stated in gzip bytes, what a visitor downloads.
 flate2 = "1.1.10"
 
@@ -75,19 +75,19 @@ armillary = { git = "https://github.com/merely-made/armillary.git", branch = "ma
 # Producer contracts use the same Mere source as the host.
 sceno = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 scenotime = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
-scenograph = { git = "https://github.com/merely-made/mere.git", branch = "main" }
-scenomise = { git = "https://github.com/merely-made/mere.git", branch = "main" }
-incipit = { git = "https://github.com/merely-made/mere.git", branch = "main" }
+scenograph = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
+scenomise = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
+incipit = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 chirograph = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
-mere-surface-api = { git = "https://github.com/merely-made/mere.git", branch = "main" }
-workbench = { git = "https://github.com/merely-made/mere.git", branch = "main" }
+mere-surface-api = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
+workbench = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 hest = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
-sprigging = { git = "https://github.com/merely-made/mere.git", branch = "main" }
+sprigging = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 # Promoted sources shared with immutable older Mere suppliers.
 # Canonical promoted families; keep registry and Git consumers type-identical.
 armillary = { git = "https://github.com/merely-made/armillary.git", branch = "main" }
 chartulary = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
 genet-scripted-dom = { git = "https://github.com/merely-made/genet.git", branch = "main", version = "=0.1.2" }
 layout-dom-api = { git = "https://github.com/merely-made/genet.git", branch = "main", version = "=0.1.1" }
-cambium = { git = "https://github.com/merely-made/mere.git", branch = "main" }
+cambium = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
 muniment = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
