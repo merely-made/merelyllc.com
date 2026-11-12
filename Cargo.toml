@@ -65,12 +65,6 @@ missing_safety_doc = "warn"
 undocumented_unsafe_blocks = "warn"
 too_many_lines = "warn"
 
-[patch."https://github.com/merely-made/mere.git"]
-# Promoted sources shared with immutable older Mere suppliers.
-chartulary = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
-muniment = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
-armillary = { git = "https://github.com/merely-made/armillary.git", branch = "main" }
-
 [patch.crates-io]
 # Producer contracts use the same Mere source as the host.
 sceno = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
