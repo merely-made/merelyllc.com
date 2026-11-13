@@ -554,7 +554,10 @@ impl Roadmap {
             &relationships,
         ))
         .map_err(|error| format!("could not canonicalize the roadmap dataset: {error}"))?;
-        let revision = format!("sha256:{}", base16ct::lower::encode_string(&Sha256::digest(material)));
+        let revision = format!(
+            "sha256:{}",
+            base16ct::lower::encode_string(&Sha256::digest(material))
+        );
         for relationship in &mut relationships {
             relationship.provenance.source_revision = revision.clone().into();
         }

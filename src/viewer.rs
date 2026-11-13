@@ -32,7 +32,10 @@ pub fn prefix() -> &'static str {
             digest.update(name.as_bytes());
             digest.update(bytes);
         }
-        format!("graphshell/{}", &base16ct::lower::encode_string(&digest.finalize())[..12])
+        format!(
+            "graphshell/{}",
+            &base16ct::lower::encode_string(&digest.finalize())[..12]
+        )
     })
 }
 pub fn href(file: &str) -> String {
