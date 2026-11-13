@@ -80,14 +80,14 @@ validate` checks them).
 ## Use
 
 ```powershell
-cargo run --locked --bin site                       # generate the static site
-cargo run --locked --bin authority -- validate      # validate content
+cargo run --bin site                                # generate the static site
+cargo run --bin authority -- validate               # validate content
 .\scripts\refresh-public-metadata.ps1               # refresh the GitHub metadata cache
 .\scripts\build-repo-graph.ps1                      # rebuild the committed Wasm graph runtime
 .\scripts\build-radio-mirror.ps1                    # rebuild the committed radio-mirror runtime
 ```
 
-Verify with `cargo test --locked` and the browser smoke (`npm ci
+Verify with `cargo test` and the browser smoke (`npm ci
 --ignore-scripts`, `npx playwright install chromium`, `npm run smoke`).
 For installed Microsoft Edge on Windows, set `$env:MER3LY_BROWSER_CHANNEL =
 "msedge"` before `npm run smoke`; the receipt records the selected channel.

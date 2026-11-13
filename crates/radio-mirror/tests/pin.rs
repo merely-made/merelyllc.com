@@ -57,7 +57,7 @@ fn pinned_radio_mirror_dir() -> PathBuf {
     let output = Command::new(env!("CARGO"))
         // Resolve the declared pin outside repository-local path redirects.
         .current_dir(std::env::temp_dir())
-        .args(["metadata", "--format-version", "1", "--locked", "--offline"])
+        .args(["metadata", "--format-version", "1", "--offline"])
         .arg("--manifest-path")
         .arg(manifest_dir().join("Cargo.toml"))
         .output()

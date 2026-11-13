@@ -1,30 +1,57 @@
-# mere/design_docs/mere_docs/implementation_strategy/2026-10-30_house_style_plan.md
+# house hooks --no-decisions --deny --clippy '--manifest-path crates/repo-graph/Cargo.toml --all-targets' --clippy '--manifest-path crates/radio-mirror/Cargo.toml --all-targets'
+# Written by `house hooks` (eidetic, crates/house); `house hooks --check` fails when this file drifts from it.
+# `house` is on the PATH: cargo install --git https://github.com/merely-made/eidetic house
 fail_fast: true
+default_install_hook_types: [pre-commit, post-commit, pre-push]
+# Hooks without stages run at pre-commit only, so the notes push inside
+# `house resolved push` reruns nothing but that hook.
+default_stages: [pre-commit]
 repos:
   - repo: local
     hooks:
       - id: line-ceiling
         name: line ceiling
-        entry: line-ceiling
-        language: rust
+        entry: house line-ceiling
+        language: system
         types: [text]
         always_run: true
-        additional_dependencies: ["cli:https://github.com/merely-made/eidetic:line-ceiling-v0.0.2:line-ceiling"]
       - id: clippy
         name: clippy
-        entry: cargo clippy --locked --all-targets
+        entry: cargo clippy --all-targets
         language: system
-        files: '(^|/)(Cargo\.(toml|lock)|[^/]+\.rs)$'
+        files: '(^|/)(Cargo\.toml|rust-toolchain\.toml|[^/]+\.rs)$'
         pass_filenames: false
-      - id: clippy-repo-graph
-        name: clippy repo graph
-        entry: cargo clippy --manifest-path crates/repo-graph/Cargo.toml --locked --all-targets
+      - id: clippy-2
+        name: clippy --manifest-path crates/repo-graph/Cargo.toml --all-targets
+        entry: cargo clippy --manifest-path crates/repo-graph/Cargo.toml --all-targets
         language: system
-        files: '^(crates/repo-graph/.*\.(rs|toml|lock)|Cargo\.(toml|lock))$'
+        files: '(^|/)(Cargo\.toml|rust-toolchain\.toml|[^/]+\.rs)$'
         pass_filenames: false
-      - id: clippy-radio-mirror
-        name: clippy radio mirror
-        entry: cargo clippy --manifest-path crates/radio-mirror/Cargo.toml --locked --all-targets
+      - id: clippy-3
+        name: clippy --manifest-path crates/radio-mirror/Cargo.toml --all-targets
+        entry: cargo clippy --manifest-path crates/radio-mirror/Cargo.toml --all-targets
         language: system
-        files: '^(crates/radio-mirror/.*\.(rs|toml|lock)|Cargo\.(toml|lock))$'
+        files: '(^|/)(Cargo\.toml|rust-toolchain\.toml|[^/]+\.rs)$'
         pass_filenames: false
+      - id: dependency-bans
+        name: dependency bans
+        entry: cargo deny check bans
+        language: system
+        pass_filenames: false
+        always_run: true
+      # No Cargo.lock is tracked; what cargo resolved rides on each commit as a
+      # git note under refs/notes/resolved (`house resolved show <commit>`).
+      - id: record-resolved
+        name: record resolved versions
+        entry: house resolved record
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [post-commit]
+      - id: push-resolved
+        name: push resolved versions
+        entry: house resolved push
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]

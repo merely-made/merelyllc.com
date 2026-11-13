@@ -35,8 +35,7 @@ try {
         --manifest-path $manifest `
         --target wasm32-unknown-unknown `
         --target-dir $env:MER3LY_GRAPH_TARGET `
-        --release `
-        --locked
+        --release
     if ($LASTEXITCODE -ne 0) {
         throw "repository graph Wasm build failed"
     }

@@ -58,8 +58,8 @@ jobs:
           node-version: "22"
           cache: npm
 
-      - name: Install the pinned Rust toolchain
-        run: rustup toolchain install 1.99.1 --profile minimal --component clippy,rustfmt --target wasm32-unknown-unknown
+      - name: Install the stable Rust toolchain
+        run: rustup toolchain install stable --profile minimal --component clippy,rustfmt --target wasm32-unknown-unknown
 
       - name: Install native font build dependencies
         run: |
@@ -75,21 +75,21 @@ jobs:
         run: python3 scripts/verify-viewer.py
 
       - name: Validate the committed authority
-        run: cargo run --locked --bin authority -- validate
+        run: cargo run --bin authority -- validate
 
       - name: Refresh reduced public GitHub metadata
         shell: pwsh
         run: ./scripts/refresh-public-metadata.ps1
 
       - name: Validate refreshed public metadata
-        run: cargo run --locked --bin authority -- validate-metadata
+        run: cargo run --bin authority -- validate-metadata
 
       - name: Refresh spec results from the repositories that run each suite
         shell: bash
-        run: cargo run --locked --bin authority -- spec-sources | python3 scripts/refresh-spec-results.py
+        run: cargo run --bin authority -- spec-sources | python3 scripts/refresh-spec-results.py
 
       - name: Validate the registry with refreshed spec results
-        run: cargo run --locked --bin authority -- validate
+        run: cargo run --bin authority -- validate
 
       - name: Verify Rust source and behavior
         shell: pwsh
@@ -99,9 +99,9 @@ jobs:
           cargo fmt --all -- --check
           cargo fmt --manifest-path crates/repo-graph/Cargo.toml -- --check
           cargo fmt --manifest-path crates/radio-mirror/Cargo.toml -- --check
-          cargo test --locked
-          cargo test --manifest-path crates/repo-graph/Cargo.toml --locked
-          cargo test --manifest-path crates/radio-mirror/Cargo.toml --locked
+          cargo test
+          cargo test --manifest-path crates/repo-graph/Cargo.toml
+          cargo test --manifest-path crates/radio-mirror/Cargo.toml
 
       - name: Build the reproducible pinned Mere graph runtime
         shell: pwsh
@@ -133,16 +133,16 @@ jobs:
         shell: pwsh
         run: |
           $artifact = ".tmp/pages-artifact"
-          cargo run --locked --bin site -- --output $artifact
+          cargo run --bin site -- --output $artifact
           if ($LASTEXITCODE -ne 0) {
             throw "static site build failed"
           }
-          $receipt = cargo run --quiet --locked --bin authority -- validate-artifact "." $artifact
+          $receipt = cargo run --quiet --bin authority -- validate-artifact "." $artifact
           if ($LASTEXITCODE -ne 0) {
             throw "public artifact validation failed"
           }
           Set-Content -LiteralPath ".tmp/m9-static-receipt.json" -Value $receipt -Encoding utf8
-          $projectionReceipt = cargo run --quiet --manifest-path crates/repo-graph/Cargo.toml --locked --bin projection-receipt -- "$artifact"
+          $projectionReceipt = cargo run --quiet --manifest-path crates/repo-graph/Cargo.toml --bin projection-receipt -- "$artifact"
           if ($LASTEXITCODE -ne 0) {
             throw "native Scenograph projection consumer failed"
           }

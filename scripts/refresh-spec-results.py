@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Fetch the spec registry's results files into content/spec-results/.
 
-    cargo run --locked --bin authority -- spec-sources | python3 scripts/refresh-spec-results.py
+    cargo run --bin authority -- spec-sources | python3 scripts/refresh-spec-results.py
 
 Each stdin line names a repository, its GitHub slug, a branch and a path. The
 file is fetched at the latest commit on that branch that touched it, and

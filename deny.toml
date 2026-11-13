@@ -1,0 +1,68 @@
+# cargo-deny configuration for mer3ly.
+#
+#   cargo deny check bans
+#
+# Two versions of one crate in a build are a defect: move the older version's
+# holder forward. No duplicates: latest releases, or a skip below saying who
+# holds the older one and what removes it (Mark, 2026-11-12). One entry per
+# older version; delete an entry when its holder moves, and
+# `cargo deny check bans` will name any that no longer match.
+
+[graph]
+all-features = true
+
+[bans]
+multiple-versions = "deny"
+wildcards = "allow"
+
+[[bans.skip]]
+crate = "block-buffer@0.10.4"
+reason = "held by digest 0.10.7 under sha2 0.10.9 (mer3ly-site, mer3ly-repo-graph); gone with it"
+
+[[bans.skip]]
+crate = "cpufeatures@0.2.17"
+reason = "held by sha2 0.10.9 (mer3ly-site, mer3ly-repo-graph); gone with it"
+
+[[bans.skip]]
+crate = "crypto-common@0.1.7"
+reason = "held by digest 0.10.7 under sha2 0.10.9 (mer3ly-site, mer3ly-repo-graph); gone with it"
+
+[[bans.skip]]
+crate = "digest@0.10.7"
+reason = "held by sha2 0.10.9 (mer3ly-site, mer3ly-repo-graph); gone with it"
+
+[[bans.skip]]
+crate = "foldhash@0.1.5"
+reason = "held by hashbrown 0.15.5; gone when its holders move to foldhash 0.2.0 (hashbrown 0.15.5 in the graph, 0.17.1 newest)"
+
+[[bans.skip]]
+crate = "getrandom@0.3.4"
+reason = "held by mere 0.1.0, mere-rdfc 0.1.0, rand_core 0.9.5; gone when its holders move to getrandom 0.4.3 (mere 0.1.0 (git); mere-rdfc 0.1.0 (git); rand_core 0.9.5 in the graph, 0.10.1 newest)"
+
+[[bans.skip]]
+crate = "hashbrown@0.15.5"
+reason = "held by petgraph 0.8.3; gone when its holders move to hashbrown 0.17.1 (petgraph 0.8.3 is its latest release)"
+
+[[bans.skip]]
+crate = "hashbrown@0.16.1"
+reason = "held by regress 0.11.1, spade 2.15.1; gone when its holders move to hashbrown 0.17.1 (regress 0.11.1 (git); spade 2.15.1 is its latest release)"
+
+[[bans.skip]]
+crate = "miniz_oxide@0.8.9"
+reason = "held by png 0.18.1; gone when its holders move to miniz_oxide 0.9.1 (png 0.18.1 is its latest release)"
+
+[[bans.skip]]
+crate = "r-efi@5.3.0"
+reason = "held by getrandom 0.3.4; gone when its holders move to r-efi 6.0.0 (getrandom 0.3.4 in the graph, 0.4.3 newest)"
+
+[[bans.skip]]
+crate = "sha2@0.10.9"
+reason = "mer3ly-site and mer3ly-repo-graph name sha2 0.10; gone when they move to sha2 0.11.1"
+
+[[bans.skip]]
+crate = "syn@2.0.119"
+reason = "held by enumn 0.1.14, munge_macro 0.4.7, nalgebra-macros 0.3.0, profiling-procmacros 1.0.18, strum_macros 0.28.0, tracing-attributes 0.1.31, zerocopy-derive 0.8.63; gone when its holders move to syn 3.0.10 (enumn 0.1.14 is its latest release; munge_macro 0.4.7 is its latest release; nalgebra-macros 0.3.0 is its latest release; profiling-procmacros 1.0.18 is its latest release; strum_macros 0.28.0 is its latest release; tracing-attributes 0.1.31 is its latest release; zerocopy-derive 0.8.63 is its latest release)"
+
+[[bans.skip]]
+crate = "winnow@0.7.15"
+reason = "held by toml 0.9.12 (mer3ly-site names toml 0.9); gone when it moves to toml 1"
