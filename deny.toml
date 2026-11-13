@@ -57,12 +57,8 @@ reason = "held by getrandom 0.3.4; gone when its holders move to r-efi 6.0.0 (ge
 
 [[bans.skip]]
 crate = "sha2@0.10.9"
-reason = "mer3ly-site and mer3ly-repo-graph name sha2 0.10; gone when they move to sha2 0.11.1"
+reason = "mer3ly-site and mer3ly-repo-graph name sha2 0.10; gone when they move to sha2 0.11.1, whose digest output has no LowerHex, so the sixteen format!('{:x}') sites need a hex encoder chosen first"
 
 [[bans.skip]]
 crate = "syn@2.0.119"
 reason = "held by enumn 0.1.14, munge_macro 0.4.7, nalgebra-macros 0.3.0, profiling-procmacros 1.0.18, strum_macros 0.28.0, tracing-attributes 0.1.31, zerocopy-derive 0.8.63; gone when its holders move to syn 3.0.10 (enumn 0.1.14 is its latest release; munge_macro 0.4.7 is its latest release; nalgebra-macros 0.3.0 is its latest release; profiling-procmacros 1.0.18 is its latest release; strum_macros 0.28.0 is its latest release; tracing-attributes 0.1.31 is its latest release; zerocopy-derive 0.8.63 is its latest release)"
-
-[[bans.skip]]
-crate = "winnow@0.7.15"
-reason = "held by toml 0.9.12 (mer3ly-site names toml 0.9); gone when it moves to toml 1"
