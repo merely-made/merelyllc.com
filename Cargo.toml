@@ -80,7 +80,10 @@ sprigging = { git = "https://github.com/merely-made/graphshell.git", branch = "m
 # Promoted sources shared with immutable older Mere suppliers.
 # Canonical promoted families; keep registry and Git consumers type-identical.
 armillary = { git = "https://github.com/merely-made/armillary.git", branch = "main" }
-chartulary = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
+fieldbook = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
+hodograph = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
+portolan = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
+quadstore = { git = "https://github.com/merely-made/eidetic.git", branch = "main" }
 genet-scripted-dom = { git = "https://github.com/merely-made/genet.git", branch = "main", version = "=0.1.2" }
 layout-dom-api = { git = "https://github.com/merely-made/genet.git", branch = "main", version = "=0.1.1" }
 cambium = { git = "https://github.com/merely-made/graphshell.git", branch = "main" }
