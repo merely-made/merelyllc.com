@@ -108,7 +108,7 @@ pub fn radio_simulator_href() -> String {
     digest.update(RADIO_SIMULATOR);
     digest.update(RADIO_MIRROR_WASM_GLUE);
     digest.update(RADIO_MIRROR_WASM);
-    let digest = format!("{:x}", digest.finalize());
+    let digest = base16ct::lower::encode_string(&digest.finalize());
     format!("/radio-simulator.js?v={}", &digest[..12])
 }
 

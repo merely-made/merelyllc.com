@@ -149,7 +149,7 @@ impl FirmwareCatalog {
                 "firmware index source_url must be {RETINUE_PACKAGE_INDEX_URL}"
             )));
         }
-        let actual_hash = format!("{:x}", Sha256::digest(index_bytes));
+        let actual_hash = base16ct::lower::encode_string(&Sha256::digest(index_bytes));
         if self.source.source_sha256 != actual_hash {
             return Err(AuthorityError::from_message(format!(
                 "firmware index digest mismatch: source records {}, retained artifact is {}",

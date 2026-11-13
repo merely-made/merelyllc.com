@@ -15,21 +15,9 @@ all-features = true
 multiple-versions = "deny"
 wildcards = "allow"
 
-[[bans.skip]]
-crate = "block-buffer@0.10.4"
-reason = "held by digest 0.10.7 under sha2 0.10.9 (mer3ly-site, mer3ly-repo-graph); gone with it"
 
-[[bans.skip]]
-crate = "cpufeatures@0.2.17"
-reason = "held by sha2 0.10.9 (mer3ly-site, mer3ly-repo-graph); gone with it"
 
-[[bans.skip]]
-crate = "crypto-common@0.1.7"
-reason = "held by digest 0.10.7 under sha2 0.10.9 (mer3ly-site, mer3ly-repo-graph); gone with it"
 
-[[bans.skip]]
-crate = "digest@0.10.7"
-reason = "held by sha2 0.10.9 (mer3ly-site, mer3ly-repo-graph); gone with it"
 
 [[bans.skip]]
 crate = "foldhash@0.1.5"
@@ -55,9 +43,6 @@ reason = "held by png 0.18.1; gone when its holders move to miniz_oxide 0.9.1 (p
 crate = "r-efi@5.3.0"
 reason = "held by getrandom 0.3.4; gone when its holders move to r-efi 6.0.0 (getrandom 0.3.4 in the graph, 0.4.3 newest)"
 
-[[bans.skip]]
-crate = "sha2@0.10.9"
-reason = "mer3ly-site and mer3ly-repo-graph name sha2 0.10; gone when they move to sha2 0.11.1, whose digest output has no LowerHex, so the sixteen format!('{:x}') sites need a hex encoder chosen first"
 
 [[bans.skip]]
 crate = "syn@2.0.119"

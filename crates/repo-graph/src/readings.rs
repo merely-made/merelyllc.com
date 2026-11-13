@@ -246,7 +246,7 @@ pub(super) fn authority_identity(input: &GraphInput) -> Result<(String, u64), St
             .try_into()
             .expect("SHA-256 prefix is eight bytes"),
     );
-    Ok((format!("{digest:x}"), generation))
+    Ok((base16ct::lower::encode_string(&digest), generation))
 }
 
 pub(super) fn next_diff(snapshot: &SceneSnapshot, operations: Vec<SceneOp>) -> SceneDiff {

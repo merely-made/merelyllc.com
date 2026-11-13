@@ -48,7 +48,7 @@ pub fn message_path_lab_href() -> String {
     digest.update(MESSAGE_PATH_LAB);
     digest.update(RADIO_MIRROR_WASM_GLUE);
     digest.update(RADIO_MIRROR_WASM);
-    let digest = format!("{:x}", digest.finalize());
+    let digest = base16ct::lower::encode_string(&digest.finalize());
     format!("/message-path-lab.js?v={}", &digest[..12])
 }
 

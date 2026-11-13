@@ -301,7 +301,7 @@ pub(super) fn projection_bootstrap(proof: &ProjectionProof) -> String {
     for (_, bytes) in proof.files() {
         digest.update(bytes);
     }
-    let digest = format!("{:x}", digest.finalize());
+    let digest = base16ct::lower::encode_string(&digest.finalize());
     format!(
         "<script type=\"module\" src=\"/projection-proof.js?v={}\"></script>",
         &digest[..12]

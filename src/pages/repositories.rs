@@ -543,7 +543,7 @@ fn serialize_json_records<T: Serialize>(records: &[T]) -> String {
 pub fn graph_sandbox_mount_href() -> String {
     format!(
         "/graph-sandbox-mount.js?v={}",
-        &format!("{:x}", Sha256::digest(GRAPH_SANDBOX_MOUNT))[..12]
+        &base16ct::lower::encode_string(&Sha256::digest(GRAPH_SANDBOX_MOUNT))[..12]
     )
 }
 
@@ -556,7 +556,7 @@ pub fn graph_runtime_version() -> String {
     digest.update(GRAPH_SANDBOX_LOADER);
     digest.update(REPO_GRAPH_WASM_GLUE);
     digest.update(REPO_GRAPH_WASM);
-    let digest = format!("{:x}", digest.finalize());
+    let digest = base16ct::lower::encode_string(&digest.finalize());
     format!("?v={}", &digest[..12])
 }
 

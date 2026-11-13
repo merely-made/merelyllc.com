@@ -339,7 +339,7 @@ pub fn validate_repository_host_history(
 pub fn host_history_href(json: &str) -> String {
     format!(
         "/{HOST_HISTORY_FILE}?v={}",
-        &format!("{:x}", Sha256::digest(json.as_bytes()))[..12]
+        &base16ct::lower::encode_string(&Sha256::digest(json.as_bytes()))[..12]
     )
 }
 

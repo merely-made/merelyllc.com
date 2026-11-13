@@ -215,7 +215,7 @@ impl ProjectionProof {
     pub fn href(name: &str, bytes: &[u8]) -> String {
         format!(
             "/{name}?v={}",
-            &format!("{:x}", Sha256::digest(bytes))[..12]
+            &base16ct::lower::encode_string(&Sha256::digest(bytes))[..12]
         )
     }
 

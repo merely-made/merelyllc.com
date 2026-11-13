@@ -24,7 +24,7 @@ pub(super) fn scan_public_bytes(
     // in these verified bytes.
     let qualified_viewer = relative_path
         == crate::viewer::href("pkg/graphshell_web_bg.wasm").trim_start_matches('/')
-        && format!("{:x}", Sha256::digest(bytes)) == crate::viewer::WASM_SHA256;
+        && base16ct::lower::encode_string(&Sha256::digest(bytes)) == crate::viewer::WASM_SHA256;
     scan_public_text_policy(
         relative_path,
         &String::from_utf8_lossy(bytes),

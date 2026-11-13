@@ -128,3 +128,12 @@ fn the_scenarios_carry_the_facts_the_lab_states() {
         ]
     );
 }
+
+/// The digest is lowercase hex of SHA-256: the FIPS 180-2 "abc" vector.
+#[test]
+fn sha256_hex_is_lowercase_hex_of_sha256() {
+    assert_eq!(
+        sha256_hex(b"abc"),
+        "ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad"
+    );
+}

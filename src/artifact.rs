@@ -277,7 +277,7 @@ fn read_text(root: &Path, relative: &str, errors: &mut Vec<String>) -> String {
 }
 
 fn sha256(bytes: &[u8]) -> String {
-    format!("{:x}", Sha256::digest(bytes))
+    base16ct::lower::encode_string(&Sha256::digest(bytes))
 }
 
 #[cfg(test)]

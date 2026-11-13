@@ -454,7 +454,7 @@ fn stylesheet_href() -> String {
 }
 
 fn content_addressed_href(path: &str, content: &str) -> String {
-    let digest = format!("{:x}", Sha256::digest(content.as_bytes()));
+    let digest = base16ct::lower::encode_string(&Sha256::digest(content.as_bytes()));
     format!("{path}?v={}", &digest[..12])
 }
 
