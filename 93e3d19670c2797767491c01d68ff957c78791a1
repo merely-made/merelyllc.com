@@ -119,7 +119,7 @@ checksum = "be5eb007b7cacc6c660343e96f650fedf4b5a77512399eb952ca6642cf8d13f7"
 [[package]]
 name = "backstep"
 version = "0.2.0"
-source = "git+https://github.com/merely-made/graphshell.git?branch=main#1bdb2ce38479a4cab9bfad198d972fe00ee67e2a"
+source = "git+https://github.com/merely-made/graphshell.git?branch=main#8885bb499f0cb08c028a5bf25a8dc157476d2252"
 
 [[package]]
 name = "base16ct"
@@ -225,7 +225,7 @@ checksum = "fc652a48c352aef3ea3aed32080501cf3ef6ed5da78602a020c991775b0aff04"
 [[package]]
 name = "cambium"
 version = "0.6.1"
-source = "git+https://github.com/merely-made/graphshell.git?branch=main#1bdb2ce38479a4cab9bfad198d972fe00ee67e2a"
+source = "git+https://github.com/merely-made/graphshell.git?branch=main#8885bb499f0cb08c028a5bf25a8dc157476d2252"
 dependencies = [
  "backstep",
  "genet-events",
@@ -250,7 +250,7 @@ dependencies = [
 [[package]]
 name = "catchment"
 version = "0.1.0"
-source = "git+https://github.com/merely-made/mere.git?branch=main#440aa564b0ad05ed34b61894fa0995bbf4bccab5"
+source = "git+https://github.com/merely-made/mere.git?branch=main#43322122ac4b39a9bb13e6108d49c2374706eda3"
 dependencies = [
  "serde",
  "uuid",
@@ -312,7 +312,7 @@ dependencies = [
 [[package]]
 name = "chirograph"
 version = "0.0.5"
-source = "git+https://github.com/merely-made/graphshell.git?branch=main#1bdb2ce38479a4cab9bfad198d972fe00ee67e2a"
+source = "git+https://github.com/merely-made/graphshell.git?branch=main#8885bb499f0cb08c028a5bf25a8dc157476d2252"
 dependencies = [
  "base64",
  "blake3",
@@ -930,7 +930,7 @@ dependencies = [
 [[package]]
 name = "graphshell-client"
 version = "0.0.2"
-source = "git+https://github.com/merely-made/graphshell.git?branch=main#1bdb2ce38479a4cab9bfad198d972fe00ee67e2a"
+source = "git+https://github.com/merely-made/graphshell.git?branch=main#8885bb499f0cb08c028a5bf25a8dc157476d2252"
 dependencies = [
  "chirograph",
  "hest",
@@ -999,7 +999,7 @@ checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
 [[package]]
 name = "hest"
 version = "0.2.1"
-source = "git+https://github.com/merely-made/graphshell.git?branch=main#1bdb2ce38479a4cab9bfad198d972fe00ee67e2a"
+source = "git+https://github.com/merely-made/graphshell.git?branch=main#8885bb499f0cb08c028a5bf25a8dc157476d2252"
 dependencies = [
  "serde",
 ]
@@ -1141,7 +1141,7 @@ dependencies = [
 [[package]]
 name = "incipit"
 version = "0.2.3"
-source = "git+https://github.com/merely-made/graphshell.git?branch=main#1bdb2ce38479a4cab9bfad198d972fe00ee67e2a"
+source = "git+https://github.com/merely-made/graphshell.git?branch=main#8885bb499f0cb08c028a5bf25a8dc157476d2252"
 dependencies = [
  "catchment",
  "serde",
@@ -1357,7 +1357,7 @@ dependencies = [
 [[package]]
 name = "mere"
 version = "0.1.0"
-source = "git+https://github.com/merely-made/mere.git?branch=main#440aa564b0ad05ed34b61894fa0995bbf4bccab5"
+source = "git+https://github.com/merely-made/mere.git?branch=main#43322122ac4b39a9bb13e6108d49c2374706eda3"
 dependencies = [
  "eidetic",
  "getrandom",
@@ -1385,7 +1385,7 @@ dependencies = [
 [[package]]
 name = "mere-cartography"
 version = "0.0.2"
-source = "git+https://github.com/merely-made/graphshell.git?branch=main#1bdb2ce38479a4cab9bfad198d972fe00ee67e2a"
+source = "git+https://github.com/merely-made/graphshell.git?branch=main#8885bb499f0cb08c028a5bf25a8dc157476d2252"
 dependencies = [
  "mere-kernel",
  "sceno",
@@ -1397,7 +1397,7 @@ dependencies = [
 [[package]]
 name = "mere-kernel"
 version = "0.0.3"
-source = "git+https://github.com/merely-made/mere.git?branch=main#440aa564b0ad05ed34b61894fa0995bbf4bccab5"
+source = "git+https://github.com/merely-made/mere.git?branch=main#43322122ac4b39a9bb13e6108d49c2374706eda3"
 dependencies = [
  "accesskit",
  "crossbeam-channel",
@@ -1426,7 +1426,7 @@ dependencies = [
 [[package]]
 name = "mere-rdfc"
 version = "0.1.0"
-source = "git+https://github.com/merely-made/mere.git?branch=main#440aa564b0ad05ed34b61894fa0995bbf4bccab5"
+source = "git+https://github.com/merely-made/mere.git?branch=main#43322122ac4b39a9bb13e6108d49c2374706eda3"
 dependencies = [
  "getrandom",
  "oxrdf",
@@ -1436,7 +1436,7 @@ dependencies = [
 [[package]]
 name = "mere-surface-api"
 version = "0.1.1"
-source = "git+https://github.com/merely-made/graphshell.git?branch=main#1bdb2ce38479a4cab9bfad198d972fe00ee67e2a"
+source = "git+https://github.com/merely-made/graphshell.git?branch=main#8885bb499f0cb08c028a5bf25a8dc157476d2252"
 dependencies = [
  "workbench",
 ]
@@ -1444,7 +1444,7 @@ dependencies = [
 [[package]]
 name = "meristem"
 version = "0.2.0"
-source = "git+https://github.com/merely-made/graphshell.git?branch=main#1bdb2ce38479a4cab9bfad198d972fe00ee67e2a"
+source = "git+https://github.com/merely-made/graphshell.git?branch=main#8885bb499f0cb08c028a5bf25a8dc157476d2252"
 dependencies = [
  "anymore",
  "tracing",
@@ -1764,7 +1764,7 @@ dependencies = [
 [[package]]
 name = "paint_list_api"
 version = "0.1.2"
-source = "git+https://github.com/merely-made/netrender.git?branch=main#7a919567f227385831617209ca2ad0d7ec644980"
+source = "git+https://github.com/merely-made/netrender.git?branch=main#8a6fcefa0045b540977a674d5530fa157930820e"
 dependencies = [
  "euclid",
  "serde",
@@ -2299,7 +2299,7 @@ dependencies = [
 [[package]]
 name = "sceno"
 version = "0.0.7"
-source = "git+https://github.com/merely-made/graphshell.git?branch=main#1bdb2ce38479a4cab9bfad198d972fe00ee67e2a"
+source = "git+https://github.com/merely-made/graphshell.git?branch=main#8885bb499f0cb08c028a5bf25a8dc157476d2252"
 dependencies = [
  "serde",
  "serde_json",
@@ -2308,7 +2308,7 @@ dependencies = [
 [[package]]
 name = "sceno-backdrops"
 version = "0.0.1"
-source = "git+https://github.com/merely-made/graphshell.git?branch=main#1bdb2ce38479a4cab9bfad198d972fe00ee67e2a"
+source = "git+https://github.com/merely-made/graphshell.git?branch=main#8885bb499f0cb08c028a5bf25a8dc157476d2252"
 dependencies = [
  "sceno",
  "serde",
@@ -2318,7 +2318,7 @@ dependencies = [
 [[package]]
 name = "scenograph"
 version = "0.0.7"
-source = "git+https://github.com/merely-made/graphshell.git?branch=main#1bdb2ce38479a4cab9bfad198d972fe00ee67e2a"
+source = "git+https://github.com/merely-made/graphshell.git?branch=main#8885bb499f0cb08c028a5bf25a8dc157476d2252"
 dependencies = [
  "incipit",
  "sceno",
@@ -2329,7 +2329,7 @@ dependencies = [
 [[package]]
 name = "scenomise"
 version = "0.0.8"
-source = "git+https://github.com/merely-made/graphshell.git?branch=main#1bdb2ce38479a4cab9bfad198d972fe00ee67e2a"
+source = "git+https://github.com/merely-made/graphshell.git?branch=main#8885bb499f0cb08c028a5bf25a8dc157476d2252"
 dependencies = [
  "libm",
  "sceno",
@@ -2342,7 +2342,7 @@ dependencies = [
 [[package]]
 name = "scenotime"
 version = "0.0.5"
-source = "git+https://github.com/merely-made/graphshell.git?branch=main#1bdb2ce38479a4cab9bfad198d972fe00ee67e2a"
+source = "git+https://github.com/merely-made/graphshell.git?branch=main#8885bb499f0cb08c028a5bf25a8dc157476d2252"
 dependencies = [
  "sceno",
  "serde",
@@ -2555,7 +2555,7 @@ dependencies = [
 [[package]]
 name = "sprigging"
 version = "0.3.0"
-source = "git+https://github.com/merely-made/graphshell.git?branch=main#1bdb2ce38479a4cab9bfad198d972fe00ee67e2a"
+source = "git+https://github.com/merely-made/graphshell.git?branch=main#8885bb499f0cb08c028a5bf25a8dc157476d2252"
 dependencies = [
  "accesskit",
  "netrender-vello",
@@ -2987,7 +2987,7 @@ checksum = "8c3b93199df0ab874cdf0c6a94f0a0dc3423fe41f1cafb62b8bd7b1deb277aef"
 [[package]]
 name = "workbench"
 version = "0.1.1"
-source = "git+https://github.com/merely-made/graphshell.git?branch=main#1bdb2ce38479a4cab9bfad198d972fe00ee67e2a"
+source = "git+https://github.com/merely-made/graphshell.git?branch=main#8885bb499f0cb08c028a5bf25a8dc157476d2252"
 
 [[package]]
 name = "writeable"
