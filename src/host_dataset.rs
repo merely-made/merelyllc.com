@@ -169,11 +169,12 @@ fn export(authority: &Authority, metadata: &PublicMetadataCache) -> Result<Expor
                 ),
             ]);
             values.insert("order".into(), ProjectionValue::Number(order as f64));
-            ProjectionOccurrence {
-                occurrence_id: node.id.clone(),
-                source: SourceRef::new(REPOSITORY_ADAPTER, &node.id),
+            ProjectionOccurrence::new(
+                node.id.clone(),
+                SourceRef::new(REPOSITORY_ADAPTER, &node.id),
                 values,
-            }
+            )
+            .with_classes([node.class.slug()])
         })
         .collect::<Vec<_>>();
     let mut relationships = Vec::with_capacity(graph.edges.len());

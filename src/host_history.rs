@@ -137,28 +137,31 @@ pub fn disclose_graph(
     let occurrences = graph
         .nodes
         .iter()
-        .map(|node| ProjectionOccurrence {
-            occurrence_id: node.id.clone(),
-            source: SourceRef::new(REPOSITORY_ADAPTER, &node.id),
-            values: BTreeMap::from([
-                (
-                    "occurrence_id".to_owned(),
-                    ProjectionValue::Text(node.id.clone()),
-                ),
-                ("label".to_owned(), ProjectionValue::Text(node.name.clone())),
-                (
-                    "class".to_owned(),
-                    ProjectionValue::Text(node.class.clone()),
-                ),
-                (
-                    "status".to_owned(),
-                    ProjectionValue::Text(node.status.clone()),
-                ),
-                (
-                    "pushed_at".to_owned(),
-                    ProjectionValue::Text(node.pushed_at.clone()),
-                ),
-            ]),
+        .map(|node| {
+            ProjectionOccurrence::new(
+                node.id.clone(),
+                SourceRef::new(REPOSITORY_ADAPTER, &node.id),
+                BTreeMap::from([
+                    (
+                        "occurrence_id".to_owned(),
+                        ProjectionValue::Text(node.id.clone()),
+                    ),
+                    ("label".to_owned(), ProjectionValue::Text(node.name.clone())),
+                    (
+                        "class".to_owned(),
+                        ProjectionValue::Text(node.class.clone()),
+                    ),
+                    (
+                        "status".to_owned(),
+                        ProjectionValue::Text(node.status.clone()),
+                    ),
+                    (
+                        "pushed_at".to_owned(),
+                        ProjectionValue::Text(node.pushed_at.clone()),
+                    ),
+                ]),
+            )
+            .with_classes([node.class.as_str()])
         })
         .collect();
     let relationships = graph
