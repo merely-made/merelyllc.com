@@ -219,6 +219,7 @@ fn solve_capture(
         let from_point = scene.items[from.0 as usize].transform.translate;
         let to_point = scene.items[to.0 as usize].transform.translate;
         relations.push(RoutedRelation {
+            form: Default::default(),
             from,
             to,
             space: sceno::Scene::WORLD,
