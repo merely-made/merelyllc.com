@@ -78,6 +78,8 @@ t = t.replace("All 615 specs in the w3c/browser-specs catalog", f"All {len(catal
 t = t.replace("<li>Repo maps: read-only surveys of READMEs, manifests, design docs and source greps across 25 repos: the 23 code repos in merely-made, plus hocket and netfetcher. Nothing was built or run. Depth reflects each repo's own receipts and docs.</li>",
               f"<li>Built from <code>authority specs-json</code> on {cov['on']}: the registry in <code>merelyllc.com/content/specs.toml</code> ({cov['specs']} specs, {cov['claims']} claims) and the committed browser-specs {cov['catalog_version']} snapshot. The registry was seeded from read-only surveys of every repo, genet's ledger, mere's standards survey and its W3C review.</li>")
 t = t.replace("__NCAT__", str(len(catalog)))
+assert "__ON__" in t
+t = t.replace("__ON__", cov["on"])
 for a, b in [("__REPOS__", json.dumps(repos, ensure_ascii=False, separators=(",", ":"))),
              ("__ROWS__", json.dumps(rows, ensure_ascii=False, separators=(",", ":")))]:
     assert "</script" not in b

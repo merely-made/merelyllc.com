@@ -82,7 +82,7 @@ tr.grp td{background:var(--accent-soft);font:600 12px var(--mono);letter-spacing
 
 <div class="wrap">
 <header style="display:grid;gap:14px">
-  <div class="eyebrow">Merely family · standards survey · 2026-10-18</div>
+  <div class="eyebrow">Merely family · standards survey · __ON__</div>
   <h1>Merely Spec Atlas</h1>
   <p class="lede">Every repo in the merely-made family checked against the specs it implements, depends on, or ought to follow. Genet is also measured against the whole web platform: __NCAT__ browser specs joined to its WPT census, IDL and CSS property coverage.</p>
 </header>
@@ -93,7 +93,7 @@ tr.grp td{background:var(--accent-soft);font:600 12px var(--mono);letter-spacing
     <ul>
       <li><b>Every repo has at least one relevant spec</b>, and for about half the family a spec is the product itself: genet, netfetcher, vano, bole, smolweb, turquet, wavicle and emblem. Specs don't reach the house-grammar crates: scenograph, chirograph, platen, servitor, armillary and the UI internals. Those formats are Merely's own and ought to be published as specs.</li>
       <li><b>“W3C” is too narrow a word for it.</b> The core of the web engine is WHATWG (HTML, DOM, Fetch, URL, Encoding, Streams): about three-quarters of genet's passing WPT subtests (24,756 of 33,824 in the 2026-09-29 census). Outside the browser, most of what the apps implement is IETF RFCs or community specs (Gemini, Reticulum, LXMF, Meshtastic, Djot, WavPack, IconVG), plus IAU/IERS for the sky.</li>
-      <li><b>W3C's distinctive share is data, identity and annotation.</b> mere already ships JSON-LD, RDF 1.2, SPARQL 1.2, Web Annotation and DTCG tokens, and dramatis speaks <code>did:key</code>. The unused fits are a short list: RDFC-1.0, SHACL, VC 2.0, PROV-O as a model, ActivityPub, WebSub, Webmention, PLS, MusicXML and WCAG statements.</li>
+      <li><b>W3C's distinctive share is data, identity and annotation.</b> mere already ships JSON-LD, RDF 1.2, SPARQL 1.2 and RDFC-1.0; Web Annotation is in inker's fleece and DTCG tokens in graphshell's tabard; dramatis speaks <code>did:key</code>. The unused fits are a short list: SHACL, VC 2.0, PROV-O as a model, ActivityPub, WebSub, Webmention, PLS, MusicXML and WCAG statements.</li>
     </ul>
   </div>
   <div class="stats" id="stats"></div>
@@ -150,7 +150,7 @@ tr.grp td{background:var(--accent-soft);font:600 12px var(--mono);letter-spacing
     <div style="display:grid;gap:10px">
       <h3>Strong fits nobody has adopted</h3>
       <ul class="list">
-        <li><b>RDFC-1.0 + Data Integrity</b> for mere-rdf. It already promises byte-stable normalized datasets; canonicalization would make graph exports signable with insigne keys.</li>
+        <li><b>Data Integrity proofs</b> for mere. RDFC-1.0 canonicalization is in <code>mere-rdfc</code> (86 of 86 on the W3C suite, 2026-11-13); verifying proofs over it is not built, and signing exports with insigne keys is custody's side.</li>
         <li><b>SHACL</b> as the ingest validator, replacing eidetic's own JSON-schema codicils and the open-IRI “recognized core”.</li>
         <li><b>PROV-O as a model, not seven constants.</b> It fits mere statements, cleromancy's reading receipts and isocosm's chronicles.</li>
         <li><b>VC 2.0 / DID Core</b> for insigne delegation certificates, which are already VC-shaped. gaz already parses <code>did:key</code> and <code>did:plc</code>.</li>
@@ -196,7 +196,7 @@ const TIERS=[
  {k:"dep",h:"Specs arrive through dependencies",p:"The repo composes engines that carry the specs; its own surface is vendor APIs or glue."},
  {k:"thin",h:"Thin or mostly planned",p:"A few format or crypto RFCs; the product's own logic has no external standard."}];
 const TR=[
- ["Semantic web / RDF",117,"RDF 1.2, SPARQL, OWL 2, SKOS, SHACL, PROV, DCAT, JSON-LD","mere-rdf, fleece, cleromancy"],
+ ["Semantic web / RDF",117,"RDF 1.2, SPARQL, OWL 2, SKOS, SHACL, PROV, DCAT, JSON-LD","mere, fleece, cleromancy"],
  ["XML family",86,"XML, XPath, XSLT, XQuery, XML Schema, EXI","genet (xpath, XHTML); little else"],
  ["Accessibility guidelines",30,"WCAG 2.2/3.0, ARIA 1.1, AccName, Core-AAM, ATAG, ACT Rules","every UI: cambium, turnstone, knot, scry, site"],
  ["Media & timed text",30,"TTML2, IMSC, WebVTT, SSML, PLS, SMIL, MSE, EME","woodshed (WebVTT), mora (PLS, SSML)"],
