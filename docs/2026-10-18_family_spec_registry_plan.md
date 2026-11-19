@@ -7,6 +7,12 @@ measurements; the remaining sections describe possibilities and dependencies.
 2026-11-19: claims re-homed after the engine split, each to the repository that
 now holds its named crate (735 claims to 673; Mere 166 to 17); ledger ids added:
 `graphshell`, `inker`, `eidetic`, `seiche`, `armillary`, `distillery`.
+The five claims that re-home left on Mere were settled the same day by the
+session, at Mark's word ("rule on the five claims left on mere"), each checked
+in code: `rfc9420` dropped (no evidence; Murm's transport holds the claim),
+`selectors-states` and `warc` to Inker's `fleece`, `xdg-basedir` split between
+Graphshell's `mere-resident` and Armillary's `ostiary`, and `schema-org` kept on
+Mere with its evidence rewritten to the engine's own (673 claims; Mere 13).
 **Data:** [`content/specs.toml`](../content/specs.toml)
 **Rendered view:** the Merely Spec Atlas,
 https://claude.ai/artifact/HFe3GfjV3SmvqyipkDzW5R (private until shared)

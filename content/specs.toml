@@ -5034,15 +5034,6 @@ source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
 [[claim]]
-spec = "rfc9420"
-repo = "mere"
-relation = "should"
-depth = "planned"
-verdict = "open"
-source = "atlas-2026-10-18"
-verified_on = "2026-10-18"
-
-[[claim]]
 spec = "rfc9562"
 repo = "mere"
 relation = "implements"
@@ -8666,13 +8657,14 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "selectors-states"
-repo = "mere"
+repo = "inker"
+crate = "fleece"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
-evidence = "None — and that is the point. Anyone in fleece or import reaching for a non-annotation-framed selector spec would land here first."
+evidence = "None — and that is the point. Anyone in fleece's bridge (crates/fleece/src/eidetic_bridge.rs carries the Web Annotation text quote and position selectors) reaching for a non-annotation-framed selector spec would land here first."
 source = "mere-survey-2026-08-24#7.41"
-verified_on = "2026-08-24"
+verified_on = "2026-11-19"
 
 [[claim]]
 spec = "selectors-states"
@@ -8720,9 +8712,9 @@ repo = "mere"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-evidence = "fleece StructuredData (the @type and itemtype values it already collects are overwhelmingly schema.org terms); eidetic corpus typing; gazette's …"
+evidence = "the mere engine vendors the schema.org JSON-LD context (crates/graph/engine/assets/schema.org.context.jsonld, feature bundled-contexts) and unifies http and https schema.org IRIs at ingest (crates/graph/engine/src/acquire/ingest.rs); the vocabulary's terms are a pack, not engine code. Fleece's StructuredData is genet's claim."
 source = "mere-survey-2026-08-24#7.43"
-verified_on = "2026-08-24"
+verified_on = "2026-11-19"
 
 [[claim]]
 spec = "schema-org"
@@ -9036,13 +9028,14 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "warc"
-repo = "mere"
+repo = "inker"
+crate = "fleece"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
-evidence = "mere-crawl's stored fetch keeps WARC's request, response and metadata record shape, so export is lossless"
+evidence = "fleece's crawl module (crates/fleece/src/crawl, formerly mere-crawl): a stored fetch keeps WARC's request, response and metadata record shape, so export is lossless. At inker 1194c74 the module has a frontier, robots, sitemaps and a session, and no stored-fetch record yet."
 source = "mere-survey-2026-08-24#7.67+7.1"
-verified_on = "2026-09-23"
+verified_on = "2026-11-19"
 
 [[claim]]
 spec = "webextensions"
@@ -9146,13 +9139,25 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "xdg-basedir"
-repo = "mere"
+repo = "graphshell"
+crate = "mere-resident"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-evidence = "mere/ports/djinn (src/settings.rs already reads LOCALAPPDATA then falls back to XDG_DATA_HOME) and mere/ports/graphshell (native/app_admission.rs and …"
+evidence = "host/ports/mere-resident/src/settings.rs reads LOCALAPPDATA, then falls back to XDG_DATA_HOME (the resident's settings, cited by the survey at mere/ports/djinn)"
 source = "mere-survey-2026-08-24#7.77"
-verified_on = "2026-08-24"
+verified_on = "2026-11-19"
+
+[[claim]]
+spec = "xdg-basedir"
+repo = "armillary"
+crate = "ostiary"
+relation = "implements"
+depth = "partial"
+verdict = "ADOPT"
+evidence = "crates/ostiary/src/app_admission.rs derives the app admission socket path from XDG_RUNTIME_DIR, then XDG_DATA_HOME, then HOME (cited by the survey at mere/ports/graphshell native/app_admission.rs)"
+source = "mere-survey-2026-08-24#7.77"
+verified_on = "2026-11-19"
 
 [[claim]]
 spec = "desktop-entry"
