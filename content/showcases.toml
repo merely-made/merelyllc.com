@@ -40,9 +40,23 @@ order = 3
 headline = "Browse a web of things, not a stack of tabs."
 copy = "Turnstone keeps pages, media, and notes as graph nodes that can be related, arranged, and opened together. Its current workbench is an early host for Mere and Genet rather than a finished browser shell."
 image = "showcase/turnstone.png"
-alt = "Turnstone showing a graph canvas beside two tiled web documents for IANA and Example Domain."
-caption = "Turnstone's early workbench opening two related web documents in place."
+alt = "Turnstone's graph canvas under a single chrome row: fifteen documents drawn as coloured tiles joined by their relations, three of them labelled alpha, beta and gamma, with mere://gamma in the status line."
+caption = "Turnstone's canvas: the documents of a mere as a graph, with gamma in focus."
+source_url = "https://github.com/merely-made/turnstone/blob/main/assets/screenshots/canvas.png"
+source_license = "MIT OR Apache-2.0"
+
+[[showcase.images]]
+image = "showcase/turnstone-2.png"
+alt = "Turnstone's workbench tiling the IANA home page beside the Project Gemini capsule, the capsule set in serif on the dark host palette, with the trail from Meres to Project Gemini in the chrome row."
+caption = "The workbench: a web page and a Gemini capsule opened side by side."
 source_url = "https://github.com/merely-made/turnstone/blob/main/assets/screenshots/workbench-split.png"
+source_license = "MIT OR Apache-2.0"
+
+[[showcase.images]]
+image = "showcase/turnstone-3.png"
+alt = "Turnstone with the Overview pane open beside the canvas: a miniature of the whole graph with the focused node ringed, above an empty Downloads list."
+caption = "The Overview pane: the whole graph in miniature beside the canvas."
+source_url = "https://github.com/merely-made/turnstone/blob/main/assets/screenshots/overview.png"
 source_license = "MIT OR Apache-2.0"
 
 [[showcase]]
