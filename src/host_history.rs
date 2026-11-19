@@ -161,7 +161,9 @@ pub fn disclose_graph(
                     ),
                 ]),
             )
-            .with_classes([node.class.as_str()])
+            // No classes slot here yet: the pinned viewer (assets/graphshell,
+            // built 2026-10-27) refuses the key. The `class` value above still
+            // discloses it; add `.with_classes` when the viewer is rebuilt.
         })
         .collect();
     let relationships = graph
