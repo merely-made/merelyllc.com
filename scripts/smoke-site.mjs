@@ -695,7 +695,7 @@ try {
     };
   });
   assert.equal(staticBench.ready, "false");
-  assert.match(staticBench.fallback, /rendered by radio-mirror from Retinue's firmware UI at retinue revision [0-9a-f]{7}/);
+  assert.match(staticBench.fallback, /rendered by radio-mirror from Retinue's firmware UI on Murm's main branch/);
   assert.equal(staticBench.screen, "status");
   assert.equal(staticBench.reading[0], "STATUS, RAD OK");
   assert.deepEqual(

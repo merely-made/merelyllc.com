@@ -8,13 +8,13 @@
 use radio_mirror::{Mirror, input, names};
 use serde_json::{Value, json};
 
-use crate::{HOST_FIXTURE, LOCAL_FIXTURE, RETINUE_REPOSITORY, RETINUE_REVISION, SURFACE};
+use crate::{HOST_FIXTURE, LOCAL_FIXTURE, RETINUE_BRANCH, RETINUE_REPOSITORY, SURFACE};
 
 /// The schema of the inline scenario document the bench reads.
 pub const SCENARIOS_SCHEMA: &str = "mer3ly.radio-bench-scenarios/v1";
 
 /// The fault the V4 firmware raises when its SX1262 does not initialize
-/// (`firmware/heltec-v4-phy/src/main.rs` at the pinned revision).
+/// (`firmware/heltec-v4-phy/src/main.rs` in Murm).
 const V4_INIT_FAULT_CODE: u8 = 1;
 const V4_INIT_FAULT_MESSAGE: &str = "SX1262 INIT";
 
@@ -91,7 +91,7 @@ pub fn scenarios_json() -> String {
         "schema": SCENARIOS_SCHEMA,
         "source": {
             "repository": RETINUE_REPOSITORY,
-            "revision": RETINUE_REVISION,
+            "branch": RETINUE_BRANCH,
             "crate": "radio-mirror",
             "fixtures": [
                 "crates/radio-mirror/fixtures/receipts-local.json",

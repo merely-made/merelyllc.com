@@ -15,10 +15,11 @@ license = "MPL-2.0"
 [lib]
 crate-type = ["cdylib", "rlib"]
 
-# radio-mirror is unpublished, so it is taken from retinue at an exact
-# revision. It links radio-face and the vendored embedded-graphics only; the
-# Reticulum-licensed `retinue` and `retinue-sim` crates must never enter this
-# resolve (Ruling 127), which `tests/pin.rs` checks against Cargo.lock.
+# radio-mirror is unpublished, so it is taken from Murm's main, as every
+# family dependency is (engine split D139). It links radio-face and the
+# vendored embedded-graphics only; the Reticulum-licensed `retinue` and
+# `retinue-sim` crates must never enter this resolve (Ruling 127), which
+# `tests/pin.rs` checks against what Cargo resolved.
 [dependencies]
 radio-mirror = { git = "https://github.com/merely-made/murm.git", branch = "main" }
 

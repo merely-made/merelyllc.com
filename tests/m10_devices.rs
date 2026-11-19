@@ -211,11 +211,10 @@ fn v4_bench_states_where_its_screens_come_from() {
     assert!(!document.contains("accurate static example"));
     assert!(!document.contains("deterministic controller model"));
     assert!(document.contains(&devices::radio_mirror_source_statement()));
-    assert!(document.contains("at retinue revision b49df89"));
-    assert_eq!(mer3ly_radio_mirror::short_revision(), "b49df89");
+    assert!(document.contains("from Murm's main branch"));
     assert!(document.contains(&format!(
         "https://github.com/merely-made/murm/tree/{}/crates/radio-mirror",
-        mer3ly_radio_mirror::RETINUE_REVISION
+        mer3ly_radio_mirror::RETINUE_BRANCH
     )));
     for firmware in ["RNode", "Meshtastic", "MeshCore"] {
         assert!(document.contains(&format!(
@@ -295,8 +294,8 @@ fn v4_bench_scenarios_are_the_pinned_fixtures() {
     assert_eq!(scenarios["schema"], "mer3ly.radio-bench-scenarios/v1");
     assert_eq!(scenarios["surface"], "oled-128x64");
     assert_eq!(
-        scenarios["source"]["revision"],
-        mer3ly_radio_mirror::RETINUE_REVISION
+        scenarios["source"]["branch"],
+        mer3ly_radio_mirror::RETINUE_BRANCH
     );
     let local: serde_json::Value =
         serde_json::from_str(mer3ly_radio_mirror::LOCAL_FIXTURE).expect("local fixture");

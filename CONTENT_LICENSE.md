@@ -15,16 +15,15 @@ recorded in `content/showcases.toml`. This repository does not grant rights in
 third-party material that may appear inside a screenshot.
 
 The V4 radio bench is built from retinue's `radio-mirror` and `radio-face`
-crates, which are MPL-2.0, at retinue revision
-`6aa78fc0d0ddd30e94db59470f30f47e669321dc`. That covers the committed runtime
+crates, which are MPL-2.0, taken from Murm's main branch at each build. That covers the committed runtime
 `assets/radio_mirror.js` and `assets/radio_mirror_bg.wasm`, and the screen
 images the site build renders into `radio-mirror/`. Their source is
-<https://github.com/merely-made/murm/tree/6aa78fc0d0ddd30e94db59470f30f47e669321dc/crates/radio-mirror>
+<https://github.com/merely-made/murm/tree/main/crates/radio-mirror>
 and
-<https://github.com/merely-made/murm/tree/6aa78fc0d0ddd30e94db59470f30f47e669321dc/crates/radio-face>.
+<https://github.com/merely-made/murm/tree/main/crates/radio-face>.
 The vendored `embedded-graphics` they link is MIT OR Apache-2.0. The status
 documents in `crates/radio-mirror/fixtures/` are copied unchanged from the
-same revision. These screens are firmware output, not original site artwork,
+same source. These screens are firmware output, not original site artwork,
 and CC BY 4.0 does not apply to them. The build links no Reticulum-licensed
 retinue crate.
 

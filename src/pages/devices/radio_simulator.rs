@@ -36,7 +36,7 @@ pub(super) fn radio_simulator() -> SiteView {
                             txt(" "),
                             external_link(
                                 &radio_mirror_source_url(),
-                                "Read radio-mirror at that revision.",
+                                "Read radio-mirror on Murm's main.",
                                 "radio-source-link",
                             ),
                         ],
@@ -54,10 +54,9 @@ pub(super) fn radio_simulator() -> SiteView {
                     ("class", "radio-bench-fallback"),
                     ("data-radio-fallback", ""),
                 ],
-                vec![txt(format!(
-                    "Enable JavaScript to operate the controls. Each screen below was rendered by radio-mirror from Retinue's firmware UI at retinue revision {}.",
-                    mer3ly_radio_mirror::short_revision()
-                ))],
+                vec![txt(
+                    "Enable JavaScript to operate the controls. Each screen below was rendered by radio-mirror from Retinue's firmware UI on Murm's main branch.",
+                )],
             ),
             radio_screen_gallery(&screens),
         ],
@@ -66,17 +65,14 @@ pub(super) fn radio_simulator() -> SiteView {
 
 /// Where the screens come from, as the page states it.
 pub fn radio_mirror_source_statement() -> String {
-    format!(
-        "The screen is drawn by radio-mirror, which runs Retinue's own firmware UI (radio-face's renderer and Controller) at retinue revision {}, compiled to WebAssembly. Its status is retinue's fixed receipt fixtures; it is not connected to a radio.",
-        mer3ly_radio_mirror::short_revision()
-    )
+    "The screen is drawn by radio-mirror, which runs Retinue's own firmware UI (radio-face's renderer and Controller) from Murm's main branch, compiled to WebAssembly. Its status is retinue's fixed receipt fixtures; it is not connected to a radio.".to_owned()
 }
 
 pub(super) fn radio_mirror_source_url() -> String {
     format!(
         "{}/tree/{}/crates/radio-mirror",
         mer3ly_radio_mirror::RETINUE_REPOSITORY,
-        mer3ly_radio_mirror::RETINUE_REVISION
+        mer3ly_radio_mirror::RETINUE_BRANCH
     )
 }
 
@@ -324,10 +320,9 @@ pub(super) fn radio_screen_gallery(screens: &[mer3ly_radio_mirror::StaticScreen]
             element(
                 "p",
                 &[],
-                vec![txt(format!(
-                    "Rendered at site build time by radio-mirror from Retinue's firmware UI at retinue revision {}, with retinue's receipt fixtures and the host attached; the fault is the V4 firmware's own radio-init fault. Each image's text is radio-face's text projection of the same screen.",
-                    mer3ly_radio_mirror::short_revision()
-                ))],
+                vec![txt(
+                    "Rendered at site build time by radio-mirror from Retinue's firmware UI on Murm's main branch, with retinue's receipt fixtures and the host attached; the fault is the V4 firmware's own radio-init fault. Each image's text is radio-face's text projection of the same screen.",
+                )],
             ),
             element(
                 "ul",
