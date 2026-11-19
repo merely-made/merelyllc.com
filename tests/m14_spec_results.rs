@@ -93,7 +93,7 @@ const BOTH: [(&str, &str, &str, &str); 2] = [
     (
         "piccolo-fork",
         "merely-made/didgeridoo",
-        "master",
+        "main",
         "spec-results.toml",
     ),
 ];
@@ -145,7 +145,7 @@ fn a_source_missing_from_the_fetch_is_an_error() {
     let root = scratch("missing", &BOTH[..1]);
     let mut registry = SpecRegistry::parse(REGISTRY).unwrap();
     let errors = spec_results::apply(&mut registry, &authority(), &root).unwrap_err();
-    assert!(errors[0].contains("merely-made/didgeridoo spec-results.toml@master is not in"));
+    assert!(errors[0].contains("merely-made/didgeridoo spec-results.toml@main is not in"));
     let _ = fs::remove_dir_all(root);
 }
 
@@ -160,7 +160,7 @@ fn sources_resolve_through_the_migration_ledger() {
     assert_eq!(
         listed,
         [
-            ("merely-made/didgeridoo", "master"),
+            ("merely-made/didgeridoo", "main"),
             ("merely-made/vano", "main")
         ]
     );

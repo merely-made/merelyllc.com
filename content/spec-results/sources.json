@@ -1,20 +1,20 @@
 {
- "fetched_on": "2026-10-22",
+ "fetched_on": "2026-11-19",
  "source": [
   {
    "repo": "boa-fork",
    "slug": "merely-made/bole",
    "ref": "genet",
    "path": "spec-results.toml",
-   "commit": "4f50841e93517fc8db03892de0dc10a5b0482734",
+   "commit": "ab4c8634cdf663a78a05adad2ed9ca54f20884c2",
    "committed_on": "2026-10-22"
   },
   {
    "repo": "piccolo-fork",
    "slug": "merely-made/didgeridoo",
-   "ref": "master",
+   "ref": "main",
    "path": "spec-results.toml",
-   "commit": "a2648e49c35e48b3d438a327a5b822ef8473d5bd",
+   "commit": "dcdd02397925d02a2d73ef678e420c994e3e81aa",
    "committed_on": "2026-10-22"
   },
   {
@@ -22,7 +22,7 @@
    "slug": "merely-made/vano",
    "ref": "main",
    "path": "tests/metrics-skipped.json",
-   "commit": "0c52b50f0c8f8058707478b65a5e1edca75fc3e9",
+   "commit": "94d0ae81e820fcdbd0ae9083983252c779f3128a",
    "committed_on": "2026-10-18"
   },
   {
@@ -30,7 +30,7 @@
    "slug": "merely-made/vano",
    "ref": "main",
    "path": "tests/metrics.json",
-   "commit": "fca286669bfc02016a05424cc6ff723881e09282",
+   "commit": "8c107e3bdb74f7cbd30e1ecb85ba9834ad562627",
    "committed_on": "2026-10-17"
   }
  ]

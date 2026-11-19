@@ -519,8 +519,12 @@ impl Roadmap {
                     ("source_url".into(), text(&node.source_url)),
                     ("order".into(), ProjectionValue::Number(order as f64)),
                 ]);
-                ProjectionOccurrence::new(node.id.clone(), SourceRef::new(ADAPTER, &node.id), values)
-                    .with_classes([node.class])
+                ProjectionOccurrence::new(
+                    node.id.clone(),
+                    SourceRef::new(ADAPTER, &node.id),
+                    values,
+                )
+                .with_classes([node.class])
             })
             .collect();
         let mut relationships: Vec<DisclosedRelationship> = self

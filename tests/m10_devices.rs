@@ -349,19 +349,37 @@ fn radio_simulator_drives_radio_mirror_and_keeps_no_page_table() {
 
 #[test]
 fn the_site_resolve_holds_no_reticulum_licensed_crate() {
-    for lock in ["Cargo.lock", "crates/radio-mirror/Cargo.lock"] {
-        let text = std::fs::read_to_string(workspace_root().join(lock)).expect("lockfile");
-        let parsed: toml::Value = toml::from_str(&text).expect("valid Cargo lockfile");
-        let names: Vec<_> = parsed["package"]
+    // No Cargo.lock is tracked, so ask Cargo for each root's resolve.
+    let cargo = std::env::var("CARGO").unwrap_or_else(|_| "cargo".into());
+    for manifest in ["Cargo.toml", "crates/radio-mirror/Cargo.toml"] {
+        let output = std::process::Command::new(&cargo)
+            .args(["metadata", "--format-version", "1", "--manifest-path"])
+            .arg(workspace_root().join(manifest))
+            .output()
+            .expect("cargo metadata");
+        assert!(
+            output.status.success(),
+            "{manifest} does not resolve: {}",
+            String::from_utf8_lossy(&output.stderr)
+        );
+        let resolve: serde_json::Value =
+            serde_json::from_slice(&output.stdout).expect("cargo metadata JSON");
+        let names: Vec<_> = resolve["packages"]
             .as_array()
             .expect("Cargo package list")
             .iter()
             .map(|package| package["name"].as_str().expect("Cargo package name"))
             .collect();
         for forbidden in ["retinue", "retinue-sim"] {
-            assert!(!names.contains(&forbidden), "{lock} resolves {forbidden}");
+            assert!(
+                !names.contains(&forbidden),
+                "{manifest} resolves {forbidden}"
+            );
         }
-        assert!(names.contains(&"radio-mirror"), "{lock} lacks radio-mirror");
+        assert!(
+            names.contains(&"radio-mirror"),
+            "{manifest} lacks radio-mirror"
+        );
     }
 }
 
