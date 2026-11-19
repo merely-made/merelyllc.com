@@ -209,7 +209,7 @@ h1 {
   margin-top: 18px;
   max-width: 15ch;
   color: var(--oxblood);
-  font: 400 clamp(2.6rem, 7vw, 5.2rem)/0.98 var(--font-wordmark);
+  font: 400 clamp(1.95rem, 5.25vw, 3.9rem)/0.98 var(--font-wordmark);
   letter-spacing: -0.025em;
   text-wrap: balance;
 }
@@ -217,7 +217,7 @@ h1 {
 .radio-hero h1 {
   max-width: 22ch;
   margin-top: 0;
-  font-size: clamp(2.35rem, 6vw, 4.35rem);
+  font-size: clamp(1.76rem, 4.5vw, 3.26rem);
   line-height: 1.03;
 }
 
@@ -344,7 +344,7 @@ h1 {
   max-width: 17ch;
   margin-top: 10px;
   color: var(--oxblood);
-  font: 400 clamp(1.8rem, 4vw, 2.65rem)/1.08 var(--font-wordmark);
+  font: 400 clamp(1.35rem, 3vw, 1.99rem)/1.08 var(--font-wordmark);
 }
 
 .feature-copy > p:not(.card-kicker) {
@@ -452,7 +452,7 @@ h1 {
 
 .repositories-hero h1 {
   max-width: 17ch;
-  font-size: clamp(2.8rem, 6.4vw, 4.8rem);
+  font-size: clamp(2.1rem, 4.8vw, 3.6rem);
   line-height: 1;
 }
 
@@ -1584,7 +1584,7 @@ h1 {
 .repository-card h2 {
   margin-top: 5px;
   color: var(--oxblood);
-  font: 400 clamp(1.75rem, 4vw, 2.35rem)/1.05 var(--font-wordmark);
+  font: 400 clamp(1.31rem, 3vw, 1.76rem)/1.05 var(--font-wordmark);
 }
 
 .repository-badges {
@@ -2478,7 +2478,7 @@ tbody tr:last-child td {
 .project-showcase-copy h2 {
   margin-top: 12px;
   color: var(--oxblood);
-  font: 400 clamp(1.75rem, 3.6vw, 2.65rem)/1.08 var(--font-wordmark);
+  font: 400 clamp(1.31rem, 2.7vw, 1.99rem)/1.08 var(--font-wordmark);
   text-wrap: balance;
 }
 
@@ -2502,7 +2502,7 @@ tbody tr:last-child td {
 
 .project-profile-hero h1 {
   max-width: 17ch;
-  font-size: clamp(2.8rem, 6.4vw, 4.8rem);
+  font-size: clamp(2.1rem, 4.8vw, 3.6rem);
   line-height: 1;
 }
 
@@ -2522,7 +2522,7 @@ tbody tr:last-child td {
 
 .project-showcase-copy h2 {
   margin-top: 0;
-  font-size: clamp(1.75rem, 3.2vw, 2.35rem);
+  font-size: clamp(1.31rem, 2.4vw, 1.76rem);
   overflow-wrap: break-word;
 }
 
@@ -2612,7 +2612,7 @@ tbody tr:last-child td {
 
 .projection-proof-heading h2 {
   color: var(--oxblood);
-  font: 400 clamp(1.8rem, 4vw, 2.7rem)/1.08 var(--font-wordmark);
+  font: 400 clamp(1.35rem, 3vw, 2.03rem)/1.08 var(--font-wordmark);
 }
 
 .projection-proof-heading > div > p {
@@ -3414,20 +3414,20 @@ tbody tr:last-child td {
   }
 
   h1 {
-    font-size: clamp(2.35rem, 11.8vw, 3.2rem);
+    font-size: clamp(1.76rem, 8.85vw, 2.4rem);
     overflow-wrap: anywhere;
   }
 
   .radio-hero h1 {
-    font-size: clamp(2.2rem, 11vw, 3rem);
+    font-size: clamp(1.65rem, 8.25vw, 2.25rem);
   }
 
   .repositories-hero h1 {
-    font-size: clamp(2.25rem, 11vw, 3rem);
+    font-size: clamp(1.69rem, 8.25vw, 2.25rem);
   }
 
   .project-profile-hero h1 {
-    font-size: clamp(2.25rem, 11vw, 3rem);
+    font-size: clamp(1.69rem, 8.25vw, 2.25rem);
   }
 
   .hero-actions {
