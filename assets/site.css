@@ -3750,6 +3750,12 @@ tbody tr:last-child td {
   margin: 0 0 12px;
 }
 
+/* A plan path is one long unbreakable word; let it wrap on a phone. */
+.roadmap-feature-meta a {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
 .roadmap-feature tr[data-depth="full"] td {
   color: var(--lake);
 }
