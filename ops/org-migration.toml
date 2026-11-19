@@ -754,3 +754,117 @@ publication_gate_status = "not-applicable"
 pages_status = "none"
 packages_status = "not-inventoried"
 actions_workflows = 1
+
+# Graphshell, Inker, Eidetic, Seiche, Armillary and Distillery are not covered by
+# the historical migration review: Eidetic, Armillary and Distillery were created
+# in the organization on 2026-10-19, Inker and Seiche on 2026-11-07, and Graphshell
+# took the host layer in the engine split of 2026-11. The spec registry needs their
+# ids (claims re-homed 2026-11-19); heads are as read that day. This does not claim
+# the historical migration review covered these projects.
+[[migration]]
+id = "graphshell"
+current_slug = "merely-made/graphshell"
+target_slug = "merely-made/graphshell"
+classification = "platform"
+batch = "platform"
+disposition = "already-in-org"
+visibility = "public"
+default_branch = "main"
+head = "e058383e88410cbbe19196aef4981d3abe96c668"
+license_status = "MPL-2.0"
+provenance_status = "not-assessed-in-historical-migration"
+sensitive_information_status = "not-assessed-in-historical-migration"
+publication_gate_status = "not-applicable"
+pages_status = "none"
+packages_status = "not-inventoried"
+actions_workflows = 0
+
+[[migration]]
+id = "inker"
+current_slug = "merely-made/inker"
+target_slug = "merely-made/inker"
+classification = "platform"
+batch = "platform"
+disposition = "already-in-org"
+visibility = "public"
+default_branch = "main"
+head = "1194c74adc5f7718dd8a8ab6df1701d9d23e4720"
+license_status = "MPL-2.0"
+provenance_status = "not-assessed-in-historical-migration"
+sensitive_information_status = "not-assessed-in-historical-migration"
+publication_gate_status = "not-applicable"
+pages_status = "none"
+packages_status = "not-inventoried"
+actions_workflows = 0
+
+[[migration]]
+id = "eidetic"
+current_slug = "merely-made/eidetic"
+target_slug = "merely-made/eidetic"
+classification = "platform"
+batch = "platform"
+disposition = "already-in-org"
+visibility = "public"
+default_branch = "main"
+head = "63741b5e25d9126cf7af9df77e8555a9f560c315"
+license_status = "MPL-2.0"
+provenance_status = "not-assessed-in-historical-migration"
+sensitive_information_status = "not-assessed-in-historical-migration"
+publication_gate_status = "not-applicable"
+pages_status = "none"
+packages_status = "not-inventoried"
+actions_workflows = 0
+
+[[migration]]
+id = "seiche"
+current_slug = "merely-made/seiche"
+target_slug = "merely-made/seiche"
+classification = "foundation"
+batch = "foundation"
+disposition = "already-in-org"
+visibility = "public"
+default_branch = "main"
+head = "46fc0061272378669ced7c3b463868611cd4cb09"
+license_status = "MPL-2.0"
+provenance_status = "not-assessed-in-historical-migration"
+sensitive_information_status = "not-assessed-in-historical-migration"
+publication_gate_status = "not-applicable"
+pages_status = "none"
+packages_status = "not-inventoried"
+actions_workflows = 0
+
+[[migration]]
+id = "armillary"
+current_slug = "merely-made/armillary"
+target_slug = "merely-made/armillary"
+classification = "platform"
+batch = "platform"
+disposition = "already-in-org"
+visibility = "public"
+default_branch = "main"
+head = "0bad2d7ec5609e0d97b1970f5764302cb4846a4c"
+license_status = "MPL-2.0"
+provenance_status = "not-assessed-in-historical-migration"
+sensitive_information_status = "not-assessed-in-historical-migration"
+publication_gate_status = "not-applicable"
+pages_status = "none"
+packages_status = "not-inventoried"
+actions_workflows = 1
+
+[[migration]]
+id = "distillery"
+current_slug = "merely-made/distillery"
+target_slug = "merely-made/distillery"
+classification = "platform"
+batch = "platform"
+disposition = "already-in-org"
+visibility = "public"
+default_branch = "main"
+head = "48b10680a964959fb3e8354e94b9ac8612c49e34"
+license_status = "MPL-2.0"
+provenance_status = "not-assessed-in-historical-migration"
+sensitive_information_status = "not-assessed-in-historical-migration"
+publication_gate_status = "not-applicable"
+pages_status = "none"
+packages_status = "not-inventoried"
+actions_workflows = 0

@@ -4,6 +4,9 @@
 **Status:** in progress. R0 (seed), R1 (validator), R2 (one home) and R3
 (coverage report) landed 2026-10-18; D1–D6 ruled as proposed. R4 has partial
 measurements; the remaining sections describe possibilities and dependencies.
+2026-11-19: claims re-homed after the engine split, each to the repository that
+now holds its named crate (735 claims to 673; Mere 166 to 17); ledger ids added:
+`graphshell`, `inker`, `eidetic`, `seiche`, `armillary`, `distillery`.
 **Data:** [`content/specs.toml`](../content/specs.toml)
 **Rendered view:** the Merely Spec Atlas,
 https://claude.ai/artifact/HFe3GfjV3SmvqyipkDzW5R (private until shared)

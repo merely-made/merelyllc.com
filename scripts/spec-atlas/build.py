@@ -14,14 +14,14 @@ specs = {s["id"]: s for s in reg["spec"]}
 
 GROUPS = [("Engines", ["genet", "vano", "boa-fork", "piccolo-fork"]),
           ("Rendering & embedding", ["netrender", "wgpu-weld", "wgpu-scry", "wgpu-graft"]),
-          ("Workbench", ["mere", "dramatis"]),
+          ("Workbench", ["mere", "graphshell", "inker", "eidetic", "seiche", "dramatis", "armillary", "distillery"]),
           ("Apps", ["turnstone", "knot-editor", "woodshed", "isocosm", "cleromancy"]),
           ("Spec libraries", ["smolweb", "turquet", "wavicle", "emblem", "pipit", "mora"]),
           ("Transport", ["retinue"]), ("Site", ["mer3ly"]), ("Family-wide verdicts", ["family"])]
-TIER = {**{r: "spec" for r in ["genet", "vano", "boa-fork", "piccolo-fork", "mere", "dramatis", "knot-editor", "woodshed",
+TIER = {**{r: "spec" for r in ["genet", "vano", "boa-fork", "piccolo-fork", "mere", "graphshell", "inker", "dramatis", "knot-editor", "woodshed",
                                 "cleromancy", "smolweb", "turquet", "wavicle", "emblem", "retinue", "mer3ly"]},
-        **{r: "dep" for r in ["netrender", "wgpu-weld", "wgpu-scry", "wgpu-graft", "turnstone"]},
-        **{r: "thin" for r in ["isocosm", "pipit", "mora"]}}
+        **{r: "dep" for r in ["netrender", "wgpu-weld", "wgpu-scry", "wgpu-graft", "turnstone", "eidetic", "distillery"]},
+        **{r: "thin" for r in ["isocosm", "pipit", "mora", "seiche", "armillary"]}}
 LABEL = {"retinue": "murm", "boa-fork": "bole", "piccolo-fork": "didgeridoo", "mer3ly": "merelyllc.com"}
 REL = {"implements": "impl", "via-dep": "dep", "should": "should", "adjacent": "adj"}
 RANK = {"full": 0, "partial": 1, "stub": 2, "planned": 3, "none": 4}

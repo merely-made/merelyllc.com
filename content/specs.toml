@@ -4220,7 +4220,7 @@ crate = "netfetcher"
 relation = "implements"
 depth = "full"
 verdict = "open"
-source = "atlas-2026-10-18"
+source = "atlas-2026-10-18 mere-survey-2026-08-24#7.89+7.1"
 verified_on = "2026-10-18"
 
 [[claim]]
@@ -4730,7 +4730,7 @@ repo = "mere"
 relation = "implements"
 depth = "full"
 verdict = "open"
-evidence = "mere-rdf via oxjsonld"
+evidence = "mere engine crate (parse_jsonld) via oxjsonld; mere-rdf retired at engine split P5"
 source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
@@ -4776,17 +4776,17 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "annotation-model"
-repo = "mere"
+repo = "inker"
 relation = "implements"
 depth = "full"
 verdict = "ADOPT"
-evidence = "fleece; mere's own survey still lists it as to-do"
+evidence = "crates/fleece eidetic_bridge; mere's own survey still lists it as to-do"
 source = "atlas-2026-10-18 mere-survey-2026-08-24#7.40"
 verified_on = "2026-10-18"
 
 [[claim]]
 spec = "dtcg-format"
-repo = "mere"
+repo = "graphshell"
 relation = "implements"
 depth = "full"
 verdict = "ADOPT"
@@ -4796,11 +4796,11 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "WCAG22"
-repo = "mere"
+repo = "graphshell"
 relation = "implements"
 depth = "full"
 verdict = "ADOPT"
-evidence = "tinct"
+evidence = "graphshell crates/tinct — already the basis of the derivation. lib.rs carries WCAG relative luminance and contrast ratio (1.0..=21.0), a …"
 source = "atlas-2026-10-18 mere-survey-2026-08-24#7.74"
 verified_on = "2026-10-18"
 
@@ -4837,14 +4837,15 @@ verified_on = "2026-10-18"
 [[claim]]
 spec = "rdf-canon"
 repo = "mere"
-relation = "should"
-depth = "none"
+relation = "implements"
+depth = "full"
 verdict = "open"
+evidence = "mere-rdfc (oxrdf rdfc-10 carried): rdf-canon eval 64/64, map 21/21, negative 1/1 on 2026-11-13 (mere conformance ledger)"
 unlocks = [
   { feature = "signed, content-addressed graph exports with insigne keys", consumer = "mere-rdf's byte-stable normalized-dataset promise" },
 ]
 source = "atlas-2026-10-18"
-verified_on = "2026-10-18"
+verified_on = "2026-11-19"
 
 [[claim]]
 spec = "shacl"
@@ -4860,7 +4861,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "wai-aria-1.2"
-repo = "mere"
+repo = "graphshell"
 relation = "should"
 depth = "none"
 verdict = "open"
@@ -4873,7 +4874,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "accname-1.2"
-repo = "mere"
+repo = "graphshell"
 relation = "should"
 depth = "none"
 verdict = "open"
@@ -4883,7 +4884,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "html-aam-1.0"
-repo = "mere"
+repo = "graphshell"
 relation = "should"
 depth = "none"
 verdict = "open"
@@ -4892,28 +4893,8 @@ source = "atlas-2026-10-18"
 verified_on = "2026-10-18"
 
 [[claim]]
-spec = "html-microdata"
-repo = "mere"
-relation = "implements"
-depth = "partial"
-verdict = "open"
-evidence = "fleece"
-source = "atlas-2026-10-18"
-verified_on = "2026-10-18"
-
-[[claim]]
-spec = "open-graph"
-repo = "mere"
-relation = "implements"
-depth = "partial"
-verdict = "open"
-evidence = "fleece"
-source = "atlas-2026-10-18"
-verified_on = "2026-10-18"
-
-[[claim]]
 spec = "rfc9309"
-repo = "mere"
+repo = "inker"
 relation = "implements"
 depth = "partial"
 verdict = "open"
@@ -4923,7 +4904,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "sitemaps"
-repo = "mere"
+repo = "inker"
 relation = "implements"
 depth = "partial"
 verdict = "open"
@@ -4933,7 +4914,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "gemini"
-repo = "mere"
+repo = "inker"
 relation = "implements"
 depth = "full"
 verdict = "open"
@@ -4943,7 +4924,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "rfc1436"
-repo = "mere"
+repo = "inker"
 relation = "implements"
 depth = "full"
 verdict = "open"
@@ -4953,7 +4934,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "rfc1288"
-repo = "mere"
+repo = "inker"
 relation = "implements"
 depth = "full"
 verdict = "open"
@@ -4963,7 +4944,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "rss-2.0"
-repo = "mere"
+repo = "inker"
 relation = "implements"
 depth = "full"
 verdict = "ADOPT"
@@ -4973,7 +4954,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "rfc4287"
-repo = "mere"
+repo = "inker"
 relation = "implements"
 depth = "full"
 verdict = "ADOPT"
@@ -4983,7 +4964,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "json-feed"
-repo = "mere"
+repo = "inker"
 relation = "implements"
 depth = "full"
 verdict = "PULL"
@@ -4993,7 +4974,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "misfin"
-repo = "mere"
+repo = "smolweb"
 crate = "errand"
 relation = "implements"
 depth = "full"
@@ -5004,7 +4985,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "wasm-component-model"
-repo = "mere"
+repo = "graphshell"
 relation = "via-dep"
 depth = "partial"
 verdict = "open"
@@ -5014,7 +4995,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "wasi-p2"
-repo = "mere"
+repo = "graphshell"
 relation = "via-dep"
 depth = "partial"
 verdict = "open"
@@ -5024,7 +5005,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "gltf-2.0"
-repo = "mere"
+repo = "seiche"
 relation = "via-dep"
 depth = "full"
 verdict = "open"
@@ -5034,7 +5015,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "p2panda"
-repo = "mere"
+repo = "eidetic"
 relation = "via-dep"
 depth = "full"
 verdict = "open"
@@ -5044,7 +5025,7 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "dcgka"
-repo = "mere"
+repo = "eidetic"
 relation = "via-dep"
 depth = "full"
 verdict = "open"
@@ -5157,7 +5138,7 @@ repo = "dramatis"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-evidence = "gaz"
+evidence = "dramatis crates/gaz (the contact store), crates/gazette Ledger projection and recipient picker"
 source = "atlas-2026-10-18 mere-survey-2026-08-24#7.95"
 verified_on = "2026-10-18"
 
@@ -5167,7 +5148,7 @@ repo = "dramatis"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-evidence = "gaz"
+evidence = "crates/gazette (already built), gaz HandleKind::Acct"
 source = "atlas-2026-10-18 mere-survey-2026-08-24#7.94"
 verified_on = "2026-10-18"
 
@@ -5197,8 +5178,9 @@ repo = "dramatis"
 relation = "implements"
 depth = "partial"
 verdict = "open"
-source = "atlas-2026-10-18"
-verified_on = "2026-10-18"
+evidence = "crates/castellan feature `cxf`: two-step CXF import (README, CXF import); the 2026-08-24 survey row listed it as follow-on work and named the old import crate as a second consumer"
+source = "atlas-2026-10-18 mere-survey-2026-08-24#7.20+7.1 mere-survey-2026-08-24#7.21"
+verified_on = "2026-11-19"
 
 [[claim]]
 spec = "webauthn-3"
@@ -6205,7 +6187,7 @@ relation = "implements"
 depth = "full"
 verdict = "open"
 evidence = "reference icon reproduced byte-for-byte"
-source = "atlas-2026-10-18"
+source = "atlas-2026-10-18 mere-survey-2026-08-24#7.163+7.1"
 verified_on = "2026-10-18"
 
 [[claim]]
@@ -6487,7 +6469,7 @@ relation = "implements"
 depth = "partial"
 verdict = "open"
 evidence = "webrtc-carrier"
-source = "atlas-2026-10-18"
+source = "atlas-2026-10-18 mere-survey-2026-08-24#7.108+7.1"
 verified_on = "2026-10-18"
 
 [[claim]]
@@ -7104,7 +7086,7 @@ verdict = "ADOPT"
 measured = { on = "2026-10-18", scope = "names in genet components/ at 6f00922", css_props_named = 1, css_props_total = 4 }
 source = "catalog-join-2026-10-18 mere-survey-2026-08-24#7.76"
 verified_on = "2026-10-18"
-evidence = "genet/components/livery (parsing, done) and genet/ports/pelt (the half that is missing: nothing in pelt actually *sources* these preference values …"
+evidence = "genet/components/livery (parsing, done) and turnstone ports/pelt (the half that is missing: nothing in pelt actually *sources* these preference values …"
 
 [[claim]]
 spec = "css-conditional-3"
@@ -8096,14 +8078,14 @@ verdict = "ADOPT"
 unlocks = [
   { feature = "mere-rdf ingest straight from visited pages", consumer = "genet:design_docs/2026-09-07_standards_to_features_ledger.md row 13" },
 ]
-source = "genet-ledger-2026-09-07 mere-survey-2026-08-24#7.45"
+source = "genet-ledger-2026-09-07 mere-survey-2026-08-24#7.45 atlas-2026-10-18"
 verified_on = "2026-10-18"
 consumers = ["genet:design_docs/2026-09-07_standards_to_features_ledger.md#row-13"]
 evidence = "fleece extract_structured_data + microdata_item + collect_microdata_fields — already implemented, including nested itemscope items."
 
 [[claim]]
 spec = "rfc7914"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -8113,7 +8095,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "rfc8018"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -8123,7 +8105,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "nist-sp-800-132"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -8143,22 +8125,12 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "iso-27002-5.17"
-repo = "mere"
+repo = "dramatis"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
 evidence = "None in the codebase. The nearest thing is castellan's gate-petition transcript, which incidentally satisfies 5.17's records requirement."
 source = "mere-survey-2026-08-24#7.4"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "rfc8439"
-repo = "mere"
-relation = "implements"
-depth = "partial"
-verdict = "ADOPT"
-evidence = "Both halves are already shipped. personae/src/passphrase_root.rs uses RFC-8439 ChaCha20-Poly1305 (12-byte nonce) to seal the 32-byte vault root; …"
-source = "mere-survey-2026-08-24#7.5"
 verified_on = "2026-08-24"
 
 [[claim]]
@@ -8172,18 +8144,8 @@ source = "mere-survey-2026-08-24#7.5"
 verified_on = "2026-08-24"
 
 [[claim]]
-spec = "draft-irtf-cfrg-xchacha"
-repo = "mere"
-relation = "implements"
-depth = "partial"
-verdict = "ADOPT"
-evidence = "Both halves are already shipped. personae/src/passphrase_root.rs uses RFC-8439 ChaCha20-Poly1305 (12-byte nonce) to seal the 32-byte vault root; …"
-source = "mere-survey-2026-08-24#7.5"
-verified_on = "2026-08-24"
-
-[[claim]]
 spec = "nist-sp-800-38d"
-repo = "mere"
+repo = "dramatis"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -8193,7 +8155,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "rfc5297"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -8203,7 +8165,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "rfc8452"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -8213,7 +8175,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "nist-sp-800-38f"
-repo = "mere"
+repo = "dramatis"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -8272,16 +8234,6 @@ source = "mere-survey-2026-08-24#7.11+7.1"
 verified_on = "2026-09-23"
 
 [[claim]]
-spec = "slip-0039"
-repo = "mere"
-relation = "should"
-depth = "planned"
-verdict = "PULL"
-evidence = "personae's vault-root recovery reserves a share-set representation"
-source = "mere-survey-2026-08-24#7.11+7.1"
-verified_on = "2026-09-23"
-
-[[claim]]
 spec = "rfc9807"
 repo = "family"
 relation = "adjacent"
@@ -8313,16 +8265,6 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "fips-203"
-repo = "mere"
-relation = "should"
-depth = "none"
-verdict = "WATCH"
-evidence = "For the vault: none, honestly. For the sync transport (retinue/Reticulum, iroh, murm): eventually yes — but that is a different lane."
-source = "mere-survey-2026-08-24#7.14"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "fips-203"
 repo = "retinue"
 relation = "should"
 depth = "none"
@@ -8333,27 +8275,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "fips-204"
-repo = "mere"
-relation = "should"
-depth = "none"
-verdict = "WATCH"
-evidence = "For the vault: none, honestly. For the sync transport (retinue/Reticulum, iroh, murm): eventually yes — but that is a different lane."
-source = "mere-survey-2026-08-24#7.14"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "fips-204"
 repo = "retinue"
-relation = "should"
-depth = "none"
-verdict = "WATCH"
-evidence = "For the vault: none, honestly. For the sync transport (retinue/Reticulum, iroh, murm): eventually yes — but that is a different lane."
-source = "mere-survey-2026-08-24#7.14"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "fips-205"
-repo = "mere"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
@@ -8383,7 +8305,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "rfc9420"
-repo = "mere"
+repo = "dramatis"
 crate = "castellan"
 relation = "adjacent"
 depth = "none"
@@ -8404,7 +8326,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "pkcs11"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
@@ -8423,28 +8345,8 @@ source = "mere-survey-2026-08-24#7.19+7.1"
 verified_on = "2026-09-23"
 
 [[claim]]
-spec = "tpm-2.0"
-repo = "mere"
-relation = "should"
-depth = "planned"
-verdict = "PULL"
-evidence = "personae's `FileFreshnessLedger` takes its counter through an interface: a file today, a TPM NV index later"
-source = "mere-survey-2026-08-24#7.19+7.1"
-verified_on = "2026-09-23"
-
-[[claim]]
-spec = "fido-cxf"
-repo = "mere"
-relation = "implements"
-depth = "partial"
-verdict = "PULL"
-evidence = "repos/mere/ports/djinn/castellan — the README's own open item, 'CXF import remains follow-on work'. Second consumer: repos/mere/crates/import, which today …"
-source = "mere-survey-2026-08-24#7.20+7.1 mere-survey-2026-08-24#7.21"
-verified_on = "2026-09-23"
-
-[[claim]]
 spec = "fido-cxp"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -8454,7 +8356,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "kdbx"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -8464,7 +8366,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "1pux"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -8474,7 +8376,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "opvault"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -8484,7 +8386,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "bitwarden-export"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -8494,7 +8396,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "chromium-password-csv"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -8504,7 +8406,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "firefox-password-csv"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -8514,7 +8416,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "apple-passwords-csv"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -8524,17 +8426,17 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "secret-service"
-repo = "mere"
+repo = "dramatis"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-evidence = "repos/mere/ports/djinn/castellan, feature secret-service — already shipped: the resident owns org.freedesktop.secrets without replacement, implements the …"
+evidence = "dramatis crates/castellan, feature secret-service — already shipped: the resident owns org.freedesktop.secrets without replacement, implements the …"
 source = "mere-survey-2026-08-24#7.26"
 verified_on = "2026-08-24"
 
 [[claim]]
 spec = "xdg-portal-secret"
-repo = "mere"
+repo = "dramatis"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -8544,7 +8446,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "html"
-repo = "mere"
+repo = "dramatis"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
@@ -8554,7 +8456,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "credential-management-1"
-repo = "mere"
+repo = "dramatis"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -8574,7 +8476,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "change-password-url"
-repo = "mere"
+repo = "dramatis"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
@@ -8594,7 +8496,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "psl"
-repo = "mere"
+repo = "dramatis"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
@@ -8610,16 +8512,6 @@ depth = "partial"
 verdict = "ADOPT"
 evidence = "castellan credential scoping (which stored login is offered for which site), and genet for cookie scoping and same-site logic if it does not already …"
 source = "mere-survey-2026-08-24#7.31 mere-survey-2026-08-24#7.88"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "webauthn-3"
-repo = "mere"
-relation = "implements"
-depth = "partial"
-verdict = "ADOPT"
-evidence = "castellan as a passkey provider (the chatelaine side, since a passkey private key is bearer material); genet as the user agent implementing the API; …"
-source = "mere-survey-2026-08-24#7.32"
 verified_on = "2026-08-24"
 
 [[claim]]
@@ -8644,7 +8536,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "windows-webauthn-plugin"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -8654,7 +8546,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "apple-credential-provider"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -8664,7 +8556,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "android-credential-provider"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -8674,7 +8566,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "credentialsd"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
@@ -8694,7 +8586,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "hibp-range-api"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -8708,33 +8600,13 @@ repo = "dramatis"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-evidence = "repos/mere/crates/personae (the ssh-agent, live on Mark's Windows box since 2026-07-22) and castellan's keeper authority, which serves it. …"
-source = "mere-survey-2026-08-24#7.37"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "rfc9987"
-repo = "mere"
-relation = "implements"
-depth = "partial"
-verdict = "ADOPT"
-evidence = "repos/mere/crates/personae (the ssh-agent, live on Mark's Windows box since 2026-07-22) and castellan's keeper authority, which serves it. …"
+evidence = "dramatis crates/personae (the ssh-agent, live on Mark's Windows box since 2026-07-22) and castellan's keeper authority, which serves it. …"
 source = "mere-survey-2026-08-24#7.37"
 verified_on = "2026-08-24"
 
 [[claim]]
 spec = "owasp-asvs"
 repo = "dramatis"
-relation = "should"
-depth = "planned"
-verdict = "PULL"
-evidence = "castellan's and personae's plans check new surfaces against it, as self-assessment"
-source = "mere-survey-2026-08-24#7.38+7.1"
-verified_on = "2026-09-23"
-
-[[claim]]
-spec = "owasp-asvs"
-repo = "mere"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -8889,12 +8761,12 @@ relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
 evidence = "fleece extract_metadata — already harvests og:* with the prefix stripped and gives OG precedence over name; Article.site maps from og:site_name, …"
-source = "mere-survey-2026-08-24#7.47"
+source = "mere-survey-2026-08-24#7.47 atlas-2026-10-18"
 verified_on = "2026-08-24"
 
 [[claim]]
 spec = "microformats2"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -8914,7 +8786,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "dcmi-terms"
-repo = "mere"
+repo = "eidetic"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -8974,7 +8846,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "rfc5023"
-repo = "mere"
+repo = "dramatis"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
@@ -8994,7 +8866,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "websub"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
@@ -9024,7 +8896,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "djot"
-repo = "mere"
+repo = "inker"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
@@ -9034,7 +8906,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "commonmark"
-repo = "mere"
+repo = "inker"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
@@ -9044,11 +8916,11 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "fs"
-repo = "mere"
+repo = "eidetic"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-evidence = "mere ports/muniment-opfs-probe and crates/eidetic/muniment (the storage lane already probes OPFS); knot ONLY if it ever grows a browser-hosted …"
+evidence = "eidetic crates/muniment-opfs-probe and crates/muniment (the storage lane already probes OPFS); knot ONLY if it ever grows a browser-hosted …"
 source = "mere-survey-2026-08-24#7.61"
 verified_on = "2026-08-24"
 
@@ -9058,7 +8930,7 @@ repo = "knot-editor"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-evidence = "mere ports/muniment-opfs-probe and crates/eidetic/muniment (the storage lane already probes OPFS); knot ONLY if it ever grows a browser-hosted …"
+evidence = "eidetic crates/muniment-opfs-probe and crates/muniment (the storage lane already probes OPFS); knot ONLY if it ever grows a browser-hosted …"
 source = "mere-survey-2026-08-24#7.61"
 verified_on = "2026-08-24"
 
@@ -9074,17 +8946,17 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "netscape-bookmarks"
-repo = "mere"
+repo = "eidetic"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-evidence = "already built: `mere/crates/import` detects and tokenizes it"
+evidence = "already built: `eidetic crates/eidetic-core/src/import` detects and tokenizes it"
 source = "mere-survey-2026-08-24#7.63+7.1"
 verified_on = "2026-09-23"
 
 [[claim]]
 spec = "opml-2.0"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -9094,7 +8966,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "epub-34"
-repo = "mere"
+repo = "distillery"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
@@ -9114,7 +8986,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "epub-rs-34"
-repo = "mere"
+repo = "distillery"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
@@ -9134,7 +9006,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "epub-a11y-12"
-repo = "mere"
+repo = "distillery"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
@@ -9174,51 +9046,31 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "webextensions"
-repo = "mere"
+repo = "eidetic"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
-evidence = "mere/crates/import — BrowserImportMode::SnapshotBridge and BrowserImportMode::IncrementalBridge already exist in the enum, which is precisely the …"
+evidence = "eidetic crates/eidetic-core/src/import — BrowserImportMode::SnapshotBridge and BrowserImportMode::IncrementalBridge already exist in the enum, which is precisely the …"
 source = "mere-survey-2026-08-24#7.68"
 verified_on = "2026-08-24"
 
 [[claim]]
-spec = "dtcg-format"
-repo = "genet"
-relation = "implements"
-depth = "partial"
-verdict = "ADOPT"
-evidence = "genet/ports/tabard — the one port whose README already names it: \"W3C Design Tokens (the non-negotiable interchange form).\" Currently a name …"
-source = "mere-survey-2026-08-24#7.69 mere-survey-2026-08-24#7.162"
-verified_on = "2026-08-24"
-
-[[claim]]
 spec = "dtcg-color"
-repo = "mere"
+repo = "graphshell"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-evidence = "genet/components/tinct (the derivation math) via genet/ports/tabard (the authoring surface). tinct already derives in OKLCH and already owns its own …"
-source = "mere-survey-2026-08-24#7.70"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "dtcg-color"
-repo = "genet"
-relation = "implements"
-depth = "partial"
-verdict = "ADOPT"
-evidence = "genet/components/tinct (the derivation math) via genet/ports/tabard (the authoring surface). tinct already derives in OKLCH and already owns its own …"
+evidence = "graphshell crates/tinct (the derivation math) via graphshell host/crates/system/tabard (the authoring surface). tinct already derives in OKLCH and already owns its own …"
 source = "mere-survey-2026-08-24#7.70"
 verified_on = "2026-08-24"
 
 [[claim]]
 spec = "dtcg-resolver"
-repo = "mere"
+repo = "graphshell"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
-evidence = "genet/ports/tabard, and downstream genet/components/livery — which already parses prefers-color-scheme, prefers-contrast, forced-colors and …"
+evidence = "graphshell host/crates/system/tabard, and downstream genet/components/livery — which already parses prefers-color-scheme, prefers-contrast, forced-colors and …"
 source = "mere-survey-2026-08-24#7.71"
 verified_on = "2026-08-24"
 
@@ -9228,7 +9080,7 @@ repo = "genet"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
-evidence = "genet/ports/tabard, and downstream genet/components/livery — which already parses prefers-color-scheme, prefers-contrast, forced-colors and …"
+evidence = "graphshell host/crates/system/tabard, and downstream genet/components/livery — which already parses prefers-color-scheme, prefers-contrast, forced-colors and …"
 source = "mere-survey-2026-08-24#7.71"
 verified_on = "2026-08-24"
 
@@ -9243,62 +9095,32 @@ source = "mere-survey-2026-08-24#7.73 mere-w3c-review-2026-07-05#C2"
 verified_on = "2026-08-24"
 
 [[claim]]
-spec = "WCAG22"
-repo = "genet"
-relation = "implements"
-depth = "partial"
-verdict = "ADOPT"
-evidence = "genet/components/tinct — already the basis of the derivation. lib.rs carries WCAG relative luminance and contrast ratio (1.0..=21.0), a …"
-source = "mere-survey-2026-08-24#7.74"
-verified_on = "2026-08-24"
-
-[[claim]]
 spec = "apca"
-repo = "mere"
+repo = "graphshell"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
-evidence = "Would be genet/components/tinct. It is the obvious upgrade candidate for the dark-mode contrast problem noted above."
-source = "mere-survey-2026-08-24#7.75"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "apca"
-repo = "genet"
-relation = "adjacent"
-depth = "none"
-verdict = "SKIP"
-evidence = "Would be genet/components/tinct. It is the obvious upgrade candidate for the dark-mode contrast problem noted above."
+evidence = "Would be graphshell crates/tinct. It is the obvious upgrade candidate for the dark-mode contrast problem noted above."
 source = "mere-survey-2026-08-24#7.75"
 verified_on = "2026-08-24"
 
 [[claim]]
 spec = "wcag-3.0"
-repo = "mere"
+repo = "graphshell"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
-evidence = "Would be genet/components/tinct. It is the obvious upgrade candidate for the dark-mode contrast problem noted above."
-source = "mere-survey-2026-08-24#7.75"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "wcag-3.0"
-repo = "genet"
-relation = "adjacent"
-depth = "none"
-verdict = "SKIP"
-evidence = "Would be genet/components/tinct. It is the obvious upgrade candidate for the dark-mode contrast problem noted above."
+evidence = "Would be graphshell crates/tinct. It is the obvious upgrade candidate for the dark-mode contrast problem noted above."
 source = "mere-survey-2026-08-24#7.75"
 verified_on = "2026-08-24"
 
 [[claim]]
 spec = "mediaqueries-5"
-repo = "mere"
+repo = "turnstone"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-evidence = "genet/components/livery (parsing, done) and genet/ports/pelt (the half that is missing: nothing in pelt actually *sources* these preference values …"
+evidence = "genet/components/livery (parsing, done) and turnstone ports/pelt (the half that is missing: nothing in pelt actually *sources* these preference values …"
 source = "mere-survey-2026-08-24#7.76"
 verified_on = "2026-08-24"
 
@@ -9308,17 +9130,17 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-evidence = "genet/components/livery (parsing, done) and genet/ports/pelt (the half that is missing: nothing in pelt actually *sources* these preference values …"
+evidence = "genet/components/livery (parsing, done) and turnstone ports/pelt (the half that is missing: nothing in pelt actually *sources* these preference values …"
 source = "mere-survey-2026-08-24#7.76"
 verified_on = "2026-08-24"
 
 [[claim]]
 spec = "css-color-adjust-1"
-repo = "mere"
+repo = "turnstone"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-evidence = "genet/components/livery (parsing, done) and genet/ports/pelt (the half that is missing: nothing in pelt actually *sources* these preference values …"
+evidence = "genet/components/livery (parsing, done) and turnstone ports/pelt (the half that is missing: nothing in pelt actually *sources* these preference values …"
 source = "mere-survey-2026-08-24#7.76"
 verified_on = "2026-08-24"
 
@@ -9334,57 +9156,27 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "desktop-entry"
-repo = "mere"
+repo = "turnstone"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-evidence = "genet/ports/pelt (as a viewer that wants to be openable from a file manager and to claim http/https/gemini/gopher), mere/ports/graphshell (which …"
-source = "mere-survey-2026-08-24#7.78"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "desktop-entry"
-repo = "genet"
-relation = "implements"
-depth = "partial"
-verdict = "ADOPT"
-evidence = "genet/ports/pelt (as a viewer that wants to be openable from a file manager and to claim http/https/gemini/gopher), mere/ports/graphshell (which …"
+evidence = "turnstone ports/pelt (as a viewer that wants to be openable from a file manager and to claim http/https/gemini/gopher), turnstone ports/graphshell (which …"
 source = "mere-survey-2026-08-24#7.78"
 verified_on = "2026-08-24"
 
 [[claim]]
 spec = "xdg-desktop-portals"
-repo = "mere"
+repo = "turnstone"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-evidence = "genet/ports/pelt — this is the missing OS-preference source for livery's prefers-color-scheme / prefers-contrast evaluator (see the user-preference …"
-source = "mere-survey-2026-08-24#7.79"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "xdg-desktop-portals"
-repo = "genet"
-relation = "implements"
-depth = "partial"
-verdict = "ADOPT"
-evidence = "genet/ports/pelt — this is the missing OS-preference source for livery's prefers-color-scheme / prefers-contrast evaluator (see the user-preference …"
+evidence = "turnstone ports/pelt — this is the missing OS-preference source for livery's prefers-color-scheme / prefers-contrast evaluator (see the user-preference …"
 source = "mere-survey-2026-08-24#7.79"
 verified_on = "2026-08-24"
 
 [[claim]]
 spec = "shared-mime-info"
-repo = "mere"
-relation = "should"
-depth = "planned"
-verdict = "PULL"
-evidence = "pelt's and knot's file-type registry keys on shared-mime-info types"
-source = "mere-survey-2026-08-24#7.80+7.1"
-verified_on = "2026-09-23"
-
-[[claim]]
-spec = "shared-mime-info"
-repo = "genet"
+repo = "turnstone"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -9404,17 +9196,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "icon-theme-spec"
-repo = "mere"
-relation = "should"
-depth = "planned"
-verdict = "PULL"
-evidence = "pelt's and knot's file-type registry keys on shared-mime-info types"
-source = "mere-survey-2026-08-24#7.80+7.1"
-verified_on = "2026-09-23"
-
-[[claim]]
-spec = "icon-theme-spec"
-repo = "genet"
+repo = "turnstone"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -9434,7 +9216,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "windows-app-registration"
-repo = "mere"
+repo = "armillary"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -9464,7 +9246,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "macos-uttype"
-repo = "mere"
+repo = "armillary"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -9494,7 +9276,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "appmanifest"
-repo = "mere"
+repo = "graphshell"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -9524,7 +9306,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "manifest-incubations"
-repo = "mere"
+repo = "graphshell"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -9564,31 +9346,11 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "en-301-549"
-repo = "mere"
-relation = "should"
-depth = "none"
-verdict = "WATCH"
-evidence = "genet/ports/pelt and turnstone if either is ever distributed commercially in the EU; also woodshed, hocket, isometry and the other apps if they are …"
-source = "mere-survey-2026-08-24#7.84"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "en-301-549"
-repo = "genet"
-relation = "should"
-depth = "none"
-verdict = "WATCH"
-evidence = "genet/ports/pelt and turnstone if either is ever distributed commercially in the EU; also woodshed, hocket, isometry and the other apps if they are …"
-source = "mere-survey-2026-08-24#7.84"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "en-301-549"
 repo = "turnstone"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
-evidence = "genet/ports/pelt and turnstone if either is ever distributed commercially in the EU; also woodshed, hocket, isometry and the other apps if they are …"
+evidence = "turnstone ports/pelt and turnstone if either is ever distributed commercially in the EU; also woodshed, hocket, isometry and the other apps if they are …"
 source = "mere-survey-2026-08-24#7.84"
 verified_on = "2026-08-24"
 
@@ -9598,7 +9360,7 @@ repo = "woodshed"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
-evidence = "genet/ports/pelt and turnstone if either is ever distributed commercially in the EU; also woodshed, hocket, isometry and the other apps if they are …"
+evidence = "turnstone ports/pelt and turnstone if either is ever distributed commercially in the EU; also woodshed, hocket, isometry and the other apps if they are …"
 source = "mere-survey-2026-08-24#7.84"
 verified_on = "2026-08-24"
 
@@ -9608,27 +9370,7 @@ repo = "isocosm"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
-evidence = "genet/ports/pelt and turnstone if either is ever distributed commercially in the EU; also woodshed, hocket, isometry and the other apps if they are …"
-source = "mere-survey-2026-08-24#7.84"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "eu-accessibility-act"
-repo = "mere"
-relation = "should"
-depth = "none"
-verdict = "WATCH"
-evidence = "genet/ports/pelt and turnstone if either is ever distributed commercially in the EU; also woodshed, hocket, isometry and the other apps if they are …"
-source = "mere-survey-2026-08-24#7.84"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "eu-accessibility-act"
-repo = "genet"
-relation = "should"
-depth = "none"
-verdict = "WATCH"
-evidence = "genet/ports/pelt and turnstone if either is ever distributed commercially in the EU; also woodshed, hocket, isometry and the other apps if they are …"
+evidence = "turnstone ports/pelt and turnstone if either is ever distributed commercially in the EU; also woodshed, hocket, isometry and the other apps if they are …"
 source = "mere-survey-2026-08-24#7.84"
 verified_on = "2026-08-24"
 
@@ -9638,7 +9380,7 @@ repo = "turnstone"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
-evidence = "genet/ports/pelt and turnstone if either is ever distributed commercially in the EU; also woodshed, hocket, isometry and the other apps if they are …"
+evidence = "turnstone ports/pelt and turnstone if either is ever distributed commercially in the EU; also woodshed, hocket, isometry and the other apps if they are …"
 source = "mere-survey-2026-08-24#7.84"
 verified_on = "2026-08-24"
 
@@ -9648,7 +9390,7 @@ repo = "woodshed"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
-evidence = "genet/ports/pelt and turnstone if either is ever distributed commercially in the EU; also woodshed, hocket, isometry and the other apps if they are …"
+evidence = "turnstone ports/pelt and turnstone if either is ever distributed commercially in the EU; also woodshed, hocket, isometry and the other apps if they are …"
 source = "mere-survey-2026-08-24#7.84"
 verified_on = "2026-08-24"
 
@@ -9658,19 +9400,9 @@ repo = "isocosm"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
-evidence = "genet/ports/pelt and turnstone if either is ever distributed commercially in the EU; also woodshed, hocket, isometry and the other apps if they are …"
+evidence = "turnstone ports/pelt and turnstone if either is ever distributed commercially in the EU; also woodshed, hocket, isometry and the other apps if they are …"
 source = "mere-survey-2026-08-24#7.84"
 verified_on = "2026-08-24"
-
-[[claim]]
-spec = "icc-profiles"
-repo = "mere"
-relation = "should"
-depth = "planned"
-verdict = "PULL"
-evidence = "genet-render's image decode carries an embedded profile rather than discarding it"
-source = "mere-survey-2026-08-24#7.85+7.1"
-verified_on = "2026-09-23"
 
 [[claim]]
 spec = "icc-profiles"
@@ -9684,52 +9416,22 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "itu-bt2100"
-repo = "mere"
+repo = "graphshell"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
-evidence = "genet/ports/pelt (desktop/smoke_wayland.rs, smoke_windows.rs, smoke_macos.rs are the present-backend seams) and repos/netrender. Verified: zero HDR …"
-source = "mere-survey-2026-08-24#7.86"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "itu-bt2100"
-repo = "genet"
-relation = "should"
-depth = "none"
-verdict = "WATCH"
-evidence = "genet/ports/pelt (desktop/smoke_wayland.rs, smoke_windows.rs, smoke_macos.rs are the present-backend seams) and repos/netrender. Verified: zero HDR …"
+evidence = "graphshell host/ports/pelt (desktop/smoke_wayland.rs, smoke_windows.rs, smoke_macos.rs are the present-backend seams) and repos/netrender. Verified: zero HDR …"
 source = "mere-survey-2026-08-24#7.86"
 verified_on = "2026-08-24"
 
 [[claim]]
 spec = "wayland-color-management"
-repo = "mere"
+repo = "graphshell"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
-evidence = "genet/ports/pelt (desktop/smoke_wayland.rs, smoke_windows.rs, smoke_macos.rs are the present-backend seams) and repos/netrender. Verified: zero HDR …"
+evidence = "graphshell host/ports/pelt (desktop/smoke_wayland.rs, smoke_windows.rs, smoke_macos.rs are the present-backend seams) and repos/netrender. Verified: zero HDR …"
 source = "mere-survey-2026-08-24#7.86"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "wayland-color-management"
-repo = "genet"
-relation = "should"
-depth = "none"
-verdict = "WATCH"
-evidence = "genet/ports/pelt (desktop/smoke_wayland.rs, smoke_windows.rs, smoke_macos.rs are the present-backend seams) and repos/netrender. Verified: zero HDR …"
-source = "mere-survey-2026-08-24#7.86"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "gpc"
-repo = "mere"
-relation = "implements"
-depth = "partial"
-verdict = "ADOPT"
-evidence = "genet/ports/pelt and turnstone as user agents; the netfetch/errand transport as the place the header is attached. Verified absent: no GPC handling …"
-source = "mere-survey-2026-08-24#7.87"
 verified_on = "2026-08-24"
 
 [[claim]]
@@ -9738,7 +9440,7 @@ repo = "genet"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-evidence = "genet/ports/pelt and turnstone as user agents; the netfetch/errand transport as the place the header is attached. Verified absent: no GPC handling …"
+evidence = "turnstone ports/pelt and turnstone as user agents; the netfetch/errand transport as the place the header is attached. Verified absent: no GPC handling …"
 source = "mere-survey-2026-08-24#7.87"
 verified_on = "2026-08-24"
 
@@ -9748,33 +9450,13 @@ repo = "turnstone"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-evidence = "genet/ports/pelt and turnstone as user agents; the netfetch/errand transport as the place the header is attached. Verified absent: no GPC handling …"
+evidence = "turnstone ports/pelt and turnstone as user agents; the netfetch/errand transport as the place the header is attached. Verified absent: no GPC handling …"
 source = "mere-survey-2026-08-24#7.87"
 verified_on = "2026-08-24"
 
 [[claim]]
 spec = "rfc6797"
-repo = "mere"
-relation = "should"
-depth = "planned"
-verdict = "PULL"
-evidence = "genet netfetch's per-origin policy store reserves an HSTS entry"
-source = "mere-survey-2026-08-24#7.89+7.1"
-verified_on = "2026-09-23"
-
-[[claim]]
-spec = "rfc6797"
 repo = "genet"
-relation = "should"
-depth = "planned"
-verdict = "PULL"
-evidence = "genet netfetch's per-origin policy store reserves an HSTS entry"
-source = "mere-survey-2026-08-24#7.89+7.1"
-verified_on = "2026-09-23"
-
-[[claim]]
-spec = "hsts-preload"
-repo = "mere"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -9854,102 +9536,42 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "adobe-ase"
-repo = "mere"
+repo = "graphshell"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
-evidence = "genet/ports/tabard, as candidate import/export formats."
-source = "mere-survey-2026-08-24#7.93"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "adobe-ase"
-repo = "genet"
-relation = "adjacent"
-depth = "none"
-verdict = "SKIP"
-evidence = "genet/ports/tabard, as candidate import/export formats."
+evidence = "graphshell host/crates/system/tabard, as candidate import/export formats."
 source = "mere-survey-2026-08-24#7.93"
 verified_on = "2026-08-24"
 
 [[claim]]
 spec = "figma-variables"
-repo = "mere"
+repo = "graphshell"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
-evidence = "genet/ports/tabard, as candidate import/export formats."
-source = "mere-survey-2026-08-24#7.93"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "figma-variables"
-repo = "genet"
-relation = "adjacent"
-depth = "none"
-verdict = "SKIP"
-evidence = "genet/ports/tabard, as candidate import/export formats."
+evidence = "graphshell host/crates/system/tabard, as candidate import/export formats."
 source = "mere-survey-2026-08-24#7.93"
 verified_on = "2026-08-24"
 
 [[claim]]
 spec = "style-dictionary"
-repo = "mere"
+repo = "graphshell"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
-evidence = "genet/ports/tabard, as candidate import/export formats."
-source = "mere-survey-2026-08-24#7.93"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "style-dictionary"
-repo = "genet"
-relation = "adjacent"
-depth = "none"
-verdict = "SKIP"
-evidence = "genet/ports/tabard, as candidate import/export formats."
+evidence = "graphshell host/crates/system/tabard, as candidate import/export formats."
 source = "mere-survey-2026-08-24#7.93"
 verified_on = "2026-08-24"
 
 [[claim]]
 spec = "tokens-studio"
-repo = "mere"
+repo = "graphshell"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
-evidence = "genet/ports/tabard, as candidate import/export formats."
+evidence = "graphshell host/crates/system/tabard, as candidate import/export formats."
 source = "mere-survey-2026-08-24#7.93"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "tokens-studio"
-repo = "genet"
-relation = "adjacent"
-depth = "none"
-verdict = "SKIP"
-evidence = "genet/ports/tabard, as candidate import/export formats."
-source = "mere-survey-2026-08-24#7.93"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "rfc7033"
-repo = "mere"
-relation = "implements"
-depth = "partial"
-verdict = "ADOPT"
-evidence = "ports/gazette (already built), gaz HandleKind::Acct"
-source = "mere-survey-2026-08-24#7.94"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "rfc9553"
-repo = "mere"
-relation = "implements"
-depth = "partial"
-verdict = "ADOPT"
-evidence = "crates/dramatis/gaz (the contact store), ports/gazette Ledger projection and recipient picker"
-source = "mere-survey-2026-08-24#7.95"
 verified_on = "2026-08-24"
 
 [[claim]]
@@ -9958,17 +9580,7 @@ repo = "dramatis"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-evidence = "crates/dramatis/gaz (the contact store), ports/gazette Ledger projection and recipient picker"
-source = "mere-survey-2026-08-24#7.95"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "rfc9554"
-repo = "mere"
-relation = "implements"
-depth = "partial"
-verdict = "ADOPT"
-evidence = "crates/dramatis/gaz (the contact store), ports/gazette Ledger projection and recipient picker"
+evidence = "dramatis crates/gaz (the contact store), crates/gazette Ledger projection and recipient picker"
 source = "mere-survey-2026-08-24#7.95"
 verified_on = "2026-08-24"
 
@@ -9978,17 +9590,7 @@ repo = "dramatis"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-evidence = "crates/dramatis/gaz (the contact store), ports/gazette Ledger projection and recipient picker"
-source = "mere-survey-2026-08-24#7.95"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "rfc9555"
-repo = "mere"
-relation = "implements"
-depth = "partial"
-verdict = "ADOPT"
-evidence = "crates/dramatis/gaz (the contact store), ports/gazette Ledger projection and recipient picker"
+evidence = "dramatis crates/gaz (the contact store), crates/gazette Ledger projection and recipient picker"
 source = "mere-survey-2026-08-24#7.95"
 verified_on = "2026-08-24"
 
@@ -10003,28 +9605,8 @@ source = "mere-survey-2026-08-24#7.96+7.1"
 verified_on = "2026-09-23"
 
 [[claim]]
-spec = "rfc6350"
-repo = "mere"
-relation = "should"
-depth = "planned"
-verdict = "PULL"
-evidence = "gaz's JSContact mapping (an exchange format, Mark 2026-09-23) is the hub, and RFC 9555 converts vCard to and from it"
-source = "mere-survey-2026-08-24#7.96+7.1"
-verified_on = "2026-09-23"
-
-[[claim]]
 spec = "rfc7095"
 repo = "dramatis"
-relation = "should"
-depth = "planned"
-verdict = "PULL"
-evidence = "gaz's JSContact mapping (an exchange format, Mark 2026-09-23) is the hub, and RFC 9555 converts vCard to and from it"
-source = "mere-survey-2026-08-24#7.96+7.1"
-verified_on = "2026-09-23"
-
-[[claim]]
-spec = "rfc7095"
-repo = "mere"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -10034,7 +9616,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "rfc6352"
-repo = "mere"
+repo = "dramatis"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10064,7 +9646,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "rfc8620"
-repo = "mere"
+repo = "dramatis"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10094,7 +9676,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "rfc8621"
-repo = "mere"
+repo = "dramatis"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10124,7 +9706,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "rfc9610"
-repo = "mere"
+repo = "dramatis"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10163,38 +9745,8 @@ source = "mere-survey-2026-08-24#7.98+7.1"
 verified_on = "2026-09-23"
 
 [[claim]]
-spec = "did-1.1"
-repo = "mere"
-relation = "should"
-depth = "planned"
-verdict = "PULL"
-evidence = "amended in §5: `did:key` and `did:plc` are ADOPT; `did:web` is carried as a gaz handle (`HandleKind::Did`)"
-source = "mere-survey-2026-08-24#7.98+7.1"
-verified_on = "2026-09-23"
-
-[[claim]]
-spec = "did-key"
-repo = "mere"
-relation = "implements"
-depth = "partial"
-verdict = "ADOPT"
-evidence = "amended in §5: `did:key` and `did:plc` are ADOPT; `did:web` is carried as a gaz handle (`HandleKind::Did`)"
-source = "mere-survey-2026-08-24#7.98+7.1"
-verified_on = "2026-09-23"
-
-[[claim]]
 spec = "did-plc"
 repo = "dramatis"
-relation = "implements"
-depth = "partial"
-verdict = "ADOPT"
-evidence = "amended in §5: `did:key` and `did:plc` are ADOPT; `did:web` is carried as a gaz handle (`HandleKind::Did`)"
-source = "mere-survey-2026-08-24#7.98+7.1"
-verified_on = "2026-09-23"
-
-[[claim]]
-spec = "did-plc"
-repo = "mere"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
@@ -10213,28 +9765,8 @@ source = "mere-survey-2026-08-24#7.98+7.1"
 verified_on = "2026-09-23"
 
 [[claim]]
-spec = "did-web"
-repo = "mere"
-relation = "should"
-depth = "planned"
-verdict = "PULL"
-evidence = "amended in §5: `did:key` and `did:plc` are ADOPT; `did:web` is carried as a gaz handle (`HandleKind::Did`)"
-source = "mere-survey-2026-08-24#7.98+7.1"
-verified_on = "2026-09-23"
-
-[[claim]]
 spec = "nip-05"
 repo = "dramatis"
-relation = "should"
-depth = "planned"
-verdict = "PULL"
-evidence = "gazette's resolver facade returns a handle bound to a lifted Nostr key (`TypedKey::from_nostr_x_only`, already in insigne)"
-source = "mere-survey-2026-08-24#7.100+7.1"
-verified_on = "2026-09-23"
-
-[[claim]]
-spec = "nip-05"
-repo = "mere"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -10244,7 +9776,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "activitypub"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -10254,7 +9786,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "activitystreams-core"
-repo = "mere"
+repo = "dramatis"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -10264,7 +9796,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "rfc9421"
-repo = "mere"
+repo = "graphshell"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -10278,17 +9810,7 @@ repo = "dramatis"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
-evidence = "AMENDED 2026-09-23 (§5 prose wins): WATCH stands for the repository and sync layers only. The identity layer (did:plc, handle resolution) is ADOPT for crates/dramatis/gaz and ports/gazette, checked against live PLC data."
-source = "mere-survey-2026-08-24#7.103"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "atproto"
-repo = "mere"
-relation = "should"
-depth = "none"
-verdict = "WATCH"
-evidence = "AMENDED 2026-09-23 (§5 prose wins): WATCH stands for the repository and sync layers only. The identity layer (did:plc, handle resolution) is ADOPT for crates/dramatis/gaz and ports/gazette, checked against live PLC data."
+evidence = "AMENDED 2026-09-23 (§5 prose wins): WATCH stands for the repository and sync layers only. The identity layer (did:plc, handle resolution) is ADOPT for dramatis crates/gaz and crates/gazette, checked against live PLC data."
 source = "mere-survey-2026-08-24#7.103"
 verified_on = "2026-08-24"
 
@@ -10305,17 +9827,17 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "mimi"
-repo = "mere"
+repo = "graphshell"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
-evidence = "ports/moot (murmur) — speculative only"
+evidence = "host/ports/moot (murmur) — speculative only"
 source = "mere-survey-2026-08-24#7.105"
 verified_on = "2026-08-24"
 
 [[claim]]
 spec = "matrix"
-repo = "mere"
+repo = "graphshell"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10364,18 +9886,8 @@ source = "mere-survey-2026-08-24#7.107+7.1"
 verified_on = "2026-09-23"
 
 [[claim]]
-spec = "webrtc"
-repo = "mere"
-relation = "implements"
-depth = "partial"
-verdict = "ADOPT"
-evidence = "WebRTC is already built as `murm/native/crates/webrtc-carrier`. SIP has no consumer; calls ride WebRTC"
-source = "mere-survey-2026-08-24#7.108+7.1"
-verified_on = "2026-09-23"
-
-[[claim]]
 spec = "rfc3261"
-repo = "mere"
+repo = "retinue"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10475,17 +9987,17 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "safetensors"
-repo = "mere"
+repo = "distillery"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
-evidence = "crates/intel/esp — already a dependency (safetensors = \"0.4\", behind the decoder and bert features); the BERT modules are deliberately named so HF …"
+evidence = "crates/esp — already a dependency (safetensors = \"0.4\", behind the decoder and bert features); the BERT modules are deliberately named so HF …"
 source = "mere-survey-2026-08-24#7.115"
 verified_on = "2026-08-24"
 
 [[claim]]
 spec = "gguf"
-repo = "mere"
+repo = "distillery"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -10495,7 +10007,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "onnx"
-repo = "mere"
+repo = "distillery"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10505,7 +10017,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "cncf-modelpack"
-repo = "mere"
+repo = "distillery"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10515,7 +10027,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "mcp"
-repo = "mere"
+repo = "turnstone"
 crate = "graphshell-mcp"
 relation = "implements"
 depth = "partial"
@@ -10526,7 +10038,7 @@ verified_on = "2026-10-25"
 
 [[claim]]
 spec = "openai-chat-completions"
-repo = "mere"
+repo = "distillery"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -10536,7 +10048,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "eu-ai-act-art-50"
-repo = "mere"
+repo = "distillery"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
@@ -10546,7 +10058,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "p2p-job-lease"
-repo = "mere"
+repo = "distillery"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10586,16 +10098,6 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "mei"
-repo = "mere"
-relation = "adjacent"
-depth = "none"
-verdict = "SKIP"
-evidence = "None. Would be the same woodshed notation surface as MusicXML, for import of scholarly editions."
-source = "mere-survey-2026-08-24#7.127"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "mei"
 repo = "woodshed"
 relation = "adjacent"
 depth = "none"
@@ -10616,27 +10118,7 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "guitar-pro"
-repo = "mere"
-relation = "adjacent"
-depth = "none"
-verdict = "SKIP"
-evidence = "repos/woodshed — would be an import path only. No export could ever be responsible."
-source = "mere-survey-2026-08-24#7.129"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "guitar-pro"
 repo = "woodshed"
-relation = "adjacent"
-depth = "none"
-verdict = "SKIP"
-evidence = "repos/woodshed — would be an import path only. No export could ever be responsible."
-source = "mere-survey-2026-08-24#7.129"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "alphatex"
-repo = "mere"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10703,16 +10185,6 @@ verdict = "ADOPT"
 evidence = "repos/hocket — the .hock container's media entries (currently WAV, with wavicle .wv wired in) and loop export. repos/woodshed — Looper export. …"
 source = "mere-survey-2026-08-24#7.131"
 verified_on = "2026-08-24"
-
-[[claim]]
-spec = "rfc6716"
-repo = "mere"
-relation = "should"
-depth = "planned"
-verdict = "PULL"
-evidence = "pipit's codec tiers reserve an Opus tier above its vocoders"
-source = "mere-survey-2026-08-24#7.132+7.1"
-verified_on = "2026-09-23"
 
 [[claim]]
 spec = "rfc6716"
@@ -10946,27 +10418,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "praat-textgrid"
-repo = "mere"
-relation = "adjacent"
-depth = "none"
-verdict = "SKIP"
-evidence = "none: mora has no corpus-validation plan"
-source = "mere-survey-2026-08-24#7.146+7.1"
-verified_on = "2026-09-23"
-
-[[claim]]
-spec = "praat-textgrid"
 repo = "mora"
-relation = "adjacent"
-depth = "none"
-verdict = "SKIP"
-evidence = "none: mora has no corpus-validation plan"
-source = "mere-survey-2026-08-24#7.146+7.1"
-verified_on = "2026-09-23"
-
-[[claim]]
-spec = "tobi"
-repo = "mere"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -11022,16 +10474,6 @@ depth = "none"
 verdict = "SKIP"
 evidence = "none: no catalogue-query or table-export surface"
 source = "mere-survey-2026-08-24#7.149+7.1"
-verified_on = "2026-09-23"
-
-[[claim]]
-spec = "ivoa-samp"
-repo = "mere"
-relation = "adjacent"
-depth = "none"
-verdict = "SKIP"
-evidence = "none yet: no turquet-backed viewer exists in pelt or graphshell to message. The first IVOA standard to reopen, since its architecture fits the house posture"
-source = "mere-survey-2026-08-24#7.150+7.1"
 verified_on = "2026-09-23"
 
 [[claim]]
@@ -11146,7 +10588,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "spir-v"
-repo = "mere"
+repo = "netrender"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
@@ -11156,7 +10598,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "vulkan"
-repo = "mere"
+repo = "netrender"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
@@ -11166,7 +10608,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "css-color-4"
-repo = "mere"
+repo = "graphshell"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
@@ -11206,7 +10648,7 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "opentype"
-repo = "mere"
+repo = "graphshell"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
@@ -11223,46 +10665,6 @@ verdict = "ADOPT"
 evidence = "netrender (netrender_text, skrifa — NOT swash, which is absent from the lockfile; COLR appears 15 times in the repo), genet's font stack, and tabard's icon story."
 source = "mere-survey-2026-08-24#7.161"
 verified_on = "2026-08-24"
-
-[[claim]]
-spec = "iconvg"
-repo = "mere"
-relation = "implements"
-depth = "partial"
-verdict = "ADOPT"
-evidence = "already built: `repos/emblem` decodes and encodes it at the same spec pin (the row's `repos/iconvg` *(historical citation)* <!-- doc-audit: historical-path --> path is stale)"
-source = "mere-survey-2026-08-24#7.163+7.1"
-verified_on = "2026-09-23"
-
-[[claim]]
-spec = "SVG11"
-repo = "mere"
-relation = "should"
-depth = "planned"
-verdict = "PULL"
-evidence = "genet's render tree reserves an SVG paint model"
-source = "mere-survey-2026-08-24#7.164+7.1"
-verified_on = "2026-09-23"
-
-[[claim]]
-spec = "SVG2"
-repo = "mere"
-relation = "should"
-depth = "planned"
-verdict = "PULL"
-evidence = "genet's render tree reserves an SVG paint model"
-source = "mere-survey-2026-08-24#7.164+7.1"
-verified_on = "2026-09-23"
-
-[[claim]]
-spec = "SVGTiny12"
-repo = "mere"
-relation = "should"
-depth = "planned"
-verdict = "PULL"
-evidence = "genet's render tree reserves an SVG paint model"
-source = "mere-survey-2026-08-24#7.164+7.1"
-verified_on = "2026-09-23"
 
 [[claim]]
 spec = "SVGTiny12"
@@ -11296,16 +10698,6 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "rfc3986"
-repo = "mere"
-relation = "implements"
-depth = "partial"
-verdict = "ADOPT"
-evidence = "Every smolweb crate — scorpion-protocol/src/request.rs cites RFC 3986 directly; text-protocol requires IRIs specifically; genet's errand client."
-source = "mere-survey-2026-08-24#7.172"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "rfc3986"
 repo = "genet"
 relation = "implements"
 depth = "partial"
@@ -11317,16 +10709,6 @@ verified_on = "2026-08-24"
 [[claim]]
 spec = "rfc3986"
 repo = "smolweb"
-relation = "implements"
-depth = "partial"
-verdict = "ADOPT"
-evidence = "Every smolweb crate — scorpion-protocol/src/request.rs cites RFC 3986 directly; text-protocol requires IRIs specifically; genet's errand client."
-source = "mere-survey-2026-08-24#7.172"
-verified_on = "2026-08-24"
-
-[[claim]]
-spec = "rfc3987"
-repo = "mere"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
