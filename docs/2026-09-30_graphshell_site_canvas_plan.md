@@ -43,7 +43,8 @@ The separate Mere profile projection proof still uses the small graph runtime;
 its retirement remains a later consumer migration under R159.
 
 R157 delivery caps remain: first load 64 KiB gzip; interaction assets 3.25 MiB
-Wasm, 20 KiB glue, 8 KiB mount, 128 KiB history. `scripts/verify-viewer.py`
+Wasm, 20 KiB glue, 10 KiB mount (amended 2026-11-19, Ruling 157), 128 KiB history.
+`scripts/verify-viewer.py`
 checks pinned package hashes and gzip levels 6 and 9.
 `scripts/build-public-viewer.py` documents the pinned source/toolchain build
 with public diagnostic paths. The mount bound includes
@@ -1865,6 +1866,15 @@ viewer loaded on use; an eager whole-page cap; per-asset caps only. Mark:
   mount script at most 8 KiB, v2 history at most 128 KiB.
 - **m5's gzip caps (Ruling 141)** keep bounding the graph Wasm while it lives.
 - **Mobile and browsers without WebGPU** keep the frozen view.
+- **Amendment, 2026-11-19: the mount bound is 10 KiB gzip (10,240 B),** raised
+  from 8 KiB when the viewer source moved to Turnstone. The accounting is
+  unchanged: the site adapter, the shared mount helper, `viewer.js` and the
+  viewer CSS. The rebuilt viewer measures 9,160 B at gzip 6 (9,136 at 9) against
+  7,060 B before: Turnstone's own `mount.js` grew from 1,158 to 2,823 B (the
+  physics-unavailable notice) and its stylesheet from 3,461 to 3,875 B. Mark's
+  pick of the card option "Raise to 10 KiB (Recommended)", after the options to
+  count scripts only, to trim the site adapter, or to hold the migration. No
+  other cap moved: the webgl2 Wasm is 3,139,028 B against 3.25 MiB.
 
 **Ruling 158, features with no stack home.** Scatter, deck, facets and the
 field/tangible backdrops. Options: promote them where a home exists; drop
@@ -3674,3 +3684,25 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   - **Still site-local:** the sandbox's live matrix, readings and diff remain
     the graph Wasm's own (`matrix_projection`, `diff_graphs`) until the viewer
     absorbs it (Ruling 159).
+- 2026-11-19: **The viewer source moved to Turnstone; `/repos/` takes the
+  occurrence `classes` slot again.** The pinned viewer in `assets/graphshell`
+  (Mere `14b91e3d`, built 2026-10-27) refused the `classes` key, so
+  `40d6770` withheld it from `repository-host-history.json`. The viewer's web
+  port left Mere with the engine split (U4) and lives in Turnstone's
+  `ports/graphshell/web`, which takes Graphshell from branch main; the
+  site now pins a build of Turnstone `d3dd2c17` against Graphshell `2b0b5ff4`
+  (the reader has accepted `classes` since `b8194d7d`).
+  - **Layout.** `pkg/webgl2/` (Wasm, glue and one wasm-bindgen snippet) and
+    `pkg/physics/` (the physics Worker module and its glue), beside `viewer.js`,
+    `mount.js` and `styles.css`. One WebGL2 artifact serves every browser; the
+    site's mount still opens the live graph only where WebGPU exists.
+  - **Provenance.** `provenance.json` records the Turnstone commit, the Graphshell
+    commit and every family dependency revision cargo resolved (Turnstone tracks
+    no lock, D139), the SHA-256 of the lock the build left, per-file hashes, rustc
+    1.99.1, wasm-bindgen 0.2.129, terser 5.51.2, the rustflags and the measured
+    sizes. `scripts/build-public-viewer.py` runs the build through the build-storage
+    wrapper (lane `merelyllc-viewer`, one cold run of about 25 minutes, 1.9 GiB)
+    and installs the files; `scripts/verify-viewer.py` pins both Wasm hashes.
+  - **Sizes (gzip 6).** Viewer Wasm 3,139,028 B (cap 3,407,872); physics Wasm
+    492,391 B (655,360); glue 12,666, 2,045 and 1,008 B (20,480 each); mount
+    bound 9,160 B, which needed the 10 KiB amendment under Ruling 157.

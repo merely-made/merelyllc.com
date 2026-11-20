@@ -1,6 +1,16 @@
 //! Immutable browser-qualified Graphshell viewer; the site owns data and mounting.
 use sha2::{Digest, Sha256};
-pub const WASM_SHA256: &str = "cbe148bce26990274974a23bedcc6b32b80611deaa3b4766a2aac6e0568c255e";
+/// The qualified application binaries: the only files admitted past the public-bytes scan's parser-constant rules.
+pub const QUALIFIED_WASM: &[(&str, &str)] = &[
+    (
+        "pkg/webgl2/graphshell_web_bg.wasm",
+        "61daf58315098d57e26b2e6555f7a3b4b813c6e42b79ab254a052a05951ed4cc",
+    ),
+    (
+        "pkg/physics/graphshell_physics_bg.wasm",
+        "eae38540ca1a55f7989c3bf968e06210dccc9ff0a6e174e87f7de9528afe6f3b",
+    ),
+];
 pub const FILES: &[(&str, &[u8])] = &[
     (
         "viewer.js",
@@ -12,12 +22,30 @@ pub const FILES: &[(&str, &[u8])] = &[
         include_bytes!("../assets/graphshell/styles.css"),
     ),
     (
-        "pkg/graphshell_web.js",
-        include_bytes!("../assets/graphshell/pkg/graphshell_web.js"),
+        "pkg/webgl2/graphshell_web.js",
+        include_bytes!("../assets/graphshell/pkg/webgl2/graphshell_web.js"),
     ),
     (
-        "pkg/graphshell_web_bg.wasm",
-        include_bytes!("../assets/graphshell/pkg/graphshell_web_bg.wasm"),
+        "pkg/webgl2/graphshell_web_bg.wasm",
+        include_bytes!("../assets/graphshell/pkg/webgl2/graphshell_web_bg.wasm"),
+    ),
+    (
+        "pkg/physics/graphshell_physics.js",
+        include_bytes!("../assets/graphshell/pkg/physics/graphshell_physics.js"),
+    ),
+    (
+        "pkg/physics/graphshell_physics_bg.wasm",
+        include_bytes!("../assets/graphshell/pkg/physics/graphshell_physics_bg.wasm"),
+    ),
+    (
+        "pkg/physics/worker.js",
+        include_bytes!("../assets/graphshell/pkg/physics/worker.js"),
+    ),
+    (
+        "pkg/webgl2/snippets/genet-presenter-efb9887771c95a54/inline0.js",
+        include_bytes!(
+            "../assets/graphshell/pkg/webgl2/snippets/genet-presenter-efb9887771c95a54/inline0.js"
+        ),
     ),
     (
         "provenance.json",

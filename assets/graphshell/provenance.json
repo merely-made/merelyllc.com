@@ -1,15 +1,45 @@
 {
-  "runtime_source": "14b91e3df2e239924bdb3d7b88a58d00f40871ae",
-  "files": {
-    "viewer.js": "d36f0c879683b0f18e27d31b67162055fab268377ad04c2d0039f1aaf116419f",
-    "mount.js": "88dafd9520fd2619aeef21aeacc183d49bf6e7f977155a3bc50c13a785913b13",
-    "styles.css": "a0944b06a83a7249fc69239ecffc8cab543f7556ffc95f2446b33ce3b5cd0bfd",
-    "pkg/graphshell_web.js": "d05f60d85c8aca2779d181d73df953d8afc0a9cc0eb92709fcb171295f9b7e81",
-    "pkg/graphshell_web_bg.wasm": "cbe148bce26990274974a23bedcc6b32b80611deaa3b4766a2aac6e0568c255e"
+  "runtime_source": "d3dd2c177b45d4ecd5fc79e181716d08501a2e8c",
+  "runtime_repository": "turnstone ports/graphshell/web",
+  "graphshell_source": "2b0b5ff4a512704c9690256735779abd7ab12fbb",
+  "dependency_sources": {
+    "armillary": "0bad2d7ec5609e0d97b1970f5764302cb4846a4c",
+    "distillery": "48b10680a964959fb3e8354e94b9ac8612c49e34",
+    "dramatis": "2679db85e3860faaf4848a630a82ccfb43c7eb34",
+    "eidetic": "63741b5e25d9126cf7af9df77e8555a9f560c315",
+    "emblem": "5ee5ba5a1732c6a39200e7ac5a45108f9ea351ff",
+    "gemot": "23021d06f57b564526e3b3161bed260d65edcd65",
+    "genet": "8ca4d8399b897afd08813f3241ee91138d73d70f",
+    "graphshell": "2b0b5ff4a512704c9690256735779abd7ab12fbb",
+    "inker": "1194c74adc5f7718dd8a8ab6df1701d9d23e4720",
+    "mere": "0dcdac36182ddcc7e5f4efa65b7e41d9169c52df",
+    "murm": "113232db3e1321c682dcf2734db713acbcc86571",
+    "netrender": "7060634fb93c6df5b43c4971e03ccaef0b2b7feb",
+    "seiche": "46fc0061272378669ced7c3b463868611cd4cb09",
+    "wgpu-cue": "ee41d51b970db4d6730474df3609b44ee61616a9",
+    "wgpu-graft": "db9d6bea71bd24a9208040a1f9d494e48a16527c"
   },
-  "build_source": "14b91e3df2e239924bdb3d7b88a58d00f40871ae",
-  "build_adjustment": "Public diagnostic paths; preserve configured wasm_js backend and 4 MiB linear stack.",
-  "toolchain": "rustc 1.99.0; wasm-bindgen 0.2.129; viewer profile; no default features",
+  "resolved_lock_sha256": "e94342d187c40b22b45bfc103c0ebdf04c74b14cc08f7af5729feba26eda8aea",
+  "files": {
+    "viewer.js": "6f9859b00ec2492f4c779fe64bf23d1c9c5aad6fcd70a7535f25188aa0c329b0",
+    "mount.js": "212abac2d6074eb1db350a01646964df8f721ec6a66fdee3de1fdafbedd7f119",
+    "styles.css": "544d28e3d8d734d4f9920358ce8276cecc5bcd52fe5b2040c6d581f3f0fd31e6",
+    "pkg/webgl2/graphshell_web.js": "59a5d7f0c9ecc12bd89df3ef6102f859050f5e090c06a297da2e6a8916167af8",
+    "pkg/webgl2/graphshell_web_bg.wasm": "61daf58315098d57e26b2e6555f7a3b4b813c6e42b79ab254a052a05951ed4cc",
+    "pkg/physics/graphshell_physics.js": "afb02aed2587907d2e872c30f88bd4aca3b7ae3ddd043a18983499c00b492153",
+    "pkg/physics/graphshell_physics_bg.wasm": "eae38540ca1a55f7989c3bf968e06210dccc9ff0a6e174e87f7de9528afe6f3b",
+    "pkg/physics/worker.js": "c44e3fbabfec106bc0174fb688e67c78a44e78e130bf5058229c0363503d7a59",
+    "pkg/webgl2/snippets/genet-presenter-efb9887771c95a54/inline0.js": "6b6e0a83cb8c25ad3aa36935ee4925cdfaf13764c3ef308f3c4a241b7b9a28ee"
+  },
+  "artifacts": {
+    "webgl2": [
+      "presentation-webgl2",
+      "without-classic-vello",
+      "without-table-layout",
+      "physics-worker-default"
+    ]
+  },
+  "toolchain": "rustc 1.99.1; wasm-bindgen 0.2.129; terser 5.51.2; viewer profile; no default features; engine-free",
   "rustflags": [
     "--cfg",
     "getrandom_backend=\"wasm_js\"",
@@ -17,9 +47,44 @@
     "link-arg=-zstack-size=4194304",
     "--remap-path-prefix=<build-host-home>=/build"
   ],
-  "acceptance_record": "docs/receipts/viewer_backpressure_20261027/qualification.json",
-  "previous_published_runtime_source": "56859e30292405e682f28f3841b76e4f141acf73",
-  "runtime_adjustment": "Bound browser frame submissions by draining the previous curve-quality readbacks; original viewer dependency pins retained.",
-  "runtime_baseline": "56859e30292405e682f28f3841b76e4f141acf73",
-  "mapped_baseline": "0e360eacca7d71541a50f9f0f3a4f043ae39e3b6"
+  "sizes": {
+    "wasm:webgl2": {
+      "gzip6": 3139028,
+      "gzip9": 3125248,
+      "cap": 3670016
+    },
+    "glue:webgl2": {
+      "gzip6": 12666,
+      "gzip9": 12454,
+      "cap": 20480
+    },
+    "physics:wasm": {
+      "gzip6": 492391,
+      "gzip9": 490656,
+      "cap": 655360
+    },
+    "glue:physics": {
+      "gzip6": 2045,
+      "gzip9": 2045,
+      "cap": 20480
+    },
+    "glue:physics-worker": {
+      "gzip6": 1008,
+      "gzip9": 1008,
+      "cap": 20480
+    },
+    "mount": {
+      "gzip6": 609,
+      "gzip9": 609,
+      "cap": 8192
+    },
+    "history": {
+      "gzip6": 6704,
+      "gzip9": 6254,
+      "cap": 131072
+    }
+  },
+  "build_adjustment": "Cargo through the build-storage wrapper; target dir and rustflags as scripts/build-public-viewer.py sets them.",
+  "previous_published_runtime_source": "14b91e3df2e239924bdb3d7b88a58d00f40871ae",
+  "previous_layout": "Mere ports/graphshell/web, one pkg/graphshell_web wasm; the viewer source left Mere in the engine split (U4)."
 }

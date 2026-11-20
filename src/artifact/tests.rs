@@ -39,7 +39,7 @@ fn historical_trace_locator_is_scoped_to_the_exact_manifest() {
 
 #[test]
 fn viewer_binary_scanning_retains_private_boundaries() {
-    let path = crate::viewer::href("pkg/graphshell_web_bg.wasm");
+    let path = crate::viewer::href("pkg/webgl2/graphshell_web_bg.wasm");
     let path = path.trim_start_matches('/');
     let allowed = BTreeSet::new();
     let mut errors = Vec::new();

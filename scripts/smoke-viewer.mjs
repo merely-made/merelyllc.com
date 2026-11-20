@@ -255,7 +255,7 @@ export async function checkQualifiedViewer(browser, baseUrl, receiptRoot) {
       await page.waitForFunction(() => window.__removedRoot.dataset.mountState === 'cancelled' && window.__deviceLost?.reason === 'destroyed', null, {timeout: 60000, polling: 100});
       const after = await page.evaluate(async () => {
         const entry = document.querySelector('[data-graph-sandbox]').dataset.sandboxRuntime;
-        const module = await import(new URL('./pkg/graphshell_web.js', new URL(entry, location.href)).href);
+        const module = await import(new URL('./pkg/webgl2/graphshell_web.js', new URL(entry, location.href)).href);
         let refusal = null;
         try { module.run_scenario('settle 1\n'); } catch (error) { refusal = String(error); }
         const root = window.__removedRoot;

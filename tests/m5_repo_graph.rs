@@ -251,14 +251,17 @@ fn qualified_viewer_is_the_lazy_owner() {
     let mut mounting = gzip(GRAPH_SANDBOX_MOUNT.as_bytes());
     for (name, bytes) in mer3ly_site::viewer::FILES {
         match *name {
-            "pkg/graphshell_web_bg.wasm" => assert!(gzip(bytes) <= 3_407_872),
-            "pkg/graphshell_web.js" => assert!(gzip(bytes) <= 20_480),
+            "pkg/webgl2/graphshell_web_bg.wasm" => assert!(gzip(bytes) <= 3_407_872),
+            "pkg/physics/graphshell_physics_bg.wasm" => assert!(gzip(bytes) <= 655_360),
+            "pkg/webgl2/graphshell_web.js"
+            | "pkg/physics/graphshell_physics.js"
+            | "pkg/physics/worker.js" => assert!(gzip(bytes) <= 20_480),
             "viewer.js" | "mount.js" | "styles.css" => mounting += gzip(bytes),
             _ => (),
         }
     }
     assert!(
-        mounting <= 8192,
+        mounting <= 10240,
         "viewer mounting and styles: {mounting} gzip bytes"
     );
 }

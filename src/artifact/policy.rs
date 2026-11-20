@@ -18,13 +18,14 @@ pub(super) fn scan_public_bytes(
     allowed_github_slugs: &BTreeSet<String>,
     errors: &mut Vec<String>,
 ) {
-    // Only the exact pinned application binary admits parser constants and
+    // Only the exact pinned application binaries admit parser constants and
     // upstream shader references. A changed binary or a lookalike filename
     // does not inherit this allowance. Machine paths remain forbidden even
     // in these verified bytes.
-    let qualified_viewer = relative_path
-        == crate::viewer::href("pkg/graphshell_web_bg.wasm").trim_start_matches('/')
-        && base16ct::lower::encode_string(&Sha256::digest(bytes)) == crate::viewer::WASM_SHA256;
+    let digest = base16ct::lower::encode_string(&Sha256::digest(bytes));
+    let qualified_viewer = crate::viewer::QUALIFIED_WASM.iter().any(|(name, sha256)| {
+        relative_path == crate::viewer::href(name).trim_start_matches('/') && digest == *sha256
+    });
     scan_public_text_policy(
         relative_path,
         &String::from_utf8_lossy(bytes),
