@@ -3706,3 +3706,17 @@ Rulings 19-25 settled the fold's look, the old links, the phase order (Ruling
   - **Sizes (gzip 6).** Viewer Wasm 3,139,028 B (cap 3,407,872); physics Wasm
     492,391 B (655,360); glue 12,666, 2,045 and 1,008 B (20,480 each); mount
     bound 9,160 B, which needed the 10 KiB amendment under Ruling 157.
+  - **Smoke follow-up (first Pages run, 4314d63, failed in the headed smoke).**
+    The new viewer's accessible surface differs from the pinned one's, so the
+    smoke follows it: the browse menu ("Graph menu") sits behind the "View
+    controls" disclosure; the command menu selects nothing until ArrowDown and
+    pages with "Next commands"; the viewer draws through WebGL2, so the startup
+    deadline check stalls the Wasm download instead of holding a WebGPU device;
+    and a failed Wasm download also surfaces as the viewer's own rejected mount
+    promise, which the failure-wasm case now allows. Run locally (headless
+    Chromium against the built artifact), the shared-viewer cases pass: desktop,
+    no-script, mobile, tablet, touch-live, no-webgpu, no-adapter, legacy-share,
+    startup-timeout and the four failure cases. The browse toolbar still shows
+    "Graph commands", "Graph tools" and "Fit graph" beside "View controls";
+    the old assertion that browse mode omits them matched by name only and no
+    longer binds, which is Turnstone's to settle.
