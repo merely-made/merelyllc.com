@@ -233,8 +233,8 @@
     },
     {
       "id": "smolweb",
-      "github_slug": "merely-made/smolweb",
-      "name": "smolweb",
+      "github_slug": "merely-made/errand",
+      "name": "errand",
       "description": "Spec-faithful Rust implementations of small-web protocols: misfin, spartan, nex, guppy.",
       "homepage": null,
       "license": "mit",

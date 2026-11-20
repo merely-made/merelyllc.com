@@ -733,3 +733,25 @@ links are projected onto the canonical home after verification. Existing
 headed viewer/deployment receipts retain their recorded sources. The family
 cutover and open implementation work are owned by
 `murm/design_docs/2026-11-02_murm_family_move_plan.md`.
+
+## 2026-11-19 — Ledger reconciled against GitHub
+
+`ops/org-migration.toml` was checked slug by slug against GitHub and corrected
+where the two disagreed.
+
+- **Renamed.** `merely-made/smolweb` is now `merely-made/errand`. The ledger and
+  the public manifest keep id `smolweb`, as `retinue` was kept for Murm, and
+  display Errand with its canonical slug and homepage.
+- **Transferred.** The P2panda fork left `mark-ik/p2panda` for
+  `merely-made/p2mere`; its record keeps id `p2panda-fork` and is now
+  `already-in-org`.
+- **Removed.** `merely-made/hocket`, `merely-made/mesocosm`,
+  `merely-made/paredros`, `mark-ik/arboard` and `mark-ik/stylo` no longer exist
+  on GitHub, so their records are gone. Hocket's source is in
+  `woodshed/ports/hocket` and Mesocosm's in `isocosm/mesocosm`. The earlier
+  records remain in this file's git history.
+- **Added.** `gemot`, `wgpu-cue`, `rtc-fork` and `taplo-fork` were in the
+  organization without a record. They are entered as inventoried on this date,
+  not as covered by the historical migration review.
+
+Heads and workflow counts on the untouched records are still as inventoried.

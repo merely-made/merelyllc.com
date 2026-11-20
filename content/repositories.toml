@@ -66,13 +66,13 @@ public = true
 
 [[repository]]
 id = "smolweb"
-github_slug = "merely-made/smolweb"
-name = "Smolweb"
+github_slug = "merely-made/errand"
+name = "Errand"
 summary = "Spec-faithful Rust implementations of Misfin, Spartan, Nex, Guppy, and adjacent small-web protocols."
 class = "foundation"
 status = "active"
 license = "MIT"
-homepage = "https://github.com/merely-made/smolweb"
+homepage = "https://github.com/merely-made/errand"
 public = true
 
 [[repository]]

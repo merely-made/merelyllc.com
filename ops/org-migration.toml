@@ -69,27 +69,27 @@ source_aliases = ["mark-ik/netrender"]
 
 [[migration]]
 id = "smolweb"
-current_slug = "merely-made/smolweb"
-target_slug = "merely-made/smolweb"
+current_slug = "merely-made/errand"
+target_slug = "merely-made/errand"
 classification = "foundation"
 batch = "foundation"
 disposition = "already-in-org"
 visibility = "public"
 default_branch = "main"
-head = "8a7eac7c0639830c7f4c9b61451c3b18f951c1a9"
+head = "869ed02f3990d9aad2386e93d78b4690ea575978"
 license_status = "MIT"
 provenance_status = "reviewed-original"
 sensitive_information_status = "current-and-history-detector-clean"
-public_scope = "Smolweb protocol crates, examples, tests, and public design documentation."
+public_scope = "Errand (formerly Smolweb) protocol crates, examples, tests, and public design documentation."
 publication_gate_status = "ready"
 history_remediation = "No remediation required."
 pages_status = "none"
 packages_status = "none-detected"
-actions_workflows = 1
+actions_workflows = 2
 old_owner_files = 0
 old_owner_manifests = 0
-local_locator = "repos/smolweb"
-source_aliases = ["mark-ik/smolweb"]
+local_locator = "repos/errand"
+source_aliases = ["mark-ik/smolweb", "merely-made/smolweb"]
 
 [[migration]]
 id = "wavicle"
@@ -331,30 +331,6 @@ local_locator = "repos/woodshed"
 source_aliases = ["mark-ik/woodshed"]
 
 [[migration]]
-id = "hocket"
-current_slug = "merely-made/hocket"
-target_slug = "merely-made/hocket"
-classification = "product"
-batch = "product"
-disposition = "already-in-org"
-visibility = "public"
-default_branch = "main"
-head = "cfe47b07bb4a81520b5414528ec0557d8abc8dcf"
-license_status = "MIT-OR-Apache-2.0"
-provenance_status = "reviewed-original"
-sensitive_information_status = "current-and-history-detector-clean"
-public_scope = "Hocket application source, tests, fixtures, assets, and public plans."
-publication_gate_status = "ready"
-history_remediation = "No remediation required."
-pages_status = "none"
-packages_status = "none-detected"
-actions_workflows = 0
-old_owner_files = 3
-old_owner_manifests = 0
-local_locator = "repos/hocket"
-source_aliases = ["mark-ik/hocket"]
-
-[[migration]]
 id = "isocosm"
 current_slug = "merely-made/isocosm"
 target_slug = "merely-made/isocosm"
@@ -377,71 +353,6 @@ old_owner_files = 0
 old_owner_manifests = 0
 local_locator = "repos/isometry"
 source_aliases = ["mark-ik/isometry", "merely-made/isometry"]
-
-[[migration]]
-id = "mesocosm"
-current_slug = "merely-made/mesocosm"
-target_slug = "merely-made/mesocosm"
-classification = "product"
-batch = "product"
-disposition = "already-in-org"
-visibility = "public"
-default_branch = "main"
-head = "5b41f1a242a830382d8767cf9a8eaac3f55c530b"
-license_status = "MIT-OR-Apache-2.0"
-provenance_status = "reviewed-original"
-sensitive_information_status = "current-and-history-detector-clean"
-public_scope = "Mesocosm name-reservation package, design record, and project documentation."
-publication_gate_status = "ready"
-history_remediation = "No remediation required."
-pages_status = "none"
-packages_status = "none-detected"
-actions_workflows = 0
-old_owner_files = 0
-old_owner_manifests = 0
-local_locator = "repos/mesocosm"
-
-[[migration]]
-id = "paredros"
-current_slug = "merely-made/paredros"
-target_slug = "merely-made/paredros"
-classification = "product"
-batch = "product"
-disposition = "already-in-org"
-visibility = "public"
-default_branch = "main"
-head = "009221555dc9ecfb516a61a3b785c0f3b3a7fb34"
-license_status = "MIT-OR-Apache-2.0"
-provenance_status = "reviewed-original"
-sensitive_information_status = "current-and-history-detector-clean"
-public_scope = "Paredros name-reservation package, design record, and project documentation."
-publication_gate_status = "ready"
-history_remediation = "No remediation required."
-pages_status = "none"
-packages_status = "none-detected"
-actions_workflows = 0
-old_owner_files = 0
-old_owner_manifests = 0
-local_locator = "repos/paredros"
-
-[[migration]]
-id = "arboard-fork"
-current_slug = "mark-ik/arboard"
-classification = "maintained-fork"
-batch = "fork-review"
-disposition = "keep-personal"
-visibility = "public"
-default_branch = "master"
-head = "9f7b05ca9178e3c28ec5e59a522786a8ea591cce"
-license_status = "MIT-OR-Apache-2.0"
-provenance_status = "reviewed-github-fork-of-1Password/arboard"
-sensitive_information_status = "active-branches-and-fork-only-history-reviewed"
-pages_status = "none"
-packages_status = "none-detected"
-actions_workflows = 1
-old_owner_files = 2
-old_owner_manifests = 0
-local_locator = "crates/arboard"
 
 [[migration]]
 id = "boa-fork"
@@ -519,22 +430,24 @@ actions_workflows = 0
 
 [[migration]]
 id = "p2panda-fork"
-current_slug = "mark-ik/p2panda"
+current_slug = "merely-made/p2mere"
+target_slug = "merely-made/p2mere"
 classification = "maintained-fork"
 batch = "fork-review"
-disposition = "keep-personal"
+disposition = "already-in-org"
 visibility = "public"
 default_branch = "main"
-head = "44e067d8d4c346ce69d49d9315ea5fa66e59fd31"
+head = "1ef69afaafe90c5d576ddaf2317852e2874a1cb4"
 license_status = "MIT-OR-Apache-2.0"
 provenance_status = "reviewed-github-fork-of-p2panda/p2panda"
 sensitive_information_status = "active-branches-and-fork-only-history-reviewed"
 pages_status = "none"
 packages_status = "none-detected"
-actions_workflows = 3
+actions_workflows = 1
 old_owner_files = 0
 old_owner_manifests = 0
 local_locator = "crates/p2panda"
+source_aliases = ["mark-ik/p2panda"]
 
 [[migration]]
 id = "piccolo-fork"
@@ -555,25 +468,6 @@ actions_workflows = 0
 old_owner_files = 0
 old_owner_manifests = 0
 local_locator = "crates/piccolo"
-
-[[migration]]
-id = "stylo-fork"
-current_slug = "mark-ik/stylo"
-classification = "maintained-fork"
-batch = "fork-review"
-disposition = "keep-personal"
-visibility = "public"
-default_branch = "main"
-head = "b157d925267fdd37b03f43e3387ab2f0909e57b0"
-license_status = "MPL-2.0-with-MIT-OR-Apache-components"
-provenance_status = "reviewed-github-fork-of-servo/stylo"
-sensitive_information_status = "active-branches-and-fork-only-history-reviewed"
-pages_status = "none"
-packages_status = "none-detected"
-actions_workflows = 3
-old_owner_files = 5
-old_owner_manifests = 5
-local_locator = "crates/stylo"
 
 [[migration]]
 id = "swarm-discovery-fork"
@@ -868,3 +762,80 @@ publication_gate_status = "not-applicable"
 pages_status = "none"
 packages_status = "not-inventoried"
 actions_workflows = 0
+
+# Gemot, wgpu-cue and the rtc and taplo forks were in the organization but not
+# in this ledger when it was reconciled against GitHub on 2026-11-19; heads,
+# licenses and workflow counts are as read that day. This does not claim the
+# historical migration review covered these projects.
+
+[[migration]]
+id = "gemot"
+current_slug = "merely-made/gemot"
+target_slug = "merely-made/gemot"
+classification = "platform"
+batch = "platform"
+disposition = "already-in-org"
+visibility = "public"
+default_branch = "main"
+head = "23021d06f57b564526e3b3161bed260d65edcd65"
+license_status = "MPL-2.0"
+provenance_status = "not-assessed-in-historical-migration"
+sensitive_information_status = "not-assessed-in-historical-migration"
+publication_gate_status = "not-applicable"
+pages_status = "none"
+packages_status = "not-inventoried"
+actions_workflows = 0
+
+[[migration]]
+id = "wgpu-cue"
+current_slug = "merely-made/wgpu-cue"
+target_slug = "merely-made/wgpu-cue"
+classification = "foundation"
+batch = "foundation"
+disposition = "already-in-org"
+visibility = "public"
+default_branch = "main"
+head = "ee41d51b970db4d6730474df3609b44ee61616a9"
+license_status = "MPL-2.0"
+provenance_status = "not-assessed-in-historical-migration"
+sensitive_information_status = "not-assessed-in-historical-migration"
+publication_gate_status = "not-applicable"
+pages_status = "none"
+packages_status = "not-inventoried"
+actions_workflows = 0
+
+[[migration]]
+id = "rtc-fork"
+current_slug = "merely-made/rtc"
+target_slug = "merely-made/rtc"
+classification = "maintained-fork"
+batch = "fork-review"
+disposition = "already-in-org"
+visibility = "public"
+default_branch = "main"
+head = "0a473d04ab23835929d1e81736014eb381bfd0fa"
+license_status = "Apache-2.0"
+provenance_status = "github-fork-of-webrtc-rs/rtc-not-assessed-in-historical-migration"
+sensitive_information_status = "not-assessed-in-historical-migration"
+publication_gate_status = "not-applicable"
+pages_status = "none"
+packages_status = "not-inventoried"
+actions_workflows = 3
+
+[[migration]]
+id = "taplo-fork"
+current_slug = "merely-made/taplo"
+target_slug = "merely-made/taplo"
+classification = "maintained-fork"
+batch = "fork-review"
+disposition = "already-in-org"
+visibility = "public"
+default_branch = "main"
+head = "493430f7fcad92d3dad555397fc39250fe9f9998"
+license_status = "MIT"
+provenance_status = "github-fork-of-tamasfe/taplo-not-assessed-in-historical-migration"
+sensitive_information_status = "not-assessed-in-historical-migration"
+publication_gate_status = "not-applicable"
+pages_status = "none"
+packages_status = "not-inventoried"
+actions_workflows = 3
