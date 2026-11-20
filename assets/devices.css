@@ -5,12 +5,12 @@
 
 .device-catalog-hero h1 {
   max-width: 16ch;
-  font-size: clamp(1.88rem, 4.5vw, 3.45rem);
+  font-size: var(--h1-inner);
 }
 
 .device-profile-hero h1 {
   max-width: 18ch;
-  font-size: clamp(1.88rem, 4.5vw, 3.3rem);
+  font-size: var(--h1-inner);
 }
 
 .catalog-flow {

@@ -55,6 +55,10 @@ pub struct ShowcaseRecord {
     /// profile's showcase rotation, in order.
     #[serde(default)]
     pub images: Vec<ShowcaseImageRecord>,
+    /// The primary image's pixel size, read from the file at load so a page
+    /// can reserve its space before the image arrives.
+    #[serde(skip)]
+    pub image_size: Option<(u32, u32)>,
 }
 
 /// One additional approved capture in a showcase rotation. Carries the same
@@ -446,6 +450,7 @@ impl PublicSiteData {
         let authority = authority.with_live_github_repositories(&metadata);
         let mut showcases: ShowcaseManifest = read_toml(root.join(SHOWCASES_PATH))?;
         showcases.retain_live_repositories(&authority);
+        showcases.measure_images(root);
         showcases.validate(root, &authority).map_err(|errors| {
             AuthorityError::new(format!(
                 "showcase validation failed:\n{}",

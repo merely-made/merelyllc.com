@@ -3,7 +3,8 @@ use std::path::Path;
 
 use crate::repositories::{AuthorityError, PublicSiteData, RepositoryRecord, ShowcaseRecord};
 use crate::site::{
-    ActivePage, PageMetadata, SiteView, element, link, render_with, section_heading, shell, txt,
+    ActivePage, PageMetadata, SiteView, element, hero_ledger, link, render_with, section_heading,
+    shell, txt,
 };
 
 pub const METADATA: PageMetadata = PageMetadata {
@@ -28,7 +29,7 @@ pub fn view(data: &PublicSiteData) -> SiteView {
             "main",
             &[("id", "main")],
             vec![
-                hero(),
+                hero(data),
                 radio_feature(),
                 project_showcases(data),
                 principle(),
@@ -37,11 +38,18 @@ pub fn view(data: &PublicSiteData) -> SiteView {
     )
 }
 
-fn hero() -> SiteView {
+fn hero(data: &PublicSiteData) -> SiteView {
+    let authority = &data.authority;
+    let public = authority
+        .repositories
+        .repository
+        .iter()
+        .filter(|r| r.public)
+        .count();
     element(
         "section",
         &[
-            ("class", "hero home-hero"),
+            ("class", "hero home-hero hero-split"),
             ("aria-labelledby", "home-title"),
         ],
         vec![
@@ -78,6 +86,14 @@ fn hero() -> SiteView {
                     ),
                 ],
             ),
+            hero_ledger(&[
+                ("public repositories", public.to_string()),
+                (
+                    "relationships",
+                    authority.relations.relation.len().to_string(),
+                ),
+                ("radio specimens", data.devices.device.len().to_string()),
+            ]),
             element(
                 "div",
                 &[("class", "signal-rule"), ("aria-hidden", "true")],
@@ -201,6 +217,8 @@ fn project_showcases(data: &PublicSiteData) -> SiteView {
 fn project_showcase(showcase: &ShowcaseRecord, repository: &RepositoryRecord) -> SiteView {
     let image_src = format!("/{}", showcase.image);
     let profile_href = format!("/projects/{}/", repository.id);
+    let (width, height) = showcase.image_size.unwrap_or((16, 9));
+    let (width, height) = (width.to_string(), height.to_string());
     element(
         "article",
         &[("class", "home-showcase-card")],
@@ -213,6 +231,8 @@ fn project_showcase(showcase: &ShowcaseRecord, repository: &RepositoryRecord) ->
                     &[
                         ("src", image_src.as_str()),
                         ("alt", showcase.alt.as_str()),
+                        ("width", width.as_str()),
+                        ("height", height.as_str()),
                         ("loading", "lazy"),
                         ("decoding", "async"),
                     ],

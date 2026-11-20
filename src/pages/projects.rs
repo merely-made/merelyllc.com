@@ -13,7 +13,8 @@ use crate::repositories::{
 use crate::site::{
     ActivePage, DEFAULT_SOCIAL_IMAGE_ALT, DEFAULT_SOCIAL_IMAGE_URL, DocumentMetadata,
     ORGANIZATION_ID, SiteView, SocialImage, WEBSITE_ID, base_schema_graph, element, external_link,
-    json_ld_for_script, link, render_with_dynamic_and_body_end, section_heading, shell, txt,
+    hero_ledger, json_ld_for_script, link, render_with_dynamic_and_body_end, section_heading,
+    shell, txt,
 };
 
 const PROJECTION_PROOF: &[u8] = include_bytes!("../../assets/projection-proof.js");
@@ -169,7 +170,7 @@ fn view_with(
     let showcase = data.showcases.for_repository(&repository.id);
 
     let mut sections = vec![
-        hero(repository),
+        hero(data, repository),
         showcase_section(showcase),
         place_in_family(data, repository),
     ];
@@ -197,7 +198,16 @@ fn view_with(
     )
 }
 
-fn hero(repository: &RepositoryRecord) -> SiteView {
+fn hero(data: &PublicSiteData, repository: &RepositoryRecord) -> SiteView {
+    let relations = &data.authority.relations.relation;
+    let uses = relations
+        .iter()
+        .filter(|r| r.source == repository.id)
+        .count();
+    let used_by = relations
+        .iter()
+        .filter(|r| r.target == repository.id)
+        .count();
     let github_url = format!("https://github.com/{}", repository.github_slug);
     let project_href = format!("/projects/{}/", repository.id);
     let mut links = vec![
@@ -221,19 +231,11 @@ fn hero(repository: &RepositoryRecord) -> SiteView {
     element(
         "section",
         &[
-            ("class", "hero project-profile-hero"),
+            ("class", "hero project-profile-hero hero-split"),
             ("aria-labelledby", "project-title"),
         ],
         vec![
-            element(
-                "p",
-                &[("class", "eyebrow")],
-                vec![txt(format!(
-                    "Merely project · {} · {}",
-                    repository.class.label(),
-                    repository.status.label()
-                ))],
-            ),
+            element("p", &[("class", "eyebrow")], vec![txt("Merely project")]),
             element(
                 "h1",
                 &[("id", "project-title")],
@@ -245,6 +247,12 @@ fn hero(repository: &RepositoryRecord) -> SiteView {
                 vec![txt(&repository.summary)],
             ),
             element("div", &[("class", "hero-actions")], links),
+            hero_ledger(&[
+                ("class", repository.class.label().to_string()),
+                ("status", repository.status.label().to_string()),
+                ("uses", uses.to_string()),
+                ("used by", used_by.to_string()),
+            ]),
             element(
                 "div",
                 &[("class", "signal-rule"), ("aria-hidden", "true")],
@@ -278,6 +286,12 @@ fn place_in_family(data: &PublicSiteData, repository: &RepositoryRecord) -> Site
         .filter(|relation| relation.target == repository.id)
         .collect::<Vec<_>>();
 
+    // A side with nothing recorded takes one line under the other.
+    let columns = if outgoing.is_empty() != incoming.is_empty() {
+        "project-relation-columns has-empty-group"
+    } else {
+        "project-relation-columns"
+    };
     element(
         "section",
         &[("class", "content-section project-relations-section")],
@@ -285,7 +299,7 @@ fn place_in_family(data: &PublicSiteData, repository: &RepositoryRecord) -> Site
             section_heading("02", "place in the family"),
             element(
                 "div",
-                &[("class", "project-relation-columns")],
+                &[("class", columns)],
                 vec![
                     relation_group("This project uses", &outgoing, true, &repositories),
                     relation_group("Other projects use this", &incoming, false, &repositories),
@@ -346,9 +360,14 @@ fn relation_group(
         )]
     };
 
+    let class = if relations.is_empty() {
+        "project-relation-group is-empty"
+    } else {
+        "project-relation-group"
+    };
     element(
         "section",
-        &[("class", "project-relation-group")],
+        &[("class", class)],
         vec![
             element("h3", &[], vec![txt(heading)]),
             element("div", &[], body),

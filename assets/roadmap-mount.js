@@ -12,9 +12,11 @@ if (root) {
   const open = root.querySelector('[data-roadmap-open]');
   const status = root.querySelector('[data-roadmap-status]');
   const surface = root.querySelector('[data-roadmap-surface]');
+  const text = root.querySelector('[data-roadmap-text]');
   const say = (text) => { status.textContent = text; };
   if (!navigator.gpu) {
     open.hidden = true;
+    if (text) text.open = true;
     say('The live map needs WebGPU; the frozen scene below is the same graph.');
   }
   open.addEventListener('click', async () => {
@@ -43,6 +45,7 @@ if (root) {
       say('');
     } catch (error) {
       open.disabled = false;
+      if (text) text.open = true;
       say(`The live map could not load (${error.message ?? error}); the frozen scene below is the same graph.`);
     }
   });

@@ -18,6 +18,8 @@
   --font-prose: "Newsreader", Georgia, serif;
   --font-mono: "IBM Plex Mono", Consolas, monospace;
   --page: min(100% - 48px, 960px);
+  --h1-home: clamp(1.8rem, 4.75vw, 3.5rem);
+  --h1-inner: clamp(1.7rem, 4.2vw, 3.1rem);
 }
 
 *,
@@ -209,7 +211,7 @@ h1 {
   margin-top: 18px;
   max-width: 15ch;
   color: var(--oxblood);
-  font: 400 clamp(1.95rem, 5.25vw, 3.9rem)/0.98 var(--font-wordmark);
+  font: 400 var(--h1-home)/0.98 var(--font-wordmark);
   letter-spacing: -0.025em;
   text-wrap: balance;
 }
@@ -217,7 +219,7 @@ h1 {
 .radio-hero h1 {
   max-width: 22ch;
   margin-top: 0;
-  font-size: clamp(1.76rem, 4.5vw, 3.26rem);
+  font-size: var(--h1-inner);
   line-height: 1.03;
 }
 
@@ -446,21 +448,23 @@ h1 {
   padding-bottom: 20px;
 }
 
-.repositories-hero {
+.repositories-hero,
+.roadmap-hero {
   padding: 90px 0 72px;
 }
 
-.repositories-hero h1 {
+.repositories-hero h1,
+.roadmap-hero h1 {
   max-width: 17ch;
-  font-size: clamp(2.1rem, 4.8vw, 3.6rem);
+  font-size: var(--h1-inner);
   line-height: 1;
 }
 
-.repository-overview {
+.hero-ledger {
   max-width: 760px;
   margin-top: 44px;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }
@@ -489,6 +493,45 @@ h1 {
   margin-top: 5px;
   color: var(--oxblood);
   font: 400 1.75rem/1 var(--font-wordmark);
+}
+
+@media (min-width: 1000px) {
+  .hero-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 280px);
+    column-gap: 72px;
+  }
+
+  .hero-split > * {
+    grid-column: 1;
+  }
+
+  /* The ledger stands beside the headline, its last line level with the
+     hero's last line of copy or its buttons. */
+  .hero-split > .hero-ledger {
+    grid-column: 2;
+    grid-row: 1 / span 4;
+    align-self: end;
+    margin-top: 0;
+    grid-template-columns: 1fr;
+    border-bottom: 0;
+  }
+
+  .hero-split .overview-stat,
+  .hero-split .overview-stat:not(:first-child) {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 13px 0 11px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .hero-split .overview-stat dd {
+    margin-top: 0;
+    text-align: right;
+  }
 }
 
 .graph-legend-node {
@@ -2430,33 +2473,16 @@ tbody tr:last-child td {
 }
 
 .home-showcase-card {
-  min-height: 360px;
-  display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--paper);
 }
 
-.home-showcase-card:nth-child(even) {
-  grid-template-columns: minmax(280px, 0.65fr) minmax(0, 1.35fr);
-}
-
-.home-showcase-card:nth-child(even) .home-showcase-figure {
-  order: 2;
-}
-
 .home-showcase-figure,
 .project-showcase-figure {
   overflow: hidden;
   background: var(--shell);
-}
-
-.home-showcase-figure {
-  min-height: 360px;
-  display: grid;
-  place-items: center;
 }
 
 .home-showcase-figure img,
@@ -2467,11 +2493,37 @@ tbody tr:last-child td {
   object-fit: contain;
 }
 
+/* A capture keeps its own shape; a tall one stops at 600px and centers. */
+.home-showcase-figure img {
+  height: auto;
+  max-height: 600px;
+}
+
 .home-showcase-copy {
-  padding: 36px 34px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+  padding: 30px 34px 34px;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  grid-template-rows: auto 1fr auto;
+  column-gap: 48px;
+  align-items: start;
+}
+
+/* Heading on the left, the paragraph and its link on the right. */
+.home-showcase-copy > .card-kicker,
+.home-showcase-copy > h3 {
+  grid-column: 1;
+}
+
+.home-showcase-copy > p:not(.card-kicker) {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  margin-top: 0;
+}
+
+.home-showcase-copy > .text-link {
+  grid-column: 2;
+  justify-self: start;
+  margin-top: 16px;
 }
 
 .home-showcase-copy h3,
@@ -2502,7 +2554,7 @@ tbody tr:last-child td {
 
 .project-profile-hero h1 {
   max-width: 17ch;
-  font-size: clamp(2.1rem, 4.8vw, 3.6rem);
+  font-size: var(--h1-inner);
   line-height: 1;
 }
 
@@ -2562,7 +2614,11 @@ tbody tr:last-child td {
   grid-auto-columns: 100%;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
-  scrollbar-width: thin;
+  scrollbar-width: none;
+}
+
+.project-showcase-strip::-webkit-scrollbar {
+  display: none;
 }
 
 .project-showcase-strip .project-showcase-figure {
@@ -3008,6 +3064,28 @@ tbody tr:last-child td {
   border-left: 1px solid var(--line-soft);
 }
 
+.project-relation-columns.has-empty-group {
+  grid-template-columns: 1fr;
+}
+
+.project-relation-columns.has-empty-group .project-relation-group + .project-relation-group {
+  border-top: 1px solid var(--line-soft);
+  border-left: 0;
+}
+
+.project-relation-group.is-empty {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 18px;
+  padding-top: 18px;
+  padding-bottom: 18px;
+}
+
+.project-relation-group.is-empty .project-relation-empty {
+  margin: 0;
+}
+
 .project-relation-group h3,
 .project-topics h3 {
   color: var(--muted);
@@ -3174,7 +3252,8 @@ tbody tr:last-child td {
     padding: 70px 0 58px;
   }
 
-  .repositories-hero {
+  .repositories-hero,
+  .roadmap-hero {
     padding: 70px 0 58px;
   }
 
@@ -3182,7 +3261,7 @@ tbody tr:last-child td {
     padding: 70px 0 58px;
   }
 
-  .repository-overview {
+  .hero-ledger {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -3301,8 +3380,7 @@ tbody tr:last-child td {
     grid-template-columns: 1fr;
   }
 
-  .home-showcase-card,
-  .home-showcase-card:nth-child(even),
+  .home-showcase-copy,
   .project-showcase-layout,
   .project-relation-columns,
   .project-facts-layout {
@@ -3330,12 +3408,16 @@ tbody tr:last-child td {
     min-height: 320px;
   }
 
-  .home-showcase-card:nth-child(even) .home-showcase-figure {
-    order: 0;
+  .home-showcase-copy > .card-kicker,
+  .home-showcase-copy > h3,
+  .home-showcase-copy > p:not(.card-kicker),
+  .home-showcase-copy > .text-link {
+    grid-column: 1;
+    grid-row: auto;
   }
 
-  .home-showcase-figure {
-    min-height: 280px;
+  .home-showcase-copy > p:not(.card-kicker) {
+    margin-top: 17px;
   }
 
   .project-relation-group + .project-relation-group,
@@ -3413,21 +3495,13 @@ tbody tr:last-child td {
     padding-top: 68px;
   }
 
+  :root {
+    --h1-home: clamp(1.65rem, 8.2vw, 2.25rem);
+    --h1-inner: clamp(1.55rem, 7.6vw, 2.1rem);
+  }
+
   h1 {
-    font-size: clamp(1.76rem, 8.85vw, 2.4rem);
     overflow-wrap: anywhere;
-  }
-
-  .radio-hero h1 {
-    font-size: clamp(1.65rem, 8.25vw, 2.25rem);
-  }
-
-  .repositories-hero h1 {
-    font-size: clamp(1.69rem, 8.25vw, 2.25rem);
-  }
-
-  .project-profile-hero h1 {
-    font-size: clamp(1.69rem, 8.25vw, 2.25rem);
   }
 
   .hero-actions {
@@ -3535,10 +3609,6 @@ tbody tr:last-child td {
   .project-topics {
     padding-right: 20px;
     padding-left: 20px;
-  }
-
-  .home-showcase-figure {
-    min-height: 220px;
   }
 
   .project-showcase-figure {

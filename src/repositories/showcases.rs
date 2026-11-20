@@ -12,6 +12,22 @@ impl ShowcaseManifest {
             .retain(|showcase| live_ids.contains(showcase.repository.as_str()));
     }
 
+    /// Read each primary image's size from its PNG header (IHDR).
+    pub(super) fn measure_images(&mut self, root: &Path) {
+        for showcase in &mut self.showcase {
+            let path = root.join("assets").join(&showcase.image);
+            showcase.image_size = std::fs::read(path).ok().and_then(|bytes| {
+                let header = bytes.get(..24)?;
+                if &header[..8] != b"\x89PNG\r\n\x1a\n" {
+                    return None;
+                }
+                let width = u32::from_be_bytes(header[16..20].try_into().ok()?);
+                let height = u32::from_be_bytes(header[20..24].try_into().ok()?);
+                Some((width, height))
+            });
+        }
+    }
+
     pub fn validate(&self, root: &Path, authority: &Authority) -> Result<(), Vec<String>> {
         let mut errors = Vec::new();
         let repositories = authority

@@ -17,8 +17,8 @@ use crate::repository_history::{
     GitAuthorityHistoryProjection, RepositoryGraph, public_history_projection,
 };
 use crate::site::{
-    ActivePage, PageMetadata, SiteView, element, external_link, link, render_with_body_end,
-    section_heading, shell, txt,
+    ActivePage, PageMetadata, SiteView, element, external_link, hero_ledger, link,
+    render_with_body_end, section_heading, shell, txt,
 };
 
 pub const METADATA: PageMetadata = PageMetadata {
@@ -246,7 +246,7 @@ fn hero(data: &PublicSiteData) -> SiteView {
     element(
         "section",
         &[
-            ("class", "hero repositories-hero"),
+            ("class", "hero repositories-hero hero-split"),
             ("aria-labelledby", "repositories-title"),
         ],
         vec![
@@ -267,16 +267,12 @@ fn hero(data: &PublicSiteData) -> SiteView {
                     "Every project below is public. The links among them are shown as ordinary text first, so the family remains legible without JavaScript, WebGPU, or a graph canvas.",
                 )],
             ),
-            element(
-                "dl",
-                &[("class", "repository-overview")],
-                vec![
-                    overview_stat("repositories", repositories.len()),
-                    overview_stat("relationships", relations.len()),
-                    overview_stat("derived edges", derived),
-                    overview_stat("curated edges", curated),
-                ],
-            ),
+            hero_ledger(&[
+                ("repositories", repositories.len().to_string()),
+                ("relationships", relations.len().to_string()),
+                ("derived edges", derived.to_string()),
+                ("curated edges", curated.to_string()),
+            ]),
         ],
     )
 }
@@ -368,17 +364,6 @@ fn activity_label(kind: &str) -> &'static str {
         "WatchEvent" => "received a star",
         _ => "recorded public activity",
     }
-}
-
-fn overview_stat(label: &str, value: usize) -> SiteView {
-    element(
-        "div",
-        &[("class", "overview-stat")],
-        vec![
-            element("dt", &[], vec![txt(label)]),
-            element("dd", &[], vec![txt(value.to_string())]),
-        ],
-    )
 }
 
 fn relation_key() -> SiteView {

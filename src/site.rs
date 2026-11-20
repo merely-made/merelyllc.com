@@ -126,6 +126,25 @@ pub fn section_heading(number: &str, title: &str) -> SiteView {
     )
 }
 
+/// A hero's own numbers. It sits under the copy on a narrow screen and beside
+/// the headline on a wide one, in a hero that also carries `hero-split`.
+pub fn hero_ledger(stats: &[(&str, String)]) -> SiteView {
+    let rows = stats
+        .iter()
+        .map(|(label, value)| {
+            element(
+                "div",
+                &[("class", "overview-stat")],
+                vec![
+                    element("dt", &[], vec![txt(*label)]),
+                    element("dd", &[], vec![txt(value.clone())]),
+                ],
+            )
+        })
+        .collect();
+    element("dl", &[("class", "hero-ledger")], rows)
+}
+
 pub fn shell(active: ActivePage, main: SiteView) -> SiteView {
     let home_attrs = if active == ActivePage::Home {
         vec![

@@ -13,7 +13,7 @@ use std::path::Path;
 
 use crate::repositories::{Authority, AuthorityError};
 use crate::site::{
-    ActivePage, PageMetadata, SiteView, element, external_link, render_with_body_end,
+    ActivePage, PageMetadata, SiteView, element, external_link, hero_ledger, render_with_body_end,
     section_heading, shell, txt,
 };
 use crate::spec_coverage::CatalogSnapshot;
@@ -80,7 +80,10 @@ fn view(roadmap: &Roadmap) -> SiteView {
             vec![
                 element(
                     "section",
-                    &[("class", "hero"), ("aria-labelledby", "roadmap-title")],
+                    &[
+                        ("class", "hero roadmap-hero hero-split"),
+                        ("aria-labelledby", "roadmap-title"),
+                    ],
                     vec![
                         element("p", &[("class", "eyebrow")], vec![txt("spec roadmap")]),
                         element(
@@ -94,12 +97,15 @@ fn view(roadmap: &Roadmap) -> SiteView {
                             "p",
                             &[("class", "hero-copy")],
                             vec![txt(format!(
-                                "{} features named by the family's own plans, resting on {} specifications. {complete} have every spec on their chain complete. Counts come from the repositories that run each suite, as of {}.",
-                                roadmap.features.len(),
-                                roadmap.spec_count(),
+                                "The features the family's own plans name, and the specifications each one rests on. Counts come from the repositories that run each suite, as of {}.",
                                 roadmap.on
                             ))],
                         ),
+                        hero_ledger(&[
+                            ("features", roadmap.features.len().to_string()),
+                            ("specifications", roadmap.spec_count().to_string()),
+                            ("chains complete", complete.to_string()),
+                        ]),
                     ],
                 ),
                 map_section(),
@@ -136,7 +142,7 @@ fn map_section() -> SiteView {
                 )],
             ),
             paragraph(
-                "The scene below is solved and frozen at build time. The live map is Graphshell, loading the same graph as a dataset; select a node to follow its links to the spec, its registry line or the plan that names it.",
+                "The map is solved and frozen at build time, and reads as text below. The live map is Graphshell, loading the same graph as a dataset; select a node to follow its links to the spec, its registry line or the plan that names it.",
             ),
             element(
                 "button",
@@ -161,9 +167,16 @@ fn map_section() -> SiteView {
                 "div",
                 &[("class", "graph-sandbox-frozen")],
                 vec![element(
-                    "div",
-                    &[("class", "graph-sandbox-frozen-scene")],
-                    vec![txt(SCENE_MARKER)],
+                    "details",
+                    &[("data-roadmap-text", "")],
+                    vec![
+                        element("summary", &[], vec![txt("Read the map as text")]),
+                        element(
+                            "div",
+                            &[("class", "graph-sandbox-frozen-scene")],
+                            vec![txt(SCENE_MARKER)],
+                        ),
+                    ],
                 )],
             ),
         ],
