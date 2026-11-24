@@ -250,12 +250,12 @@ pub(super) fn authority_identity(input: &GraphInput) -> Result<(String, u64), St
 }
 
 pub(super) fn next_diff(snapshot: &SceneSnapshot, operations: Vec<SceneOp>) -> SceneDiff {
-    SceneDiff {
-        epoch: snapshot.epoch,
-        base: snapshot.revision,
-        revision: Revision(snapshot.revision.0 + 1),
+    SceneDiff::new(
+        snapshot.epoch,
+        snapshot.revision,
+        Revision(snapshot.revision.0 + 1),
         operations,
-    }
+    )
 }
 
 pub(super) fn move_diff(
