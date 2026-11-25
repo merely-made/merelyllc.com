@@ -103,8 +103,8 @@ source = "mere"
 target = "retinue"
 kind = "depends_on"
 provenance = "derived"
-evidence = "Mere's root Cargo manifest uses Retinue from merely-made/murm."
-verified_on = "2026-07-29"
+evidence = "Mere's root Cargo manifest takes its transport from merely-made/murm, which takes Retinue from merely-made/retinue."
+verified_on = "2026-11-25"
 
 [[relation]]
 id = "turnstone-depends-on-genet"

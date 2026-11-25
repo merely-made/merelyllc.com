@@ -248,8 +248,8 @@ fn mesh(traces: &TraceSet) -> SiteView {
                             txt(" "),
                             external_link(
                                 &format!(
-                                    "https://github.com/merely-made/murm/tree/{}/crates/retinue-sim",
-                                    traces.provenance.revision
+                                    "{}/tree/{}/crates/retinue-sim",
+                                    traces.provenance.repository, traces.provenance.revision
                                 ),
                                 "Read retinue-sim at that revision.",
                                 "message-path-source-link",
@@ -561,7 +561,7 @@ fn partnership() -> SiteView {
                         ))],
                     ),
                     external_link(
-                        "https://github.com/merely-made/murm",
+                        "https://github.com/merely-made/retinue",
                         "Read the Retinue source ↗",
                         "button button-night",
                     ),

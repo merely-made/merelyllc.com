@@ -14,7 +14,7 @@ use crate::{HOST_FIXTURE, LOCAL_FIXTURE, RETINUE_BRANCH, RETINUE_REPOSITORY, SUR
 pub const SCENARIOS_SCHEMA: &str = "mer3ly.radio-bench-scenarios/v1";
 
 /// The fault the V4 firmware raises when its SX1262 does not initialize
-/// (`firmware/heltec-v4-phy/src/main.rs` in Murm).
+/// (`firmware/heltec-v4-phy/src/main.rs` in Retinue).
 const V4_INIT_FAULT_CODE: u8 = 1;
 const V4_INIT_FAULT_MESSAGE: &str = "SX1262 INIT";
 

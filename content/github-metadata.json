@@ -218,9 +218,9 @@
     },
     {
       "id": "retinue",
-      "github_slug": "merely-made/murm",
-      "name": "murm",
-      "description": "Experimental Rust transport and device management for the Merely stack: native P2P, radio protocols, conversations, and Signalman.",
+      "github_slug": "merely-made/retinue",
+      "name": "retinue",
+      "description": "Experimental Rust mesh layer for the Merely stack: Reticulum, LXMF, radio protocols, board firmware and Signalman.",
       "homepage": null,
       "license": "mpl-2.0",
       "updated_at": "2026-10-14T00:01:11Z",

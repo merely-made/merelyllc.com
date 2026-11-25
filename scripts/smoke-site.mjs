@@ -695,7 +695,7 @@ try {
     };
   });
   assert.equal(staticBench.ready, "false");
-  assert.match(staticBench.fallback, /rendered by radio-mirror from Retinue's firmware UI on Murm's main branch/);
+  assert.match(staticBench.fallback, /rendered by radio-mirror from Retinue's firmware UI on Retinue's main branch/);
   assert.equal(staticBench.screen, "status");
   assert.equal(staticBench.reading[0], "STATUS, RAD OK");
   assert.deepEqual(
@@ -1411,7 +1411,7 @@ try {
   assert.equal(textMetadata.structured_type, "SoftwareSourceCode");
   assert.equal(
     textMetadata.code_repository,
-    "https://github.com/merely-made/murm",
+    "https://github.com/merely-made/retinue",
   );
   assert.equal(await horizontalOverflow(textProject), 0);
   assert.deepEqual(

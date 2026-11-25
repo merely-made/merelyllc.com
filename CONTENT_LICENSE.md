@@ -15,12 +15,12 @@ recorded in `content/showcases.toml`. This repository does not grant rights in
 third-party material that may appear inside a screenshot.
 
 The V4 radio bench is built from retinue's `radio-mirror` and `radio-face`
-crates, which are MPL-2.0, taken from Murm's main branch at each build. That covers the committed runtime
+crates, which are MPL-2.0, taken from Retinue's main branch at each build. That covers the committed runtime
 `assets/radio_mirror.js` and `assets/radio_mirror_bg.wasm`, and the screen
 images the site build renders into `radio-mirror/`. Their source is
-<https://github.com/merely-made/murm/tree/main/crates/radio-mirror>
+<https://github.com/merely-made/retinue/tree/main/crates/radio-mirror>
 and
-<https://github.com/merely-made/murm/tree/main/crates/radio-face>.
+<https://github.com/merely-made/retinue/tree/main/crates/radio-face>.
 The vendored `embedded-graphics` they link is MIT OR Apache-2.0. The status
 documents in `crates/radio-mirror/fixtures/` are copied unchanged from the
 same source. These screens are firmware output, not original site artwork,
@@ -33,7 +33,7 @@ are the output of retinue's `retinue-sim` lab example, which is MPL-2.0, run
 outside this site at retinue revision
 `fa0d98b1562357e617062283be1de483f3dcd4d4`; `provenance.toml` beside them
 records the commands and each file's SHA-256, and the source is
-<https://github.com/merely-made/murm/tree/fa0d98b1562357e617062283be1de483f3dcd4d4/crates/retinue-sim>.
+<https://github.com/merely-made/retinue/tree/fa0d98b1562357e617062283be1de483f3dcd4d4/crates/retinue-sim>.
 The files are generated data, not original site prose, and CC BY 4.0 does not
 apply to them. `retinue-sim` links the `retinue` crate, which is under the
 Reticulum License. The traces contain no part of that crate's source: they

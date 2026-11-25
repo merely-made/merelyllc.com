@@ -202,7 +202,7 @@ impl DeviceCatalog {
                 check_public_text(&format!("device {} {field}", device.id), value, &mut errors);
             }
 
-            if device.source_repository != "https://github.com/merely-made/murm" {
+            if device.source_repository != "https://github.com/merely-made/retinue" {
                 errors.push(format!(
                     "device {} source_repository must be the public Retinue repository",
                     device.id

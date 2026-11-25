@@ -20,7 +20,7 @@ power = "USB bench power"
 antenna = "Open"
 enclosure = "Open"
 recipe_state = "Incomplete"
-source_repository = "https://github.com/merely-made/murm"
+source_repository = "https://github.com/merely-made/retinue"
 source_document = "firmware/example/README.md"
 
 [device.authorization]
