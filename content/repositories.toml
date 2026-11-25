@@ -195,36 +195,3 @@ status = "active"
 license = "MPL-2.0"
 homepage = "https://github.com/merely-made/emblem"
 public = true
-
-[[repository]]
-id = "mora"
-github_slug = "merely-made/mora"
-name = "Mora"
-summary = "A dependency-free prosody engine for syllabification, syllable weight, verse meter, rhyme, and other sound relationships."
-class = "foundation"
-status = "active"
-license = "MPL-2.0"
-homepage = "https://github.com/merely-made/mora"
-public = true
-
-[[repository]]
-id = "pipit"
-github_slug = "merely-made/pipit"
-name = "Pipit"
-summary = "A dependency-free speech codec for constrained links, with framed IMA ADPCM and low-bitrate LPC voice clips."
-class = "foundation"
-status = "active"
-license = "MIT OR Apache-2.0"
-homepage = "https://github.com/merely-made/pipit"
-public = true
-
-[[repository]]
-id = "turquet"
-github_slug = "merely-made/turquet"
-name = "Turquet"
-summary = "A celestial calculation engine for positions and events, with explicit time scales, observer frames, and reproducible model provenance."
-class = "foundation"
-status = "active"
-license = "MIT"
-homepage = "https://github.com/merely-made/turquet"
-public = true

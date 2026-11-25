@@ -165,21 +165,6 @@
       ]
     },
     {
-      "id": "mora",
-      "github_slug": "merely-made/mora",
-      "name": "mora",
-      "description": "A prosody engine built on the mora: syllabification, syllable weight, accentual and quantitative meter, and sound kinship.",
-      "homepage": null,
-      "license": "other",
-      "updated_at": "2026-09-05T03:22:25Z",
-      "pushed_at": "2026-09-05T03:22:22Z",
-      "primary_language": "Rust",
-      "stargazer_count": 0,
-      "archived": false,
-      "fork": false,
-      "topics": []
-    },
-    {
       "id": "netrender",
       "github_slug": "merely-made/netrender",
       "name": "netrender",
@@ -200,21 +185,6 @@
         "web-rendering",
         "wgpu"
       ]
-    },
-    {
-      "id": "pipit",
-      "github_slug": "merely-made/pipit",
-      "name": "pipit",
-      "description": "A small speech codec for voices that travel light: framed IMA ADPCM and a 2.4 kbps LPC vocoder, no_std and dependency-free.",
-      "homepage": null,
-      "license": "apache-2.0",
-      "updated_at": "2026-09-05T03:22:41Z",
-      "pushed_at": "2026-09-05T03:22:38Z",
-      "primary_language": "Rust",
-      "stargazer_count": 0,
-      "archived": false,
-      "fork": false,
-      "topics": []
     },
     {
       "id": "retinue",
@@ -275,27 +245,6 @@
         "peer-to-peer",
         "rust",
         "wgpu"
-      ]
-    },
-    {
-      "id": "turquet",
-      "github_slug": "merely-made/turquet",
-      "name": "turquet",
-      "description": "Many views of one sky. A pure-Rust celestial fact engine.",
-      "homepage": "https://saurvs.github.io/astro-rust/",
-      "license": "mit",
-      "updated_at": "2026-09-11T19:10:35Z",
-      "pushed_at": "2026-09-11T19:10:30Z",
-      "primary_language": "Rust",
-      "stargazer_count": 0,
-      "archived": false,
-      "fork": true,
-      "topics": [
-        "astrometry",
-        "astronomy",
-        "celestial-mechanics",
-        "ephemeris",
-        "rust"
       ]
     },
     {
