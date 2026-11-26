@@ -824,11 +824,10 @@ actions_workflows = 3
 
 [[migration]]
 id = "taplo-fork"
-current_slug = "merely-made/taplo"
-target_slug = "merely-made/taplo"
+current_slug = "mark-ik/taplo"
 classification = "maintained-fork"
 batch = "fork-review"
-disposition = "already-in-org"
+disposition = "keep-personal"
 visibility = "public"
 default_branch = "main"
 head = "493430f7fcad92d3dad555397fc39250fe9f9998"
