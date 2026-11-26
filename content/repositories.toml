@@ -76,17 +76,6 @@ homepage = "https://github.com/merely-made/errand"
 public = true
 
 [[repository]]
-id = "wavicle"
-github_slug = "merely-made/wavicle"
-name = "Wavicle"
-summary = "A pure-Rust WavPack v5 codec for lossless audio."
-class = "foundation"
-status = "active"
-license = "MIT OR Apache-2.0"
-homepage = "https://github.com/merely-made/wavicle"
-public = true
-
-[[repository]]
 id = "wgpu-graft"
 github_slug = "merely-made/wgpu-graft"
 name = "wgpu-graft"

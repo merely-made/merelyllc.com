@@ -6153,7 +6153,8 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "wavpack-5"
-repo = "wavicle"
+repo = "woodshed"
+crate = "wavicle"
 relation = "implements"
 depth = "full"
 verdict = "open"
@@ -6163,7 +6164,8 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "rfc1321"
-repo = "wavicle"
+repo = "woodshed"
+crate = "wavicle"
 relation = "implements"
 depth = "stub"
 verdict = "open"
@@ -10183,7 +10185,8 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "rfc9639"
-repo = "wavicle"
+repo = "woodshed"
+crate = "wavicle"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
@@ -10233,7 +10236,8 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "replaygain-2.0"
-repo = "wavicle"
+repo = "woodshed"
+crate = "wavicle"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -10253,7 +10257,8 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "apev2"
-repo = "wavicle"
+repo = "woodshed"
+crate = "wavicle"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -10273,7 +10278,8 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "vorbis-comments"
-repo = "wavicle"
+repo = "woodshed"
+crate = "wavicle"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -10293,7 +10299,8 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "id3v2"
-repo = "wavicle"
+repo = "woodshed"
+crate = "wavicle"
 relation = "should"
 depth = "planned"
 verdict = "PULL"

@@ -270,27 +270,6 @@
       ]
     },
     {
-      "id": "wavicle",
-      "github_slug": "merely-made/wavicle",
-      "name": "wavicle",
-      "description": "a pure-Rust WavPack v5 codec",
-      "homepage": null,
-      "license": "other",
-      "updated_at": "2026-09-03T05:30:44Z",
-      "pushed_at": "2026-09-03T05:29:02Z",
-      "primary_language": "Rust",
-      "stargazer_count": 1,
-      "archived": false,
-      "fork": false,
-      "topics": [
-        "audio-codec",
-        "codec",
-        "lossless-audio",
-        "rust",
-        "wavpack"
-      ]
-    },
-    {
       "id": "wgpu-graft",
       "github_slug": "merely-made/wgpu-graft",
       "name": "wgpu-graft",
