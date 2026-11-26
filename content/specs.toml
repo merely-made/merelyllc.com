@@ -6057,7 +6057,8 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "iau-2006-2000a"
-repo = "turquet"
+repo = "cleromancy"
+crate = "turquet"
 relation = "via-dep"
 depth = "full"
 verdict = "open"
@@ -6067,7 +6068,8 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "iers-finals2000a"
-repo = "turquet"
+repo = "cleromancy"
+crate = "turquet"
 relation = "implements"
 depth = "partial"
 verdict = "open"
@@ -6077,7 +6079,8 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "time-scales"
-repo = "turquet"
+repo = "cleromancy"
+crate = "turquet"
 relation = "via-dep"
 depth = "full"
 verdict = "open"
@@ -6087,7 +6090,8 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "wgs84"
-repo = "turquet"
+repo = "cleromancy"
+crate = "turquet"
 relation = "implements"
 depth = "full"
 verdict = "open"
@@ -6096,7 +6100,8 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "jpl-de440"
-repo = "turquet"
+repo = "cleromancy"
+crate = "turquet"
 relation = "via-dep"
 depth = "partial"
 verdict = "ADOPT"
@@ -6106,7 +6111,8 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "hipparcos"
-repo = "turquet"
+repo = "cleromancy"
+crate = "turquet"
 relation = "should"
 depth = "none"
 verdict = "open"
@@ -6115,7 +6121,8 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "gaia-dr3"
-repo = "turquet"
+repo = "cleromancy"
+crate = "turquet"
 relation = "should"
 depth = "none"
 verdict = "open"
@@ -6124,7 +6131,8 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "ccsds-omm"
-repo = "turquet"
+repo = "cleromancy"
+crate = "turquet"
 relation = "should"
 depth = "none"
 verdict = "SKIP"
@@ -6134,7 +6142,8 @@ evidence = "none: turquet models solar-system bodies only"
 
 [[claim]]
 spec = "tle-sgp4"
-repo = "turquet"
+repo = "cleromancy"
+crate = "turquet"
 relation = "should"
 depth = "none"
 verdict = "SKIP"
@@ -6144,7 +6153,8 @@ evidence = "none: turquet models solar-system bodies only"
 
 [[claim]]
 spec = "rfc5545"
-repo = "turquet"
+repo = "cleromancy"
+crate = "turquet"
 relation = "should"
 depth = "none"
 verdict = "open"
@@ -6195,7 +6205,8 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "ima-adpcm"
-repo = "pipit"
+repo = "retinue"
+crate = "pipit"
 relation = "implements"
 depth = "full"
 verdict = "open"
@@ -6205,7 +6216,8 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "lpc-10e"
-repo = "pipit"
+repo = "retinue"
+crate = "pipit"
 relation = "adjacent"
 depth = "stub"
 verdict = "open"
@@ -6215,7 +6227,8 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "rfc3551"
-repo = "pipit"
+repo = "retinue"
+crate = "pipit"
 relation = "should"
 depth = "none"
 verdict = "open"
@@ -6224,7 +6237,8 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "webaudio-1.1"
-repo = "pipit"
+repo = "retinue"
+crate = "pipit"
 relation = "should"
 depth = "none"
 verdict = "open"
@@ -6233,7 +6247,8 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "webcodecs"
-repo = "pipit"
+repo = "retinue"
+crate = "pipit"
 relation = "should"
 depth = "none"
 verdict = "open"
@@ -6242,7 +6257,8 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "cmudict"
-repo = "mora"
+repo = "knot-editor"
+crate = "mora"
 relation = "implements"
 depth = "full"
 verdict = "open"
@@ -6251,7 +6267,8 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "arpabet"
-repo = "mora"
+repo = "knot-editor"
+crate = "mora"
 relation = "implements"
 depth = "full"
 verdict = "open"
@@ -6260,7 +6277,8 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "ipa"
-repo = "mora"
+repo = "knot-editor"
+crate = "mora"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -6270,7 +6288,8 @@ evidence = "mora's phone model is keyed by IPA symbol, with ARPAbet as one input
 
 [[claim]]
 spec = "pls-1.0"
-repo = "mora"
+repo = "knot-editor"
+crate = "mora"
 relation = "should"
 depth = "none"
 verdict = "open"
@@ -6282,7 +6301,8 @@ verified_on = "2026-10-18"
 
 [[claim]]
 spec = "ssml-1.1"
-repo = "mora"
+repo = "knot-editor"
+crate = "mora"
 relation = "should"
 depth = "none"
 verdict = "SKIP"
@@ -6292,7 +6312,8 @@ evidence = "repos/mora — the question the lane brief asks directly: is SSML th
 
 [[claim]]
 spec = "rfc5646"
-repo = "mora"
+repo = "knot-editor"
+crate = "mora"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
@@ -10196,7 +10217,8 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "rfc6716"
-repo = "pipit"
+repo = "retinue"
+crate = "pipit"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -10360,7 +10382,8 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "itu-p800"
-repo = "pipit"
+repo = "retinue"
+crate = "pipit"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
@@ -10370,7 +10393,8 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "itu-p862"
-repo = "pipit"
+repo = "retinue"
+crate = "pipit"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10380,7 +10404,8 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "itu-p863"
-repo = "pipit"
+repo = "retinue"
+crate = "pipit"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10390,7 +10415,8 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "visqol"
-repo = "pipit"
+repo = "retinue"
+crate = "pipit"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10400,7 +10426,8 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "rfc4647"
-repo = "mora"
+repo = "knot-editor"
+crate = "mora"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
@@ -10410,7 +10437,8 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "uax29"
-repo = "mora"
+repo = "knot-editor"
+crate = "mora"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
@@ -10420,7 +10448,8 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "ssml-1.1"
-repo = "pipit"
+repo = "retinue"
+crate = "pipit"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10430,7 +10459,8 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "praat-textgrid"
-repo = "mora"
+repo = "knot-editor"
+crate = "mora"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10440,7 +10470,8 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "tobi"
-repo = "mora"
+repo = "knot-editor"
+crate = "mora"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10450,7 +10481,8 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "fits"
-repo = "turquet"
+repo = "cleromancy"
+crate = "turquet"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10460,7 +10492,8 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "fits-wcs"
-repo = "turquet"
+repo = "cleromancy"
+crate = "turquet"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10480,7 +10513,8 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "ivoa-votable"
-repo = "turquet"
+repo = "cleromancy"
+crate = "turquet"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10490,7 +10524,8 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "ivoa-samp"
-repo = "turquet"
+repo = "cleromancy"
+crate = "turquet"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10500,7 +10535,8 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "ivoa-hips"
-repo = "turquet"
+repo = "cleromancy"
+crate = "turquet"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10510,7 +10546,8 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "ivoa-scs"
-repo = "turquet"
+repo = "cleromancy"
+crate = "turquet"
 relation = "adjacent"
 depth = "none"
 verdict = "SKIP"
@@ -10520,7 +10557,8 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "icrf3"
-repo = "turquet"
+repo = "cleromancy"
+crate = "turquet"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
@@ -10530,7 +10568,8 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "continuous-utc"
-repo = "turquet"
+repo = "cleromancy"
+crate = "turquet"
 relation = "should"
 depth = "none"
 verdict = "WATCH"
@@ -10550,7 +10589,8 @@ verified_on = "2026-08-24"
 
 [[claim]]
 spec = "iau-constellations"
-repo = "turquet"
+repo = "cleromancy"
+crate = "turquet"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -10570,7 +10610,8 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "iau-star-names"
-repo = "turquet"
+repo = "cleromancy"
+crate = "turquet"
 relation = "should"
 depth = "planned"
 verdict = "PULL"
@@ -10590,7 +10631,8 @@ verified_on = "2026-09-23"
 
 [[claim]]
 spec = "naif-spice"
-repo = "turquet"
+repo = "cleromancy"
+crate = "turquet"
 relation = "implements"
 depth = "partial"
 verdict = "ADOPT"
