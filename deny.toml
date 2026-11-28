@@ -24,10 +24,6 @@ crate = "foldhash@0.1.5"
 reason = "held by hashbrown 0.15.5; gone when its holders move to foldhash 0.2.0 (hashbrown 0.15.5 in the graph, 0.17.1 newest)"
 
 [[bans.skip]]
-crate = "getrandom@0.3.4"
-reason = "held by mere 0.1.0, mere-rdfc 0.1.0, rand_core 0.9.5; gone when its holders move to getrandom 0.4.3 (mere 0.1.0 (git); mere-rdfc 0.1.0 (git); rand_core 0.9.5 in the graph, 0.10.1 newest)"
-
-[[bans.skip]]
 crate = "hashbrown@0.15.5"
 reason = "held by petgraph 0.8.3; gone when its holders move to hashbrown 0.17.1 (petgraph 0.8.3 is its latest release)"
 
@@ -38,10 +34,6 @@ reason = "held by regress 0.11.1, spade 2.15.1; gone when its holders move to ha
 [[bans.skip]]
 crate = "miniz_oxide@0.8.9"
 reason = "held by png 0.18.1; gone when its holders move to miniz_oxide 0.9.1 (png 0.18.1 is its latest release)"
-
-[[bans.skip]]
-crate = "r-efi@5.3.0"
-reason = "held by getrandom 0.3.4; gone when its holders move to r-efi 6.0.0 (getrandom 0.3.4 in the graph, 0.4.3 newest)"
 
 
 [[bans.skip]]
